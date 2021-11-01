@@ -20,6 +20,13 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
+            whoami
+            pwd
+            echo $0
+            node -v
+            npm -v
+            npm i -g pm2
+            npm i -g yarn
             cd web02-booducksound
             git pull origin main
             pm2 kill
