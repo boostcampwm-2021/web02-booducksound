@@ -6,29 +6,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-18.04
+  deploy:
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
       - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@master
+      - uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            whoami | xargs echo 'USERNAME:' &&
-            echo 'SHELL:' ${0} &&
-            node -v | xargs echo 'NODE VERSION:' &&
-            whereis npm
-            whereis pm2
-            whereis yarn
-            npm i -g pm2
-            npm i -g yarn
-            cd web02-booducksound
+            bash
+            cd ~/web02-booducksound
             git pull origin main
             pm2 kill
             cd backend
