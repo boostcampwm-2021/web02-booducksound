@@ -38,6 +38,7 @@
     "build": "babel src --out-dir build --extensions '.ts'",
     "dev": "nodemon",
     "check-types": "tsc",
-    "check-types:watch": "tsc --watch"
+    "check-types:watch": "tsc --watch",
+    "deploy": "pm2 start build/server.js -n express"
   }
 }

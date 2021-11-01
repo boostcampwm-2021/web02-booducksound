@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "PORT=7000 next start",
     "start_win": "set PORT=7000 next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "pm2 start yarn --name nextjs -- run start"
   },
   "dependencies": {
     "next": "12.0.2",
