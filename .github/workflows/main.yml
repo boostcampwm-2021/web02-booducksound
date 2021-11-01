@@ -20,14 +20,10 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            sudo curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-            sudo apt install -y nodejs
-            npm i -g npm
-            npm i -g pm2
-            npm i -g yarn
             whoami | xargs echo 'USERNAME:' &&
             echo 'SHELL:' ${0} &&
             node -v | xargs echo 'NODE VERSION:' &&
+            whereis npm
             whereis pm2
             whereis yarn
             npm i -g pm2
