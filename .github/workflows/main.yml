@@ -8,10 +8,10 @@ on:
 jobs:
   build:
     name: Build
-
     runs-on: ubuntu-18.04
 
     steps:
+      - uses: actions/checkout@v2
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@master
         with:
@@ -20,7 +20,8 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            node -v || {apt update && curl -sL https://deb.nodesource.com/setup_14.x | bash && apt install nodejs} &&
+            sudo curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+            sudo apt install -y nodejs
             npm i -g npm
             npm i -g pm2
             npm i -g yarn
