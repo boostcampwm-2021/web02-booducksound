@@ -20,11 +20,14 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
+            zsh
             whoami
             pwd
             echo $0
             node -v
             npm -v
+            whereis pm2
+            whereis yarn
             npm i -g pm2
             npm i -g yarn
             cd web02-booducksound
