@@ -11,7 +11,7 @@ interface TextInputContainerProps {
   fontSize: string;
 }
 interface ImageContainerProps {
-  rightMargin: number;
+  rightMargin: string;
   size: string;
 }
 interface Props {
