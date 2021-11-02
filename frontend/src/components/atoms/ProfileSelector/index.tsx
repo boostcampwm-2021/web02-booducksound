@@ -3,10 +3,10 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 
 import theme from '../../../styles/theme';
-import Character from '../character';
+import Character from '../Character';
 
 const getRandomHex = () => {
-  return parseInt(Math.random() * 255)
+  return Math.floor(Math.random() * 255)
     .toString(16)
     .padStart(2, '0');
 };
@@ -45,7 +45,7 @@ const ProfileSelector = () => {
 
   return (
     <ProfileContainer>
-      <Character width={'100%'} height={'100%'} color={color}></Character>
+      <Character width={'100%'} color={color}></Character>
       <ChangeBtn onClick={getRandomColor} />
     </ProfileContainer>
   );

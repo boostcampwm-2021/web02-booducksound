@@ -1,7 +1,5 @@
 import styled from '@emotion/styled';
 
-import theme from '../../../styles/theme';
-
 const BoxWrapper = styled.div`
   padding: 5.6rem 2rem;
 `;

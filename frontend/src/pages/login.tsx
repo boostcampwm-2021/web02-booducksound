@@ -56,14 +56,21 @@ const Login: NextPage = () => {
       <PageBox>
         <LoginContainer>
           <InputContainer>
-            <InputBox isSearch={false} placeholder="아이디를 입력하세요." height={'80px'} fontSize={'20px'}></InputBox>
             <InputBox
               isSearch={false}
-              placeholder="비밀번호를 입력하세요."
+              placeholder="아이디를 입력하세요."
+              width={'100%'}
               height={'80px'}
               fontSize={'20px'}
             ></InputBox>
-            <Link href="/join">
+            <InputBox
+              isSearch={false}
+              placeholder="비밀번호를 입력하세요."
+              width={'100%'}
+              height={'80px'}
+              fontSize={'20px'}
+            ></InputBox>
+            <Link href="/lobby">
               <a>
                 <Button
                   width={'560px'}

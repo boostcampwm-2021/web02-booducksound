@@ -59,8 +59,14 @@ const Enter: NextPage = () => {
         <EnterContainer>
           <ProfileSelector></ProfileSelector>
           <InputContainer>
-            <InputBox isSearch={false} placeholder="닉네임을 입력하세요." height={'80px'} fontSize={'20px'}></InputBox>
-            <Link href="/">
+            <InputBox
+              isSearch={false}
+              placeholder="닉네임을 입력하세요."
+              width={'100%'}
+              height={'80px'}
+              fontSize={'20px'}
+            ></InputBox>
+            <Link href="/lobby">
               <a>
                 <Button
                   width={'480px'}

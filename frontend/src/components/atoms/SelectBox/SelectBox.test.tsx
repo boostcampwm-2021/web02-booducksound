@@ -1,7 +1,5 @@
 import { render } from '@testing-library/react';
 
-import theme from '../../../styles/theme';
-
 import SelectBox from '.';
 
 describe('SelectBox', () => {
