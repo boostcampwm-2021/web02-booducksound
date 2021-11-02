@@ -4,13 +4,16 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   background: #fff;
-  width: 480px;
-  max-width: 100vw;
   height: 180px;
   padding: 36px 24px;
   box-shadow: ${({ theme }) => `0 0 20px ${theme.colors.deepgray}`};
   border-radius: 16px;
   overflow: hidden;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    height: 120px;
+    padding: 16px 12px;
+  }
 `;
 
 const FirstLineContainer = styled.div`
@@ -24,12 +27,20 @@ const Title = styled.h3`
   color: #000;
   white-space: nowrap;
   overflow: hidden;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 18px;
+  }
 `;
 
 const NumberOfPeople = styled.span`
   font-size: 24px;
   color: ${({ theme }) => theme.colors.deepgray};
   white-space: nowrap;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 18px;
+  }
 `;
 
 const PlaylistName = styled.h4`
@@ -38,6 +49,10 @@ const PlaylistName = styled.h4`
   white-space: nowrap;
   overflow: hidden;
   margin-top: 16px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 16px;
+  }
 `;
 
 const HashtagContainer = styled.div`
@@ -51,6 +66,10 @@ const Hashtag = styled.span`
   font-size: 18px;
   color: ${({ theme }) => theme.colors.ocean};
   white-space: nowrap;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: 14px;
+  }
 `;
 
 interface Props {

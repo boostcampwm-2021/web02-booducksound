@@ -27,6 +27,7 @@ declare module '@emotion/react' {
       kopub: string;
     };
     breakpoints: {
+      lg: string;
       md: string;
       sm: string;
     };
@@ -59,6 +60,7 @@ const theme: Theme = {
     kopub: 'KoPubDotumMedium',
   },
   breakpoints: {
+    lg: '1200px',
     md: '768px',
     sm: '480px',
   },

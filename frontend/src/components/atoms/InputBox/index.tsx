@@ -27,7 +27,7 @@ const InputBoxContainer = styled.div<InputBoxContainerProps>`
   padding-left: ${({ height }) => height}px;
   padding-right: ${({ height }) => height}px;
   text-align: center;
-  margin-top: 50px;
+  /* margin-top: 50px; */
   display: flex;
   box-shadow: 2px 2px 10px gray;
 `;
