@@ -5,11 +5,13 @@ import Button from '../../components/atoms/Button';
 import InputBox from '../../components/atoms/InputBox';
 import RoomCard from '../../components/atoms/RoomCard';
 import theme from '../../styles/theme';
+import { Room } from '../../types/Room';
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
   overflow: hidden;
+  padding-bottom: 32px;
 `;
 
 const Wrapper = styled.div`
@@ -71,8 +73,12 @@ const SearchContainer = styled.div`
 
 const SearchWrapper = styled.div`
   padding: 0 8px;
-  width: 720px;
+  width: 576px;
   justify-content: center;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    width: 100%;
+  }
 `;
 
 interface ButtonContainerProps {
@@ -114,6 +120,45 @@ const GridWrapper = styled.div`
 `;
 
 const Lobby: NextPage = () => {
+  const dummyRooms: Room[] = [
+    {
+      title: '방 제목입니다',
+      playlistName: '플레이리스트 이름입니다',
+      hashtags: ['해시태그1', '해시태그2'],
+      curPeople: 2,
+      maxPeople: 8,
+      status: 'prepare',
+      hasPassword: false,
+    },
+    {
+      title: '방 제목입니다',
+      playlistName: '플레이리스트 이름입니다',
+      hashtags: ['해시태그1', '해시태그2'],
+      curPeople: 2,
+      maxPeople: 8,
+      status: 'prepare',
+      hasPassword: true,
+    },
+    {
+      title: '방 제목입니다',
+      playlistName: '플레이리스트 이름입니다',
+      hashtags: ['해시태그1', '해시태그2'],
+      curPeople: 2,
+      maxPeople: 8,
+      status: 'playing',
+      hasPassword: false,
+    },
+    {
+      title: '방 제목입니다',
+      playlistName: '플레이리스트 이름입니다',
+      hashtags: ['해시태그1', '해시태그2'],
+      curPeople: 2,
+      maxPeople: 8,
+      status: 'prepare',
+      hasPassword: true,
+    },
+  ];
+
   return (
     <Container>
       <Wrapper>
@@ -140,132 +185,10 @@ const Lobby: NextPage = () => {
         </SearchContainer>
         <GridContainer>
           <GridWrapper>
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
-            <RoomCard
-              title={'방 제목'}
-              playlistName={'플레이리스트이름'}
-              hashtags={['해시1', '해시2']}
-              curPeople={0}
-              maxPeople={8}
-            />
+            {dummyRooms &&
+              dummyRooms.map((room, i) => {
+                return <RoomCard key={i} {...room} />;
+              })}
           </GridWrapper>
         </GridContainer>
       </Wrapper>
