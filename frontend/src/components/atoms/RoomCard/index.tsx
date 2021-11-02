@@ -1,14 +1,22 @@
 import styled from '@emotion/styled';
 
-const Container = styled.div`
+import { Room } from '../../../types/Room';
+
+interface ContainerProps {
+  status: 'playing' | 'waiting';
+}
+
+const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: column;
-  background: #fff;
+  background: ${({ theme }) => theme.colors.white};
   height: 180px;
   padding: 36px 24px;
   box-shadow: ${({ theme }) => `0 0 20px ${theme.colors.deepgray}`};
   border-radius: 16px;
   overflow: hidden;
+  filter: ${({ status }) => status === 'playing' && 'brightness(0.9)'};
+  cursor: ${({ status }) => status === 'waiting' && 'pointer'};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     height: 120px;
@@ -33,6 +41,12 @@ const Title = styled.h3`
   }
 `;
 
+const FirstLineRightContainer = styled.div`
+  display: flex;
+  align-items: center;
+  column-gap: 6px;
+`;
+
 const NumberOfPeople = styled.span`
   font-size: 24px;
   color: ${({ theme }) => theme.colors.deepgray};
@@ -40,6 +54,15 @@ const NumberOfPeople = styled.span`
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 18px;
+  }
+`;
+
+const Lock = styled.img`
+  width: 18px;
+  transform: translateY(-1px);
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width: 14px;
   }
 `;
 
@@ -72,22 +95,17 @@ const Hashtag = styled.span`
   }
 `;
 
-interface Props {
-  title: string;
-  playlistName: string;
-  hashtags: string[];
-  maxPeople: number;
-  curPeople: number;
-}
-
-const RoomCard = ({ title, playlistName, hashtags, curPeople, maxPeople }: Props) => {
+const RoomCard = ({ title, playlistName, hashtags, curPeople, maxPeople, status, hasPassword }: Room) => {
   return (
-    <Container>
+    <Container status={status}>
       <FirstLineContainer>
         <Title>{title}</Title>
-        <NumberOfPeople>
-          {curPeople}/{maxPeople}
-        </NumberOfPeople>
+        <FirstLineRightContainer>
+          {hasPassword && <Lock src="/images/lock.svg" />}
+          <NumberOfPeople>
+            {curPeople}/{maxPeople}
+          </NumberOfPeople>
+        </FirstLineRightContainer>
       </FirstLineContainer>
       <PlaylistName>{playlistName}</PlaylistName>
       <HashtagContainer>

@@ -1,5 +1,5 @@
 export interface Room {
-  status: 'playing' | 'prepare';
+  status: 'playing' | 'waiting';
   hasPassword: boolean;
   title: string;
   playlistName: string;
