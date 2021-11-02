@@ -15,8 +15,12 @@ const Container = styled.div<ContainerProps>`
   box-shadow: ${({ theme }) => `0 0 20px ${theme.colors.deepgray}`};
   border-radius: 16px;
   overflow: hidden;
-  filter: ${({ status }) => status === 'playing' && 'brightness(0.9)'};
+  filter: ${({ status }) => status === 'playing' && 'brightness(0.86)'};
   cursor: ${({ status }) => status === 'waiting' && 'pointer'};
+
+  &:hover {
+    filter: ${({ status }) => status === 'waiting' && 'brightness(0.96)'};
+  }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     height: 120px;
