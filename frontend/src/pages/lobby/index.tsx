@@ -62,13 +62,17 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const SearchWrapper = styled.div`
+const SearchContainer = styled.div`
   display: flex;
-  padding: 0 8px;
-  width: 720px;
   justify-content: flex-end;
   margin-top: 16px;
   margin-bottom: 48px;
+`;
+
+const SearchWrapper = styled.div`
+  padding: 0 8px;
+  width: 720px;
+  justify-content: center;
 `;
 
 interface ButtonContainerProps {
@@ -123,15 +127,17 @@ const Lobby: NextPage = () => {
             <ResponsiveButton background={theme.colors.sand} fontSize={20} content={'방 생성'} />
           </NavItem>
         </Nav>
-        <SearchWrapper>
-          <InputBox
-            isSearch={true}
-            placeholder={'검색어를 입력하세요'}
-            width={720}
-            height={12}
-            fontSize={16}
-          ></InputBox>
-        </SearchWrapper>
+        <SearchContainer>
+          <SearchWrapper>
+            <InputBox
+              isSearch={true}
+              placeholder={'검색어를 입력하세요'}
+              width={'100%'}
+              height={'54px'}
+              fontSize={'18px'}
+            ></InputBox>
+          </SearchWrapper>
+        </SearchContainer>
         <GridContainer>
           <GridWrapper>
             <RoomCard
