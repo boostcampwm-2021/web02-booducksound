@@ -2,7 +2,6 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
 html,
 body,
 div,
@@ -130,6 +129,26 @@ table {
 * {
   box-sizing: border-box;
   font-family: 'KoPubDotumMedium';
+}
+
+body {
+  min-width: 100vw;
+  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
+  background: url('/images/background.svg');
+  animation: background 30s linear infinite reverse running;
+
+  background-size: cover;
+}
+
+@keyframes background {
+  from {
+    background-position-x: 0px;
+  }
+  to {
+    background-position-x: 1869px;
+  }
 }
 
 @font-face {
