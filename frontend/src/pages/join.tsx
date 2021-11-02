@@ -52,6 +52,12 @@ const InputContainer = styled.div`
     display: block;
   }
 
+  > button {
+    position: absolute;
+    right: 1rem;
+    top: 10px;
+  }
+
   @media (max-width: 768px) {
     > * {
       width: 100% !important;
@@ -70,20 +76,17 @@ const Join: NextPage = () => {
         <LoginContainer>
           <ProfileSelector></ProfileSelector>
           <InputContainer>
-            <InputBox
-              isSearch={false}
-              placeholder="아이디를 입력하세요.  (한/영/숫자 4~10자)"
-              width={480}
-              height={20}
-            ></InputBox>
+            <InputBox isSearch={false} placeholder="아이디를 입력하세요." width={480} height={20}></InputBox>
+            <Button
+              className="dsadsa"
+              content={'중복확인'}
+              background={theme.colors.peach}
+              fontSize={18}
+              width={120}
+            ></Button>
           </InputContainer>
           <InputContainer>
-            <InputBox
-              isSearch={false}
-              placeholder="비밀번호를 입력해 주세요. (한/영/숫자/특수문자 포함 8자 이상)"
-              width={480}
-              height={20}
-            ></InputBox>
+            <InputBox isSearch={false} placeholder="비밀번호를 입력해 주세요." width={480} height={20}></InputBox>
             <InputBox isSearch={false} placeholder="닉네임을 입력하세요." width={480} height={20}></InputBox>
             <Link href="/join">
               <a>
