@@ -9,7 +9,8 @@
     "start": "PORT=7000 next start",
     "start_win": "set PORT=7000 next start",
     "lint": "next lint",
-    "deploy": "pm2 start npm --name nextjs -- start"
+    "deploy": "pm2 start npm --name nextjs -- start",
+    "test": "jest --detectOpenHandles --forceExit --coverage --watch"
   },
   "dependencies": {
     "@emotion/core": "^11.0.0",
@@ -20,9 +21,12 @@
     "react-dom": "17.0.2"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.15.0",
+    "@testing-library/react": "^12.1.2",
     "@types/react": "17.0.33",
     "@typescript-eslint/eslint-plugin": "^5.2.0",
     "@typescript-eslint/parser": "^5.2.0",
+    "babel-jest": "^27.3.1",
     "eslint": "<8.0.0",
     "eslint-config-next": "12.0.2",
     "eslint-config-prettier": "^8.3.0",
@@ -34,7 +38,10 @@
     "eslint-plugin-promise": "^5.1.1",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.3.1",
     "prettier": "^2.4.1",
+    "react-test-renderer": "^17.0.2",
     "typescript": "4.4.4"
   }
 }
