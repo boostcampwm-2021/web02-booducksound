@@ -19,10 +19,16 @@ declare module '@emotion/react' {
       orange: string;
       mint: string;
       soda: string;
+      black: string;
+      white: string;
     };
     fonts: {
       gmarket: string;
       kopub: string;
+    };
+    breakpoints: {
+      md: string;
+      sm: string;
     };
   }
 }
@@ -45,10 +51,16 @@ const theme: Theme = {
     orange: '#FD8A69',
     mint: '#B8E6E1',
     soda: '#58CCFF',
+    black: '#000',
+    white: '#fff',
   },
   fonts: {
     gmarket: 'GmarketSansMedium',
     kopub: 'KoPubDotumMedium',
+  },
+  breakpoints: {
+    md: '768px',
+    sm: '480px',
   },
 };
 
