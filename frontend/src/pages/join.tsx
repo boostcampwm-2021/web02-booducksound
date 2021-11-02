@@ -21,21 +21,15 @@ const LoginContainer = styled.div`
   right: 0;
 
   @media (max-width: 768px) {
-    button {
+    a > button {
       width: calc(100% - 2rem);
     }
   }
   @media (max-width: 480px) {
-    button {
+    a > button {
       width: 90%;
     }
   }
-`;
-
-const SearchPwdBtn = styled.a`
-  color: ${theme.colors.deepgray};
-  text-align: center;
-  margin-top: 1.5rem;
 `;
 
 const InputContainer = styled.div`
@@ -57,15 +51,6 @@ const InputContainer = styled.div`
     right: 1rem;
     top: 10px;
   }
-
-  @media (max-width: 768px) {
-    > * {
-      width: 100% !important;
-    }
-    button {
-      width: 90%;
-    }
-  }
 `;
 
 const Join: NextPage = () => {
@@ -76,21 +61,31 @@ const Join: NextPage = () => {
         <LoginContainer>
           <ProfileSelector></ProfileSelector>
           <InputContainer>
-            <InputBox isSearch={false} placeholder="아이디를 입력하세요." width={480} height={20}></InputBox>
+            <InputBox isSearch={false} placeholder="아이디를 입력하세요." height={'80px'} fontSize={'20px'}></InputBox>
             <Button
               className="dsadsa"
               content={'중복확인'}
               background={theme.colors.peach}
-              fontSize={18}
-              width={120}
+              fontSize={'18px'}
+              paddingH={'18px'}
+              width={'120px'}
             ></Button>
-          </InputContainer>
-          <InputContainer>
-            <InputBox isSearch={false} placeholder="비밀번호를 입력해 주세요." width={480} height={20}></InputBox>
-            <InputBox isSearch={false} placeholder="닉네임을 입력하세요." width={480} height={20}></InputBox>
+            <InputBox
+              isSearch={false}
+              placeholder="비밀번호를 입력해 주세요."
+              height={'80px'}
+              fontSize={'20px'}
+            ></InputBox>
+            <InputBox isSearch={false} placeholder="닉네임을 입력하세요." height={'80px'} fontSize={'20px'}></InputBox>
             <Link href="/join">
               <a>
-                <Button width={480} background={theme.colors.sky} fontSize={30} content={'가입하기'} />
+                <Button
+                  width={'480px'}
+                  background={theme.colors.sky}
+                  fontSize={'30px'}
+                  paddingH={'24px'}
+                  content={'가입하기'}
+                />
               </a>
             </Link>
           </InputContainer>
