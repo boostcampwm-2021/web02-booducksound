@@ -13,6 +13,7 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
+  max-width: 1600px;
   width: 100%;
 `;
 
@@ -34,12 +35,13 @@ const Nav = styled.nav`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 32px;
+  padding: 32px 8px;
   column-gap: 10px;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    column-gap: 6px;
+    padding: 8px 4px;
     row-gap: 6px;
+    column-gap: 6px;
     flex-wrap: wrap;
   }
 
@@ -60,7 +62,14 @@ const ButtonWrapper = styled.div`
   }
 `;
 
-const SeaarchWrapper = styled.div``;
+const SearchWrapper = styled.div`
+  display: flex;
+  padding: 0 8px;
+  width: 720px;
+  justify-content: flex-end;
+  margin-top: 16px;
+  margin-bottom: 48px;
+`;
 
 interface ButtonContainerProps {
   background: string;
@@ -84,7 +93,6 @@ const GridContainer = styled.div`
 
 const GridWrapper = styled.div`
   display: grid;
-  max-width: 1600px;
   width: 100%;
   grid-template-columns: repeat(3, 1fr);
   justify-items: stretch;
@@ -115,9 +123,15 @@ const Lobby: NextPage = () => {
             <ResponsiveButton background={theme.colors.sand} fontSize={20} content={'방 생성'} />
           </NavItem>
         </Nav>
-        {/* <SeaarchWrapper>
-        <InputBox isSearch={true} placeholder={'검색어를 입력하세요'} width={640} height={10}></InputBox>
-      </SeaarchWrapper> */}
+        <SearchWrapper>
+          <InputBox
+            isSearch={true}
+            placeholder={'검색어를 입력하세요'}
+            width={720}
+            height={12}
+            fontSize={16}
+          ></InputBox>
+        </SearchWrapper>
         <GridContainer>
           <GridWrapper>
             <RoomCard
