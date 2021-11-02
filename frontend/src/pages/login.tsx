@@ -31,11 +31,11 @@ const InputContainer = styled.div`
   margin: 0 auto;
 
   > * {
-    margin: 0 auto 0.5rem auto;
+    margin: 0 auto 0.8rem auto !important;
   }
 
   a {
-    margin-top: 1.5rem;
+    margin-top: 2rem !important;
     display: block;
   }
 
