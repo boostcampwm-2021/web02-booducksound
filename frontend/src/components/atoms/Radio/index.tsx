@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 
 import theme from '../../../styles/theme';
+import { radio } from '../../../types/radio';
 
 const RadioBtnGroup = styled.label`
   display: inline-flex;
@@ -46,7 +47,7 @@ const RadioBtnGroup = styled.label`
   }
 `;
 
-const Radio = ({ name, value, checked }: any) => {
+const Radio = ({ name, value, checked }: radio) => {
   return (
     <RadioBtnGroup>
       <input type="radio" name={name} checked={checked} />
