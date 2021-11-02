@@ -1,17 +1,18 @@
 import styled from '@emotion/styled';
 
 interface ButtonContainerProps {
-  width?: number;
-  background: string;
-  fontSize?: number;
+  width?: string;
+  background?: string;
+  fontSize?: string;
+  paddingH?: string;
 }
 
 const ButtonContainer = styled.button<ButtonContainerProps>`
-  width: ${({ width }) => (width ? `${width}px` : '100%')};
-  background: ${({ background }) => background};
+  width: ${({ width }) => width || '100%'};
+  background: ${({ background }) => background || 'inherit'};
 
-  font-size: ${({ fontSize }) => (fontSize ? `${fontSize}px` : 'inherit')};
-  padding: 6% 0;
+  font-size: ${({ fontSize }) => fontSize || 'inherit'};
+  padding: ${({ paddingH }) => paddingH || '6%'} 0;
 
   font-family: ${({ theme }) => theme.fonts.gmarket};
   border-radius: 60px;
@@ -32,15 +33,16 @@ const ButtonContainer = styled.button<ButtonContainerProps>`
 `;
 
 interface Props {
-  width?: number;
-  background: string;
-  fontSize?: number;
+  width?: string;
+  background?: string;
+  fontSize?: string;
+  paddingH?: string;
   content: string;
 }
 
-const Button = ({ width, background, fontSize, content }: Props) => {
+const Button = ({ width, background, fontSize, paddingH, content }: Props) => {
   return (
-    <ButtonContainer width={width} background={background} fontSize={fontSize}>
+    <ButtonContainer width={width} background={background} fontSize={fontSize} paddingH={paddingH}>
       {content}
     </ButtonContainer>
   );
