@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "PORT=7000 next dev",
-    "dev_win": "set PORT=7000 next dev",
+    "dev_win": "set PORT=7000 && next dev",
     "build": "next build",
     "start": "PORT=7000 next start",
     "start_win": "set PORT=7000 next start",
