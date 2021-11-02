@@ -8,6 +8,7 @@ interface InputBoxContainerProps {
 }
 interface TextInputContainerProps {
   height: number;
+  fontSize: number;
 }
 interface ImageContainerProps {
   rightMargin: number;
@@ -17,6 +18,7 @@ interface Props {
   placeholder: string;
   width: number;
   height: number;
+  fontSize: number;
 }
 
 const InputBoxContainer = styled.div<InputBoxContainerProps>`
@@ -30,14 +32,14 @@ const InputBoxContainer = styled.div<InputBoxContainerProps>`
   margin-top: 50px;
   display: flex;
   box-shadow: 2px 2px 10px gray;
+  background-color: white;
 `;
 const TextInputContainer = styled.input<TextInputContainerProps>`
   display: inline-block;
   width: 100%;
   outline: none;
   border: none;
-  background-color: transparent;
-  font-size: ${({ height }) => height}px;
+  font-size: ${({ fontSize }) => fontSize}px;
 `;
 
 const ImageContainer = styled.div<ImageContainerProps>`
@@ -51,7 +53,7 @@ const ReadingGlass = styled.img`
   user-select: none;
 `;
 
-const InputBox = ({ isSearch, placeholder, width, height }: PropsWithChildren<Props>) => {
+const InputBox = ({ isSearch, placeholder, width, height, fontSize }: PropsWithChildren<Props>) => {
   return (
     <InputBoxContainer width={width} height={height}>
       {isSearch ? (
@@ -59,7 +61,7 @@ const InputBox = ({ isSearch, placeholder, width, height }: PropsWithChildren<Pr
           <ReadingGlass src="/images/readingGlass.png" draggable="false"></ReadingGlass>
         </ImageContainer>
       ) : null}
-      <TextInputContainer placeholder={placeholder} height={height}></TextInputContainer>
+      <TextInputContainer placeholder={placeholder} height={height} fontSize={fontSize}></TextInputContainer>
     </InputBoxContainer>
   );
 };
