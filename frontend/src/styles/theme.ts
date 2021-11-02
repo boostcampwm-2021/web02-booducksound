@@ -5,7 +5,7 @@ declare module '@emotion/react' {
     colors: {
       sky: string;
       lime: string;
-      lightgray: string;
+      lightsky: string;
       peach: string;
       sand: string;
       night: string;
@@ -31,7 +31,7 @@ const theme: Theme = {
   colors: {
     sky: '#C3E3F1',
     lime: '#DDECCA',
-    lightgray: '#EEEEEE',
+    lightsky: '#EFF7FB',
     peach: '#FECCBE',
     sand: '#FEEBB6',
     night: '#324156',
