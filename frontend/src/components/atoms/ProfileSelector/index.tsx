@@ -20,18 +20,18 @@ const ProfileContainer = styled.div<Props>`
   border: 1px solid ${theme.colors.gray};
   max-width: ${({ type }) => (type === 'mypage' ? '120px' : '240px')};
   max-height: ${({ type }) => (type === 'mypage' ? '120px' : '240px')};
-  width: ${({ type }) => (type === 'mypage' ? '12vw' : '24vw')};
-  height: ${({ type }) => (type === 'mypage' ? '12vw' : '24vw')};
+  width: ${({ type }) => (type === 'mypage' ? '14vw' : '24vw')};
+  height: ${({ type }) => (type === 'mypage' ? '14vw' : '24vw')};
   margin: 0 auto 2.4rem auto;
   position: relative;
 `;
 
 const ChangeBtn = styled.span<Props>`
   border-radius: 50%;
-  max-width: 80px;
-  max-height: 80px;
-  width: ${({ type }) => (type === 'mypage' ? '4vw' : '8vw')};
-  height: ${({ type }) => (type === 'mypage' ? '4vw' : '8vw')};
+  max-width: ${({ type }) => (type === 'mypage' ? '40px' : '80px')};
+  max-height: ${({ type }) => (type === 'mypage' ? '40px' : '80px')};
+  width: ${({ type }) => (type === 'mypage' ? '5vw' : '8vw')};
+  height: ${({ type }) => (type === 'mypage' ? '5vw' : '8vw')};
   cursor: pointer;
   position: absolute;
   right: 0;
