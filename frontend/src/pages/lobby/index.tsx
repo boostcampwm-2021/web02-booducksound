@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 
-import Button from '../../components/atoms/Button';
 import InputBox from '../../components/atoms/InputBox';
 import RoomCard from '../../components/atoms/RoomCard';
+import ResponsiveButton from '../../components/molecules/ResponsiveButton';
 import theme from '../../styles/theme';
 import { Room } from '../../types/Room';
 
@@ -53,17 +53,6 @@ const Nav = styled.nav`
   }
 `;
 
-const ButtonWrapper = styled.div`
-  width: 180px;
-  height: 100%;
-  font-size: 20px;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 110px;
-    font-size: 12px;
-  }
-`;
-
 const SearchContainer = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -80,20 +69,6 @@ const SearchWrapper = styled.div`
     width: 100%;
   }
 `;
-
-interface ButtonContainerProps {
-  background: string;
-  content: string;
-  fontSize?: number;
-}
-
-const ResponsiveButton = ({ background, content }: ButtonContainerProps) => {
-  return (
-    <ButtonWrapper>
-      <Button content={content} background={background}></Button>
-    </ButtonWrapper>
-  );
-};
 
 const GridContainer = styled.div`
   display: flex;
@@ -299,22 +274,50 @@ const Lobby: NextPage = () => {
       <Wrapper>
         <Nav>
           <NavItem>
-            <ResponsiveButton background={theme.colors.lime} fontSize={20} content={'MY PAGE'} />
+            <ResponsiveButton
+              background={theme.colors.lime}
+              width="180px"
+              fontSize="20px"
+              smWidth="110px"
+              smFontSize="12px"
+              content="MY PAGE"
+            />
           </NavItem>
           <NavItem>
-            <ResponsiveButton background={theme.colors.lightsky} fontSize={20} content={'초대코드 입력'} />
-            <ResponsiveButton background={theme.colors.peach} fontSize={20} content={'플레이리스트 추가'} />
-            <ResponsiveButton background={theme.colors.sand} fontSize={20} content={'방 생성'} />
+            <ResponsiveButton
+              background={theme.colors.lightsky}
+              width="180px"
+              fontSize="20px"
+              smWidth="110px"
+              smFontSize="12px"
+              content="초대코드 입력"
+            />
+            <ResponsiveButton
+              background={theme.colors.peach}
+              width="180px"
+              fontSize="20px"
+              smWidth="110px"
+              smFontSize="12px"
+              content="플레이리스트 추가"
+            />
+            <ResponsiveButton
+              background={theme.colors.sand}
+              width="180px"
+              fontSize="20px"
+              smWidth="110px"
+              smFontSize="12px"
+              content="방 생성"
+            />
           </NavItem>
         </Nav>
         <SearchContainer>
           <SearchWrapper>
             <InputBox
               isSearch={true}
-              placeholder={'검색어를 입력하세요'}
-              width={'100%'}
-              height={'54px'}
-              fontSize={'18px'}
+              placeholder="검색어를 입력하세요"
+              width="100%"
+              height="54px"
+              fontSize="18px"
             ></InputBox>
           </SearchWrapper>
         </SearchContainer>
