@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 interface InputBoxContainerProps {
   width: string;
   height: string;
+  paddingW?: string;
 }
 interface TextInputContainerProps {
   height: string;
@@ -20,6 +21,7 @@ interface Props {
   width: string;
   height: string;
   fontSize: string;
+  disabled?: boolean;
 }
 
 const InputBoxContainer = styled.div<InputBoxContainerProps>`
@@ -27,8 +29,8 @@ const InputBoxContainer = styled.div<InputBoxContainerProps>`
   border-radius: 100px;
   width: ${({ width }) => width};
   height: ${({ height }) => height};
-  padding-left: ${({ height }) => height};
-  padding-right: ${({ height }) => height};
+  padding-left: ${({ paddingW, height }) => paddingW || height};
+  padding-right: ${({ paddingW, height }) => paddingW || height};
   text-align: center;
   display: flex;
   box-shadow: 2px 2px 10px gray;
@@ -55,7 +57,7 @@ const ReadingGlass = styled.img`
   user-select: none;
 `;
 
-const InputBox = ({ isSearch, placeholder, width, height, fontSize }: PropsWithChildren<Props>) => {
+const InputBox = ({ isSearch, placeholder, width, height, fontSize, disabled }: PropsWithChildren<Props>) => {
   return (
     <InputBoxContainer width={width} height={height}>
       {isSearch ? (
@@ -63,7 +65,12 @@ const InputBox = ({ isSearch, placeholder, width, height, fontSize }: PropsWithC
           <ReadingGlass src="/images/readingGlass.png" draggable="false"></ReadingGlass>
         </ImageContainer>
       ) : null}
-      <TextInputContainer placeholder={placeholder} height={height} fontSize={fontSize}></TextInputContainer>
+      <TextInputContainer
+        disabled={disabled}
+        placeholder={placeholder}
+        height={height}
+        fontSize={fontSize}
+      ></TextInputContainer>
     </InputBoxContainer>
   );
 };
