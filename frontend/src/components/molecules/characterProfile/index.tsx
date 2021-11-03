@@ -1,8 +1,9 @@
+import styled from '@emotion/styled';
+
 import Character from '../../atoms/Character';
 import StatusChip from '../../atoms/StatusChip';
 import { PropsWithChildren } from 'react';
 import theme from '../../../styles/theme';
-import styled from '@emotion/styled';
 
 interface props {
   color: string;

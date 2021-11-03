@@ -1,7 +1,8 @@
-import GlassContainer from '../../atoms/GlassContainer';
-import CharacterProfile from '../../molecules/characterProfile';
-import theme from '../../../styles/theme';
 import styled from '@emotion/styled';
+
+import GlassContainer from '../../atoms/GlassContainer';
+import CharacterProfile from '../CharacterProfile';
+import theme from '../../../styles/theme';
 
 const Title = styled.p`
   margin-right: auto;
@@ -22,11 +23,11 @@ const CharacterList = ({ children }: any) => {
     { color: '234def', name: 'dd', status: 'ready' },
   ];
   return (
-    <GlassContainer type={'left'}>
+    <GlassContainer type={'left'} mode={'detail'}>
       <Title>사용자 목록</Title>
       <Container>
-        {dummy.map((element) => (
-          <CharacterProfile color={element.color} name={element.name} status={element.status} />
+        {dummy.map((element, index) => (
+          <CharacterProfile key={index} color={element.color} name={element.name} status={element.status} />
         ))}
       </Container>
     </GlassContainer>

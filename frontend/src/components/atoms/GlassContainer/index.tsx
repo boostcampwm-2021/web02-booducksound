@@ -3,17 +3,19 @@ import { PropsWithChildren } from 'react';
 import theme from '../../../styles/theme';
 
 interface ContainerProps {
-  type: string;
+  type: 'left' | 'right';
+  mode: 'title' | 'detail';
   ratio: string;
 }
 
 interface props {
-  type: string;
+  type: 'left' | 'right';
+  mode: 'title' | 'detail';
 }
 
 const Container = styled.div<ContainerProps>`
   width: ${({ type }) => type};
-  min-height: 15%;
+  min-height: ${({ mode }) => mode};
 
   background-color: ${theme.colors.lightsky};
   margin: ${({ ratio }) => ratio};
@@ -24,20 +26,24 @@ const Container = styled.div<ContainerProps>`
   align-items: center;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    min-height: 15%;
+    min-height: ${({ mode }) => mode};
     width: ${({ type }) => type};
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    min-height: 45px;
+    min-height: ${({ mode }) => mode};
     width: ${({ type }) => type};
   }
 `;
 
 //1920 568 946
-const GlassContainer = ({ type, children }: PropsWithChildren<props>) => {
+const GlassContainer = ({ type, mode, children }: PropsWithChildren<props>) => {
   return (
-    <Container ratio={type === 'left' ? '1%' : '2%'} type={type === 'left' ? '60%' : '80%'}>
+    <Container
+      ratio={type === 'left' ? '1%' : '2%'}
+      type={type === 'left' ? '60%' : '80%'}
+      mode={mode === 'title' ? '15%' : '45%'}
+    >
       {children}
     </Container>
   );
