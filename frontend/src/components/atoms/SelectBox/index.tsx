@@ -8,7 +8,8 @@ interface Props {
 const Select = styled.select`
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
   border: 2px solid black;
-  padding: 0.8rem 6rem 0.8rem 1.2rem;
+  height: 48px;
+  padding-left: 16px;
   border-radius: 100px;
   outline: none;
   -webkit-appearance: none;
