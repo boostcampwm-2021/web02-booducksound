@@ -316,14 +316,18 @@ const Lobby: NextPage = () => {
               smFontSize="12px"
               content="초대코드 입력"
             />
-            <ResponsiveButton
-              background={theme.colors.peach}
-              width="180px"
-              fontSize="20px"
-              smWidth="110px"
-              smFontSize="12px"
-              content="플레이리스트 추가"
-            />
+            <Link href="playlist/create">
+              <a>
+                <ResponsiveButton
+                  background={theme.colors.peach}
+                  width="180px"
+                  fontSize="20px"
+                  smWidth="110px"
+                  smFontSize="12px"
+                  content="플레이리스트 추가"
+                />
+              </a>
+            </Link>
             <ResponsiveButton
               background={theme.colors.sand}
               width="180px"
