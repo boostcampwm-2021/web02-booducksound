@@ -1,3 +1,5 @@
+import { MouseEventHandler } from 'react';
+
 import styled from '@emotion/styled';
 
 import InputBox from '../../atoms/InputBox';
@@ -19,6 +21,7 @@ interface Props {
   btnLgWidth?: string;
   btnMdWidth?: string;
   btnSmWidth?: string;
+  onClick?: MouseEventHandler;
 }
 
 const Container = styled.div`
@@ -54,6 +57,7 @@ const InputWithButton = (props: Props) => {
           mdWidth={props.btnMdWidth}
           smWidth={props.btnSmWidth}
           height={props.btnHeight}
+          onClick={props.onClick}
         />
       </ButtonContainer>
     </Container>

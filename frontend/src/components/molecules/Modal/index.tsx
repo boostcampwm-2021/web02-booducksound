@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { MouseEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -57,9 +57,19 @@ const ButtonContainer = styled.div`
 interface Props extends ModalContainerProps {
   leftButtonText?: string;
   rightButtonText?: string;
+  leftButtonHanlder?: MouseEventHandler;
+  rightButtonHanlder?: MouseEventHandler;
 }
 
-const Modal = ({ children, height, maxWidth, leftButtonText, rightButtonText }: PropsWithChildren<Props>) => {
+const Modal = ({
+  children,
+  height,
+  maxWidth,
+  leftButtonText,
+  rightButtonText,
+  leftButtonHanlder,
+  rightButtonHanlder,
+}: PropsWithChildren<Props>) => {
   return (
     <Portal>
       <ModalBackground />
@@ -76,6 +86,7 @@ const Modal = ({ children, height, maxWidth, leftButtonText, rightButtonText }: 
               smFontSize={'16px'}
               background={theme.colors.sky}
               content={leftButtonText || '확인'}
+              onClick={leftButtonHanlder}
             />
             <ResponsiveButton
               width={'180px'}
@@ -86,6 +97,7 @@ const Modal = ({ children, height, maxWidth, leftButtonText, rightButtonText }: 
               smFontSize={'16px'}
               background={theme.colors.alert}
               content={rightButtonText || '취소'}
+              onClick={rightButtonHanlder}
             />
           </ButtonContainer>
         </ModalWrapper>

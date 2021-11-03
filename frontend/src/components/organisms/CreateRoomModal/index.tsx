@@ -1,3 +1,5 @@
+import { MouseEventHandler } from 'react';
+
 import styled from '@emotion/styled';
 
 import theme from '../../../styles/theme';
@@ -23,7 +25,7 @@ const Container = styled.div`
   }
 `;
 
-const SelectlaylistContainer = styled.div`
+const SelectPlaylistContainer = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 8px;
@@ -34,9 +36,22 @@ const SelectPlaylistLabel = styled.h4`
   font-weight: 700;
 `;
 
-const CreateRoomModal = () => {
+interface Props {
+  handleCreateRoomYesBtn: MouseEventHandler;
+  handleCreateRoomNoBtn: MouseEventHandler;
+}
+
+const CreateRoomModal = ({ handleCreateRoomYesBtn, handleCreateRoomNoBtn }: Props) => {
+  const handleSelectPlaylistBtn = () => {};
+
   return (
-    <Modal height="440px" maxWidth="480px" leftButtonText="생성">
+    <Modal
+      height="440px"
+      maxWidth="480px"
+      leftButtonText="생성"
+      leftButtonHanlder={handleCreateRoomYesBtn}
+      rightButtonHanlder={handleCreateRoomNoBtn}
+    >
       <Container>
         <InputSection
           id="roomTitle"
@@ -62,7 +77,7 @@ const CreateRoomModal = () => {
           isSearch={false}
           paddingW="20px"
         />
-        <SelectlaylistContainer>
+        <SelectPlaylistContainer>
           <SelectPlaylistLabel>플레이리스트 *</SelectPlaylistLabel>
           <InputWithButton
             inputFontSize="0.76em"
@@ -77,8 +92,9 @@ const CreateRoomModal = () => {
             btnSmWidth="60px"
             btnHeight="38px"
             inputPaddingW="20px"
+            onClick={handleSelectPlaylistBtn}
           ></InputWithButton>
-        </SelectlaylistContainer>
+        </SelectPlaylistContainer>
       </Container>
     </Modal>
   );

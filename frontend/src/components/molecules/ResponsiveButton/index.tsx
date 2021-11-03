@@ -1,3 +1,5 @@
+import { MouseEventHandler } from 'react';
+
 import styled from '@emotion/styled';
 
 import Button from '../../atoms/Button';
@@ -11,6 +13,7 @@ interface ButtonWrapperProps {
   mdFontSize?: string;
   lgWidth?: string;
   lgFontSize?: string;
+  onClick?: MouseEventHandler;
 }
 
 interface ResponsiveButtonProps extends ButtonWrapperProps {
