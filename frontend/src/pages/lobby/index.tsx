@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
+import Link from 'next/link';
 
 import InputBox from '../../components/atoms/InputBox';
 import RoomCard from '../../components/atoms/RoomCard';
@@ -274,14 +275,18 @@ const Lobby: NextPage = () => {
       <Wrapper>
         <Nav>
           <NavItem>
-            <ResponsiveButton
-              background={theme.colors.lime}
-              width="180px"
-              fontSize="20px"
-              smWidth="110px"
-              smFontSize="12px"
-              content="MY PAGE"
-            />
+            <Link href="mypage">
+              <a>
+                <ResponsiveButton
+                  background={theme.colors.lime}
+                  width="180px"
+                  fontSize="20px"
+                  smWidth="110px"
+                  smFontSize="12px"
+                  content="MY PAGE"
+                />
+              </a>
+            </Link>
           </NavItem>
           <NavItem>
             <ResponsiveButton
