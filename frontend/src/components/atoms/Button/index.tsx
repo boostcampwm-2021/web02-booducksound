@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 
 interface ButtonContainerProps {
   width?: string;
+  height?: string;
   background?: string;
   fontSize?: string;
   paddingH?: string;
@@ -9,6 +10,7 @@ interface ButtonContainerProps {
 
 const ButtonContainer = styled.button<ButtonContainerProps>`
   width: ${({ width }) => width || '100%'};
+  height: ${({ height }) => height || 'auto'};
   background: ${({ background }) => background || 'inherit'};
 
   font-size: ${({ fontSize }) => fontSize || 'inherit'};
@@ -34,15 +36,16 @@ const ButtonContainer = styled.button<ButtonContainerProps>`
 
 interface Props {
   width?: string;
+  height?: string;
   background?: string;
   fontSize?: string;
   paddingH?: string;
   content: string;
 }
 
-const Button = ({ width, background, fontSize, paddingH, content }: Props) => {
+const Button = ({ width, height, background, fontSize, paddingH, content }: Props) => {
   return (
-    <ButtonContainer width={width} background={background} fontSize={fontSize} paddingH={paddingH}>
+    <ButtonContainer width={width} height={height} background={background} fontSize={fontSize} paddingH={paddingH}>
       {content}
     </ButtonContainer>
   );

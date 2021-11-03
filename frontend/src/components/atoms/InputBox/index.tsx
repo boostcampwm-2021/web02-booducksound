@@ -22,6 +22,7 @@ interface Props {
   height: string;
   fontSize: string;
   disabled?: boolean;
+  paddingW?: string;
 }
 
 const InputBoxContainer = styled.div<InputBoxContainerProps>`
@@ -35,6 +36,7 @@ const InputBoxContainer = styled.div<InputBoxContainerProps>`
   display: flex;
   box-shadow: 2px 2px 10px gray;
   background-color: white;
+  overflow: hidden;
 `;
 const TextInputContainer = styled.input<TextInputContainerProps>`
   display: inline-block;
@@ -57,9 +59,9 @@ const ReadingGlass = styled.img`
   user-select: none;
 `;
 
-const InputBox = ({ isSearch, placeholder, width, height, fontSize, disabled }: PropsWithChildren<Props>) => {
+const InputBox = ({ isSearch, placeholder, width, height, fontSize, disabled, paddingW }: PropsWithChildren<Props>) => {
   return (
-    <InputBoxContainer width={width} height={height}>
+    <InputBoxContainer width={width} height={height} paddingW={paddingW}>
       {isSearch ? (
         <ImageContainer rightMargin={height} size={fontSize}>
           <ReadingGlass src="/images/readingGlass.png" draggable="false"></ReadingGlass>

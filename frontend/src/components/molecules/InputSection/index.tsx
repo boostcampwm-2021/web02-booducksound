@@ -14,6 +14,8 @@ interface Props {
   fontSize: string;
   titleSize: string;
   margin: string;
+  paddingW?: string;
+  disabled?: boolean;
 }
 interface InputLabelContainerProps {
   titleSize: string;
@@ -28,6 +30,7 @@ const InputSectionContainer = styled.div`
 const InputLabelContainer = styled.label<InputLabelContainerProps>`
   font-size: ${({ titleSize }) => titleSize};
   margin-bottom: ${({ margin }) => margin};
+  font-weight: 700;
 `;
 
 const InputSection = ({
@@ -40,6 +43,8 @@ const InputSection = ({
   height,
   fontSize,
   margin,
+  paddingW,
+  disabled,
 }: PropsWithChildren<Props>) => {
   return (
     <InputSectionContainer>
@@ -52,6 +57,8 @@ const InputSection = ({
         width={width}
         height={height}
         fontSize={fontSize}
+        paddingW={paddingW}
+        disabled={disabled}
       ></InputBox>
     </InputSectionContainer>
   );

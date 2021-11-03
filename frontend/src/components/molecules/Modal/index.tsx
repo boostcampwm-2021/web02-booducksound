@@ -8,6 +8,7 @@ import ResponsiveButton from '../ResponsiveButton';
 
 interface ModalContainerProps {
   height?: string;
+  maxWidth?: string;
 }
 
 const ModalBackground = styled.div`
@@ -25,7 +26,7 @@ const ModalContainer = styled.div<ModalContainerProps>`
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90vw;
-  max-width: 920px;
+  max-width: ${({ maxWidth }) => maxWidth || '640px'};
   height: ${({ height }) => height || '72vh'};
   padding: 32px;
   background: #fff;
@@ -53,37 +54,36 @@ const ButtonContainer = styled.div`
   }
 `;
 
-interface Props {
-  height?: 'string';
-  leftButtonText?: 'string';
-  rightButtonText?: 'string';
+interface Props extends ModalContainerProps {
+  leftButtonText?: string;
+  rightButtonText?: string;
 }
 
-const Modal = ({ children, height, leftButtonText, rightButtonText }: PropsWithChildren<Props>) => {
+const Modal = ({ children, height, maxWidth, leftButtonText, rightButtonText }: PropsWithChildren<Props>) => {
   return (
     <Portal>
       <ModalBackground />
-      <ModalContainer height={height}>
+      <ModalContainer height={height} maxWidth={maxWidth}>
         <ModalWrapper>
           {children}
           <ButtonContainer>
             <ResponsiveButton
-              width={'220px'}
-              fontSize={'20px'}
-              smWidth={'120px'}
-              smFontSize={'14px'}
+              width={'180px'}
+              fontSize={'22px'}
               mdWidth={'160px'}
-              mdFontSize={'16px'}
+              mdFontSize={'20px'}
+              smWidth={'120px'}
+              smFontSize={'16px'}
               background={theme.colors.sky}
               content={leftButtonText || '확인'}
             />
             <ResponsiveButton
-              width={'220px'}
-              fontSize={'20px'}
-              smWidth={'120px'}
-              smFontSize={'14px'}
+              width={'180px'}
+              fontSize={'22px'}
               mdWidth={'160px'}
-              mdFontSize={'16px'}
+              mdFontSize={'20px'}
+              smWidth={'120px'}
+              smFontSize={'16px'}
               background={theme.colors.alert}
               content={rightButtonText || '취소'}
             />
