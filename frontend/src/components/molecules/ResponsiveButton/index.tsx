@@ -16,6 +16,8 @@ interface ButtonWrapperProps {
 interface ResponsiveButtonProps extends ButtonWrapperProps {
   background: string;
   content: string;
+  height?: string;
+  paddingH?: string;
 }
 
 const ButtonWrapper = styled.div<ButtonWrapperProps>`
@@ -39,11 +41,11 @@ const ButtonWrapper = styled.div<ButtonWrapperProps>`
 `;
 
 const ResponsiveButton = (props: ResponsiveButtonProps) => {
-  const { content, background } = props;
+  const { content, background, height, paddingH } = props;
 
   return (
     <ButtonWrapper {...props}>
-      <Button content={content} background={background} />
+      <Button content={content} background={background} height={height} paddingH={paddingH} />
     </ButtonWrapper>
   );
 };
