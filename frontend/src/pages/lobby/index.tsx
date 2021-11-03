@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
+import Link from 'next/link';
 
 import Button from '../../components/atoms/Button';
 import InputBox from '../../components/atoms/InputBox';
@@ -299,7 +300,11 @@ const Lobby: NextPage = () => {
       <Wrapper>
         <Nav>
           <NavItem>
-            <ResponsiveButton background={theme.colors.lime} fontSize={20} content={'MY PAGE'} />
+            <Link href="mypage">
+              <a>
+                <ResponsiveButton background={theme.colors.lime} fontSize={20} content={'MY PAGE'} />
+              </a>
+            </Link>
           </NavItem>
           <NavItem>
             <ResponsiveButton background={theme.colors.lightsky} fontSize={20} content={'초대코드 입력'} />
