@@ -34,7 +34,7 @@ const InputBoxContainer = styled.div<InputBoxContainerProps>`
   padding-right: ${({ paddingW, height }) => paddingW || height};
   text-align: center;
   display: flex;
-  box-shadow: 2px 2px 10px gray;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
   background-color: white;
   overflow: hidden;
 `;

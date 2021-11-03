@@ -7,7 +7,7 @@ import Link from 'next/link';
 import InputBox from '../../components/atoms/InputBox';
 import RoomCard from '../../components/atoms/RoomCard';
 import ResponsiveButton from '../../components/molecules/ResponsiveButton';
-import CreateRoomModal from '../../components/organisms/CreateRoomModal';
+import CreateRoomModal from '../../components/organisms/RoomSettingModal';
 import theme from '../../styles/theme';
 import { Room } from '../../types/Room';
 
@@ -337,6 +337,7 @@ const Lobby: NextPage = () => {
               <CreateRoomModal
                 handleCreateRoomYesBtn={handleCreateRoomYesBtn}
                 handleCreateRoomNoBtn={handleCreateRoomNoBtn}
+                leftButtonText="생성"
               />
             )}
           </NavItem>
