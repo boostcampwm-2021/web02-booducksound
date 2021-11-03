@@ -4,15 +4,15 @@ import styled from '@emotion/styled';
 
 interface ChipContainerProps {
   color: string;
-  fontSize: number;
+  fontSize: string;
 }
 interface DeleteButtonProps {
   color: string;
-  fontSize: number;
+  marginRight: string;
 }
 interface Props {
   color: string;
-  fontSize: number;
+  fontSize: string;
   content: string;
 }
 
@@ -21,27 +21,27 @@ const ChipContainer = styled.div<ChipContainerProps>`
 
   text-align: center;
   border: 2px ${({ color }) => color} solid;
-  border-radius: ${({ fontSize }) => fontSize / 5}px;
+  border-radius: 5px;
 
-  font-size: ${({ fontSize }) => fontSize}px;
+  font-size: ${({ fontSize }) => fontSize};
   font-weight: bold;
   color: ${({ color }) => color};
-  padding-left: ${({ fontSize }) => fontSize}px;
-  padding-right: ${({ fontSize }) => fontSize}px;
+  padding-left: ${({ fontSize }) => fontSize};
+  padding-right: ${({ fontSize }) => fontSize};
 `;
 const DeleteButton = styled.button<DeleteButtonProps>`
   color: ${({ color }) => color};
   font-size: inherit;
   background-color: transparent;
   border: none;
-  margin-right: ${({ fontSize }) => fontSize}px;
+  margin-right: ${({ marginRight }) => marginRight};
   cursor: pointer;
 `;
 
 const Chip = ({ color, fontSize, content }: PropsWithChildren<Props>) => {
   return (
     <ChipContainer color={color} fontSize={fontSize}>
-      <DeleteButton color={color} fontSize={fontSize}>
+      <DeleteButton color={color} marginRight={fontSize}>
         x
       </DeleteButton>
       {content}
