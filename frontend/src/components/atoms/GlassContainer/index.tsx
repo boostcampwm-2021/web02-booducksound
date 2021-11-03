@@ -14,8 +14,14 @@ interface props {
 const Container = styled.div<ContainerProps>`
   width: ${({ type }) => type};
   min-height: 15%;
+
   background-color: ${theme.colors.lightsky};
   margin: ${({ ratio }) => ratio};
+  display: flex;
+  padding: 2%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     min-height: 15%;

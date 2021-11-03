@@ -3,6 +3,7 @@ import type { NextPage } from 'next';
 
 import theme from '../../styles/theme';
 import Button from '../../components/atoms/Button';
+import CharacterList from '../../components/molecules/characterList';
 import GlassContainer from '../../components/atoms/GlassContainer';
 
 const Container = styled.div`
@@ -118,6 +119,10 @@ const ChatContainer = styled.div`
   }
 `;
 
+const RoomStateTitle = styled.p`
+  font-weight: bolder;
+`;
+
 const CharacterListContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -171,15 +176,17 @@ const GameRoom: NextPage = () => {
         </Nav>
       </Wrapper>
       <Wrapper style={{ display: 'flex' }}>
-        <ChatContainer>
-          <GlassContainer type={'left'}>대기중 입니다.</GlassContainer>
-          <GlassContainer type={'left'}>대기중 입니다.</GlassContainer>
-        </ChatContainer>
         <CharacterListContainer>
+          <GlassContainer type={'left'}>
+            <RoomStateTitle>대기중 입니다.</RoomStateTitle>
+          </GlassContainer>
+          <CharacterList></CharacterList>
+        </CharacterListContainer>
+        <ChatContainer>
           <GlassContainer type={'right'}>대기중 입니다.</GlassContainer>
           <GlassContainer type={'right'}>대기중 입니다.</GlassContainer>
           <InputBox placeholder={'메세지를 입력해주세요.'} />
-        </CharacterListContainer>
+        </ChatContainer>
       </Wrapper>
     </Container>
   );
