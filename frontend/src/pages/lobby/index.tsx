@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Link from 'next/link';
@@ -5,6 +7,7 @@ import Link from 'next/link';
 import InputBox from '../../components/atoms/InputBox';
 import RoomCard from '../../components/atoms/RoomCard';
 import ResponsiveButton from '../../components/molecules/ResponsiveButton';
+import CreateRoomModal from '../../components/organisms/CreateRoomModal';
 import theme from '../../styles/theme';
 import { Room } from '../../types/Room';
 
@@ -95,180 +98,196 @@ const GridWrapper = styled.div`
   }
 `;
 
+const dummyRooms: Room[] = [
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'playing',
+    hasPassword: true,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'waiting',
+    hasPassword: false,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'playing',
+    hasPassword: false,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'waiting',
+    hasPassword: true,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'waiting',
+    hasPassword: true,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'waiting',
+    hasPassword: false,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'playing',
+    hasPassword: false,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'waiting',
+    hasPassword: true,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'playing',
+    hasPassword: true,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'waiting',
+    hasPassword: false,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'playing',
+    hasPassword: false,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'waiting',
+    hasPassword: true,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'waiting',
+    hasPassword: true,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'waiting',
+    hasPassword: false,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'playing',
+    hasPassword: false,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'waiting',
+    hasPassword: true,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'waiting',
+    hasPassword: false,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'playing',
+    hasPassword: false,
+  },
+  {
+    title: '방 제목입니다',
+    playlistName: '플레이리스트 이름입니다',
+    hashtags: ['해시태그1', '해시태그2'],
+    curPeople: 2,
+    maxPeople: 8,
+    status: 'waiting',
+    hasPassword: true,
+  },
+];
+
 const Lobby: NextPage = () => {
-  const dummyRooms: Room[] = [
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'playing',
-      hasPassword: true,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'waiting',
-      hasPassword: false,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'playing',
-      hasPassword: false,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'waiting',
-      hasPassword: true,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'waiting',
-      hasPassword: true,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'waiting',
-      hasPassword: false,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'playing',
-      hasPassword: false,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'waiting',
-      hasPassword: true,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'playing',
-      hasPassword: true,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'waiting',
-      hasPassword: false,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'playing',
-      hasPassword: false,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'waiting',
-      hasPassword: true,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'waiting',
-      hasPassword: true,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'waiting',
-      hasPassword: false,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'playing',
-      hasPassword: false,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'waiting',
-      hasPassword: true,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'waiting',
-      hasPassword: false,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'playing',
-      hasPassword: false,
-    },
-    {
-      title: '방 제목입니다',
-      playlistName: '플레이리스트 이름입니다',
-      hashtags: ['해시태그1', '해시태그2'],
-      curPeople: 2,
-      maxPeople: 8,
-      status: 'waiting',
-      hasPassword: true,
-    },
-  ];
+  const [hasCreateRoomModal, setHasCreateRoomModal] = useState(false);
+
+  const handleCreateRoomModalBtn = () => {
+    setHasCreateRoomModal(true);
+  };
+
+  const handleCreateRoomYesBtn = () => {
+    // 방 생성 로직 작성할 것
+
+    setHasCreateRoomModal(false);
+  };
+
+  const handleCreateRoomNoBtn = () => {
+    setHasCreateRoomModal(false);
+  };
 
   return (
     <Container>
@@ -312,7 +331,14 @@ const Lobby: NextPage = () => {
               smWidth="110px"
               smFontSize="12px"
               content="방 생성"
+              onClick={handleCreateRoomModalBtn}
             />
+            {hasCreateRoomModal && (
+              <CreateRoomModal
+                handleCreateRoomYesBtn={handleCreateRoomYesBtn}
+                handleCreateRoomNoBtn={handleCreateRoomNoBtn}
+              />
+            )}
           </NavItem>
         </Nav>
         <SearchContainer>
