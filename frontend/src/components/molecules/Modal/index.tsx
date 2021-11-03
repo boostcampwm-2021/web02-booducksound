@@ -3,6 +3,7 @@ import { PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
 
 import theme from '../../../styles/theme';
+import Portal from '../../atoms/Portal';
 import ResponsiveButton from '../ResponsiveButton';
 
 interface ModalContainerProps {
@@ -60,7 +61,7 @@ interface Props {
 
 const Modal = ({ children, height, leftButtonText, rightButtonText }: PropsWithChildren<Props>) => {
   return (
-    <>
+    <Portal>
       <ModalBackground />
       <ModalContainer height={height}>
         <ModalWrapper>
@@ -89,7 +90,7 @@ const Modal = ({ children, height, leftButtonText, rightButtonText }: PropsWithC
           </ButtonContainer>
         </ModalWrapper>
       </ModalContainer>
-    </>
+    </Portal>
   );
 };
 
