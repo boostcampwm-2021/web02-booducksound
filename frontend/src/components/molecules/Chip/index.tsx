@@ -6,8 +6,6 @@ import theme from '../../../styles/theme';
 import DeleteButton from '../../atoms/DeleteButton';
 
 interface Props {
-  color: string;
-  fontSize: string;
   content: string;
 }
 
