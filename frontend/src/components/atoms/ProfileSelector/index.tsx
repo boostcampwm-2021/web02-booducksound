@@ -6,7 +6,7 @@ import theme from '../../../styles/theme';
 import Character from '../Character';
 
 interface Props {
-  type: string;
+  type?: string;
 }
 
 const getRandomHex = () => {
