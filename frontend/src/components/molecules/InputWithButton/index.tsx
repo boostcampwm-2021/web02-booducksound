@@ -12,6 +12,7 @@ interface Props {
   inputHeight: string;
   inputFontSize: string;
   inputPaddingW?: string;
+  inputDisabled?: boolean;
 
   btnWidth: string;
   btnHeight: string;
@@ -46,6 +47,7 @@ const InputWithButton = (props: Props) => {
         isSearch={props.isSearch}
         placeholder={props.placeholder}
         paddingW={props.inputPaddingW}
+        disabled={props.inputDisabled}
       />
       <ButtonContainer>
         <ResponsiveButton
