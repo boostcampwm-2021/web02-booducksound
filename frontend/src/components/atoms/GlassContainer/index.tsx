@@ -42,7 +42,7 @@ const GlassContainer = ({ type, mode, children }: PropsWithChildren<props>) => {
     <Container
       ratio={type === 'left' ? '1%' : '2%'}
       type={type === 'left' ? '60%' : '80%'}
-      mode={mode === 'title' ? '15%' : '45%'}
+      mode={mode === 'title' ? '15%' : '60%'}
     >
       {children}
     </Container>
