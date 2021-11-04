@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { MouseEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -9,6 +9,7 @@ import CreatePlaylistMusicItem from '../../molecules/CreatePlaylistMusicItem';
 
 interface Props {
   musics: Music[];
+  setIsOpenModal: MouseEventHandler;
 }
 
 const MusicListContainer = styled.div``;
@@ -61,7 +62,7 @@ const EmptyBox = styled.div`
   height: 100%;
   color: #ddd;
 `;
-const CreatePlaylistMusicList = ({ musics }: PropsWithChildren<Props>) => {
+const CreatePlaylistMusicList = ({ musics, setIsOpenModal }: PropsWithChildren<Props>) => {
   return (
     <MusicListContainer>
       <MusicListTitleBox>
@@ -73,6 +74,7 @@ const CreatePlaylistMusicList = ({ musics }: PropsWithChildren<Props>) => {
             fontSize={'12px'}
             paddingH={'7px'}
             width={'100px'}
+            onClick={setIsOpenModal}
           ></Button>
         </MusicListTitleTop>
         <MusicListTitleBottom>최소 3개, 최대 50개까지 추가가 가능합니다.</MusicListTitleBottom>
@@ -81,7 +83,7 @@ const CreatePlaylistMusicList = ({ musics }: PropsWithChildren<Props>) => {
         {!musics.length ? (
           <EmptyBox>노래를 추가해 주세요.</EmptyBox>
         ) : (
-          musics.map((music, idx) => <CreatePlaylistMusicItem title={music.title} key={idx} />)
+          musics.map((music, idx) => <CreatePlaylistMusicItem title={music.info} key={idx} />)
         )}
       </MusicListContentBox>
     </MusicListContainer>
