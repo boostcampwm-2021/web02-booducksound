@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { ChangeEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -23,6 +23,7 @@ interface Props {
   fontSize: string;
   disabled?: boolean;
   paddingW?: string;
+  onChangeHandler?: ChangeEventHandler;
 }
 
 const InputBoxContainer = styled.div<InputBoxContainerProps>`
@@ -45,7 +46,6 @@ const TextInputContainer = styled.input<TextInputContainerProps>`
   border: none;
   font-size: ${({ fontSize }) => fontSize};
 `;
-
 const ImageContainer = styled.div<ImageContainerProps>`
   display: flex;
   justify-content: center;
@@ -53,13 +53,21 @@ const ImageContainer = styled.div<ImageContainerProps>`
   width: ${({ size }) => size};
   margin-right: ${({ rightMargin }) => rightMargin};
 `;
-
 const ReadingGlass = styled.img`
   height: 50%;
   user-select: none;
 `;
 
-const InputBox = ({ isSearch, placeholder, width, height, fontSize, disabled, paddingW }: PropsWithChildren<Props>) => {
+const InputBox = ({
+  isSearch,
+  placeholder,
+  width,
+  height,
+  fontSize,
+  disabled,
+  paddingW,
+  onChangeHandler,
+}: PropsWithChildren<Props>) => {
   return (
     <InputBoxContainer width={width} height={height} paddingW={paddingW}>
       {isSearch ? (
@@ -72,6 +80,7 @@ const InputBox = ({ isSearch, placeholder, width, height, fontSize, disabled, pa
         placeholder={placeholder}
         height={height}
         fontSize={fontSize}
+        onChange={onChangeHandler}
       ></TextInputContainer>
     </InputBoxContainer>
   );
