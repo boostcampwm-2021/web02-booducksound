@@ -1,9 +1,12 @@
-import { useState, MouseEventHandler, ChangeEventHandler } from 'react';
+import { useState, MouseEventHandler, ChangeEventHandler, SetStateAction, Dispatch } from 'react';
 
 import styled from '@emotion/styled';
+import Router from 'next/router';
+import { Socket } from 'socket.io-client';
 
-import useSocketOn from '../../../hooks/useSocketOn';
+import useSocket from '../../../hooks/useSocket';
 import theme from '../../../styles/theme';
+import { SocketEvents } from '../../../types/SocketEvents';
 import InputSection from '../../molecules/InputSection';
 import InputWithButton from '../../molecules/InputWithButton';
 import Modal from '../../molecules/Modal';
@@ -45,17 +48,18 @@ const HalfContainer = styled.div`
 `;
 
 interface Props {
-  handleCreateRoomYesBtn: MouseEventHandler;
-  handleCreateRoomNoBtn: MouseEventHandler;
+  setModalOnOff: Dispatch<SetStateAction<boolean>>;
   leftButtonText: string;
 }
 
-const CreateRoomModal = ({ handleCreateRoomYesBtn, handleCreateRoomNoBtn, leftButtonText }: Props) => {
+const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
+  const socket = useSocket();
+
   const [title, setTitle] = useState<string>();
   const [playListId, setPlayListId] = useState<string>();
   const [password, setPassword] = useState<string>();
-  const [skip, setSkip] = useState<number>();
-  const [timePerProblem, setTimePerProblem] = useState<number>();
+  const [skip, setSkip] = useState<number>(5);
+  const [timePerProblem, setTimePerProblem] = useState<number>(60);
 
   const handleTitleChange: ChangeEventHandler = (e) => {
     const title = (e.target as HTMLInputElement).value;
@@ -81,13 +85,29 @@ const CreateRoomModal = ({ handleCreateRoomYesBtn, handleCreateRoomNoBtn, leftBu
     setTimePerProblem(timePerProblemNum);
   };
 
+  const handleCreateRoomBtn: MouseEventHandler = () => {
+    if (socket === null) return;
+
+    const room = { title, playListId, password, skip, timePerProblem };
+    // TODO: title, playlistId 이 정의되지 않았을 경우 골라달라는 경고창과 함께 return 할 것
+
+    (socket as Socket).emit(SocketEvents.CREATE_ROOM, room, (uuid: string) => {
+      setModalOnOff(false);
+      Router.push(`/game/${uuid}`);
+    });
+  };
+
+  const handleNoBtn: MouseEventHandler = () => {
+    setModalOnOff(false);
+  };
+
   return (
     <Modal
       height="480px"
       maxWidth="540px"
       leftButtonText={leftButtonText}
-      leftButtonHanlder={handleCreateRoomYesBtn}
-      rightButtonHanlder={handleCreateRoomNoBtn}
+      leftButtonHanlder={handleCreateRoomBtn}
+      rightButtonHanlder={handleNoBtn}
     >
       <Container>
         <InputSection

@@ -3,7 +3,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { io } from 'socket.io-client';
 
 import { SocketState } from '../reducers/socket';
-import { SocketActions } from '../types/actions';
+import { SocketActions } from '../types/Actions';
 
 export const connectSocket = () => (dispatch: ThunkDispatch<SocketState, void, Action>) => {
   try {
