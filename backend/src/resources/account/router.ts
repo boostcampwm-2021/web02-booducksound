@@ -1,42 +1,15 @@
-import express, { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import express from 'express';
 
-import userService, { LoginInfo, UserType, LoginResponse } from './service';
+import UserController from './controller';
 
 const router = express.Router();
 require('dotenv').config();
 
-router.get('/checkId', async (req: Request, res: Response) => {
-  const id: string = req.query.id as string;
-  const result = await userService.idCheck(id);
-  res.json({ result });
-});
-
-router.get('/checkLogin', async (req: Request, res: Response) => {
-  const id: string = req.query.id as string;
-  const result = await userService.getUserInfo(id);
-  res.json({ result });
-});
-
-router.post('/resetPwd', async (req: Request, res: Response) => {
-  const { id, password }: LoginInfo = req.body;
-  await userService.changePassword(id, password);
-  res.json({ result: true });
-});
-
-router.post('/signIn', async (req: Request, res: Response) => {
-  const { id, password }: LoginInfo = req.body;
-  await userService.login({ id, password }, (e: LoginResponse) => res.json(e));
-});
-
-router.post('/signUp', (req: Request, res: Response) => {
-  const { id, password, nickname, color }: UserType = req.body;
-  const result = userService.join({ id, password, nickname, color });
-  res.json(result);
-});
-
-router.post('/logOut', (req: Request, res: Response) => {
-  //
-});
+router.get('/checkId', UserController.checkId);
+router.get('/checkLogin', UserController.checkLogin);
+router.post('/resetPwd', UserController.resetPwd);
+router.post('/signIn', UserController.signIn);
+router.post('/signUp', UserController.signUp);
+router.post('/logOut', UserController.logOut);
 
 export default router;
