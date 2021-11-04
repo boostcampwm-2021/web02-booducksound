@@ -6,7 +6,7 @@ import express from 'express';
 import morgan from 'morgan';
 
 import io from './io';
-import userRouter from './resources/user/router';
+import accRouter from './resources/account/router';
 
 const app = express();
 
@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(morgan('common'));
 
 app.use('/assets', express.static('assets'));
-app.use('/user', userRouter);
+app.use('/', accRouter);
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
