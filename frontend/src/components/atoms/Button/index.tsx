@@ -41,11 +41,12 @@ interface Props {
   fontSize?: string;
   paddingH?: string;
   content: string;
+  onClick: Function;
 }
 
-const Button = ({ width, height, background, fontSize, paddingH, content }: Props) => {
+const Button = ({ width, height, background, fontSize, paddingH, content, onClick }: Props) => {
   return (
-    <ButtonContainer width={width} height={height} background={background} fontSize={fontSize} paddingH={paddingH}>
+    <ButtonContainer width={width} height={height} background={background} fontSize={fontSize} paddingH={paddingH} onClick={onClick}>
       {content}
     </ButtonContainer>
   );
