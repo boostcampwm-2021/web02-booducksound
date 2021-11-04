@@ -63,7 +63,7 @@ export const getToken = () => {
 export const setToken = (token: string) => {
   const date = new Date();
   date.setTime(date.getTime() + 60 * 60 * 1000);
-  document.cookie = `token=${token};expires=${date.toLocaleString()};path=/`;
+  document.cookie = `token=${token};max-age=3600;path=/`;
 };
 
 const Login: NextPage = () => {
