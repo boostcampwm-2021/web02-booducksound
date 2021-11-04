@@ -91,6 +91,9 @@ const PlaylistCreate: NextPage = () => {
           <CreatePlaylistMusicList
             musics={musics}
             setIsOpenModal={(e) => setIsOpenModal(true)}
+            setMusics={(target: number) =>
+              setMusics((preState) => [...preState.filter((music, idx) => idx !== target)])
+            }
           ></CreatePlaylistMusicList>
           <SubmitButtonWrapper>
             <Button

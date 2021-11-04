@@ -7,6 +7,8 @@ import Button from '../../atoms/Button';
 
 interface Props {
   title: string;
+  deleteItem: Function;
+  idx: number;
 }
 
 const ItemContainer = styled.div`
@@ -26,13 +28,20 @@ const ButtonBox = styled.div`
   row-gap: 5px;
 `;
 
-const CreatePlaylistMusicItem = ({ title }: PropsWithChildren<Props>) => {
+const CreatePlaylistMusicItem = ({ title, deleteItem, idx }: PropsWithChildren<Props>) => {
   return (
     <ItemContainer>
       <MusicTitle>{title}</MusicTitle>
       <ButtonBox>
         <Button content={'수정'} background={theme.colors.sky} fontSize={'12px'} paddingH={'7px'} width={'100px'} />
-        <Button content={'삭제'} background={theme.colors.peach} fontSize={'12px'} paddingH={'7px'} width={'100px'} />
+        <Button
+          content={'삭제'}
+          background={theme.colors.peach}
+          fontSize={'12px'}
+          paddingH={'7px'}
+          width={'100px'}
+          onClick={(e) => deleteItem(idx)}
+        />
       </ButtonBox>
     </ItemContainer>
   );
