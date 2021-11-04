@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
 
     ROOMS[uuid] = { title, playListId, password, skip, timePerProblem, players };
 
-    done();
+    done(uuid);
   });
 });
 

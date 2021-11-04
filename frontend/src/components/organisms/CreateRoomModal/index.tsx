@@ -1,6 +1,7 @@
 import { useState, MouseEventHandler, ChangeEventHandler, SetStateAction, Dispatch } from 'react';
 
 import styled from '@emotion/styled';
+import Router from 'next/router';
 import { Socket } from 'socket.io-client';
 
 import useSocket from '../../../hooks/useSocket';
@@ -90,8 +91,10 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
     const room = { title, playListId, password, skip, timePerProblem };
     // TODO: title, playlistId 이 정의되지 않았을 경우 골라달라는 경고창과 함께 return 할 것
 
-    // TODO: done 이벤트로, uuid를 받아 game 페이지로 이동하게 할 것
-    (socket as Socket).emit(SocketEvents.CREATE_ROOM, room, () => setModalOnOff(false));
+    (socket as Socket).emit(SocketEvents.CREATE_ROOM, room, (uuid: string) => {
+      setModalOnOff(false);
+      Router.push(`/game/${uuid}`);
+    });
   };
 
   const handleNoBtn: MouseEventHandler = () => {
