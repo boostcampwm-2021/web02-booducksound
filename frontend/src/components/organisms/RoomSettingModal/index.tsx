@@ -2,6 +2,7 @@ import { useState, MouseEventHandler, ChangeEventHandler } from 'react';
 
 import styled from '@emotion/styled';
 
+import useSocketOn from '../../../hooks/useSocketOn';
 import theme from '../../../styles/theme';
 import InputSection from '../../molecules/InputSection';
 import InputWithButton from '../../molecules/InputWithButton';
@@ -50,10 +51,23 @@ interface Props {
 }
 
 const CreateRoomModal = ({ handleCreateRoomYesBtn, handleCreateRoomNoBtn, leftButtonText }: Props) => {
+  const [title, setTitle] = useState<string>();
+  const [playListId, setPlayListId] = useState<string>();
+  const [password, setPassword] = useState<string>();
   const [skip, setSkip] = useState<number>();
   const [timePerProblem, setTimePerProblem] = useState<number>();
 
+  const handleTitleChange: ChangeEventHandler = (e) => {
+    const title = (e.target as HTMLInputElement).value;
+    setTitle(title);
+  };
+
   const handleSelectPlaylistBtn = () => {};
+
+  const handlePasswordChange: ChangeEventHandler = (e) => {
+    const password = (e.target as HTMLInputElement).value;
+    setPassword(password);
+  };
 
   const handleSkipChange: ChangeEventHandler = (e) => {
     const skipStr = (e.target as HTMLSelectElement).value;
@@ -87,6 +101,7 @@ const CreateRoomModal = ({ handleCreateRoomYesBtn, handleCreateRoomNoBtn, leftBu
           margin="8px"
           isSearch={false}
           paddingW="20px"
+          onChangeHandler={handleTitleChange}
         />
         <SelectPlaylistContainer>
           <SelectPlaylistLabel>플레이리스트</SelectPlaylistLabel>
@@ -118,6 +133,7 @@ const CreateRoomModal = ({ handleCreateRoomYesBtn, handleCreateRoomNoBtn, leftBu
           margin="8px"
           isSearch={false}
           paddingW="20px"
+          onChangeHandler={handlePasswordChange}
         />
         <HalfContainer>
           <SelectSection
