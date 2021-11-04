@@ -1,3 +1,5 @@
+import { ChangeEventHandler } from 'react';
+
 import styled from '@emotion/styled';
 
 import SelectBox from '../../atoms/SelectBox';
@@ -11,6 +13,7 @@ interface Props extends InputLabelContainerProps {
   title: string;
   options: string[] | number[];
   defaultValue: string | number;
+  onChange: ChangeEventHandler;
 }
 
 const InputSectionContainer = styled.div`
@@ -25,13 +28,13 @@ const InputLabelContainer = styled.label<InputLabelContainerProps>`
   font-weight: 700;
 `;
 
-const SelectSection = ({ titleSize, margin, title, options, defaultValue }: Props) => {
+const SelectSection = ({ titleSize, margin, title, options, defaultValue, onChange }: Props) => {
   return (
     <InputSectionContainer>
       <InputLabelContainer titleSize={titleSize} margin={margin}>
         {title}
       </InputLabelContainer>
-      <SelectBox options={options} defaultValue={defaultValue} />
+      <SelectBox options={options} defaultValue={defaultValue} onChange={onChange} />
     </InputSectionContainer>
   );
 };

@@ -1,8 +1,11 @@
+import { ChangeEventHandler } from 'react';
+
 import styled from '@emotion/styled';
 
 interface Props {
   options: string[] | number[];
   defaultValue?: string | number;
+  onChange: ChangeEventHandler;
 }
 
 const Select = styled.select`
@@ -18,9 +21,9 @@ const Select = styled.select`
   width: 100%;
 `;
 
-const SelectBox = ({ options, defaultValue }: Props) => {
+const SelectBox = ({ options, defaultValue, onChange }: Props) => {
   return (
-    <Select defaultValue={defaultValue}>
+    <Select defaultValue={defaultValue} onChange={onChange}>
       {options.map((e, i) => (
         <option key={`${e}${i}`}>{e}</option>
       ))}
