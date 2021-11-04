@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import useSocket from './useSocket';
 
-const useSocketEmit = (event, data) => {
+const useSocketEmit = (event: string, data: any) => {
   const socket = useSocket();
 
   useEffect(() => {

@@ -8,6 +8,10 @@ import MenuInfoBox from '../components/atoms/MenuInfoBox';
 import PageBox from '../components/atoms/PageBox';
 import theme from '../styles/theme';
 
+const handleLogin = () => {
+  console.log(123);
+};
+
 const LoginContainer = styled.div`
   position: fixed;
   width: calc(100vw - 8rem);
@@ -70,17 +74,14 @@ const Login: NextPage = () => {
               height={'80px'}
               fontSize={'20px'}
             ></InputBox>
-            <Link href="/lobby">
-              <a>
-                <Button
-                  width={'560px'}
-                  background={theme.colors.sky}
-                  fontSize={'30px'}
-                  paddingH={'24px'}
-                  content={'로그인'}
-                />
-              </a>
-            </Link>
+            <Button
+              width={'560px'}
+              background={theme.colors.sky}
+              fontSize={'30px'}
+              paddingH={'24px'}
+              content={'로그인'}
+              onClick={handleLogin}
+            />
             <SearchPwdBtn href="#none">비밀번호를 잊어버리셨나요?</SearchPwdBtn>
           </InputContainer>
         </LoginContainer>

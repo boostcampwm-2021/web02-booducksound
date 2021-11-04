@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
@@ -11,6 +11,7 @@ import CreatePlaylistInputBox from '../../../components/organisms/CreatePlaylist
 import CreatePlaylistMusicList from '../../../components/organisms/CreatePlaylistMusicList';
 import theme from '../../../styles/theme';
 import { Music } from '../../../types/music';
+import useEventListener from '../../../utils/useEventListener';
 
 const ChipContainer = styled.div`
   display: flex;
@@ -50,14 +51,36 @@ const Container = styled.div`
 `;
 
 const PlaylistCreate: NextPage = () => {
+  const [title, setTitle] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [hashTag, setHashTag] = useState<string>('');
   const [chips, setChips] = useState<string[]>([]);
   const [musics, setMusics] = useState<Music[]>([]);
+
+  const pressEnterHandler = useCallback(
+    (e: globalThis.KeyboardEvent) => {
+      if (e.key !== 'Enter') return;
+      if (!hashTag) return;
+      setHashTag('');
+      setChips((preState) => [...preState, hashTag]);
+    },
+    [hashTag],
+  );
+  useEventListener('keyup', pressEnterHandler);
+
   return (
     <Container>
       <MenuInfoBox name={'플레이리스트 추가'}></MenuInfoBox>
       <PageBox>
         <Wrapper>
-          <CreatePlaylistInputBox />
+          <CreatePlaylistInputBox
+            setTitle={(e) => setTitle((e.currentTarget as HTMLTextAreaElement).value)}
+            setDescription={(e) => setDescription((e.currentTarget as HTMLTextAreaElement).value)}
+            setHashTag={(e) => setHashTag((e.currentTarget as HTMLTextAreaElement).value)}
+            title={title}
+            description={description}
+            hashTag={hashTag}
+          />
           <ChipContainer>
             {chips.map((chip, idx) => (
               <Chip content={chip} key={idx}></Chip>

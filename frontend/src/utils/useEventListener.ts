@@ -3,7 +3,7 @@ import { EventHandler, useEffect } from 'react';
 const useEventListener = (
   event: string,
   handler: EventHandler<any>,
-  element: globalThis.Element | globalThis.Window = window,
+  element: globalThis.Element | globalThis.Window = global.window,
 ) => {
   useEffect(() => {
     element.addEventListener(event, handler);
