@@ -8,7 +8,7 @@ import Button from '.';
 describe('버튼 렌더링 테스트', () => {
   const content = '로그인';
   const background = theme.colors.sky;
-  const fontSize = 16;
+  const fontSize = '16px';
 
   render(
     <ThemeProvider theme={theme}>

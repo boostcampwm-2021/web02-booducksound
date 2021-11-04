@@ -9,6 +9,13 @@ const Title = styled.p`
 const Container = styled.div`
   width: 100%;
   margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    flex-direction: row;
+    overflow: auto;
+    justify-content: space-between;
+  }
 `;
 interface props {
   color: string;
@@ -28,7 +35,7 @@ const CharacterList = ({ children }: any) => {
     { color: '234def', name: 'dd', status: 'ready' },
   ];
   return (
-    <GlassContainer type={'left'} mode={'detail'}>
+    <GlassContainer>
       <Title>사용자 목록</Title>
       <Container>
         {dummy.map((element, index) => (
