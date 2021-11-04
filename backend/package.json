@@ -45,6 +45,6 @@
     "dev": "nodemon",
     "check-types": "tsc",
     "check-types:watch": "tsc --watch",
-    "deploy": "pm2 start build/server.js -n express"
+    "deploy": "pm2 start build/index.js -n express"
   }
 }

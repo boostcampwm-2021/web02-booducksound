@@ -1,0 +1,14 @@
+import { EventHandler, useEffect } from 'react';
+
+const useEventListener = (
+  event: string,
+  handler: EventHandler<any>,
+  element: globalThis.Element | globalThis.Window = window,
+) => {
+  useEffect(() => {
+    element.addEventListener(event, handler);
+    return () => element.removeEventListener(event, handler);
+  }, [event, handler, element]);
+};
+
+export default useEventListener;

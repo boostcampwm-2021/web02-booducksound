@@ -282,6 +282,14 @@ const Lobby: NextPage = () => {
   const handleCreateRoomYesBtn = () => {
     // 방 생성 로직 작성할 것
 
+    // 타이틀이 존재
+
+    // 플레이리스트가 존재
+
+    // 비밀번호 유무 확인
+
+    // 옵션 확인
+
     setHasCreateRoomModal(false);
   };
 
