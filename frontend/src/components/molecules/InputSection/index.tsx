@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { ChangeEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -16,6 +16,7 @@ interface Props {
   margin: string;
   paddingW?: string;
   disabled?: boolean;
+  onChangeHandler?: ChangeEventHandler;
 }
 interface InputLabelContainerProps {
   titleSize: string;
@@ -45,6 +46,7 @@ const InputSection = ({
   margin,
   paddingW,
   disabled,
+  onChangeHandler,
 }: PropsWithChildren<Props>) => {
   return (
     <InputSectionContainer>
@@ -59,6 +61,7 @@ const InputSection = ({
         fontSize={fontSize}
         paddingW={paddingW}
         disabled={disabled}
+        onChangeHandler={onChangeHandler}
       ></InputBox>
     </InputSectionContainer>
   );
