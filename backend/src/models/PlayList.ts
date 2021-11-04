@@ -15,13 +15,13 @@ const PlayListSchema = new Schema({
     answers: Array,
   },
   hashTags: Array,
-  userId: String,
+  userId: mongoose.Types.ObjectId,
   createdAt: {
     type: Date,
     default: new Date(),
   },
 });
 
-const PlayLists = mongoose.model('PlayLists', PlayListSchema);
+const PlayList = mongoose.model('PlayList', PlayListSchema);
 
-module.exports = PlayLists;
+export default PlayList;
