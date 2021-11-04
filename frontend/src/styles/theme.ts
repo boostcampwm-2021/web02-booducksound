@@ -21,6 +21,7 @@ declare module '@emotion/react' {
       soda: string;
       black: string;
       white: string;
+      whitesmoke: string;
       alert: string;
     };
     fonts: {
@@ -55,6 +56,7 @@ const theme: Theme = {
     soda: '#58CCFF',
     black: '#000',
     white: '#fff',
+    whitesmoke: '#EEEEEE',
     alert: '#FFA29F',
   },
   fonts: {
