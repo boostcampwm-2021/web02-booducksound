@@ -1,4 +1,4 @@
-import { MouseEventHandler } from 'react';
+import { useState, MouseEventHandler, ChangeEventHandler } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -50,7 +50,22 @@ interface Props {
 }
 
 const CreateRoomModal = ({ handleCreateRoomYesBtn, handleCreateRoomNoBtn, leftButtonText }: Props) => {
+  const [skip, setSkip] = useState<number>();
+  const [timePerProblem, setTimePerProblem] = useState<number>();
+
   const handleSelectPlaylistBtn = () => {};
+
+  const handleSkipChange: ChangeEventHandler = (e) => {
+    const skipStr = (e.target as HTMLSelectElement).value;
+    const skipNum = Number(skipStr.replace(/[^0-9]/g, ''));
+    setSkip(skipNum);
+  };
+
+  const hanldeTimePerProlbemChange: ChangeEventHandler = (e) => {
+    const timePerProblemStr = (e.target as HTMLSelectElement).value;
+    const timePerProblemNum = Number(timePerProblemStr.replace(/[^0-9]/g, ''));
+    setTimePerProblem(timePerProblemNum);
+  };
 
   return (
     <Modal
@@ -111,6 +126,7 @@ const CreateRoomModal = ({ handleCreateRoomYesBtn, handleCreateRoomNoBtn, leftBu
             titleSize="1em"
             options={['1명', '2명', '3명', '4명', '5명', '6명', '7명', '8명']}
             defaultValue="5명"
+            onChange={handleSkipChange}
           />
           <SelectSection
             title="문항 당 시간"
@@ -118,6 +134,7 @@ const CreateRoomModal = ({ handleCreateRoomYesBtn, handleCreateRoomNoBtn, leftBu
             titleSize="1em"
             options={['10초', '20초', '30초', '40초', '50초', '60초', '70초', '80초', '90초']}
             defaultValue="60초"
+            onChange={hanldeTimePerProlbemChange}
           />
         </HalfContainer>
       </Container>
