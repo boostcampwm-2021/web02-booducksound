@@ -5,8 +5,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import morgan from 'morgan';
+
 import db from './config/db';
 import io from './io';
+import userRouter from './resources/user/router';
 
 dotenv.config();
 
@@ -20,10 +22,10 @@ app.use(cookieParser());
 app.use(morgan('common'));
 
 app.use('/assets', express.static('assets'));
+app.use('/user', userRouter);
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
-app.get('/*', (req, res) => res.redirect('/'));
 
 const server = http.createServer(app);
 
