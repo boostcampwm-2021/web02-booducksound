@@ -19,7 +19,7 @@ type ROOM = {
   timePerProblem: 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90;
 };
 
-const ROOMS: { [uuid: string]: ROOM } = {};
+const rooms: { [uuid: string]: ROOM } = {};
 
 io.on('connection', (socket) => {
   socket.on(SocketEvents.CREATE_ROOM, (room, done) => {
@@ -28,9 +28,19 @@ io.on('connection', (socket) => {
     const uuid = short.generate();
     const players: Player[] = [{ socketId: socket.id, nickname: 'TODO: 닉네임 설정' }];
 
-    ROOMS[uuid] = { title, playListId, password, skip, timePerProblem, players };
+    rooms[uuid] = { title, playListId, password, skip, timePerProblem, players };
 
     done(uuid);
+  });
+
+  socket.on(SocketEvents.JOIN_ROOM, (uuid, done) => {
+    if (!rooms[uuid]) {
+      done({ type: 'fail', messsage: '존재 하지 않는 방입니다' });
+    }
+
+    const { players, title, playListId, password } = rooms[uuid];
+
+    // done(ROOMS[uuid]);
   });
 });
 
