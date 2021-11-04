@@ -45,6 +45,19 @@ UserSchema.pre('save', function (next) {
   });
 });
 
+UserSchema.pre('updateOne', function (next) {
+  // arrow function으로 쓰면 error남 ㅠ
+  const user: any = this.getUpdate();
+  bcrypt.genSalt(SALT_ROUNDS, (err: any, salt: string) => {
+    if (err) return next(err);
+    bcrypt.hash(user.password, salt, (err: any, hash: string) => {
+      if (err) return next(err);
+      user.password = hash;
+      next();
+    });
+  });
+});
+
 const User = mongoose.model('User', UserSchema);
 
 export default User;

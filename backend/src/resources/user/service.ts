@@ -41,8 +41,8 @@ const join = ({ id, password, nickname, color }: userType) => {
   newUser.save().then((res: any) => res);
 };
 // 비밀번호 변경(아이디, 닉네임을 받아오자.)
-const changePassword = (id: string, newPw: string) => {
-  User.updateOne({ id }, { password: newPw });
+const changePassword = async (id: string, newPw: string) => {
+  await User.updateOne({ id }, { password: newPw });
 };
 
 const getUserInfo = async (id: string) => {

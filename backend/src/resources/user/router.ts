@@ -22,6 +22,12 @@ router.get('/idCheck', async (req: Request, res: Response) => {
   res.json({ result });
 });
 
+router.post('/changePassword', async (req: Request, res: Response) => {
+  const { id, password }: loginInfo = req.body;
+  await userService.changePassword(id, password);
+  res.json({ result: 'good' });
+});
+
 router.post('/login', (req: Request, res: Response) => {
   const { id, password }: loginInfo = req.body;
   // userService.login(id, password);
