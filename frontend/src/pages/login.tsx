@@ -10,9 +10,9 @@ import MenuInfoBox from '../components/atoms/MenuInfoBox';
 import PageBox from '../components/atoms/PageBox';
 import theme from '../styles/theme';
 
-const ID_EMPTY_MSG = '아이디를 입력해 주세요';
-const PASSWORD_EMPTY_MSG = '비밀번호를 입력해 주세요';
-const headers = { 'Content-Type': 'application/json' };
+export const ID_EMPTY_MSG = '아이디를 입력해 주세요';
+export const PASSWORD_EMPTY_MSG = '비밀번호를 입력해 주세요';
+export const headers = { 'Content-Type': 'application/json' };
 
 const LoginContainer = styled.div`
   position: fixed;
@@ -55,12 +55,12 @@ const InputContainer = styled.div`
   }
 `;
 
-const getToken = () => {
+export const getToken = () => {
   const value = document.cookie.match('(^|;) ?token=([^;]*)(;|$)');
   return value ? value[2] : null;
 };
 
-const setToken = (token: string) => {
+export const setToken = (token: string) => {
   const date = new Date();
   date.setTime(date.getTime() + 60 * 60 * 1000);
   document.cookie = `token=${token};expires=${date.toLocaleString()};path=/`;

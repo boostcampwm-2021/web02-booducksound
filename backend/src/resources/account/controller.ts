@@ -6,7 +6,10 @@ import UserService, { LoginInfo, UserType, LoginResponse } from './service';
 const checkId = async (req: Request, res: Response) => {
   const id: string = req.query.id as string;
   const result = await UserService.idCheck(id);
-  res.json({ result });
+  res.json({
+    result,
+    message: result ? '이미 존재하는 아이디입니다.' : '사용 가능한 아이디입니다.',
+  });
 };
 
 const checkLogin = async (req: Request, res: Response) => {
@@ -26,9 +29,10 @@ const signIn = async (req: Request, res: Response) => {
   await UserService.login({ id, password }, (e: LoginResponse) => res.json(e));
 };
 
-const signUp = (req: Request, res: Response) => {
+const signUp = async (req: Request, res: Response) => {
   const { id, password, nickname, color }: UserType = req.body;
-  const result = UserService.join({ id, password, nickname, color });
+  const result = await UserService.join({ id, password, nickname, color: `#${color}` });
+  console.log(result);
   res.json(result);
 };
 

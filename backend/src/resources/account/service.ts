@@ -40,7 +40,6 @@ const createToken = (id: any) => {
 
 const login = async ({ id, password }: LoginInfo, cb: any) => {
   await User.findOne({ id }, (err: any, user: any) => {
-    console.log(user);
     if (err || user === null) {
       const result = {
         isLogin: false,
@@ -59,14 +58,20 @@ const login = async ({ id, password }: LoginInfo, cb: any) => {
   });
 };
 
-const join = ({ id, password, nickname, color }: UserType) => {
+const join = async ({ id, password, nickname, color }: UserType) => {
   const newUser = new User({
     id,
     password,
     nickname,
     color,
   });
-  newUser.save().then((res: any) => res);
+  return await newUser.save().then((res: any) => {
+    return {
+      isLogin: true,
+      message: res ? '회원가입에 성공했습니다.' : '회원가입에 실패했습니다.',
+      token: res ? createToken(id) : undefined,
+    };
+  });
 };
 
 const changePassword = async (id: string, newPw: string) => {
