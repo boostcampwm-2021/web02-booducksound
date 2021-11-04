@@ -53,6 +53,10 @@ const CreatePlaylistMusicModal = ({ setMusics, setIsOpenModal }: PropsWithChildr
 
   const leftButtonHandler = useCallback(
     (e) => {
+      if (!(info && hint && url && answers.length !== 0)) {
+        alert('노래 정보를 모두 입력해야합니다.');
+        return;
+      }
       setMusics((preState: Music[]) => [
         ...preState,
         {
