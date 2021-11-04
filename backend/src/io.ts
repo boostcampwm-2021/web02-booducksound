@@ -1,25 +1,14 @@
 import short from 'short-uuid';
 import socketio from 'socket.io';
 
+import { GameRoom } from './types/GameRoom';
+import { Player } from './types/Player';
+import { ServerRoom } from './types/ServerRoom';
 import { SocketEvents } from './types/SocketEvents';
 
 const io = new socketio.Server();
 
-type Player = {
-  socketId: string;
-  nickname: string;
-};
-
-type ROOM = {
-  players: Player[];
-  title: string;
-  playListId: string;
-  password: string | null;
-  skip: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
-  timePerProblem: 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90;
-};
-
-const rooms: { [uuid: string]: ROOM } = {};
+const serverRooms: { [uuid: string]: ServerRoom } = {};
 
 io.on('connection', (socket) => {
   socket.on(SocketEvents.CREATE_ROOM, (room, done) => {
@@ -28,19 +17,39 @@ io.on('connection', (socket) => {
     const uuid = short.generate();
     const players: Player[] = [{ socketId: socket.id, nickname: 'TODO: 닉네임 설정' }];
 
-    rooms[uuid] = { title, playListId, password, skip, timePerProblem, players };
+    const serverRoom: ServerRoom = {
+      title,
+      password,
+      players,
+      playListId,
+      skip,
+      timePerProblem,
+      status: 'waiting',
+    };
+
+    serverRooms[uuid] = serverRoom;
 
     done(uuid);
   });
 
-  socket.on(SocketEvents.JOIN_ROOM, (uuid, done) => {
-    if (!rooms[uuid]) {
+  socket.on(SocketEvents.JOIN_ROOM, (uuid: string, done) => {
+    if (!serverRooms[uuid]) {
       done({ type: 'fail', messsage: '존재 하지 않는 방입니다' });
     }
 
-    const { players, title, playListId, password } = rooms[uuid];
+    const serverRoom = serverRooms[uuid];
 
-    // done(ROOMS[uuid]);
+    const gameRoom: GameRoom = {
+      hasPassword: !!serverRoom.password,
+      playListId: serverRoom.playListId,
+      players: serverRoom.players,
+      skip: serverRoom.skip,
+      status: serverRoom.status,
+      timePerProblem: serverRoom.timePerProblem,
+      title: serverRoom.title,
+    };
+
+    done({ type: 'success', gameRoom });
   });
 });
 

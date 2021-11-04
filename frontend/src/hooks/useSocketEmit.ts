@@ -7,7 +7,7 @@ const useSocketEmit = (event: string, ...argv: any) => {
 
   useEffect(() => {
     if (!socket) return;
-    socket.emit(event, argv);
+    socket.emit(event, ...argv);
   }, [socket]);
 };
 

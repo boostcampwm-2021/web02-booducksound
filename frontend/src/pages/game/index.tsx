@@ -7,7 +7,9 @@ import { useSelector } from 'react-redux';
 
 import GameRoomContainer from '../../components/organisms/GameRoomContainer';
 import GameRoomNav from '../../components/organisms/GameRoomNav';
+import useSocketEmit from '../../hooks/useSocketEmit';
 import { RootState } from '../../reducers';
+import { GameRoom } from '../../types/GameRoom';
 import { SocketEvents } from '../../types/SocketEvents';
 
 const Container = styled.div`
@@ -19,7 +21,7 @@ const Container = styled.div`
   padding-bottom: 32px;
 `;
 
-const GameRoom: NextPage = () => {
+const Game: NextPage = () => {
   const { uuid } = useSelector((state: RootState) => state.room);
   const router = useRouter();
 
@@ -31,6 +33,21 @@ const GameRoom: NextPage = () => {
     }
   }, []);
 
+  useSocketEmit(
+    SocketEvents.JOIN_ROOM,
+    uuid,
+    ({ type, message, gameRoom }: { type: string; message: string; gameRoom: GameRoom }) => {
+      if (type === 'fail') {
+        // TODO : window.alert이 아니라 모달으로 에러 message를 띄우도록 할 것
+        window.alert(message);
+        router.push('/lobby');
+      }
+
+      // TODO : 받아온 gameRoom 데이터에 따라 화면을 렌더링할 것
+      console.log('GameRoom Data :', gameRoom);
+    },
+  );
+
   return (
     <Container>
       <GameRoomNav />
@@ -39,4 +56,4 @@ const GameRoom: NextPage = () => {
   );
 };
 
-export default GameRoom;
+export default Game;

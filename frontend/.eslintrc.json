@@ -28,6 +28,7 @@
   "plugins": ["react", "react-hooks", "@typescript-eslint"],
   "rules": {
     "no-unused-vars": "warn",
+    "react/exhaustive-deps": "off",
     "import/order": [
       "error",
       {

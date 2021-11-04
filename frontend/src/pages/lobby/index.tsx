@@ -9,7 +9,7 @@ import RoomCard from '../../components/atoms/RoomCard';
 import ResponsiveButton from '../../components/molecules/ResponsiveButton';
 import CreateRoomModal from '../../components/organisms/CreateRoomModal';
 import theme from '../../styles/theme';
-import { Room } from '../../types/Room';
+import { LobbyRoom } from '../../types/LobbyRoom';
 
 const Container = styled.div`
   display: flex;
@@ -98,7 +98,7 @@ const GridWrapper = styled.div`
   }
 `;
 
-const dummyRooms: Room[] = [
+const dummyRooms: LobbyRoom[] = [
   {
     title: '방 제목입니다',
     playlistName: '플레이리스트 이름입니다',
@@ -284,7 +284,7 @@ const Lobby: NextPage = () => {
       <Wrapper>
         <Nav>
           <NavItem>
-            <Link href="mypage">
+            <Link href="/mypage">
               <a>
                 <ResponsiveButton
                   background={theme.colors.lime}
