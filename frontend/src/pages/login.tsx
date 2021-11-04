@@ -11,7 +11,7 @@ import PageBox from '../components/atoms/PageBox';
 import theme from '../styles/theme';
 
 const ID_EMPTY_MSG = '아이디를 입력해 주세요';
-const PASSWORD_EMPTY_MSG = '비밀번호를를 입력해 주세요';
+const PASSWORD_EMPTY_MSG = '비밀번호를 입력해 주세요';
 const headers = { 'Content-Type': 'application/json' };
 
 const LoginContainer = styled.div`
@@ -55,9 +55,14 @@ const InputContainer = styled.div`
   }
 `;
 
+const MessageBox = styled.div`
+  position: fixed;
+`;
+
 const Login: NextPage = () => {
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
+  const [msgOnOff, setMsgOnOff] = useState(false);
 
   const handleLogin = async () => {
     if (!id) alert(ID_EMPTY_MSG);
@@ -72,7 +77,12 @@ const Login: NextPage = () => {
         }),
       })
         .then((res) => res.json())
-        .then((res) => console.log(res)); // Router.push("/lobby")
+        .then(({ isLogin, message }) => {
+          if (isLogin) Router.push('/lobby');
+          else {
+            // message
+          }
+        });
     }
   };
 
@@ -88,6 +98,7 @@ const Login: NextPage = () => {
               width={'100%'}
               height={'80px'}
               fontSize={'20px'}
+              value={id}
               onChangeHandler={({ target, currentTarget }) => setID(target.value)}
             ></InputBox>
             <InputBox
@@ -97,6 +108,7 @@ const Login: NextPage = () => {
               width={'100%'}
               height={'80px'}
               fontSize={'20px'}
+              value={password}
               onChangeHandler={({ target, currentTarget }) => setPassword(target.value)}
             ></InputBox>
             <Button
@@ -110,6 +122,7 @@ const Login: NextPage = () => {
             <SearchPwdBtn href="#none">비밀번호를 잊어버리셨나요?</SearchPwdBtn>
           </InputContainer>
         </LoginContainer>
+        {!msgOnOff && <MessageBox>히히</MessageBox>}
       </PageBox>
     </>
   );

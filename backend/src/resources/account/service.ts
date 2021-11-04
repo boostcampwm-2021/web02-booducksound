@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 
 import User from '../../models/User';
+require('dotenv').config();
+const SECRET_KEY: string = process.env.JWT_SECRET || '';
 
 export interface LoginInfo {
   id: string;
@@ -17,14 +19,22 @@ export interface LoginResponse {
   message: string;
 }
 
-// 아이디 중복확인
 const idCheck = async (id: string) => {
   const result = await User.find({ id });
   return result.length > 0;
 };
 
-const createToken = (userInfo: any) => {
-  //
+const createToken = (id: any) => {
+  const token = jwt.sign(
+    {
+      id,
+    },
+    SECRET_KEY,
+    {
+      expiresIn: '1h',
+    },
+  );
+  return token;
 };
 
 const login = async ({ id, password }: LoginInfo, cb: any) => {
@@ -54,7 +64,7 @@ const join = ({ id, password, nickname, color }: UserType) => {
   });
   newUser.save().then((res: any) => res);
 };
-// 비밀번호 변경(아이디, 닉네임을 받아오자.)
+
 const changePassword = async (id: string, newPw: string) => {
   await User.updateOne({ id }, { password: newPw });
 };
@@ -64,16 +74,11 @@ const getUserInfo = async (id: string) => {
   return result;
 };
 
-// 로그아웃
-const logout = (id: string) => {
-  //
-};
-
 export default {
   idCheck,
+  createToken,
   login,
   join,
   changePassword,
   getUserInfo,
-  logout,
 };
