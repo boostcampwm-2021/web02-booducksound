@@ -1,17 +1,7 @@
 import express, { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-import userService from './service';
-
-export interface loginInfo {
-  id: string;
-  password: string;
-}
-
-export interface userType extends loginInfo {
-  nickname: string;
-  color?: string;
-}
+import userService, { LoginInfo, UserType, LoginResponse } from './service';
 
 const router = express.Router();
 require('dotenv').config();
@@ -23,19 +13,18 @@ router.get('/idCheck', async (req: Request, res: Response) => {
 });
 
 router.post('/changePassword', async (req: Request, res: Response) => {
-  const { id, password }: loginInfo = req.body;
+  const { id, password }: LoginInfo = req.body;
   await userService.changePassword(id, password);
-  res.json({ result: 'good' });
+  res.json({ result: true });
 });
 
-router.post('/login', (req: Request, res: Response) => {
-  const { id, password }: loginInfo = req.body;
-  // userService.login(id, password);
-  res.json({ a: 1 });
+router.post('/login', async (req: Request, res: Response) => {
+  const { id, password }: LoginInfo = req.body;
+  await userService.login({ id, password }, (e: LoginResponse) => res.json(e));
 });
 
 router.post('/join', (req: Request, res: Response) => {
-  const { id, password, nickname, color }: userType = req.body;
+  const { id, password, nickname, color }: UserType = req.body;
   const result = userService.join({ id, password, nickname, color });
   res.json(result);
 });

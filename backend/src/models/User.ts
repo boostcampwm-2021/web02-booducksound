@@ -46,7 +46,6 @@ UserSchema.pre('save', function (next) {
 });
 
 UserSchema.pre('updateOne', function (next) {
-  // arrow function으로 쓰면 error남 ㅠ
   const user: any = this.getUpdate();
   bcrypt.genSalt(SALT_ROUNDS, (err: any, salt: string) => {
     if (err) return next(err);
@@ -57,6 +56,10 @@ UserSchema.pre('updateOne', function (next) {
     });
   });
 });
+
+UserSchema.methods.checkPassword = function (password) {
+  return bcrypt.compareSync(password, this.password);
+};
 
 const User = mongoose.model('User', UserSchema);
 
