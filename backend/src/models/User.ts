@@ -35,7 +35,6 @@ const UserSchema = new Schema({
 UserSchema.pre('save', function (next) {
   // arrow function으로 쓰면 error남 ㅠ
   const user: any = this;
-  if (user.isNew || user.isModified('password')) console.log(12345);
   bcrypt.genSalt(SALT_ROUNDS, (err: any, salt: string) => {
     if (err) return next(err);
     bcrypt.hash(user.password, salt, (err: any, hash: string) => {

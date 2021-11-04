@@ -16,6 +16,12 @@ export interface userType extends loginInfo {
 const router = express.Router();
 require('dotenv').config();
 
+router.get('/idCheck', async (req: Request, res: Response) => {
+  const id: string = req.query.id as string;
+  const result = await userService.idCheck(id);
+  res.json({ result });
+});
+
 router.post('/login', (req: Request, res: Response) => {
   const { id, password }: loginInfo = req.body;
   // userService.login(id, password);

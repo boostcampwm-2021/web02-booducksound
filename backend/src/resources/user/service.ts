@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+
 import User from '../../models/User';
 
 export interface loginInfo {
@@ -11,15 +13,24 @@ export interface userType extends loginInfo {
 }
 
 // 아이디 중복확인
-const idCheck = (id: string) => {
+const idCheck = async (id: string) => {
+  const result = await User.find({ id });
+  return result.length > 0;
+};
+
+const createToken = (userInfo: any) => {
   //
 };
 
 // 로그인(아이디, 비밀번호 일치하는 사용자 여부)
 const login = ({ id, password }: loginInfo) => {
-  //
+  const userInfo: any = User.findOne({ id, password });
+  console.log(userInfo);
+  if (userInfo) {
+    createToken(userInfo);
+  }
 };
-// 회원가입
+
 const join = ({ id, password, nickname, color }: userType) => {
   const newUser = new User({
     id,
@@ -31,14 +42,12 @@ const join = ({ id, password, nickname, color }: userType) => {
 };
 // 비밀번호 변경(아이디, 닉네임을 받아오자.)
 const changePassword = (id: string, newPw: string) => {
-  //
+  User.updateOne({ id }, { password: newPw });
 };
 
-const getUserInfo = (id: string) => {
-  User.findOne({ id }).exec((err, user) => {
-    if (err) return err;
-    return user;
-  });
+const getUserInfo = async (id: string) => {
+  const result = await User.find({ id });
+  return result;
 };
 
 // 로그아웃
