@@ -1,4 +1,4 @@
-export interface Room {
+export type LobbyRoom = {
   status: 'playing' | 'waiting';
   hasPassword: boolean;
   title: string;
@@ -6,4 +6,4 @@ export interface Room {
   hashtags: string[];
   curPeople: number;
   maxPeople: number;
-}
+};
