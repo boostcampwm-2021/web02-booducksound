@@ -13,7 +13,7 @@ const useSocket = () => {
     if (!socket) {
       dispatch(connectSocket());
     }
-  }, [socket, dispatch]);
+  }, [socket]);
 
   return socket;
 };
