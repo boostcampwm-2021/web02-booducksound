@@ -23,16 +23,7 @@ const resetPwd = async (req: Request, res: Response) => {
 
 const signIn = async (req: Request, res: Response) => {
   const { id, password }: LoginInfo = req.body;
-  await UserService.login({ id, password }, (e: LoginResponse) => {
-    if (e.isLogin) {
-      const token = UserService.createToken(id);
-      console.log(token);
-      res.cookie('test2', 12345);
-      res.cookie('userToken', token);
-      console.log(req.cookies);
-    }
-    res.json(e);
-  });
+  await UserService.login({ id, password }, (e: LoginResponse) => res.json(e));
 };
 
 const signUp = (req: Request, res: Response) => {

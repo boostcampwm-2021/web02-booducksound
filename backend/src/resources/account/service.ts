@@ -17,6 +17,7 @@ export interface UserType extends LoginInfo {
 export interface LoginResponse {
   isLogin: boolean;
   message: string;
+  token: string | undefined;
 }
 
 const idCheck = async (id: string) => {
@@ -39,10 +40,12 @@ const createToken = (id: any) => {
 
 const login = async ({ id, password }: LoginInfo, cb: any) => {
   await User.findOne({ id }, (err: any, user: any) => {
+    console.log(user);
     if (err || user === null) {
       const result = {
         isLogin: false,
         message: '존재하지 않는 아이디입니다.',
+        token: undefined,
       };
       return cb(result);
     }
@@ -50,6 +53,7 @@ const login = async ({ id, password }: LoginInfo, cb: any) => {
     const result = {
       isLogin: res,
       message: res ? '로그인에 성공했습니다.' : '비밀번호가 틀렸습니다.',
+      token: res ? createToken(id) : undefined,
     };
     cb(result);
   });

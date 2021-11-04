@@ -55,14 +55,20 @@ const InputContainer = styled.div`
   }
 `;
 
-const MessageBox = styled.div`
-  position: fixed;
-`;
+const getToken = () => {
+  const value = document.cookie.match('(^|;) ?token=([^;]*)(;|$)');
+  return value ? value[2] : null;
+};
+
+const setToken = (token: string) => {
+  const date = new Date();
+  date.setTime(date.getTime() + 60 * 60 * 1000);
+  document.cookie = `token=${token};expires=${date.toLocaleString()};path=/`;
+};
 
 const Login: NextPage = () => {
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
-  const [msgOnOff, setMsgOnOff] = useState(false);
 
   const handleLogin = async () => {
     if (!id) alert(ID_EMPTY_MSG);
@@ -77,11 +83,11 @@ const Login: NextPage = () => {
         }),
       })
         .then((res) => res.json())
-        .then(({ isLogin, message }) => {
-          if (isLogin) Router.push('/lobby');
-          else {
-            // message
-          }
+        .then(({ isLogin, message, token }) => {
+          if (isLogin) {
+            setToken(token);
+            Router.push('/lobby');
+          } else alert(message);
         });
     }
   };
@@ -122,7 +128,6 @@ const Login: NextPage = () => {
             <SearchPwdBtn href="#none">비밀번호를 잊어버리셨나요?</SearchPwdBtn>
           </InputContainer>
         </LoginContainer>
-        {!msgOnOff && <MessageBox>히히</MessageBox>}
       </PageBox>
     </>
   );
