@@ -1,4 +1,4 @@
-import { useState, PropsWithChildren } from 'react';
+import { useState, PropsWithChildren, MouseEventHandler } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -7,6 +7,8 @@ import Character from '../Character';
 
 interface Props {
   type?: string;
+  color: string;
+  setColor: any;
 }
 
 const getRandomHex = () => {
@@ -40,9 +42,7 @@ const ChangeBtn = styled.span<Props>`
   background: #fff url('images/ic_shuffle.png') no-repeat center/45%;
 `;
 
-const ProfileSelector = ({ type }: PropsWithChildren<Props>) => {
-  const [color, setColor] = useState('C9DAF8');
-
+const ProfileSelector = ({ type, color, setColor }: PropsWithChildren<Props>) => {
   const getRandomColor = () => {
     setColor(`${getRandomHex()}${getRandomHex()}${getRandomHex()}`);
   };
