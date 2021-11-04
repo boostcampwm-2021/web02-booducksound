@@ -152,7 +152,7 @@ body {
   overflow: hidden auto;
   background: url('/images/background.svg');
   animation: background 30s linear infinite reverse running;
-
+  background-attachment: fixed;
   background-size: cover;
 }
 
