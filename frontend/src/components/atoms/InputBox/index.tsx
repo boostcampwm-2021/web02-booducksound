@@ -23,6 +23,7 @@ interface Props {
   fontSize: string;
   disabled?: boolean;
   paddingW?: string;
+  value?: string;
   onChangeHandler?: ChangeEventHandler;
 }
 
@@ -66,6 +67,7 @@ const InputBox = ({
   fontSize,
   disabled,
   paddingW,
+  value,
   onChangeHandler,
 }: PropsWithChildren<Props>) => {
   return (
@@ -80,6 +82,7 @@ const InputBox = ({
         placeholder={placeholder}
         height={height}
         fontSize={fontSize}
+        value={value}
         onChange={onChangeHandler}
       ></TextInputContainer>
     </InputBoxContainer>

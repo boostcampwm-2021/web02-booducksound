@@ -1,6 +1,17 @@
+import { ChangeEventHandler, PropsWithChildren } from 'react';
+
 import styled from '@emotion/styled';
 
 import InputSection from '../../../components/molecules/InputSection';
+
+interface Props {
+  setTitle: ChangeEventHandler;
+  setDescription: ChangeEventHandler;
+  setHashTag: ChangeEventHandler;
+  title: string;
+  description: string;
+  hashTag: string;
+}
 
 const InputContainer = styled.div`
   display: flex;
@@ -26,7 +37,14 @@ const InputContainer = styled.div`
   }
 `;
 
-const CreatePlaylistInputBox = () => {
+const CreatePlaylistInputBox = ({
+  setTitle,
+  setDescription,
+  setHashTag,
+  title,
+  description,
+  hashTag,
+}: PropsWithChildren<Props>) => {
   return (
     <InputContainer>
       <InputSection
@@ -40,6 +58,8 @@ const CreatePlaylistInputBox = () => {
         fontSize={'0.85em'}
         margin={'0.6em'}
         paddingW={'40px'}
+        value={title}
+        onChangeHandler={setTitle}
       ></InputSection>
       <InputSection
         id={'playlist-title'}
@@ -52,6 +72,8 @@ const CreatePlaylistInputBox = () => {
         fontSize={'0.85em'}
         margin={'0.6em'}
         paddingW={'40px'}
+        value={description}
+        onChangeHandler={setDescription}
       ></InputSection>
       <InputSection
         id={'playlist-title'}
@@ -64,6 +86,8 @@ const CreatePlaylistInputBox = () => {
         fontSize={'0.85em'}
         margin={'0.6em'}
         paddingW={'40px'}
+        value={hashTag}
+        onChangeHandler={setHashTag}
       ></InputSection>
     </InputContainer>
   );

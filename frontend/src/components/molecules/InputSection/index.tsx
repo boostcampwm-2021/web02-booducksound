@@ -16,6 +16,7 @@ interface Props {
   margin: string;
   paddingW?: string;
   disabled?: boolean;
+  value?: string;
   onChangeHandler?: ChangeEventHandler;
 }
 interface InputLabelContainerProps {
@@ -46,6 +47,7 @@ const InputSection = ({
   margin,
   paddingW,
   disabled,
+  value,
   onChangeHandler,
 }: PropsWithChildren<Props>) => {
   return (
@@ -61,6 +63,7 @@ const InputSection = ({
         fontSize={fontSize}
         paddingW={paddingW}
         disabled={disabled}
+        value={value}
         onChangeHandler={onChangeHandler}
       ></InputBox>
     </InputSectionContainer>
