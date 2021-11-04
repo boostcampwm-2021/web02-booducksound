@@ -9,6 +9,7 @@ import PageBox from '../../../components/atoms/PageBox';
 import Chip from '../../../components/molecules/Chip';
 import CreatePlaylistInputBox from '../../../components/organisms/CreatePlaylistInputBox';
 import CreatePlaylistMusicList from '../../../components/organisms/CreatePlaylistMusicList';
+import CreatePlaylistMusicModal from '../../../components/organisms/CreatePlaylistMusicModal';
 import theme from '../../../styles/theme';
 import { Music } from '../../../types/music';
 import useEventListener from '../../../utils/useEventListener';
@@ -56,6 +57,7 @@ const PlaylistCreate: NextPage = () => {
   const [hashTag, setHashTag] = useState<string>('');
   const [chips, setChips] = useState<string[]>([]);
   const [musics, setMusics] = useState<Music[]>([]);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const pressEnterHandler = useCallback(
     (e: globalThis.KeyboardEvent) => {
@@ -86,7 +88,13 @@ const PlaylistCreate: NextPage = () => {
               <Chip content={chip} key={idx}></Chip>
             ))}
           </ChipContainer>
-          <CreatePlaylistMusicList musics={musics}></CreatePlaylistMusicList>
+          <CreatePlaylistMusicList
+            musics={musics}
+            setIsOpenModal={(e) => setIsOpenModal(true)}
+            setMusics={(target: number) =>
+              setMusics((preState) => [...preState.filter((music, idx) => idx !== target)])
+            }
+          ></CreatePlaylistMusicList>
           <SubmitButtonWrapper>
             <Button
               content={'등록'}
@@ -98,6 +106,9 @@ const PlaylistCreate: NextPage = () => {
           </SubmitButtonWrapper>
         </Wrapper>
       </PageBox>
+      {isOpenModal && (
+        <CreatePlaylistMusicModal setIsOpenModal={setIsOpenModal} setMusics={setMusics}></CreatePlaylistMusicModal>
+      )}
     </Container>
   );
 };

@@ -85,7 +85,7 @@ const InputBox = ({
         placeholder={placeholder}
         height={height}
         fontSize={fontSize}
-        value={value}
+        value={value || ''}
         onChange={onChangeHandler}
       ></TextInputContainer>
     </InputBoxContainer>

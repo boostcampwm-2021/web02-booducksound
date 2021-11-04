@@ -2,10 +2,12 @@ import { useState, MouseEventHandler, ChangeEventHandler, SetStateAction, Dispat
 
 import styled from '@emotion/styled';
 import Router from 'next/router';
+import { useDispatch } from 'react-redux';
 import { Socket } from 'socket.io-client';
 
 import useSocket from '../../../hooks/useSocket';
 import theme from '../../../styles/theme';
+import { RoomActions } from '../../../types/Actions';
 import { SocketEvents } from '../../../types/SocketEvents';
 import InputSection from '../../molecules/InputSection';
 import InputWithButton from '../../molecules/InputWithButton';
@@ -54,6 +56,7 @@ interface Props {
 
 const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
   const socket = useSocket();
+  const dispatch = useDispatch();
 
   const [title, setTitle] = useState<string>();
   const [playListId, setPlayListId] = useState<string>();
@@ -93,7 +96,8 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
 
     (socket as Socket).emit(SocketEvents.CREATE_ROOM, room, (uuid: string) => {
       setModalOnOff(false);
-      Router.push(`/game/${uuid}`);
+      dispatch({ type: RoomActions.SET_UUID, payload: { uuid } });
+      Router.push(`/game`);
     });
   };
 
