@@ -1,10 +1,12 @@
-import styled from '@emotion/styled';
 import { PropsWithChildren } from 'react';
+
+import styled from '@emotion/styled';
+
 import theme from '../../../styles/theme';
 
 interface ContainerProps {
-  type: 'left' | 'right';
-  mode: 'title' | 'detail';
+  type: '60%' | '80%';
+  mode: '15%' | '60%';
   ratio: string;
 }
 
@@ -36,7 +38,7 @@ const Container = styled.div<ContainerProps>`
   }
 `;
 
-//1920 568 946
+// 1920 568 946
 const GlassContainer = ({ type, mode, children }: PropsWithChildren<props>) => {
   return (
     <Container

@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 
+import GlassContainer from '../../atoms/GlassContainer';
 import CharacterContainer from '../../molecules/CharacterContainer';
 import ChatContainer from '../../molecules/ChatContainer';
-import GlassContainer from '../../atoms/GlassContainer';
 
 const Wrapper = styled.div`
   max-width: 1600px;

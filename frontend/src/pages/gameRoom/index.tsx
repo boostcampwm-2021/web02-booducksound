@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 
-import GameRoomNav from '../../components/organisms/GameRoomNav';
 import GameRoomContainer from '../../components/organisms/GameRoomContainer';
+import GameRoomNav from '../../components/organisms/GameRoomNav';
 
 const Container = styled.div`
   display: flex;

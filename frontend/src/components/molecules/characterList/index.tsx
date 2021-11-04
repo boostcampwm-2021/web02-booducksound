@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 
 import GlassContainer from '../../atoms/GlassContainer';
 import CharacterProfile from '../CharacterProfile';
-import theme from '../../../styles/theme';
 
 const Title = styled.p`
   margin-right: auto;
@@ -11,8 +10,14 @@ const Container = styled.div`
   width: 100%;
   margin-right: auto;
 `;
+interface props {
+  color: string;
+  name: string;
+  status: 'king' | 'ready' | 'prepare';
+}
+
 const CharacterList = ({ children }: any) => {
-  const dummy = [
+  const dummy: props[] = [
     { color: 'ff', name: 'max', status: 'king' },
     { color: 'dwff', name: 'john', status: 'ready' },
     { color: 'dw1121', name: 'ben', status: 'prepare' },
