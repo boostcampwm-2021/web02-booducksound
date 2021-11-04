@@ -17,10 +17,17 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    flex-direction: column;
+  }
 `;
 
-const Nav = styled.div`
+const ChipContainer = styled.div`
   width: 20%;
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    width: 20px;
+    font-size: 8px;
+  }
 `;
 
 const ProfileContainer = styled.div`
@@ -35,8 +42,7 @@ const ProfileContainer = styled.div`
   }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 10px;
-    height: 10px;
+    display: none;
   }
 `;
 
@@ -46,10 +52,10 @@ const CharacterProfile = ({ color, name, status }: PropsWithChildren<props>) => 
       <ProfileContainer>
         <Character color={color} width={'100%'} />
       </ProfileContainer>
-      <Nav>{name}</Nav>
-      <Nav>
+      {name}
+      <ChipContainer>
         <StatusChip status={status} />
-      </Nav>
+      </ChipContainer>
     </Container>
   );
 };
