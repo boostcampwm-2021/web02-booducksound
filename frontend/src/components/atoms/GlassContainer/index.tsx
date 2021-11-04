@@ -4,51 +4,26 @@ import styled from '@emotion/styled';
 
 import theme from '../../../styles/theme';
 
-interface ContainerProps {
-  type: '60%' | '80%';
-  mode: '15%' | '60%';
-  ratio: string;
-}
+// interface ContainerProps {
+//   type: '60%' | '80%';
+//   mode: '15%' | '60%';
+//   ratio: string;
+// }
 
-interface props {
-  type: 'left' | 'right';
-  mode: 'title' | 'detail';
-}
-
-const Container = styled.div<ContainerProps>`
-  width: ${({ type }) => type};
-  min-height: ${({ mode }) => mode};
-
+const Container = styled.div`
   background-color: ${theme.colors.lightsky};
-  margin: ${({ ratio }) => ratio};
   display: flex;
+  width: 100%;
+  height: 100%;
   padding: 2%;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    min-height: ${({ mode }) => mode};
-    width: ${({ type }) => type};
-  }
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    min-height: ${({ mode }) => mode};
-    width: ${({ type }) => type};
-  }
 `;
 
 // 1920 568 946
-const GlassContainer = ({ type, mode, children }: PropsWithChildren<props>) => {
-  return (
-    <Container
-      ratio={type === 'left' ? '1%' : '2%'}
-      type={type === 'left' ? '60%' : '80%'}
-      mode={mode === 'title' ? '15%' : '60%'}
-    >
-      {children}
-    </Container>
-  );
+const GlassContainer = ({ children }: any) => {
+  return <Container>{children}</Container>;
 };
 
 export default GlassContainer;

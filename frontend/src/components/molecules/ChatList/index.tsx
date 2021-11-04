@@ -18,7 +18,7 @@ interface Props {
   status: 'alert' | 'message';
 }
 
-const ChatContainer = () => {
+const ChatList = () => {
   const dummy: Props[] = [
     { name: 'max', text: '', status: 'alert' },
     { name: 'john', text: '', status: 'alert' },
@@ -47,7 +47,7 @@ const ChatContainer = () => {
   ];
 
   return (
-    <GlassContainer type={'right'} mode={'detail'}>
+    <GlassContainer>
       <Container>
         {dummy.map((element, index) => (
           <Chat key={index} name={element.name} text={element.text} status={element.status} />
@@ -57,4 +57,4 @@ const ChatContainer = () => {
   );
 };
 
-export default ChatContainer;
+export default ChatList;
