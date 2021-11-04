@@ -63,7 +63,7 @@ const Login: NextPage = () => {
     if (!id) alert(ID_EMPTY_MSG);
     else if (!password) alert(PASSWORD_EMPTY_MSG);
     else {
-      await fetch(`http://localhost:5000/login`, {
+      await fetch(`http://localhost:5000/signIn`, {
         method: 'POST',
         headers,
         body: JSON.stringify({
