@@ -7,7 +7,7 @@ import Link from 'next/link';
 import InputBox from '../../components/atoms/InputBox';
 import RoomCard from '../../components/atoms/RoomCard';
 import ResponsiveButton from '../../components/molecules/ResponsiveButton';
-import CreateRoomModal from '../../components/organisms/RoomSettingModal';
+import CreateRoomModal from '../../components/organisms/CreateRoomModal';
 import theme from '../../styles/theme';
 import { Room } from '../../types/Room';
 
@@ -273,28 +273,10 @@ const dummyRooms: Room[] = [
 ];
 
 const Lobby: NextPage = () => {
-  const [hasCreateRoomModal, setHasCreateRoomModal] = useState(false);
+  const [createRoomModalOnOff, setCreateRoomModalOnOff] = useState(false);
 
   const handleCreateRoomModalBtn = () => {
-    setHasCreateRoomModal(true);
-  };
-
-  const handleCreateRoomYesBtn = () => {
-    // 방 생성 로직 작성할 것
-
-    // 타이틀이 존재
-
-    // 플레이리스트가 존재
-
-    // 비밀번호 유무 확인
-
-    // 옵션 확인
-
-    setHasCreateRoomModal(false);
-  };
-
-  const handleCreateRoomNoBtn = () => {
-    setHasCreateRoomModal(false);
+    setCreateRoomModalOnOff(true);
   };
 
   return (
@@ -345,13 +327,7 @@ const Lobby: NextPage = () => {
               content="방 생성"
               onClick={handleCreateRoomModalBtn}
             />
-            {hasCreateRoomModal && (
-              <CreateRoomModal
-                handleCreateRoomYesBtn={handleCreateRoomYesBtn}
-                handleCreateRoomNoBtn={handleCreateRoomNoBtn}
-                leftButtonText="생성"
-              />
-            )}
+            {createRoomModalOnOff && <CreateRoomModal setModalOnOff={setCreateRoomModalOnOff} leftButtonText="생성" />}
           </NavItem>
         </Nav>
         <SearchContainer>

@@ -1,4 +1,4 @@
-import { useState, MouseEventHandler, ChangeEventHandler } from 'react';
+import { useState, MouseEventHandler, ChangeEventHandler, SetStateAction, Dispatch } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -45,12 +45,11 @@ const HalfContainer = styled.div`
 `;
 
 interface Props {
-  handleCreateRoomYesBtn: MouseEventHandler;
-  handleCreateRoomNoBtn: MouseEventHandler;
+  setModalOnOff: Dispatch<SetStateAction<boolean>>;
   leftButtonText: string;
 }
 
-const CreateRoomModal = ({ handleCreateRoomYesBtn, handleCreateRoomNoBtn, leftButtonText }: Props) => {
+const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
   const [title, setTitle] = useState<string>();
   const [playListId, setPlayListId] = useState<string>();
   const [password, setPassword] = useState<string>();
@@ -81,13 +80,21 @@ const CreateRoomModal = ({ handleCreateRoomYesBtn, handleCreateRoomNoBtn, leftBu
     setTimePerProblem(timePerProblemNum);
   };
 
+  const handleCreateRoomBtn: MouseEventHandler = () => {
+    setModalOnOff(false);
+  };
+
+  const handleNoBtn: MouseEventHandler = () => {
+    setModalOnOff(false);
+  };
+
   return (
     <Modal
       height="480px"
       maxWidth="540px"
       leftButtonText={leftButtonText}
-      leftButtonHanlder={handleCreateRoomYesBtn}
-      rightButtonHanlder={handleCreateRoomNoBtn}
+      leftButtonHanlder={handleCreateRoomBtn}
+      rightButtonHanlder={handleNoBtn}
     >
       <Container>
         <InputSection
