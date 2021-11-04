@@ -10,6 +10,7 @@ import CreatePlaylistMusicItem from '../../molecules/CreatePlaylistMusicItem';
 interface Props {
   musics: Music[];
   setIsOpenModal: MouseEventHandler;
+  setMusics: Function;
 }
 
 const MusicListContainer = styled.div``;
@@ -62,7 +63,7 @@ const EmptyBox = styled.div`
   height: 100%;
   color: #ddd;
 `;
-const CreatePlaylistMusicList = ({ musics, setIsOpenModal }: PropsWithChildren<Props>) => {
+const CreatePlaylistMusicList = ({ musics, setIsOpenModal, setMusics }: PropsWithChildren<Props>) => {
   return (
     <MusicListContainer>
       <MusicListTitleBox>
@@ -83,7 +84,9 @@ const CreatePlaylistMusicList = ({ musics, setIsOpenModal }: PropsWithChildren<P
         {!musics.length ? (
           <EmptyBox>노래를 추가해 주세요.</EmptyBox>
         ) : (
-          musics.map((music, idx) => <CreatePlaylistMusicItem title={music.info} key={idx} />)
+          musics.map((music, idx) => (
+            <CreatePlaylistMusicItem title={music.info} key={idx} idx={idx} deleteItem={setMusics} />
+          ))
         )}
       </MusicListContentBox>
     </MusicListContainer>
