@@ -105,7 +105,7 @@ const Login: NextPage = () => {
               height={'80px'}
               fontSize={'20px'}
               value={id}
-              onChangeHandler={({ target, currentTarget }) => setID(target.value)}
+              onChangeHandler={({ target }) => setID(target.value)}
             ></InputBox>
             <InputBox
               isPassword={true}
@@ -115,7 +115,7 @@ const Login: NextPage = () => {
               height={'80px'}
               fontSize={'20px'}
               value={password}
-              onChangeHandler={({ target, currentTarget }) => setPassword(target.value)}
+              onChangeHandler={({ target }) => setPassword(target.value)}
             ></InputBox>
             <Button
               width={'560px'}

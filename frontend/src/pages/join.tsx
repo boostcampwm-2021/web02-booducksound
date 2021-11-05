@@ -14,7 +14,7 @@ import theme from '../styles/theme';
 
 import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, headers, getToken, setToken } from './login';
 
-const NICKNAME_EMPTY_MSG = '닉네임을 입력해 주세요';
+export const NICKNAME_EMPTY_MSG = '닉네임을 입력해 주세요';
 
 const LoginContainer = styled.div`
   position: fixed;

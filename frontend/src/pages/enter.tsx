@@ -1,6 +1,9 @@
+import { useState } from 'react';
+
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import Router from 'next/router';
 
 import Button from '../components/atoms/Button';
 import InputBox from '../components/atoms/InputBox';
@@ -8,6 +11,9 @@ import MenuInfoBox from '../components/atoms/MenuInfoBox';
 import PageBox from '../components/atoms/PageBox';
 import ProfileSelector from '../components/atoms/ProfileSelector';
 import theme from '../styles/theme';
+
+import { NICKNAME_EMPTY_MSG } from './join';
+import { headers, getToken, setToken } from './login';
 
 const EnterContainer = styled.div`
   position: fixed;
@@ -52,12 +58,35 @@ const InputContainer = styled.div`
 `;
 
 const Enter: NextPage = () => {
+  const [nickname, setNickname] = useState('');
+  const [color, setColor] = useState('fff');
+
+  const handleEnter = async () => {
+    if (!nickname) alert(NICKNAME_EMPTY_MSG);
+    else {
+      await fetch(`http://localhost:5000/enter`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          nickname,
+        }),
+      })
+        .then((res) => res.json())
+        .then(({ isLogin, message, token }) => {
+          if (isLogin) {
+            setToken(token);
+            Router.push('/lobby');
+          } else alert(message);
+        });
+    }
+  };
+
   return (
     <>
       <MenuInfoBox name="비회원 로그인" />
       <PageBox>
         <EnterContainer>
-          <ProfileSelector></ProfileSelector>
+          <ProfileSelector color={color} setColor={setColor}></ProfileSelector>
           <InputContainer>
             <InputBox
               isSearch={false}
@@ -65,18 +94,19 @@ const Enter: NextPage = () => {
               width={'100%'}
               height={'80px'}
               fontSize={'20px'}
+              value={nickname}
+              onChangeHandler={({ target }) => setNickname(target.value)}
             ></InputBox>
-            <Link href="/lobby">
-              <a>
-                <Button
-                  width={'480px'}
-                  background={theme.colors.sky}
-                  fontSize={'30px'}
-                  paddingH={'24px'}
-                  content={'참여하기'}
-                />
-              </a>
-            </Link>
+            <a>
+              <Button
+                width={'480px'}
+                background={theme.colors.sky}
+                fontSize={'30px'}
+                paddingH={'24px'}
+                content={'참여하기'}
+                onClick={handleEnter}
+              />
+            </a>
           </InputContainer>
         </EnterContainer>
       </PageBox>
