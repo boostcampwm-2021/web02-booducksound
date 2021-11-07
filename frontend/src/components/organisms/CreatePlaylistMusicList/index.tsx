@@ -42,7 +42,7 @@ const MusicListTitleBottom = styled.div`
   color: ${theme.colors.gray};
   margin-bottom: 30px;
 `;
-const MusicListTitle = styled.div`
+const MusicListTitle = styled.h1`
   font-weight: bold;
   @media (min-width: 480px) {
     font-size: 15px;

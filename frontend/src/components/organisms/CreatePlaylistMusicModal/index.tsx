@@ -20,7 +20,7 @@ const MusicModalTop = styled.div`
   align-items: center;
   margin-bottom: 20px;
 `;
-const MusicModalTitle = styled.div`
+const MusicModalTitle = styled.h1`
   font-size: 25px;
   font-weight: bold;
 `;
