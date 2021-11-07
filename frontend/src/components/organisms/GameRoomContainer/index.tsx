@@ -5,7 +5,7 @@ import CharacterList from '../../molecules/CharacterList';
 import ChatList from '../../molecules/ChatList';
 
 interface Props {
-  type: 'leftTitle' | 'rightTitle';
+  type: 'leftTitle' | 'rightTitle' | 'leftCharacter' | 'rightChat';
 }
 
 const Wrapper = styled.div`
@@ -30,21 +30,14 @@ const Wrapper = styled.div`
   }
 `;
 
-const TitleContainer = styled.div<Props>`
+const Container = styled(GlassContainer)<Props>`
   grid-area: ${({ type }) => type};
-`;
-
-const ChatContainer = styled.div`
-  grid-area: rightChat;
 `;
 
 const RoomStateTitle = styled.p`
   font-weight: bolder;
 `;
 
-const CharacterContainer = styled.div`
-  grid-area: leftCharacter;
-`;
 const InputBox = styled.input`
   grid-area: rightSearch;
   border: 2px solid black;
@@ -60,20 +53,16 @@ const InputBox = styled.input`
 const GameRoomContainer = () => {
   return (
     <Wrapper>
-      <TitleContainer type={'leftTitle'}>
-        <GlassContainer>
-          <RoomStateTitle>대기중 입니다.</RoomStateTitle>
-        </GlassContainer>
-      </TitleContainer>
-      <CharacterContainer>
+      <Container type={'leftTitle'}>
+        <RoomStateTitle>대기중 입니다.</RoomStateTitle>
+      </Container>
+      <Container type={'leftCharacter'}>
         <CharacterList />
-      </CharacterContainer>
-      <TitleContainer type={'rightTitle'}>
-        <GlassContainer>대기중 입니다.</GlassContainer>
-      </TitleContainer>
-      <ChatContainer>
+      </Container>
+      <Container type={'rightTitle'}>대기중 입니다.</Container>
+      <Container type={'rightChat'}>
         <ChatList />
-      </ChatContainer>
+      </Container>
       <InputBox placeholder={'메세지를 입력해주세요.'} />
     </Wrapper>
   );

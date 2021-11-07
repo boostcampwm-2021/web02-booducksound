@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 
-import GlassContainer from '../../atoms/GlassContainer';
 import CharacterProfile from '../CharacterProfile';
 
 const Title = styled.p`
@@ -35,14 +34,14 @@ const CharacterList = ({ children }: any) => {
     { color: '234def', name: 'dd', status: 'ready' },
   ];
   return (
-    <GlassContainer>
+    <>
       <Title>사용자 목록</Title>
       <Container>
         {dummy.map((element, index) => (
           <CharacterProfile key={index} color={element.color} name={element.name} status={element.status} />
         ))}
       </Container>
-    </GlassContainer>
+    </>
   );
 };
 
