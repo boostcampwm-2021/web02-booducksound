@@ -1,7 +1,10 @@
+import { useEffect } from 'react';
+
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 
+import { handleLoginUser } from '../actions/account';
 import Button from '../components/atoms/Button';
 import theme from '../styles/theme';
 
@@ -76,6 +79,10 @@ const Logo = styled.div`
 `;
 
 const Home: NextPage = () => {
+  useEffect(() => {
+    handleLoginUser();
+  }, []);
+
   return (
     <MainContainer>
       <Logo />

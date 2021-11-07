@@ -1,19 +1,22 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import Router from 'next/router';
 
+import {
+  requestJoin,
+  handleLoginUser,
+  ID_EMPTY_MSG,
+  PASSWORD_EMPTY_MSG,
+  NICKNAME_EMPTY_MSG,
+} from '../../actions/account';
 import Button from '../../components/atoms/Button';
 import InputBox from '../../components/atoms/InputBox';
 import MenuInfoBox from '../../components/atoms/MenuInfoBox';
 import PageBox from '../../components/atoms/PageBox';
 import ProfileSelector from '../../components/atoms/ProfileSelector';
 import theme from '../../styles/theme';
-import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, headers, getToken, setToken } from '../login';
-
-export const NICKNAME_EMPTY_MSG = '닉네임을 입력해 주세요';
 
 const LoginContainer = styled.div`
   position: fixed;
@@ -75,25 +78,7 @@ const Join: NextPage = () => {
     const { result, message } = await idCheck();
 
     if (result) alert(message);
-    else {
-      fetch(`http://localhost:5000/signUp`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          id,
-          password,
-          nickname,
-          color,
-        }),
-      })
-        .then((res) => res.json())
-        .then(({ isLogin, message, token }) => {
-          if (isLogin) {
-            setToken(token);
-            Router.push('/lobby');
-          } else alert(message);
-        });
-    }
+    else await requestJoin(id, password, nickname, color);
   };
 
   const handleIdCheck = async () => {
@@ -110,6 +95,11 @@ const Join: NextPage = () => {
     else if (!nickname) alert(NICKNAME_EMPTY_MSG);
     else signUp();
   };
+
+  useEffect(() => {
+    handleLoginUser();
+  }, []);
+  
   return (
     <>
       <MenuInfoBox name="회원가입" />

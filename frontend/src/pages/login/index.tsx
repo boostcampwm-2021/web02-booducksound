@@ -2,17 +2,13 @@ import { useState, useEffect } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
-import Router from 'next/router';
 
+import { requestLogin, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, handleLoginUser } from '../../actions/account';
 import Button from '../../components/atoms/Button';
 import InputBox from '../../components/atoms/InputBox';
 import MenuInfoBox from '../../components/atoms/MenuInfoBox';
 import PageBox from '../../components/atoms/PageBox';
 import theme from '../../styles/theme';
-
-export const ID_EMPTY_MSG = '아이디를 입력해 주세요';
-export const PASSWORD_EMPTY_MSG = '비밀번호를 입력해 주세요';
-export const headers = { 'Content-Type': 'application/json' };
 
 const LoginContainer = styled.div`
   position: fixed;
@@ -55,17 +51,6 @@ const InputContainer = styled.div`
   }
 `;
 
-export const getToken = () => {
-  const value = document.cookie.match('(^|;) ?token=([^;]*)(;|$)');
-  return value ? value[2] : null;
-};
-
-export const setToken = (token: string) => {
-  const date = new Date();
-  date.setTime(date.getTime() + 60 * 60 * 1000);
-  document.cookie = `token=${token};max-age=3600;path=/`;
-};
-
 const Login: NextPage = () => {
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
@@ -73,24 +58,12 @@ const Login: NextPage = () => {
   const handleLogin = async () => {
     if (!id) alert(ID_EMPTY_MSG);
     else if (!password) alert(PASSWORD_EMPTY_MSG);
-    else {
-      await fetch(`http://localhost:5000/signIn`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          id,
-          password,
-        }),
-      })
-        .then((res) => res.json())
-        .then(({ isLogin, message, token }) => {
-          if (isLogin) {
-            setToken(token);
-            Router.push('/lobby');
-          } else alert(message);
-        });
-    }
+    else await requestLogin(id, password);
   };
+
+  useEffect(() => {
+    handleLoginUser();
+  }, []);
 
   return (
     <>

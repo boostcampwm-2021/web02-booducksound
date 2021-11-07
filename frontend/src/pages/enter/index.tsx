@@ -1,18 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
-import Link from 'next/link';
-import Router from 'next/router';
 
+import { requestEnter, handleLoginUser, NICKNAME_EMPTY_MSG } from '../../actions/account';
 import Button from '../../components/atoms/Button';
 import InputBox from '../../components/atoms/InputBox';
 import MenuInfoBox from '../../components/atoms/MenuInfoBox';
 import PageBox from '../../components/atoms/PageBox';
 import ProfileSelector from '../../components/atoms/ProfileSelector';
 import theme from '../../styles/theme';
-import { NICKNAME_EMPTY_MSG } from '../join';
-import { headers, getToken, setToken } from '../login';
 
 const EnterContainer = styled.div`
   position: fixed;
@@ -62,23 +59,12 @@ const Enter: NextPage = () => {
 
   const handleEnter = async () => {
     if (!nickname) alert(NICKNAME_EMPTY_MSG);
-    else {
-      await fetch(`http://localhost:5000/enter`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          nickname,
-        }),
-      })
-        .then((res) => res.json())
-        .then(({ isLogin, message, token }) => {
-          if (isLogin) {
-            setToken(token);
-            Router.push('/lobby');
-          } else alert(message);
-        });
-    }
+    else await requestEnter(nickname, color);
   };
+
+  useEffect(() => {
+    handleLoginUser();
+  }, []);
 
   return (
     <>
