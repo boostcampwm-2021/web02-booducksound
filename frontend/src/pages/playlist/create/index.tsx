@@ -85,7 +85,13 @@ const PlaylistCreate: NextPage = () => {
           />
           <ChipContainer>
             {chips.map((chip, idx) => (
-              <Chip content={chip} key={idx}></Chip>
+              <Chip
+                content={chip}
+                key={idx}
+                deleteHandler={(e) => {
+                  setChips((preState) => [...preState.filter((chip, i) => i !== idx)]);
+                }}
+              ></Chip>
             ))}
           </ChipContainer>
           <CreatePlaylistMusicList
