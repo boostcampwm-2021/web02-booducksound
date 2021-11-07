@@ -18,7 +18,12 @@
     "paths": {
       "@atoms/*": ["src/components/atoms/*"],
       "@molecules/*": ["src/components/molecules/*"],
-      "@organisms/*": ["src/components/organisms/*"]
+      "@organisms/*": ["src/components/organisms/*"],
+      "@type/*": ["src/types/*"],
+      "@utils/*": ["src/utils/*"],
+      "@styles/*": ["src/styles/*"],
+      "@reducer/*": ["src/reducers/*"],
+      "@hooks/*": ["src/hooks/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

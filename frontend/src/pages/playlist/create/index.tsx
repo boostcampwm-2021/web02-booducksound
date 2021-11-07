@@ -1,18 +1,17 @@
 import { useCallback, useState } from 'react';
 
+import Button from '@atoms/Button';
+import MenuInfoBox from '@atoms/MenuInfoBox';
+import PageBox from '@atoms/PageBox';
 import styled from '@emotion/styled';
+import useEventListener from '@hooks/useEventListener';
+import Chip from '@molecules/Chip';
+import CreatePlaylistInputBox from '@organisms/CreatePlaylistInputBox';
+import CreatePlaylistMusicList from '@organisms/CreatePlaylistMusicList';
+import CreatePlaylistMusicModal from '@organisms/CreatePlaylistMusicModal';
+import theme from '@styles/theme';
+import { Music } from '@type/Music';
 import type { NextPage } from 'next';
-
-import Button from '../../../components/atoms/Button';
-import MenuInfoBox from '../../../components/atoms/MenuInfoBox';
-import PageBox from '../../../components/atoms/PageBox';
-import Chip from '../../../components/molecules/Chip';
-import CreatePlaylistInputBox from '../../../components/organisms/CreatePlaylistInputBox';
-import CreatePlaylistMusicList from '../../../components/organisms/CreatePlaylistMusicList';
-import CreatePlaylistMusicModal from '../../../components/organisms/CreatePlaylistMusicModal';
-import theme from '../../../styles/theme';
-import { Music } from '../../../types/music';
-import useEventListener from '../../../utils/useEventListener';
 
 const ChipContainer = styled.div`
   display: flex;
