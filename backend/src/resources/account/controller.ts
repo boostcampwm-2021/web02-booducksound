@@ -32,7 +32,6 @@ const signIn = async (req: Request, res: Response) => {
 const signUp = async (req: Request, res: Response) => {
   const { id, password, nickname, color }: UserType = req.body;
   const result = await UserService.join({ id, password, nickname, color: `#${color}` });
-  console.log(result);
   res.json(result);
 };
 
