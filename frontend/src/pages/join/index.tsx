@@ -99,7 +99,7 @@ const Join: NextPage = () => {
   useEffect(() => {
     handleLoginUser();
   }, []);
-  
+
   return (
     <>
       <MenuInfoBox name="회원가입" />
