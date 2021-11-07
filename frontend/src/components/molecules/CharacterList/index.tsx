@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 
+import theme from '../../../styles/theme';
 import CharacterProfile from '../CharacterProfile';
 
 const Title = styled.p`
@@ -10,7 +11,7 @@ const Container = styled.div`
   margin-right: auto;
   display: flex;
   flex-direction: column;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  @media (max-width: ${theme.breakpoints.sm}) {
     flex-direction: row;
     overflow: auto;
     justify-content: space-between;
@@ -22,7 +23,7 @@ interface props {
   status: 'king' | 'ready' | 'prepare';
 }
 
-const CharacterList = ({ children }: any) => {
+const CharacterList = () => {
   const dummy: props[] = [
     { color: 'ff', name: 'max', status: 'king' },
     { color: 'dwff', name: 'john', status: 'ready' },

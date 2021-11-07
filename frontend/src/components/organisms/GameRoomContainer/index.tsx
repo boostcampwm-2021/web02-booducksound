@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 
+import theme from '../../../styles/theme';
 import GlassContainer from '../../atoms/GlassContainer';
 import CharacterList from '../../molecules/CharacterList';
 import ChatList from '../../molecules/ChatList';
@@ -18,8 +19,8 @@ const Wrapper = styled.div`
     'leftCharacter . rightTitle' 1fr
     'leftCharacter . rightChat' 6fr
     'leftCharacter . rightSearch' 1fr
-    / 4fr 1fr 6fr;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    / 6fr 1fr 8fr;
+  @media (max-width: ${theme.breakpoints.sm}) {
     grid-template:
       '.  leftCharacter leftCharacter leftCharacter .' 3fr
       '. leftTitle rightTitle rightTitle .' 2fr
