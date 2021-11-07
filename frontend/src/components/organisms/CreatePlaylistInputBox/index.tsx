@@ -16,7 +16,7 @@ interface Props {
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-  row-gap: 20px;
+  row-gap: 25px;
   @media (max-width: 1200px) {
     & > div > :last-child {
       height: 40px;
@@ -54,6 +54,11 @@ const PlaylistInputText = styled(InputText)`
     padding: 15px 10px 15px 20px;
   }
 `;
+const SectionBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+`;
 
 const CreatePlaylistInputBox = ({
   setTitle,
@@ -65,30 +70,36 @@ const CreatePlaylistInputBox = ({
 }: PropsWithChildren<Props>) => {
   return (
     <InputContainer>
-      <Label>플레이리스트 제목</Label>
-      <PlaylistInputText
-        changeHandler={setTitle}
-        value={title}
-        className="title"
-        isSearch={false}
-        placeholder="플레이리스트 제목을 입력해주세요."
-      ></PlaylistInputText>
-      <Label>플레이리스트 설명</Label>
-      <PlaylistInputText
-        changeHandler={setDescription}
-        value={description}
-        className="description"
-        isSearch={false}
-        placeholder="플레이리스트 설명을 입력해주세요."
-      ></PlaylistInputText>
-      <Label>플레이리스트 해시태그</Label>
-      <PlaylistInputText
-        changeHandler={setHashTag}
-        value={hashTag}
-        className="hashTag"
-        isSearch={false}
-        placeholder="추가할 해시태그를 입력 후 Enter를 클릭하세요."
-      ></PlaylistInputText>
+      <SectionBox>
+        <Label>플레이리스트 제목</Label>
+        <PlaylistInputText
+          changeHandler={setTitle}
+          value={title}
+          className="title"
+          isSearch={false}
+          placeholder="플레이리스트 제목을 입력해주세요."
+        ></PlaylistInputText>
+      </SectionBox>
+      <SectionBox>
+        <Label>플레이리스트 설명</Label>
+        <PlaylistInputText
+          changeHandler={setDescription}
+          value={description}
+          className="description"
+          isSearch={false}
+          placeholder="플레이리스트 설명을 입력해주세요."
+        ></PlaylistInputText>
+      </SectionBox>
+      <SectionBox>
+        <Label>플레이리스트 해시태그</Label>
+        <PlaylistInputText
+          changeHandler={setHashTag}
+          value={hashTag}
+          className="hashTag"
+          isSearch={false}
+          placeholder="추가할 해시태그를 입력 후 Enter를 클릭하세요."
+        ></PlaylistInputText>
+      </SectionBox>
     </InputContainer>
   );
 };
