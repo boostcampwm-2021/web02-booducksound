@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
@@ -150,6 +152,7 @@ const BoxTitle = styled.h2<Props>`
 `;
 
 const MyPage: NextPage = () => {
+  const [color, setColor] = useState('fff');
   return (
     <>
       <MenuInfoBox name="마이페이지" />
@@ -157,7 +160,7 @@ const MyPage: NextPage = () => {
         <MyPageContainer>
           <ProfileBox>
             <UserInfoBox>
-              <ProfileSelector type="mypage"></ProfileSelector>
+              <ProfileSelector type="mypage" color={color} setColor={setColor}></ProfileSelector>
               <UserInfo>
                 <p className="user-name">부덕부덕</p>
                 <p className="user-id">sap03110</p>

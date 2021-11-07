@@ -2,17 +2,13 @@ import { useState, useEffect } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
-import Router from 'next/router';
 
-import Button from '../components/atoms/Button';
-import InputBox from '../components/atoms/InputBox';
-import MenuInfoBox from '../components/atoms/MenuInfoBox';
-import PageBox from '../components/atoms/PageBox';
-import theme from '../styles/theme';
-
-const ID_EMPTY_MSG = '아이디를 입력해 주세요';
-const PASSWORD_EMPTY_MSG = '비밀번호를 입력해 주세요';
-const headers = { 'Content-Type': 'application/json' };
+import { requestLogin, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, handleLoginUser } from '../../actions/account';
+import Button from '../../components/atoms/Button';
+import InputBox from '../../components/atoms/InputBox';
+import MenuInfoBox from '../../components/atoms/MenuInfoBox';
+import PageBox from '../../components/atoms/PageBox';
+import theme from '../../styles/theme';
 
 const LoginContainer = styled.div`
   position: fixed;
@@ -55,36 +51,19 @@ const InputContainer = styled.div`
   }
 `;
 
-const MessageBox = styled.div`
-  position: fixed;
-`;
-
 const Login: NextPage = () => {
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
-  const [msgOnOff, setMsgOnOff] = useState(false);
 
   const handleLogin = async () => {
     if (!id) alert(ID_EMPTY_MSG);
     else if (!password) alert(PASSWORD_EMPTY_MSG);
-    else {
-      await fetch(`http://localhost:5000/signIn`, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          id,
-          password,
-        }),
-      })
-        .then((res) => res.json())
-        .then(({ isLogin, message }) => {
-          if (isLogin) Router.push('/lobby');
-          else {
-            // message
-          }
-        });
-    }
+    else await requestLogin(id, password);
   };
+
+  useEffect(() => {
+    handleLoginUser();
+  }, []);
 
   return (
     <>
@@ -99,7 +78,7 @@ const Login: NextPage = () => {
               height={'80px'}
               fontSize={'20px'}
               value={id}
-              onChangeHandler={({ target, currentTarget }) => setID(target.value)}
+              onChangeHandler={({ target }) => setID((target as HTMLInputElement).value)}
             ></InputBox>
             <InputBox
               isPassword={true}
@@ -109,7 +88,7 @@ const Login: NextPage = () => {
               height={'80px'}
               fontSize={'20px'}
               value={password}
-              onChangeHandler={({ target, currentTarget }) => setPassword(target.value)}
+              onChangeHandler={({ target }) => setPassword((target as HTMLInputElement).value)}
             ></InputBox>
             <Button
               width={'560px'}
@@ -122,7 +101,6 @@ const Login: NextPage = () => {
             <SearchPwdBtn href="#none">비밀번호를 잊어버리셨나요?</SearchPwdBtn>
           </InputContainer>
         </LoginContainer>
-        {!msgOnOff && <MessageBox>히히</MessageBox>}
       </PageBox>
     </>
   );

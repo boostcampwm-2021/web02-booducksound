@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 
 import User from '../../models/User';
-require('dotenv').config();
 const SECRET_KEY: string = process.env.JWT_SECRET || '';
 
 export interface LoginInfo {
@@ -17,6 +16,12 @@ export interface UserType extends LoginInfo {
 export interface LoginResponse {
   isLogin: boolean;
   message: string;
+  token: string | undefined;
+}
+
+export interface GuestLoginInfo {
+  nickname: string;
+  color: string;
 }
 
 const idCheck = async (id: string) => {
@@ -24,14 +29,28 @@ const idCheck = async (id: string) => {
   return result.length > 0;
 };
 
-const createToken = (id: any) => {
+const createUserToken = (id: string) => {
   const token = jwt.sign(
     {
       id,
     },
     SECRET_KEY,
     {
-      expiresIn: '1h',
+      expiresIn: '24h',
+    },
+  );
+  return token;
+};
+
+const createNonUserToken = (nickname: string, color: string) => {
+  const token = jwt.sign(
+    {
+      nickname,
+      color,
+    },
+    SECRET_KEY,
+    {
+      expiresIn: '24h',
     },
   );
   return token;
@@ -43,6 +62,7 @@ const login = async ({ id, password }: LoginInfo, cb: any) => {
       const result = {
         isLogin: false,
         message: '존재하지 않는 아이디입니다.',
+        token: undefined,
       };
       return cb(result);
     }
@@ -50,19 +70,35 @@ const login = async ({ id, password }: LoginInfo, cb: any) => {
     const result = {
       isLogin: res,
       message: res ? '로그인에 성공했습니다.' : '비밀번호가 틀렸습니다.',
+      token: res ? createUserToken(id) : undefined,
     };
     cb(result);
   });
 };
 
-const join = ({ id, password, nickname, color }: UserType) => {
+const join = async ({ id, password, nickname, color }: UserType) => {
   const newUser = new User({
     id,
     password,
     nickname,
     color,
   });
-  newUser.save().then((res: any) => res);
+  return await newUser.save().then((res: any) => {
+    return {
+      isLogin: true,
+      message: res ? '회원가입에 성공했습니다.' : '회원가입에 실패했습니다.',
+      token: res ? createUserToken(id) : undefined,
+    };
+  });
+};
+
+const enter = ({ nickname, color }: GuestLoginInfo, cb: any) => {
+  const result = {
+    isLogin: true,
+    message: '비회원 로그인에 성공했습니다.',
+    token: createNonUserToken(nickname, color),
+  };
+  cb(result);
 };
 
 const changePassword = async (id: string, newPw: string) => {
@@ -76,9 +112,10 @@ const getUserInfo = async (id: string) => {
 
 export default {
   idCheck,
-  createToken,
+  createUserToken,
   login,
   join,
+  enter,
   changePassword,
   getUserInfo,
 };

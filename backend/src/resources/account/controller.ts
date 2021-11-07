@@ -1,12 +1,15 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-import UserService, { LoginInfo, UserType, LoginResponse } from './service';
+import UserService, { LoginInfo, GuestLoginInfo, UserType, LoginResponse } from './service';
 
 const checkId = async (req: Request, res: Response) => {
   const id: string = req.query.id as string;
   const result = await UserService.idCheck(id);
-  res.json({ result });
+  res.json({
+    result,
+    message: result ? '이미 존재하는 아이디입니다.' : '사용 가능한 아이디입니다.',
+  });
 };
 
 const checkLogin = async (req: Request, res: Response) => {
@@ -23,26 +26,22 @@ const resetPwd = async (req: Request, res: Response) => {
 
 const signIn = async (req: Request, res: Response) => {
   const { id, password }: LoginInfo = req.body;
-  await UserService.login({ id, password }, (e: LoginResponse) => {
-    if (e.isLogin) {
-      const token = UserService.createToken(id);
-      console.log(token);
-      res.cookie('test2', 12345);
-      res.cookie('userToken', token);
-      console.log(req.cookies);
-    }
-    res.json(e);
-  });
+  await UserService.login({ id, password }, (e: LoginResponse) => res.json(e));
 };
 
-const signUp = (req: Request, res: Response) => {
+const signUp = async (req: Request, res: Response) => {
   const { id, password, nickname, color }: UserType = req.body;
-  const result = UserService.join({ id, password, nickname, color });
+  const result = await UserService.join({ id, password, nickname, color: `#${color}` });
   res.json(result);
 };
 
+const guestSignIn = (req: Request, res: Response) => {
+  const { nickname, color }: GuestLoginInfo = req.body;
+  UserService.enter({ nickname, color }, (e: LoginResponse) => res.json(e));
+};
+
 const logOut = (req: Request, res: Response) => {
-  res.clearCookie('userToken');
+  res.clearCookie('token');
 };
 
 export default {
@@ -51,5 +50,6 @@ export default {
   resetPwd,
   signIn,
   signUp,
+  guestSignIn,
   logOut,
 };
