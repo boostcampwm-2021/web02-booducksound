@@ -15,11 +15,11 @@ const Wrapper = styled.div`
   display: grid;
   gap: 10px;
   grid-template:
-    'leftTitle . rightTitle' 1fr
-    'leftCharacter . rightTitle' 1fr
-    'leftCharacter . rightChat' 6fr
-    'leftCharacter . rightSearch' 1fr
-    / 6fr 1fr 8fr;
+    '. leftTitle . rightTitle .' 1fr
+    '. leftCharacter . rightTitle .' 1fr
+    '. leftCharacter . rightChat .' 6fr
+    '. leftCharacter . rightSearch .' 1fr
+    /1fr 6fr 1fr 8fr 1fr;
   @media (max-width: ${theme.breakpoints.sm}) {
     grid-template:
       '.  leftCharacter leftCharacter leftCharacter .' 3fr
