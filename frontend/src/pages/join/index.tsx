@@ -5,14 +5,13 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import Router from 'next/router';
 
-import Button from '../components/atoms/Button';
-import InputBox from '../components/atoms/InputBox';
-import MenuInfoBox from '../components/atoms/MenuInfoBox';
-import PageBox from '../components/atoms/PageBox';
-import ProfileSelector from '../components/atoms/ProfileSelector';
-import theme from '../styles/theme';
-
-import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, headers, getToken, setToken } from './login';
+import Button from '../../components/atoms/Button';
+import InputBox from '../../components/atoms/InputBox';
+import MenuInfoBox from '../../components/atoms/MenuInfoBox';
+import PageBox from '../../components/atoms/PageBox';
+import ProfileSelector from '../../components/atoms/ProfileSelector';
+import theme from '../../styles/theme';
+import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, headers, getToken, setToken } from '../login';
 
 export const NICKNAME_EMPTY_MSG = '닉네임을 입력해 주세요';
 
@@ -125,7 +124,7 @@ const Join: NextPage = () => {
               height={'80px'}
               fontSize={'20px'}
               value={id}
-              onChangeHandler={({ target, currentTarget }) => setID(target.value)}
+              onChangeHandler={({ target }) => setID((target as HTMLInputElement).value)}
             ></InputBox>
             <Button
               content={'중복확인'}
@@ -142,7 +141,7 @@ const Join: NextPage = () => {
               height={'80px'}
               fontSize={'20px'}
               value={password}
-              onChangeHandler={({ target, currentTarget }) => setPassword(target.value)}
+              onChangeHandler={({ target }) => setPassword((target as HTMLInputElement).value)}
             ></InputBox>
             <InputBox
               isSearch={false}
@@ -151,7 +150,7 @@ const Join: NextPage = () => {
               height={'80px'}
               fontSize={'20px'}
               value={nickname}
-              onChangeHandler={({ target, currentTarget }) => setNickname(target.value)}
+              onChangeHandler={({ target }) => setNickname((target as HTMLInputElement).value)}
             ></InputBox>
             <Link href="/join">
               <a>

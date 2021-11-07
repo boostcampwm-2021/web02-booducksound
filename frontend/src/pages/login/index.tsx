@@ -4,11 +4,11 @@ import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Router from 'next/router';
 
-import Button from '../components/atoms/Button';
-import InputBox from '../components/atoms/InputBox';
-import MenuInfoBox from '../components/atoms/MenuInfoBox';
-import PageBox from '../components/atoms/PageBox';
-import theme from '../styles/theme';
+import Button from '../../components/atoms/Button';
+import InputBox from '../../components/atoms/InputBox';
+import MenuInfoBox from '../../components/atoms/MenuInfoBox';
+import PageBox from '../../components/atoms/PageBox';
+import theme from '../../styles/theme';
 
 export const ID_EMPTY_MSG = '아이디를 입력해 주세요';
 export const PASSWORD_EMPTY_MSG = '비밀번호를 입력해 주세요';
@@ -105,7 +105,7 @@ const Login: NextPage = () => {
               height={'80px'}
               fontSize={'20px'}
               value={id}
-              onChangeHandler={({ target }) => setID(target.value)}
+              onChangeHandler={({ target }) => setID((target as HTMLInputElement).value)}
             ></InputBox>
             <InputBox
               isPassword={true}
@@ -115,7 +115,7 @@ const Login: NextPage = () => {
               height={'80px'}
               fontSize={'20px'}
               value={password}
-              onChangeHandler={({ target }) => setPassword(target.value)}
+              onChangeHandler={({ target }) => setPassword((target as HTMLInputElement).value)}
             ></InputBox>
             <Button
               width={'560px'}

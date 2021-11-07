@@ -25,14 +25,28 @@ const idCheck = async (id: string) => {
   return result.length > 0;
 };
 
-const createToken = (id: any) => {
+const createUserToken = (id: string) => {
   const token = jwt.sign(
     {
       id,
     },
     SECRET_KEY,
     {
-      expiresIn: '1h',
+      expiresIn: '12h',
+    },
+  );
+  return token;
+};
+
+const createNonUserToken = (nickname: string, color: string) => {
+  const token = jwt.sign(
+    {
+      nickname,
+      color,
+    },
+    SECRET_KEY,
+    {
+      expiresIn: '12h',
     },
   );
   return token;
@@ -52,7 +66,7 @@ const login = async ({ id, password }: LoginInfo, cb: any) => {
     const result = {
       isLogin: res,
       message: res ? '로그인에 성공했습니다.' : '비밀번호가 틀렸습니다.',
-      token: res ? createToken(id) : undefined,
+      token: res ? createUserToken(id) : undefined,
     };
     cb(result);
   });
@@ -69,9 +83,13 @@ const join = async ({ id, password, nickname, color }: UserType) => {
     return {
       isLogin: true,
       message: res ? '회원가입에 성공했습니다.' : '회원가입에 실패했습니다.',
-      token: res ? createToken(id) : undefined,
+      token: res ? createUserToken(id) : undefined,
     };
   });
+};
+
+const enter = async (nickname: string, color: string) => {
+  return createNonUserToken(nickname, color);
 };
 
 const changePassword = async (id: string, newPw: string) => {
@@ -85,9 +103,10 @@ const getUserInfo = async (id: string) => {
 
 export default {
   idCheck,
-  createToken,
+  createUserToken,
   login,
   join,
+  enter,
   changePassword,
   getUserInfo,
 };

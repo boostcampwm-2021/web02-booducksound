@@ -5,15 +5,14 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import Router from 'next/router';
 
-import Button from '../components/atoms/Button';
-import InputBox from '../components/atoms/InputBox';
-import MenuInfoBox from '../components/atoms/MenuInfoBox';
-import PageBox from '../components/atoms/PageBox';
-import ProfileSelector from '../components/atoms/ProfileSelector';
-import theme from '../styles/theme';
-
-import { NICKNAME_EMPTY_MSG } from './join';
-import { headers, getToken, setToken } from './login';
+import Button from '../../components/atoms/Button';
+import InputBox from '../../components/atoms/InputBox';
+import MenuInfoBox from '../../components/atoms/MenuInfoBox';
+import PageBox from '../../components/atoms/PageBox';
+import ProfileSelector from '../../components/atoms/ProfileSelector';
+import theme from '../../styles/theme';
+import { NICKNAME_EMPTY_MSG } from '../join';
+import { headers, getToken, setToken } from '../login';
 
 const EnterContainer = styled.div`
   position: fixed;
@@ -95,7 +94,7 @@ const Enter: NextPage = () => {
               height={'80px'}
               fontSize={'20px'}
               value={nickname}
-              onChangeHandler={({ target }) => setNickname(target.value)}
+              onChangeHandler={({ target }) => setNickname((target as HTMLInputElement).value)}
             ></InputBox>
             <a>
               <Button

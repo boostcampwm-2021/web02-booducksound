@@ -42,15 +42,15 @@ const ChangeBtn = styled.span<Props>`
   background: #fff url('images/ic_shuffle.png') no-repeat center/45%;
 `;
 
-const ProfileSelector = ({ type, color, setColor }: PropsWithChildren<Props>) => {
+const ProfileSelector = ({ type, color, setColor }: Props) => {
   const getRandomColor = () => {
     setColor(`${getRandomHex()}${getRandomHex()}${getRandomHex()}`);
   };
 
   return (
-    <ProfileContainer type={type}>
+    <ProfileContainer type={type} color={color} setColor={setColor}>
       <Character width={'100%'} color={color}></Character>
-      <ChangeBtn type={type} onClick={getRandomColor} />
+      <ChangeBtn type={type} onClick={getRandomColor} color={color} setColor={setColor} />
     </ProfileContainer>
   );
 };
