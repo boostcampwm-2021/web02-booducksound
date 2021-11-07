@@ -2,7 +2,7 @@ import { ChangeEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
-import InputSection from '../../../components/molecules/InputSection';
+import InputText from '../../atoms/InputText';
 
 interface Props {
   setTitle: ChangeEventHandler;
@@ -36,6 +36,24 @@ const InputContainer = styled.div`
     }
   }
 `;
+const Label = styled.label`
+  font-size: 1em;
+  font-weight: bold;
+`;
+const PlaylistInputText = styled(InputText)`
+  width: 98%;
+  height: 3em;
+  padding: 25px 10px 25px 45px;
+  @media (max-width: 1200px) {
+    padding: 25px 10px 25px 45px;
+  }
+  @media (max-width: 768px) {
+    padding: 20px 10px 20px 35px;
+  }
+  @media (max-width: 480px) {
+    padding: 15px 10px 15px 20px;
+  }
+`;
 
 const CreatePlaylistInputBox = ({
   setTitle,
@@ -47,48 +65,30 @@ const CreatePlaylistInputBox = ({
 }: PropsWithChildren<Props>) => {
   return (
     <InputContainer>
-      <InputSection
-        id={'playlist-title'}
-        title={'플레이리스트 제목'}
-        titleSize={'1em'}
-        isSearch={false}
-        placeholder={'플레이리스트 제목을 입력해주세요'}
-        width={'100%'}
-        height={'3em'}
-        fontSize={'0.85em'}
-        margin={'0.6em'}
-        paddingW={'40px'}
+      <Label>플레이리스트 제목</Label>
+      <PlaylistInputText
+        changeHandler={setTitle}
         value={title}
-        onChangeHandler={setTitle}
-      ></InputSection>
-      <InputSection
-        id={'playlist-title'}
-        title={'플레이리스트 설명'}
-        titleSize={'1em'}
+        className="title"
         isSearch={false}
-        placeholder={'플레이리스트 설명을 입력해주세요'}
-        width={'100%'}
-        height={'3em'}
-        fontSize={'0.85em'}
-        margin={'0.6em'}
-        paddingW={'40px'}
+        placeholder="플레이리스트 제목을 입력해주세요."
+      ></PlaylistInputText>
+      <Label>플레이리스트 설명</Label>
+      <PlaylistInputText
+        changeHandler={setDescription}
         value={description}
-        onChangeHandler={setDescription}
-      ></InputSection>
-      <InputSection
-        id={'playlist-title'}
-        title={'플레이리스트 해시태그'}
-        titleSize={'1em'}
+        className="description"
         isSearch={false}
-        placeholder={'추가할 해시태그를 입력 후 Enter를 클릭하세요'}
-        width={'100%'}
-        height={'3em'}
-        fontSize={'0.85em'}
-        margin={'0.6em'}
-        paddingW={'40px'}
+        placeholder="플레이리스트 설명을 입력해주세요."
+      ></PlaylistInputText>
+      <Label>플레이리스트 해시태그</Label>
+      <PlaylistInputText
+        changeHandler={setHashTag}
         value={hashTag}
-        onChangeHandler={setHashTag}
-      ></InputSection>
+        className="hashTag"
+        isSearch={false}
+        placeholder="추가할 해시태그를 입력 후 Enter를 클릭하세요."
+      ></PlaylistInputText>
     </InputContainer>
   );
 };

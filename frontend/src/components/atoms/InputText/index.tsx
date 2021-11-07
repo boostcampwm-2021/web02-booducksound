@@ -7,7 +7,7 @@ interface Props {
   placeholder: string;
   className: string;
   value: string;
-  enterHandler: KeyboardEventHandler;
+  enterHandler?: KeyboardEventHandler;
   changeHandler: ChangeEventHandler;
 }
 interface ContainerProps {
