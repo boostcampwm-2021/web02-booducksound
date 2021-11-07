@@ -11,20 +11,20 @@ const playList = {
   // },
   register: async (req: Request, res: Response) => {
     console.log(req);
-    await playListService
+    playListService
       .add(req.body)
       .then((result: any) => res.json({ status: 'SUCCESS', result }))
       .catch((e: Error) => res.json({ status: 'FAILED', error: e }));
   },
   modify: async (req: Request, res: Response) => {
     const { _id, data } = req.body;
-    await playListService
+    playListService
       .modify(_id, data)
       .then((result: any) => res.json({ status: 'SUCCESS', result }))
       .catch((e: Error) => res.json({ status: 'FAILED', error: e }));
   },
   del: async (req: Request, res: Response) => {
-    await playListService
+    playListService
       .del(req.body)
       .then((result: any) => res.json({ status: 'SUCCESS', result }))
       .catch((e: Error) => res.json({ status: 'FAILED', error: e }));
