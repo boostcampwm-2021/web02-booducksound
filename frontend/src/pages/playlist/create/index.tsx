@@ -71,7 +71,7 @@ const PlaylistCreate: NextPage = () => {
 
   return (
     <Container>
-      <MenuInfoBox name={'플레이리스트 추가'}></MenuInfoBox>
+      <MenuInfoBox name="플레이리스트 추가"></MenuInfoBox>
       <PageBox>
         <Wrapper>
           <CreatePlaylistInputBox
@@ -101,13 +101,7 @@ const PlaylistCreate: NextPage = () => {
             }
           ></CreatePlaylistMusicList>
           <SubmitButtonWrapper>
-            <Button
-              content={'등록'}
-              background={theme.colors.sky}
-              fontSize={'1.5em'}
-              paddingH={'2%'}
-              width={'45%'}
-            ></Button>
+            <Button content="등록" background={theme.colors.sky} fontSize="1.5em" paddingH="2%" width="45%"></Button>
           </SubmitButtonWrapper>
         </Wrapper>
       </PageBox>

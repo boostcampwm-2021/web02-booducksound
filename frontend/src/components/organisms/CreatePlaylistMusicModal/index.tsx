@@ -3,7 +3,7 @@ import { PropsWithChildren, useCallback, useState } from 'react';
 import styled from '@emotion/styled';
 
 import theme from '../../../styles/theme';
-import { Music } from '../../../types/music';
+import { Music } from '../../../types/Music';
 import Button from '../../atoms/Button';
 import InputText from '../../atoms/InputText';
 import Chip from '../../molecules/Chip';
@@ -92,10 +92,10 @@ const CreatePlaylistMusicModal = ({ setMusics, setIsOpenModal }: PropsWithChildr
 
   return (
     <Modal
-      height={'500px'}
-      maxWidth={'700px'}
-      leftButtonText={'등록'}
-      rightButtonText={'취소'}
+      height="500px"
+      maxWidth="700px"
+      leftButtonText="등록"
+      rightButtonText="취소"
       leftButtonHanlder={leftButtonHandler}
       rightButtonHanlder={rightButtonHandler}
     >

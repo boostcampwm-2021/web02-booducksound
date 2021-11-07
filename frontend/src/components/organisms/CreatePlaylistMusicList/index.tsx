@@ -69,11 +69,11 @@ const CreatePlaylistMusicList = ({ musics, setIsOpenModal, setMusics }: PropsWit
         <MusicListTitleTop>
           <MusicListTitle>노래 목록</MusicListTitle>
           <Button
-            content={'추가'}
+            content="추가"
             background={theme.colors.mint}
-            fontSize={'12px'}
-            paddingH={'7px'}
-            width={'100px'}
+            fontSize="12px"
+            paddingH="7px"
+            width="100px"
             onClick={setIsOpenModal}
           ></Button>
         </MusicListTitleTop>
