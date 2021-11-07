@@ -46,11 +46,12 @@ export const requestLogin = async (id: string, password: string) => {
 };
 
 export const requestEnter = async (nickname: string, color: string) => {
-  return await fetch(`http://localhost:5000/enter`, {
+  return await fetch(`http://localhost:5000/guestSignIn`, {
     method: 'POST',
     headers,
     body: JSON.stringify({
       nickname,
+      color,
     }),
   })
     .then((res) => res.json())

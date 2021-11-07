@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 
 import User from '../../models/User';
-require('dotenv').config();
 const SECRET_KEY: string = process.env.JWT_SECRET || '';
 
 export interface LoginInfo {
@@ -20,6 +19,11 @@ export interface LoginResponse {
   token: string | undefined;
 }
 
+export interface GuestLoginInfo {
+  nickname: string;
+  color: string;
+}
+
 const idCheck = async (id: string) => {
   const result = await User.find({ id });
   return result.length > 0;
@@ -32,7 +36,7 @@ const createUserToken = (id: string) => {
     },
     SECRET_KEY,
     {
-      expiresIn: '12h',
+      expiresIn: '24h',
     },
   );
   return token;
@@ -46,7 +50,7 @@ const createNonUserToken = (nickname: string, color: string) => {
     },
     SECRET_KEY,
     {
-      expiresIn: '12h',
+      expiresIn: '24h',
     },
   );
   return token;
@@ -88,8 +92,13 @@ const join = async ({ id, password, nickname, color }: UserType) => {
   });
 };
 
-const enter = async (nickname: string, color: string) => {
-  return createNonUserToken(nickname, color);
+const enter = ({ nickname, color }: GuestLoginInfo, cb: any) => {
+  const result = {
+    isLogin: true,
+    message: '비회원 로그인에 성공했습니다.',
+    token: createNonUserToken(nickname, color),
+  };
+  cb(result);
 };
 
 const changePassword = async (id: string, newPw: string) => {

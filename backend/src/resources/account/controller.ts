@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 
-import UserService, { LoginInfo, UserType, LoginResponse } from './service';
+import UserService, { LoginInfo, GuestLoginInfo, UserType, LoginResponse } from './service';
 
 const checkId = async (req: Request, res: Response) => {
   const id: string = req.query.id as string;
@@ -35,8 +35,13 @@ const signUp = async (req: Request, res: Response) => {
   res.json(result);
 };
 
+const guestSignIn = (req: Request, res: Response) => {
+  const { nickname, color }: GuestLoginInfo = req.body;
+  UserService.enter({ nickname, color }, (e: LoginResponse) => res.json(e));
+};
+
 const logOut = (req: Request, res: Response) => {
-  res.clearCookie('userToken');
+  res.clearCookie('token');
 };
 
 export default {
@@ -45,5 +50,6 @@ export default {
   resetPwd,
   signIn,
   signUp,
+  guestSignIn,
   logOut,
 };
