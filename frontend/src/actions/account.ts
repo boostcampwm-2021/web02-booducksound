@@ -5,6 +5,7 @@ export const ID_EMPTY_MSG = '아이디를 입력해 주세요';
 export const PASSWORD_EMPTY_MSG = '비밀번호를 입력해 주세요';
 export const NICKNAME_EMPTY_MSG = '닉네임을 입력해 주세요';
 export const headers = { 'Content-Type': 'application/json' };
+export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const cookie = new Cookies();
 
@@ -28,7 +29,7 @@ export const handleLoginUser = () => {
 };
 
 export const requestLogin = async (id: string, password: string) => {
-  return await fetch(`http://localhost:5000/signIn`, {
+  return await fetch(`${BACKEND_URL}/signIn`, {
     method: 'POST',
     headers,
     body: JSON.stringify({
@@ -46,7 +47,7 @@ export const requestLogin = async (id: string, password: string) => {
 };
 
 export const requestEnter = async (nickname: string, color: string) => {
-  return await fetch(`http://localhost:5000/guestSignIn`, {
+  return await fetch(`${BACKEND_URL}/guestSignIn`, {
     method: 'POST',
     headers,
     body: JSON.stringify({
@@ -64,7 +65,7 @@ export const requestEnter = async (nickname: string, color: string) => {
 };
 
 export const requestJoin = async (id: string, password: string, nickname: string, color: string) => {
-  return await fetch(`http://localhost:5000/signUp`, {
+  return await fetch(`${BACKEND_URL}/signUp`, {
     method: 'POST',
     headers,
     body: JSON.stringify({
