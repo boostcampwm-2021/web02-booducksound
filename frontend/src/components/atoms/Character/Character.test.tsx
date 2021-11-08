@@ -1,5 +1,6 @@
-import Character from '@atoms/Character';
 import { render, screen } from '@testing-library/react';
+
+import Character from '~/atoms/Character';
 
 describe('케릭터', () => {
   it('캐릭터 렌더링', () => {

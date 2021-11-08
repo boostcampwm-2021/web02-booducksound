@@ -1,4 +1,4 @@
-import { RoomActions } from '@type/Actions';
+import { RoomActions } from '~/types/Actions';
 
 export type RoomState = {
   uuid: string | null;

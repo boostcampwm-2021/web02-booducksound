@@ -1,7 +1,8 @@
 import { MouseEventHandler } from 'react';
 
-import Button from '@atoms/Button';
 import styled from '@emotion/styled';
+
+import Button from '~/atoms/Button';
 
 interface ButtonWrapperProps {
   width: string;

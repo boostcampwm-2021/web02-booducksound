@@ -1,7 +1,8 @@
 import { ChangeEventHandler } from 'react';
 
-import SelectBox from '@atoms/SelectBox';
 import styled from '@emotion/styled';
+
+import SelectBox from '~/atoms/SelectBox';
 
 interface InputLabelContainerProps {
   titleSize: string;

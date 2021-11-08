@@ -33,7 +33,10 @@
       "error",
       {
         "groups": ["builtin", "external", "parent", "sibling", "index"],
-        "pathGroups": [{ "pattern": "react", "group": "external", "position": "before" }],
+        "pathGroups": [
+          { "pattern": "react", "group": "external", "position": "before" },
+          { "pattern": "~/**", "group": "external", "position": "after" }
+        ],
         "pathGroupsExcludedImportTypes": ["react"],
         "alphabetize": { "order": "asc", "caseInsensitive": true },
         "newlines-between": "always"

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import useSocket from '@hooks/useSocket';
+import useSocket from '~/hooks/useSocket';
 
 const useSocketEmit = (event: string, ...argv: any) => {
   const socket = useSocket();

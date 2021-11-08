@@ -16,15 +16,15 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@atoms/*": ["src/components/atoms/*"],
-      "@molecules/*": ["src/components/molecules/*"],
-      "@organisms/*": ["src/components/organisms/*"],
-      "@type/*": ["src/types/*"],
-      "@utils/*": ["src/utils/*"],
-      "@styles/*": ["src/styles/*"],
-      "@reducer/*": ["src/reducers/*"],
-      "@hooks/*": ["src/hooks/*"],
-      "@actions/*": ["src/actions/*"]
+      "~/atoms/*": ["src/components/atoms/*"],
+      "~/molecules/*": ["src/components/molecules/*"],
+      "~/organisms/*": ["src/components/organisms/*"],
+      "~/types/*": ["src/types/*"],
+      "~/utils/*": ["src/utils/*"],
+      "~/styles/*": ["src/styles/*"],
+      "~/reducers/*": ["src/reducers/*"],
+      "~/hooks/*": ["src/hooks/*"],
+      "~/actions/*": ["src/actions/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

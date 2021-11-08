@@ -1,6 +1,7 @@
-import Button from '@atoms/Button';
 import styled from '@emotion/styled';
-import theme from '@styles/theme';
+
+import Button from '~/atoms/Button';
+import theme from '~/styles/theme';
 
 const Container = styled.div`
   max-width: 1600px;
