@@ -1,12 +1,12 @@
 import express from 'express';
 
-import playList from './controller';
+import Playlist from './controller';
 
 const router = express.Router();
 
-// router.get('playList/filter', playList.filter);
-router.post('/', playList.register);
-router.put('/', playList.modify);
-router.delete('/', playList.del);
+// router.get('Playlist/filter', Playlist.filter);
+router.post('/', Playlist.register);
+router.put('/', Playlist.modify);
+router.delete('/', Playlist.del);
 
 export default router;

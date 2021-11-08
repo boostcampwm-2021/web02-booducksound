@@ -121,8 +121,8 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
       height="480px"
       maxWidth="540px"
       leftButtonText={leftButtonText}
-      leftButtonHanlder={handleCreateRoomBtn}
-      rightButtonHanlder={handleNoBtn}
+      leftButtonHandler={handleCreateRoomBtn}
+      rightButtonHandler={handleNoBtn}
     >
       <Container>
         <InputSection
