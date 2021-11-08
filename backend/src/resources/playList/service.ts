@@ -9,23 +9,18 @@ interface MusicProps {
   answers: [];
 }
 interface PlaylistProps {
-  PlaylistName: String;
+  playlistName: String;
   likeCount: Number;
   playCount: Number;
   musics: MusicProps;
   hashTags: [];
-  UserId: String;
+  userId: String;
   createdAt: Date;
 }
 
-// const get = (req) => {};
-
-const add = ({ PlaylistName, musics, hashTags, UserId }: PlaylistProps) => {
+const add = (playlistInfo: PlaylistProps) => {
   const newPlaylist = new Playlist({
-    PlaylistName,
-    musics,
-    hashTags,
-    UserId,
+    ...playlistInfo,
     createAt: new Date(),
   });
   return newPlaylist.save();
