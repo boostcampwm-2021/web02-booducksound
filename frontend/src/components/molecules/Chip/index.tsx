@@ -1,9 +1,8 @@
 import { MouseEventHandler, PropsWithChildren } from 'react';
 
+import DeleteButton from '@atoms/DeleteButton';
 import styled from '@emotion/styled';
-
-import theme from '../../../styles/theme';
-import DeleteButton from '../../atoms/DeleteButton';
+import theme from '@styles/theme';
 
 interface Props {
   deleteHandler: MouseEventHandler;

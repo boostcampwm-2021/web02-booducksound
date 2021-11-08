@@ -1,8 +1,7 @@
 import { ChangeEventHandler, PropsWithChildren } from 'react';
 
+import InputBox from '@atoms/InputBox';
 import styled from '@emotion/styled';
-
-import InputBox from '../../atoms/InputBox';
 
 interface Props {
   id: string;

@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-
-import { LobbyRoom } from '../../../types/LobbyRoom';
+import { LobbyRoom } from '@type/LobbyRoom';
 
 interface ContainerProps {
   status: 'playing' | 'waiting';

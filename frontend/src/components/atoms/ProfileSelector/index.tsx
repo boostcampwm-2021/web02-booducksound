@@ -1,9 +1,8 @@
 import { useState, PropsWithChildren, MouseEventHandler } from 'react';
 
+import Character from '@atoms/Character';
 import styled from '@emotion/styled';
-
-import theme from '../../../styles/theme';
-import Character from '../Character';
+import theme from '@styles/theme';
 
 interface Props {
   type?: string;

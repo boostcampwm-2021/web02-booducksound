@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
-
-import theme from '../../../styles/theme';
-import CharacterProfile from '../CharacterProfile';
+import CharacterProfile from '@molecules/CharacterProfile';
+import theme from '@styles/theme';
 
 const Title = styled.p`
   margin-right: auto;

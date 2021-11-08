@@ -1,16 +1,15 @@
 import { useEffect } from 'react';
 
 import styled from '@emotion/styled';
+import useSocketEmit from '@hooks/useSocketEmit';
+import GameRoomContainer from '@organisms/GameRoomContainer';
+import GameRoomNav from '@organisms/GameRoomNav';
+import { RootState } from '@reducer/index';
+import { GameRoom } from '@type/GameRoom';
+import { SocketEvents } from '@type/SocketEvents';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
-
-import GameRoomContainer from '../../components/organisms/GameRoomContainer';
-import GameRoomNav from '../../components/organisms/GameRoomNav';
-import useSocketEmit from '../../hooks/useSocketEmit';
-import { RootState } from '../../reducers';
-import { GameRoom } from '../../types/GameRoom';
-import { SocketEvents } from '../../types/SocketEvents';
 
 const Container = styled.div`
   display: flex;

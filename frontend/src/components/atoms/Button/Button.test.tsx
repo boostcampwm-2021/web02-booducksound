@@ -1,7 +1,6 @@
 import { ThemeProvider } from '@emotion/react';
+import theme from '@styles/theme';
 import { render, screen } from '@testing-library/react';
-
-import theme from '../../../styles/theme';
 
 import Button from '.';
 

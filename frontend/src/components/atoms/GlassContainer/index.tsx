@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-
-import theme from '../../../styles/theme';
+import theme from '@styles/theme';
 
 const GlassContainer = styled.div`
   background-color: ${theme.colors.lightsky};

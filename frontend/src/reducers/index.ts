@@ -1,7 +1,6 @@
+import room from '@reducer/room';
+import socket from '@reducer/socket';
 import { combineReducers } from 'redux';
-
-import room from './room';
-import socket from './socket';
 
 const rootReducer = combineReducers({
   socket,

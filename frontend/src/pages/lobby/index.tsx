@@ -1,15 +1,14 @@
 import { useState } from 'react';
 
+import InputBox from '@atoms/InputBox';
+import RoomCard from '@atoms/RoomCard';
 import styled from '@emotion/styled';
+import ResponsiveButton from '@molecules/ResponsiveButton';
+import CreateRoomModal from '@organisms/CreateRoomModal';
+import theme from '@styles/theme';
+import { LobbyRoom } from '@type/LobbyRoom';
 import type { NextPage } from 'next';
 import Link from 'next/link';
-
-import InputBox from '../../components/atoms/InputBox';
-import RoomCard from '../../components/atoms/RoomCard';
-import ResponsiveButton from '../../components/molecules/ResponsiveButton';
-import CreateRoomModal from '../../components/organisms/CreateRoomModal';
-import theme from '../../styles/theme';
-import { LobbyRoom } from '../../types/LobbyRoom';
 
 const Container = styled.div`
   display: flex;

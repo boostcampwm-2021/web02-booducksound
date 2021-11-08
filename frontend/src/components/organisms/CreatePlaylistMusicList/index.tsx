@@ -4,7 +4,7 @@ import Button from '@atoms/Button';
 import styled from '@emotion/styled';
 import CreatePlaylistMusicItem from '@molecules/CreatePlaylistMusicItem';
 import theme from '@styles/theme';
-import { Music } from '@type/Music';
+import { Music } from '@type/music';
 
 interface Props {
   musics: Music[];

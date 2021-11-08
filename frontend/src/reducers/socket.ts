@@ -1,6 +1,5 @@
+import { SocketActions } from '@type/Actions';
 import { Socket } from 'socket.io-client';
-
-import { SocketActions } from '../types/Actions';
 
 export type SocketState = {
   socket: Socket | null;

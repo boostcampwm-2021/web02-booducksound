@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 
+import { requestEnter, handleLoginUser, NICKNAME_EMPTY_MSG } from '@actions/account';
+import Button from '@atoms/Button';
+import InputBox from '@atoms/InputBox';
+import MenuInfoBox from '@atoms/MenuInfoBox';
+import PageBox from '@atoms/PageBox';
+import ProfileSelector from '@atoms/ProfileSelector';
 import styled from '@emotion/styled';
+import theme from '@styles/theme';
 import { NextPage } from 'next';
-
-import { requestEnter, handleLoginUser, NICKNAME_EMPTY_MSG } from '../../actions/account';
-import Button from '../../components/atoms/Button';
-import InputBox from '../../components/atoms/InputBox';
-import MenuInfoBox from '../../components/atoms/MenuInfoBox';
-import PageBox from '../../components/atoms/PageBox';
-import ProfileSelector from '../../components/atoms/ProfileSelector';
-import theme from '../../styles/theme';
 
 const EnterContainer = styled.div`
   position: fixed;
