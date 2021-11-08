@@ -54,32 +54,28 @@ const CreatePlaylistMusicModal = ({ setMusics, setIsOpenModal }: PropsWithChildr
   const [answer, setAnswer] = useState<string>('');
   const [answers, setAnswers] = useState<string[]>([]);
 
-  const leftButtonHandler = useCallback(
+  const handleRegistButton = useCallback(
     (e) => {
       if (!(info && hint && url && answers.length !== 0)) {
         alert('노래 정보를 모두 입력해야합니다.');
         return;
       }
-      setMusics((preState: Music[]) => [
-        ...preState,
-        {
-          info,
-          hint,
-          url,
-          answers,
-        },
-      ]);
+      if (!checkValidUrl(url)) {
+        alert('유튜브 URL을 확인해주세요.');
+        return;
+      }
+      const newState = { info, hint, url, answers };
+      setMusics((preState: Music[]) => [...preState, newState]);
       setIsOpenModal(false);
     },
     [answers, hint, info, setIsOpenModal, setMusics, url],
   );
-  const rightButtonHandler = useCallback(
+  const handleCancelButton = useCallback(
     (e) => {
       setIsOpenModal(false);
     },
     [setIsOpenModal],
   );
-
   const pressEnterHandler = useCallback(
     (e) => {
       if (e.key !== 'Enter') return;
@@ -89,6 +85,10 @@ const CreatePlaylistMusicModal = ({ setMusics, setIsOpenModal }: PropsWithChildr
     },
     [answer],
   );
+  const checkValidUrl = (url: string) => {
+    const youtubeRegExp = /https:\/\/www\.youtube\.com\/watch\?v=[a-zA-Z0-9_]*/g;
+    return RegExp(youtubeRegExp).test(url);
+  };
 
   return (
     <Modal
@@ -96,8 +96,8 @@ const CreatePlaylistMusicModal = ({ setMusics, setIsOpenModal }: PropsWithChildr
       maxWidth="700px"
       leftButtonText="등록"
       rightButtonText="취소"
-      leftButtonHanlder={leftButtonHandler}
-      rightButtonHanlder={rightButtonHandler}
+      leftButtonHandler={handleRegistButton}
+      rightButtonHandler={handleCancelButton}
     >
       <MusicModalTop>
         <MusicModalTitle>노래 추가</MusicModalTitle>
