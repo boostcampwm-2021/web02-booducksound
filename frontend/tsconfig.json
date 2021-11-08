@@ -24,7 +24,8 @@
       "~/styles/*": ["src/styles/*"],
       "~/reducers/*": ["src/reducers/*"],
       "~/hooks/*": ["src/hooks/*"],
-      "~/actions/*": ["src/actions/*"]
+      "~/actions/*": ["src/actions/*"],
+      "~/constants/*": ["src/constants/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
