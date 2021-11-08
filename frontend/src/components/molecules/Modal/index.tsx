@@ -57,8 +57,8 @@ const ButtonContainer = styled.div`
 interface Props extends ModalContainerProps {
   leftButtonText?: string;
   rightButtonText?: string;
-  leftButtonHanlder?: MouseEventHandler;
-  rightButtonHanlder?: MouseEventHandler;
+  leftButtonHandler?: MouseEventHandler;
+  rightButtonHandler?: MouseEventHandler;
 }
 
 const Modal = ({
@@ -67,8 +67,8 @@ const Modal = ({
   maxWidth,
   leftButtonText,
   rightButtonText,
-  leftButtonHanlder,
-  rightButtonHanlder,
+  leftButtonHandler,
+  rightButtonHandler,
 }: PropsWithChildren<Props>) => {
   return (
     <Portal>
@@ -86,7 +86,7 @@ const Modal = ({
               smFontSize={'16px'}
               background={theme.colors.sky}
               content={leftButtonText || '확인'}
-              onClick={leftButtonHanlder}
+              onClick={leftButtonHandler}
             />
             <ResponsiveButton
               width={'180px'}
@@ -97,7 +97,7 @@ const Modal = ({
               smFontSize={'16px'}
               background={theme.colors.alert}
               content={rightButtonText || '취소'}
-              onClick={rightButtonHanlder}
+              onClick={rightButtonHandler}
             />
           </ButtonContainer>
         </ModalWrapper>
