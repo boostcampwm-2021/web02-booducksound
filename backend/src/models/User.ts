@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
+import mongoose, { NativeError } from 'mongoose';
 
 require('dotenv').config();
 
@@ -27,6 +27,12 @@ const UserSchema = new Schema({
     required: true,
     default: '#fff',
   },
+  myPlaylist: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
   likes: {
     type: Array,
   },
@@ -36,29 +42,32 @@ const UserSchema = new Schema({
   },
 });
 
-UserSchema.pre('save', function (next) {
-  // arrow function으로 쓰면 error남 ㅠ
-  const user: any = this;
-  bcrypt.genSalt(SALT_ROUNDS, (err: any, salt: string) => {
-    if (err) return next(err);
-    bcrypt.hash(user.password, salt, (err: any, hash: string) => {
-      if (err) return next(err);
-      user.password = hash;
-      next();
-    });
-  });
+UserSchema.pre('save', async function (next) {
+  try {
+    const user: any = this;
+    const salt = await bcrypt.genSalt(SALT_ROUNDS);
+    const hash = await bcrypt.hash(user.password, salt);
+    user.password = hash;
+    next();
+  } catch (err) {
+    if (err instanceof NativeError) {
+      next(err);
+    }
+  }
 });
 
-UserSchema.pre('updateOne', function (next) {
-  const user: any = this.getUpdate();
-  bcrypt.genSalt(SALT_ROUNDS, (err: any, salt: string) => {
-    if (err) return next(err);
-    bcrypt.hash(user.password, salt, (err: any, hash: string) => {
-      if (err) return next(err);
-      user.password = hash;
-      next();
-    });
-  });
+UserSchema.pre('updateOne', async function (next) {
+  try {
+    const user: any = this.getUpdate();
+    const salt = await bcrypt.genSalt(SALT_ROUNDS);
+    const hash = await bcrypt.hash(user.password, salt);
+    user.password = hash;
+    next();
+  } catch (err) {
+    if (err instanceof NativeError) {
+      next(err);
+    }
+  }
 });
 
 UserSchema.methods.checkPassword = function (password) {
