@@ -2,8 +2,8 @@ import { MouseEventHandler } from 'react';
 
 import styled from '@emotion/styled';
 
-import InputBox from '../../atoms/InputBox';
-import ResponsiveButton from '../ResponsiveButton';
+import InputBox from '~/atoms/InputBox';
+import ResponsiveButton from '~/molecules/ResponsiveButton';
 
 interface Props {
   isSearch: boolean;

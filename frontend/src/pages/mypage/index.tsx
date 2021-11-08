@@ -4,11 +4,11 @@ import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
 
-import Button from '../../components/atoms/Button';
-import MenuInfoBox from '../../components/atoms/MenuInfoBox';
-import PageBox from '../../components/atoms/PageBox';
-import ProfileSelector from '../../components/atoms/ProfileSelector';
-import theme from '../../styles/theme';
+import Button from '~/atoms/Button';
+import MenuInfoBox from '~/atoms/MenuInfoBox';
+import PageBox from '~/atoms/PageBox';
+import ProfileSelector from '~/atoms/ProfileSelector';
+import theme from '~/styles/theme';
 
 interface Props {
   num: number;

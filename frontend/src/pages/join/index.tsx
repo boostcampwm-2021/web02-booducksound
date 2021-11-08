@@ -4,19 +4,13 @@ import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
 
-import {
-  requestJoin,
-  handleLoginUser,
-  ID_EMPTY_MSG,
-  PASSWORD_EMPTY_MSG,
-  NICKNAME_EMPTY_MSG,
-} from '../../actions/account';
-import Button from '../../components/atoms/Button';
-import InputBox from '../../components/atoms/InputBox';
-import MenuInfoBox from '../../components/atoms/MenuInfoBox';
-import PageBox from '../../components/atoms/PageBox';
-import ProfileSelector from '../../components/atoms/ProfileSelector';
-import theme from '../../styles/theme';
+import { requestJoin, handleLoginUser, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG } from '~/actions/account';
+import Button from '~/atoms/Button';
+import InputBox from '~/atoms/InputBox';
+import MenuInfoBox from '~/atoms/MenuInfoBox';
+import PageBox from '~/atoms/PageBox';
+import ProfileSelector from '~/atoms/ProfileSelector';
+import theme from '~/styles/theme';
 
 const LoginContainer = styled.div`
   position: fixed;

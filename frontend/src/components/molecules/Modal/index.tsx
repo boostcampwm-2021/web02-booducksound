@@ -2,9 +2,9 @@ import { MouseEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
-import theme from '../../../styles/theme';
-import Portal from '../../atoms/Portal';
-import ResponsiveButton from '../ResponsiveButton';
+import Portal from '~/atoms/Portal';
+import ResponsiveButton from '~/molecules/ResponsiveButton';
+import theme from '~/styles/theme';
 
 interface ModalContainerProps {
   height?: string;

@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 
-import Chat from '../../atoms/Chat';
+import Chat from '~/atoms/Chat';
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
