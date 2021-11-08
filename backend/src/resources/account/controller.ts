@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 
-import UserService, { LoginInfo, GuestLoginInfo, UserType, LoginResponse } from './service';
+import UserService, { LoginInfo, GuestLoginInfo, UserType, LoginResponse, UserToken } from './service';
 
 const checkId = async (req: Request, res: Response) => {
   const id: string = req.query.id as string;
@@ -13,9 +12,16 @@ const checkId = async (req: Request, res: Response) => {
 };
 
 const checkLogin = async (req: Request, res: Response) => {
-  const id: string = req.query.id as string;
-  const result = await UserService.getUserInfo(id);
-  res.json({ result });
+  const token = req.query.token as string;
+  if (token) {
+    const decoded = UserService.verifyToken(token) as UserToken;
+    if (decoded.id) {
+      const userInfo = await UserService.getUserInfo(decoded.id);
+      res.json(userInfo[0]);
+    }
+    res.json(decoded);
+  }
+  res.json({ decoded: null });
 };
 
 const resetPwd = async (req: Request, res: Response) => {
@@ -31,7 +37,7 @@ const signIn = async (req: Request, res: Response) => {
 
 const signUp = async (req: Request, res: Response) => {
   const { id, password, nickname, color }: UserType = req.body;
-  const result = await UserService.join({ id, password, nickname, color: `#${color}` });
+  const result = await UserService.join({ id, password, nickname, color });
   res.json(result);
 };
 
@@ -42,6 +48,7 @@ const guestSignIn = (req: Request, res: Response) => {
 
 const logOut = (req: Request, res: Response) => {
   res.clearCookie('token');
+  res.sendStatus(200);
 };
 
 export default {

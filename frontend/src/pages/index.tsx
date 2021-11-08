@@ -1,10 +1,7 @@
-import { useEffect } from 'react';
-
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 
-import { handleLoginUser } from '~/actions/account';
 import Button from '~/atoms/Button';
 import theme from '~/styles/theme';
 
@@ -55,7 +52,7 @@ const BtnBox = styled.div`
   @media (min-width: 768px) {
     margin-bottom: 1rem;
 
-    > *:first-child {
+    > *:first-of-type {
       margin-right: 1rem;
     }
   }
@@ -79,10 +76,6 @@ const Logo = styled.div`
 `;
 
 const Home: NextPage = () => {
-  useEffect(() => {
-    handleLoginUser();
-  }, []);
-
   return (
     <MainContainer>
       <Logo />

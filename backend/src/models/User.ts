@@ -74,19 +74,6 @@ UserSchema.methods.checkPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-UserSchema.statics.findByToken = function (token) {
-  const user: any = this;
-  const decoded = jwt.verify(token, SECRET_KEY);
-  /*
-  return jwt.verify(token, 'secretToken', (err: any, decoded: string) => {
-    return user
-      .findOne({id: decoded, token })
-      .then((user) => user)
-      .catch((_err) => _err);
-  });
-  */
-};
-
 const User = mongoose.model('User', UserSchema);
 
 export default User;

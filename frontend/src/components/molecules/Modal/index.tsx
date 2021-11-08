@@ -40,14 +40,14 @@ const ModalWrapper = styled.div`
   overflow-y: scroll;
 `;
 
-const ButtonContainer = styled.div`
+const ButtonContainer = styled.div<{ hasOnlyCancleBtn: boolean }>`
   position: absolute;
   left: 50%;
   bottom: -24px;
   transform: translateX(-50%);
   width: 80%;
   display: flex;
-  justify-content: space-between;
+  justify-content: ${({ hasOnlyCancleBtn }) => (hasOnlyCancleBtn ? 'flex-end' : 'space-between')};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     bottom: -16px;
@@ -59,6 +59,8 @@ interface Props extends ModalContainerProps {
   rightButtonText?: string;
   leftButtonHandler?: MouseEventHandler;
   rightButtonHandler?: MouseEventHandler;
+  hasModalBackground?: boolean;
+  hasOnlyCancleBtn?: boolean;
 }
 
 const Modal = ({
@@ -69,25 +71,29 @@ const Modal = ({
   rightButtonText,
   leftButtonHandler,
   rightButtonHandler,
+  hasModalBackground = true,
+  hasOnlyCancleBtn = false,
 }: PropsWithChildren<Props>) => {
   return (
     <Portal>
-      <ModalBackground />
+      {hasModalBackground && <ModalBackground />}
       <ModalContainer height={height} maxWidth={maxWidth}>
         <ModalWrapper>
           {children}
-          <ButtonContainer>
-            <ResponsiveButton
-              width={'180px'}
-              fontSize={'22px'}
-              mdWidth={'160px'}
-              mdFontSize={'20px'}
-              smWidth={'120px'}
-              smFontSize={'16px'}
-              background={theme.colors.sky}
-              content={leftButtonText || '확인'}
-              onClick={leftButtonHandler}
-            />
+          <ButtonContainer hasOnlyCancleBtn={hasOnlyCancleBtn}>
+            {!hasOnlyCancleBtn && (
+              <ResponsiveButton
+                width={'180px'}
+                fontSize={'22px'}
+                mdWidth={'160px'}
+                mdFontSize={'20px'}
+                smWidth={'120px'}
+                smFontSize={'16px'}
+                background={theme.colors.sky}
+                content={leftButtonText || '확인'}
+                onClick={leftButtonHandler}
+              />
+            )}
             <ResponsiveButton
               width={'180px'}
               fontSize={'22px'}

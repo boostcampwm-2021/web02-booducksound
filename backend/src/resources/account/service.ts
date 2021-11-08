@@ -24,6 +24,14 @@ export interface GuestLoginInfo {
   color: string;
 }
 
+export interface UserToken {
+  id?: string;
+  nickname?: string;
+  color?: string;
+  iat?: number;
+  exp?: number;
+}
+
 const idCheck = async (id: string) => {
   const result = await User.find({ id });
   return result.length > 0;
@@ -56,8 +64,17 @@ const createNonUserToken = (nickname: string, color: string) => {
   return token;
 };
 
+const verifyToken = (token: string) => {
+  const decoded = jwt.verify(token, SECRET_KEY);
+  try {
+    if (decoded) return decoded as UserToken;
+  } catch (err) {
+    return {};
+  }
+};
+
 const login = async ({ id, password }: LoginInfo, cb: any) => {
-  await User.findOne({ id }, (err: any, user: any) => {
+  await User.findOne({ id }, (err: Error, user: any) => {
     if (err || user === null) {
       const result = {
         isLogin: false,
@@ -113,6 +130,8 @@ const getUserInfo = async (id: string) => {
 export default {
   idCheck,
   createUserToken,
+  createNonUserToken,
+  verifyToken,
   login,
   join,
   enter,

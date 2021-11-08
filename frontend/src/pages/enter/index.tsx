@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 
-import { requestEnter, handleLoginUser, NICKNAME_EMPTY_MSG } from '~/actions/account';
+import { requestEnter, NICKNAME_EMPTY_MSG } from '~/api/account';
 import Button from '~/atoms/Button';
 import InputBox from '~/atoms/InputBox';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
@@ -61,10 +61,6 @@ const Enter: NextPage = () => {
     if (!nickname) alert(NICKNAME_EMPTY_MSG);
     else await requestEnter(nickname, color);
   };
-
-  useEffect(() => {
-    handleLoginUser();
-  }, []);
 
   return (
     <>
