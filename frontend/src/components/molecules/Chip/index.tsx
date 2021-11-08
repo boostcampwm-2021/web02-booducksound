@@ -6,7 +6,6 @@ import theme from '../../../styles/theme';
 import DeleteButton from '../../atoms/DeleteButton';
 
 interface Props {
-  content: string;
   deleteHandler: MouseEventHandler;
 }
 
@@ -24,11 +23,11 @@ const ChipContainer = styled.div`
   padding: 3px 15px 3px 4px;
 `;
 
-const Chip = ({ content, deleteHandler }: PropsWithChildren<Props>) => {
+const Chip = ({ children, deleteHandler }: PropsWithChildren<Props>) => {
   return (
     <ChipContainer>
       <DeleteButton clickHandler={deleteHandler} />
-      <span>{content}</span>
+      <span>{children}</span>
     </ChipContainer>
   );
 };

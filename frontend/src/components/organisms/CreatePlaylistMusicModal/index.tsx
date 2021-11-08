@@ -112,29 +112,29 @@ const CreatePlaylistMusicModal = ({ setMusics, setIsOpenModal }: PropsWithChildr
       </MusicModalTop>
       <MusicModalInputBox>
         <MusicModalInputText
-          changeHandler={(e) => setInfo((e.currentTarget as HTMLTextAreaElement).value)}
+          onChange={(e) => setInfo((e.currentTarget as HTMLTextAreaElement).value)}
           className="info"
           isSearch={false}
           placeholder="노래 정보를 입력해 주세요. ex) 아이유 - 팔레트"
           value={info}
         ></MusicModalInputText>
         <MusicModalInputText
-          changeHandler={(e) => setHint((e.currentTarget as HTMLTextAreaElement).value)}
+          onChange={(e) => setHint((e.currentTarget as HTMLTextAreaElement).value)}
           className="hint"
           isSearch={false}
           placeholder="힌트를 입력해 주세요."
           value={hint}
         ></MusicModalInputText>
         <MusicModalInputText
-          changeHandler={(e) => setUrl((e.currentTarget as HTMLTextAreaElement).value)}
+          onChange={(e) => setUrl((e.currentTarget as HTMLTextAreaElement).value)}
           className="url"
           isSearch={false}
           placeholder="유튜브 URL을 입력해 주세요."
           value={url}
         ></MusicModalInputText>
         <MusicModalInputText
-          changeHandler={(e) => setAnswer((e.currentTarget as HTMLTextAreaElement).value)}
-          enterHandler={pressEnterHandler}
+          onChange={(e) => setAnswer((e.currentTarget as HTMLTextAreaElement).value)}
+          onKeyUp={pressEnterHandler}
           className="answer"
           isSearch={false}
           placeholder="정답을 입력 후 Enter를 클릭해 주세요."
@@ -143,11 +143,9 @@ const CreatePlaylistMusicModal = ({ setMusics, setIsOpenModal }: PropsWithChildr
       </MusicModalInputBox>
       <MusicModalChipContainer>
         {answers.map((answer, idx) => (
-          <Chip
-            content={answer}
-            key={idx}
-            deleteHandler={(e) => setAnswers((preState) => [...preState.filter((chip, i) => i !== idx)])}
-          />
+          <Chip key={idx} deleteHandler={(e) => setAnswers((preState) => [...preState.filter((chip, i) => i !== idx)])}>
+            {answer}
+          </Chip>
         ))}
       </MusicModalChipContainer>
     </Modal>

@@ -7,8 +7,8 @@ interface Props {
   placeholder: string;
   className: string;
   value: string;
-  enterHandler?: KeyboardEventHandler;
-  changeHandler: ChangeEventHandler;
+  onKeyUp?: KeyboardEventHandler;
+  onChange: ChangeEventHandler;
 }
 interface ContainerProps {
   isSearch: boolean;
@@ -23,18 +23,8 @@ const Container = styled.input<ContainerProps>`
   background-position: left;
 `;
 
-const InputText = ({ isSearch, placeholder, className, value, enterHandler, changeHandler }: Props) => {
-  return (
-    <Container
-      className={className}
-      isSearch={isSearch}
-      type="text"
-      placeholder={placeholder}
-      value={value}
-      onKeyUp={enterHandler}
-      onChange={changeHandler}
-    ></Container>
-  );
+const InputText = ({ ...props }: Props) => {
+  return <Container type="text" {...props}></Container>;
 };
 
 export default InputText;
