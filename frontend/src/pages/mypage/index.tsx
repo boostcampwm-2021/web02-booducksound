@@ -96,6 +96,7 @@ const UserInfoBox = styled.div`
 const UserInfo = styled.div`
   padding: 0 2rem;
   margin-bottom: 2.4rem;
+  text-align: left;
 
   .user-name {
     font-size: 1.2rem;
@@ -103,7 +104,6 @@ const UserInfo = styled.div`
   }
 
   .user-id {
-    text-align: left;
     color: ${theme.colors.gray};
   }
 `;
@@ -157,8 +157,10 @@ const BoxTitle = styled.h2<Props>`
 const MyPage: NextPage = () => {
   const [color, setColor] = useState('fff');
   const userInfo = useSelector((state: any) => state.user);
+  const { id, nickname, likes } = userInfo;
   useEffect(() => {
     setColor(userInfo.color);
+    console.log(id);
   }, [userInfo]);
 
   return (
@@ -175,17 +177,19 @@ const MyPage: NextPage = () => {
               </UserInfo>
             </UserInfoBox>
             <ProfileBtnBox>
-              <Link href="/findPwd">
-                <a>
-                  <Button
-                    content={'비밀번호 변경'}
-                    background={theme.colors.lime}
-                    fontSize={'16px'}
-                    paddingH={'16px'}
-                    width={'160px'}
-                  ></Button>
-                </a>
-              </Link>
+              {!!id && (
+                <Link href="/findPwd">
+                  <a>
+                    <Button
+                      content={'비밀번호 변경'}
+                      background={theme.colors.lime}
+                      fontSize={'16px'}
+                      paddingH={'16px'}
+                      width={'160px'}
+                    ></Button>
+                  </a>
+                </Link>
+              )}
               <Button
                 content={'로그아웃'}
                 background={theme.colors.lightsky}
@@ -196,46 +200,48 @@ const MyPage: NextPage = () => {
               ></Button>
             </ProfileBtnBox>
           </ProfileBox>
-          <div>
-            <BoxTitle num={5}>내가 작성한 플레이리스트</BoxTitle>
-          </div>
-          <PlayListTable>
-            <colgroup>
-              <col width="100%" />
-              <col width="*" />
-            </colgroup>
-            <tbody>
-              {Array(5)
-                .fill(null)
-                .map((_, i) => {
-                  return (
-                    <tr key={i}>
-                      <td>
-                        <PlayTitle>플레이리스트 {i + 1}</PlayTitle>
-                      </td>
-                      <td>
-                        <TableBtnBox>
-                          <Button
-                            content={'수정'}
-                            background={theme.colors.sky}
-                            fontSize={'14px'}
-                            paddingH={'8px'}
-                            width={'100px'}
-                          ></Button>
-                          <Button
-                            content={'삭제'}
-                            background={theme.colors.peach}
-                            fontSize={'14px'}
-                            paddingH={'8px'}
-                            width={'100px'}
-                          ></Button>
-                        </TableBtnBox>
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </PlayListTable>
+          {!!id && (
+            <>
+              <BoxTitle num={5}>내가 작성한 플레이리스트</BoxTitle>
+              <PlayListTable>
+                <colgroup>
+                  <col width="100%" />
+                  <col width="*" />
+                </colgroup>
+                <tbody>
+                  {Array(5)
+                    .fill(null)
+                    .map((_, i) => {
+                      return (
+                        <tr key={i}>
+                          <td>
+                            <PlayTitle>플레이리스트 {i + 1}</PlayTitle>
+                          </td>
+                          <td>
+                            <TableBtnBox>
+                              <Button
+                                content={'수정'}
+                                background={theme.colors.sky}
+                                fontSize={'14px'}
+                                paddingH={'8px'}
+                                width={'100px'}
+                              ></Button>
+                              <Button
+                                content={'삭제'}
+                                background={theme.colors.peach}
+                                fontSize={'14px'}
+                                paddingH={'8px'}
+                                width={'100px'}
+                              ></Button>
+                            </TableBtnBox>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </PlayListTable>
+            </>
+          )}
         </MyPageContainer>
       </PageBox>
     </>
