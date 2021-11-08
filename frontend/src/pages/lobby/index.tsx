@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEventHandler, useState } from 'react';
 
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
@@ -273,10 +273,16 @@ const dummyRooms: LobbyRoom[] = [
 ];
 
 const Lobby: NextPage = () => {
+  const [search, setSearch] = useState('');
   const [createRoomModalOnOff, setCreateRoomModalOnOff] = useState(false);
 
   const handleCreateRoomModalBtn = () => {
     setCreateRoomModalOnOff(true);
+  };
+
+  const handleSearchChange: ChangeEventHandler = (e) => {
+    const search = (e.target as HTMLInputElement).value;
+    setSearch(search);
   };
 
   return (
@@ -306,7 +312,7 @@ const Lobby: NextPage = () => {
               smFontSize="12px"
               content="초대코드 입력"
             />
-            <Link href="playlist/create">
+            <Link href="/playlist/create">
               <a>
                 <ResponsiveButton
                   background={theme.colors.peach}
@@ -338,6 +344,8 @@ const Lobby: NextPage = () => {
               width="100%"
               height="54px"
               fontSize="18px"
+              value={search}
+              onChangeHandler={handleSearchChange}
             ></InputBox>
           </SearchWrapper>
         </SearchContainer>
