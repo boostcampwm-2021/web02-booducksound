@@ -13,8 +13,11 @@ const serverRooms: { [uuid: string]: ServerRoom } = {};
 
 io.on('connection', (socket) => {
   socket.on(SocketEvents.GET_ROOMS, (done) => {
-    const lobbyRooms: LobbyRoom[] = Object.entries(serverRooms).map(([uuid, serverRoom]) => {
-      return {
+    // TODO: LobbyRooms를 class의 getter를 통해 정의해놓고 갖다 쓰자.
+
+    const lobbyRooms: { [uuid: string]: LobbyRoom } = {};
+    Object.entries(serverRooms).forEach(([uuid, serverRoom]) => {
+      lobbyRooms[uuid] = {
         title: serverRoom.title,
         curPeople: serverRoom.players.length,
         maxPeople: 8, // TODO: 방 슬롯 열고 닫는 거에 따라 maxPeople 설정
@@ -24,6 +27,7 @@ io.on('connection', (socket) => {
         status: serverRoom.status,
       };
     });
+
     done(lobbyRooms);
   });
 
@@ -51,6 +55,7 @@ io.on('connection', (socket) => {
   socket.on(SocketEvents.JOIN_ROOM, (uuid: string, done) => {
     if (!serverRooms[uuid]) {
       done({ type: 'fail', messsage: '존재 하지 않는 방입니다' });
+      return;
     }
 
     const serverRoom = serverRooms[uuid];

@@ -7,6 +7,7 @@ import Link from 'next/link';
 import InputBox from '~/atoms/InputBox';
 import RoomCard from '~/atoms/RoomCard';
 import useSocketEmit from '~/hooks/useSocketEmit';
+import useSocketOn from '~/hooks/useSocketOn';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import CreateRoomModal from '~/organisms/CreateRoomModal';
 import theme from '~/styles/theme';
@@ -277,9 +278,9 @@ const dummyRooms: LobbyRoom[] = [
 const Lobby: NextPage = () => {
   const [search, setSearch] = useState('');
   const [createRoomModalOnOff, setCreateRoomModalOnOff] = useState(false);
-  const [rooms, setRooms] = useState<LobbyRoom[]>();
+  const [rooms, setRooms] = useState<{ [uuid: string]: LobbyRoom }>();
 
-  useSocketEmit(SocketEvents.GET_ROOMS, (lobbyRooms: LobbyRoom[]) => {
+  useSocketEmit(SocketEvents.GET_ROOMS, (lobbyRooms: { [uuid: string]: LobbyRoom }) => {
     setRooms(lobbyRooms);
   });
 
@@ -359,8 +360,8 @@ const Lobby: NextPage = () => {
         <GridContainer>
           <GridWrapper>
             {rooms &&
-              rooms.map((room, i) => {
-                return <RoomCard key={i} {...room} />;
+              Object.entries(rooms).map(([uuid, room]) => {
+                return <RoomCard key={uuid} {...room} />;
               })}
           </GridWrapper>
         </GridContainer>
