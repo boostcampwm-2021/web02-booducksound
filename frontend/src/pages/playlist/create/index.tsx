@@ -2,10 +2,13 @@ import { useCallback, useState } from 'react';
 
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
+import Router from 'next/router';
+import { createPlaylist } from 'src/api/playlist';
 
 import Button from '~/atoms/Button';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
+import { FAILED, SUCCESS } from '~/constants/index';
 import useEventListener from '~/hooks/useEventListener';
 import Chip from '~/molecules/Chip';
 import CreatePlaylistInputBox from '~/organisms/CreatePlaylistInputBox';
@@ -59,16 +62,39 @@ const PlaylistCreate: NextPage = () => {
   const [musics, setMusics] = useState<Music[]>([]);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
-  const pressEnterHandler = useCallback(
+  const checkAllValidInput = () => {
+    if (!title || !description || !chips.length) return false;
+    if (musics.length < 3 || musics.length > 50) return false;
+    return true;
+  };
+  const handleAddChip = useCallback(
     (e: globalThis.KeyboardEvent) => {
-      if (e.key !== 'Enter') return;
+      if (e.key !== 'Enter' && e.key !== ' ') return;
       if (!hashTag) return;
       setHashTag('');
-      setChips((preState) => [...preState, hashTag]);
+      setChips((preState) => [...preState, hashTag.trim()]);
     },
     [hashTag],
   );
-  useEventListener('keyup', pressEnterHandler);
+  const handleSubmit = async () => {
+    if (!checkAllValidInput()) {
+      alert('입력을 확인해주세요.');
+      return;
+    }
+    const createResult = await createPlaylist({
+      playlistName: title,
+      musics: musics,
+      hashTags: chips,
+      userId: 'vgihan',
+    });
+    const { status } = createResult;
+    if (status === FAILED) {
+      alert('플레이리스트 등록에 실패하였습니다.');
+    } else if (status === SUCCESS) {
+      Router.push('/lobby');
+    }
+  };
+  useEventListener('keyup', handleAddChip);
 
   return (
     <Container>
@@ -103,7 +129,14 @@ const PlaylistCreate: NextPage = () => {
             }
           ></CreatePlaylistMusicList>
           <SubmitButtonWrapper>
-            <Button content="등록" background={theme.colors.sky} fontSize="1.5em" paddingH="2%" width="45%"></Button>
+            <Button
+              content="등록"
+              background={theme.colors.sky}
+              fontSize="1.5em"
+              paddingH="2%"
+              width="45%"
+              onClick={handleSubmit}
+            ></Button>
           </SubmitButtonWrapper>
         </Wrapper>
       </PageBox>

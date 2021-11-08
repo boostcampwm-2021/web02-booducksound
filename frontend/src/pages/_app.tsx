@@ -4,13 +4,12 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
-import reducers from '~/reducers/index';
-
+import rootReducer from '../reducers';
 import theme from '../styles/theme';
 
 import '~/styles/default.css';
 
-const store = createStore(reducers, compose(applyMiddleware(thunk)));
+const store = createStore(rootReducer, compose(applyMiddleware(thunk)));
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
