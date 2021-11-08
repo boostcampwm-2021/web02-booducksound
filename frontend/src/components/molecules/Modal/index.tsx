@@ -57,8 +57,8 @@ const ButtonContainer = styled.div<{ hasOnlyCancleBtn: boolean }>`
 interface Props extends ModalContainerProps {
   leftButtonText?: string;
   rightButtonText?: string;
-  leftButtonHanlder?: MouseEventHandler;
-  rightButtonHanlder?: MouseEventHandler;
+  leftButtonHandler?: MouseEventHandler;
+  rightButtonHandler?: MouseEventHandler;
   hasModalBackground?: boolean;
   hasOnlyCancleBtn?: boolean;
 }
@@ -69,8 +69,8 @@ const Modal = ({
   maxWidth,
   leftButtonText,
   rightButtonText,
-  leftButtonHanlder,
-  rightButtonHanlder,
+  leftButtonHandler,
+  rightButtonHandler,
   hasModalBackground = true,
   hasOnlyCancleBtn = false,
 }: PropsWithChildren<Props>) => {
@@ -91,7 +91,7 @@ const Modal = ({
                 smFontSize={'16px'}
                 background={theme.colors.sky}
                 content={leftButtonText || '확인'}
-                onClick={leftButtonHanlder}
+                onClick={leftButtonHandler}
               />
             )}
             <ResponsiveButton
@@ -103,7 +103,7 @@ const Modal = ({
               smFontSize={'16px'}
               background={theme.colors.alert}
               content={rightButtonText || '취소'}
-              onClick={rightButtonHanlder}
+              onClick={rightButtonHandler}
             />
           </ButtonContainer>
         </ModalWrapper>

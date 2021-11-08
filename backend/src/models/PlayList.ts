@@ -11,8 +11,8 @@ interface Props {
   answers: [];
 }
 
-const PlayListSchema = new Schema({
-  playListName: String,
+const PlaylistSchema = new Schema({
+  playlistName: String,
   likeCount: {
     type: Number,
     default: 0,
@@ -23,13 +23,13 @@ const PlayListSchema = new Schema({
   },
   musics: Array,
   hashTags: Array,
-  userId: mongoose.Types.ObjectId,
+  userId: String,
   createdAt: {
     type: Date,
     default: new Date(),
   },
 });
 
-const PlayList = mongoose.model('PlayList', PlayListSchema);
+const Playlist = mongoose.model('Playlist', PlaylistSchema);
 
-export default PlayList;
+export default Playlist;

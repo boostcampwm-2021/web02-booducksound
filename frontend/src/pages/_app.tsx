@@ -8,12 +8,13 @@ import thunk from 'redux-thunk';
 
 import { getUser } from '~/actions/user';
 import { handleLoginUser } from '~/api/account';
-import reducers from '~/reducers/index';
+import rootReducer from '~/reducers/index';
 import theme from '~/styles/theme';
 
 import '~/styles/default.css';
 
-const store = createStore(reducers, compose(applyMiddleware(thunk)));
+const store = createStore(rootReducer, compose(applyMiddleware(thunk)));
+
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <ThemeProvider theme={theme}>
