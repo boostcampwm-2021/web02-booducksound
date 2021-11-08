@@ -61,6 +61,10 @@ export const requestLogout = () => {
   handleLoginUser();
 };
 
+export const requestChangePassword = async () => {
+  //return await fetch(`${BACKEND_URL}/`)
+};
+
 export const requestEnter = async (nickname: string, color: string) => {
   return await fetch(`${BACKEND_URL}/guestSignIn`, {
     method: 'POST',

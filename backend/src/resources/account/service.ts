@@ -118,6 +118,10 @@ const enter = ({ nickname, color }: GuestLoginInfo, cb: any) => {
   cb(result);
 };
 
+const checkChangePasswordAvailable = async (id: string, nickname: string, newPw: string) => {
+  await User.findOne({ id, nickname });
+};
+
 const changePassword = async (id: string, newPw: string) => {
   await User.updateOne({ id }, { password: newPw });
 };
