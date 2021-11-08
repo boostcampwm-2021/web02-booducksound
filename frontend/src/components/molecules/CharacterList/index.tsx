@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import GlassContainer from '../../atoms/GlassContainer';
+import theme from '../../../styles/theme';
 import CharacterProfile from '../CharacterProfile';
 
 const Title = styled.p`
@@ -11,7 +11,7 @@ const Container = styled.div`
   margin-right: auto;
   display: flex;
   flex-direction: column;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  @media (max-width: ${theme.breakpoints.sm}) {
     flex-direction: row;
     overflow: auto;
     justify-content: space-between;
@@ -23,7 +23,7 @@ interface props {
   status: 'king' | 'ready' | 'prepare';
 }
 
-const CharacterList = ({ children }: any) => {
+const CharacterList = () => {
   const dummy: props[] = [
     { color: 'ff', name: 'max', status: 'king' },
     { color: 'dwff', name: 'john', status: 'ready' },
@@ -35,14 +35,14 @@ const CharacterList = ({ children }: any) => {
     { color: '234def', name: 'dd', status: 'ready' },
   ];
   return (
-    <GlassContainer>
+    <>
       <Title>사용자 목록</Title>
       <Container>
         {dummy.map((element, index) => (
           <CharacterProfile key={index} color={element.color} name={element.name} status={element.status} />
         ))}
       </Container>
-    </GlassContainer>
+    </>
   );
 };
 

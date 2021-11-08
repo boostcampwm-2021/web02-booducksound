@@ -1,18 +1,17 @@
 import { useCallback, useState } from 'react';
 
+import Button from '@atoms/Button';
+import MenuInfoBox from '@atoms/MenuInfoBox';
+import PageBox from '@atoms/PageBox';
 import styled from '@emotion/styled';
+import useEventListener from '@hooks/useEventListener';
+import Chip from '@molecules/Chip';
+import CreatePlaylistInputBox from '@organisms/CreatePlaylistInputBox';
+import CreatePlaylistMusicList from '@organisms/CreatePlaylistMusicList';
+import CreatePlaylistMusicModal from '@organisms/CreatePlaylistMusicModal';
+import theme from '@styles/theme';
+import { Music } from '@type/Music';
 import type { NextPage } from 'next';
-
-import Button from '../../../components/atoms/Button';
-import MenuInfoBox from '../../../components/atoms/MenuInfoBox';
-import PageBox from '../../../components/atoms/PageBox';
-import Chip from '../../../components/molecules/Chip';
-import CreatePlaylistInputBox from '../../../components/organisms/CreatePlaylistInputBox';
-import CreatePlaylistMusicList from '../../../components/organisms/CreatePlaylistMusicList';
-import CreatePlaylistMusicModal from '../../../components/organisms/CreatePlaylistMusicModal';
-import theme from '../../../styles/theme';
-import { Music } from '../../../types/music';
-import useEventListener from '../../../utils/useEventListener';
 
 const ChipContainer = styled.div`
   display: flex;
@@ -72,7 +71,7 @@ const PlaylistCreate: NextPage = () => {
 
   return (
     <Container>
-      <MenuInfoBox name={'플레이리스트 추가'}></MenuInfoBox>
+      <MenuInfoBox name="플레이리스트 추가"></MenuInfoBox>
       <PageBox>
         <Wrapper>
           <CreatePlaylistInputBox
@@ -85,7 +84,13 @@ const PlaylistCreate: NextPage = () => {
           />
           <ChipContainer>
             {chips.map((chip, idx) => (
-              <Chip content={chip} key={idx}></Chip>
+              <Chip
+                content={chip}
+                key={idx}
+                deleteHandler={(e) => {
+                  setChips((preState) => [...preState.filter((chip, i) => i !== idx)]);
+                }}
+              ></Chip>
             ))}
           </ChipContainer>
           <CreatePlaylistMusicList
@@ -96,13 +101,7 @@ const PlaylistCreate: NextPage = () => {
             }
           ></CreatePlaylistMusicList>
           <SubmitButtonWrapper>
-            <Button
-              content={'등록'}
-              background={theme.colors.sky}
-              fontSize={'1.5em'}
-              paddingH={'2%'}
-              width={'45%'}
-            ></Button>
+            <Button content="등록" background={theme.colors.sky} fontSize="1.5em" paddingH="2%" width="45%"></Button>
           </SubmitButtonWrapper>
         </Wrapper>
       </PageBox>

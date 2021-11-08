@@ -35,11 +35,11 @@ const CreatePlaylistMusicItem = ({ title, deleteItem, idx }: PropsWithChildren<P
       <ButtonBox>
         <Button content={'수정'} background={theme.colors.sky} fontSize={'12px'} paddingH={'7px'} width={'100px'} />
         <Button
-          content={'삭제'}
+          content="삭제"
           background={theme.colors.peach}
-          fontSize={'12px'}
-          paddingH={'7px'}
-          width={'100px'}
+          fontSize="12px"
+          paddingH="7px"
+          width="100px"
           onClick={(e) => deleteItem(idx)}
         />
       </ButtonBox>

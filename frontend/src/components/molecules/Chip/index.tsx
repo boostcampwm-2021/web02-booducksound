@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { MouseEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -6,11 +6,11 @@ import theme from '../../../styles/theme';
 import DeleteButton from '../../atoms/DeleteButton';
 
 interface Props {
-  content: string;
+  deleteHandler: MouseEventHandler;
 }
 
 const ChipContainer = styled.div`
-  display: inline-flex;
+  display: flex;
   justify-content: center;
   align-items: center;
   column-gap: 5px;
@@ -23,11 +23,11 @@ const ChipContainer = styled.div`
   padding: 3px 15px 3px 4px;
 `;
 
-const Chip = ({ content }: PropsWithChildren<Props>) => {
+const Chip = ({ children, deleteHandler }: PropsWithChildren<Props>) => {
   return (
     <ChipContainer>
-      <DeleteButton />
-      <p>{content}</p>
+      <DeleteButton clickHandler={deleteHandler} />
+      <span>{children}</span>
     </ChipContainer>
   );
 };
