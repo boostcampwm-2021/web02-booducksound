@@ -13,7 +13,7 @@ const Container = styled.div`
     ' . . . .' 1fr
     / 1fr 4fr 1fr 1fr;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  @media (max-width: ${theme.breakpoints.sm}) {
     display: grid;
     grid-template:
       'speaker . start exit' 4fr
@@ -21,7 +21,7 @@ const Container = styled.div`
       / 1fr 4fr 1fr 1fr;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  @media (max-width: ${theme.breakpoints.sm}) {
     padding: 8px 2px;
     column-gap: 4px;
   }
@@ -30,7 +30,7 @@ const Container = styled.div`
 const ButtonWrapper = styled.div`
   width: 80%;
   height: 100%;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  @media (max-width: ${theme.breakpoints.sm}) {
     font-size: 10%;
   }
 `;
@@ -41,7 +41,7 @@ const MuteButton = styled.button`
   height: 60px;
   grid-area: speaker;
   background: url('images/ic_speaker.png') no-repeat center/45%;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  @media (max-width: ${theme.breakpoints.sm}) {
     width: 30px;
     height: 30px;
   }
