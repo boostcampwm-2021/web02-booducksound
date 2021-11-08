@@ -6,8 +6,8 @@ import express from 'express';
 import morgan from 'morgan';
 
 import io from './io';
-import playListRouter from './resources/playList/router';
 import accRouter from './resources/account/router';
+import playListRouter from './resources/playList/router';
 
 const app = express();
 

@@ -2,6 +2,7 @@ import short from 'short-uuid';
 import socketio from 'socket.io';
 
 import { GameRoom } from './types/GameRoom';
+import { LobbyRoom } from './types/LobbyRoom';
 import { Player } from './types/Player';
 import { ServerRoom } from './types/ServerRoom';
 import { SocketEvents } from './types/SocketEvents';
@@ -11,6 +12,21 @@ const io = new socketio.Server();
 const serverRooms: { [uuid: string]: ServerRoom } = {};
 
 io.on('connection', (socket) => {
+  socket.on(SocketEvents.GET_ROOMS, (done) => {
+    const lobbyRooms: LobbyRoom[] = Object.entries(serverRooms).map(([uuid, serverRoom]) => {
+      return {
+        title: serverRoom.title,
+        curPeople: serverRoom.players.length,
+        maxPeople: 8, // TODO: 방 슬롯 열고 닫는 거에 따라 maxPeople 설정
+        hasPassword: !!serverRoom.password,
+        hashtags: ['해시태그1', '해시태그2'], // TODO: playlistId를 통해 hashtags 가져오기
+        playlistName: '플레이리스트이름', // TODO: playlistId를 통해 playlistName 가져오기
+        status: serverRoom.status,
+      };
+    });
+    done(lobbyRooms);
+  });
+
   socket.on(SocketEvents.CREATE_ROOM, (room, done) => {
     const { title, playListId, password, skip, timePerProblem } = room;
 
