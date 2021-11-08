@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 
-import UserService, { LoginInfo, GuestLoginInfo, UserType, LoginResponse } from './service';
+import UserService, { LoginInfo, GuestLoginInfo, UserType, LoginResponse, UserToken } from './service';
 
 const checkId = async (req: Request, res: Response) => {
   const id: string = req.query.id as string;
@@ -13,9 +12,16 @@ const checkId = async (req: Request, res: Response) => {
 };
 
 const checkLogin = async (req: Request, res: Response) => {
-  const id: string = req.query.id as string;
-  const result = await UserService.getUserInfo(id);
-  res.json({ result });
+  const token = req.cookies.token;
+  if (token) {
+    const decoded = UserService.verifyToken(token) as UserToken;
+    if (decoded.id) {
+      const userInfo = await UserService.getUserInfo(decoded.id);
+      res.json(userInfo[0]);
+    }
+    res.json(decoded);
+  }
+  res.json({ decoded: null });
 };
 
 const resetPwd = async (req: Request, res: Response) => {

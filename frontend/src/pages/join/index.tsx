@@ -96,10 +96,6 @@ const Join: NextPage = () => {
     else signUp();
   };
 
-  useEffect(() => {
-    handleLoginUser();
-  }, []);
-
   return (
     <>
       <MenuInfoBox name="회원가입" />
@@ -126,6 +122,7 @@ const Join: NextPage = () => {
             ></Button>
             <InputBox
               isSearch={false}
+              isPassword={true}
               placeholder="비밀번호를 입력해 주세요."
               width={'100%'}
               height={'80px'}

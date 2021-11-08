@@ -79,10 +79,6 @@ const Logo = styled.div`
 `;
 
 const Home: NextPage = () => {
-  useEffect(() => {
-    handleLoginUser();
-  }, []);
-
   return (
     <MainContainer>
       <Logo />

@@ -4,8 +4,8 @@ import theme from '../../../styles/theme';
 
 interface radio {
   name: string;
-  value: string;
-  checked: boolean;
+  value?: string;
+  isChecked: boolean;
 }
 
 const RadioBtnGroup = styled.label`
@@ -52,10 +52,10 @@ const RadioBtnGroup = styled.label`
   }
 `;
 
-const Radio = ({ name, value, checked }: radio) => {
+const Radio = ({ name, value, isChecked }: radio) => {
   return (
     <RadioBtnGroup>
-      <input type="radio" name={name} checked={checked} />
+      <input type="radio" name={name} checked={isChecked} />
       <span>{value}</span>
     </RadioBtnGroup>
   );

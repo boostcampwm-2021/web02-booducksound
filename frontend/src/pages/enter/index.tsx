@@ -62,10 +62,6 @@ const Enter: NextPage = () => {
     else await requestEnter(nickname, color);
   };
 
-  useEffect(() => {
-    handleLoginUser();
-  }, []);
-
   return (
     <>
       <MenuInfoBox name="비회원 로그인" />
