@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
+import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
 import { requestLogout } from '~/api/account';
@@ -174,13 +175,17 @@ const MyPage: NextPage = () => {
               </UserInfo>
             </UserInfoBox>
             <ProfileBtnBox>
-              <Button
-                content={'비밀번호 변경'}
-                background={theme.colors.lime}
-                fontSize={'16px'}
-                paddingH={'16px'}
-                width={'160px'}
-              ></Button>
+              <Link href="/findPwd">
+                <a>
+                  <Button
+                    content={'비밀번호 변경'}
+                    background={theme.colors.lime}
+                    fontSize={'16px'}
+                    paddingH={'16px'}
+                    width={'160px'}
+                  ></Button>
+                </a>
+              </Link>
               <Button
                 content={'로그아웃'}
                 background={theme.colors.lightsky}

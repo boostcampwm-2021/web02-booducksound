@@ -25,9 +25,9 @@ const checkLogin = async (req: Request, res: Response) => {
 };
 
 const resetPwd = async (req: Request, res: Response) => {
-  const { id, password }: LoginInfo = req.body;
-  await UserService.changePassword(id, password);
-  res.json({ result: true });
+  const { id, nickname, password }: { id: string; nickname: string; password: string } = req.body;
+  const result = await UserService.checkChangePasswordAvailable(id, nickname, password);
+  res.json(result);
 };
 
 const signIn = async (req: Request, res: Response) => {

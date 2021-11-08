@@ -52,7 +52,21 @@ export const requestLogout = () => {
 };
 
 export const requestChangePassword = async (id: string, nickname: string, password: string) => {
-  return await fetch(`${BACKEND_URL}/`);
+  return await fetch(`${BACKEND_URL}/resetPwd`, {
+    method: 'POST',
+    headers,
+    credentials: 'include',
+    body: JSON.stringify({
+      id,
+      nickname,
+      password,
+    }),
+  })
+    .then((res) => res.json())
+    .then(({ isChange, message }) => {
+      alert(message);
+      if (isChange) history.back();
+    });
 };
 
 export const requestEnter = async (nickname: string, color: string) => {

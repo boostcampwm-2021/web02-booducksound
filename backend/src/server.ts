@@ -18,7 +18,7 @@ app.use(cookieParser());
 app.use(morgan('common'));
 
 app.use('/assets', express.static('assets'));
-app.use('/playList', playlistRouter);
+app.use('/playList', playListRouter);
 app.use('/', accRouter);
 app.get('/', (req, res) => {
   res.send('Hello World!');

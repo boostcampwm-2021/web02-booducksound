@@ -96,7 +96,7 @@ const Login: NextPage = () => {
               content={'로그인'}
               onClick={handleLogin}
             />
-            <Link href="login/findPwd">
+            <Link href="/findPwd">
               <SearchPwdBtn href="#none">비밀번호를 잊어버리셨나요?</SearchPwdBtn>
             </Link>
           </InputContainer>

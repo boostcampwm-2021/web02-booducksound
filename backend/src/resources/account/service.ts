@@ -108,21 +108,35 @@ const enter = ({ nickname, color }: GuestLoginInfo) => {
   const result = {
     isLogin: true,
     message: '비회원 로그인에 성공했습니다.',
-    token: createNonUserToken(nickname, color),
   };
   return result;
 };
 
 const checkChangePasswordAvailable = async (id: string, nickname: string, newPw: string) => {
-  return await User.findOne({ id, nickname }, (err: Error, user: any) => {
-    if (err || !user) return false;
-    console.log(user);
-    return true;
-  });
+  try {
+    const user = await User.findOne({ id, nickname });
+    if (user) {
+      console.log(user);
+      await changePassword(id, newPw);
+      return {
+        isChange: true,
+        message: '비밀번호가 성공적으로 변경되었습니다.',
+      };
+    }
+    return {
+      isChange: false,
+      message: 'ID와 닉네임을 확인해 주세요.',
+    };
+  } catch (err) {
+    return {
+      isChange: false,
+      message: '오류가 발생했습니다.',
+    };
+  }
 };
 
 const changePassword = async (id: string, newPw: string) => {
-  return await User.updateOne({ id }, { password: newPw });
+  await User.updateOne({ id }, { password: newPw });
 };
 
 const getUserInfo = async (id: string) => {
