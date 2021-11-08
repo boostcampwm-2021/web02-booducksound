@@ -3,12 +3,12 @@ import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 
-import { requestLogin, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, handleLoginUser } from '../../actions/account';
-import Button from '../../components/atoms/Button';
-import InputBox from '../../components/atoms/InputBox';
-import MenuInfoBox from '../../components/atoms/MenuInfoBox';
-import PageBox from '../../components/atoms/PageBox';
-import theme from '../../styles/theme';
+import { requestLogin, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, handleLoginUser } from '~/actions/account';
+import Button from '~/atoms/Button';
+import InputBox from '~/atoms/InputBox';
+import MenuInfoBox from '~/atoms/MenuInfoBox';
+import PageBox from '~/atoms/PageBox';
+import theme from '~/styles/theme';
 
 const LoginContainer = styled.div`
   position: fixed;

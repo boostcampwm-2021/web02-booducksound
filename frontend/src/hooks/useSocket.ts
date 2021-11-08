@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { connectSocket } from '../actions/socket';
-import { RootState } from '../reducers';
+import { connectSocket } from '~/actions/socket';
+import { RootState } from '~/reducers/index';
 
 const useSocket = () => {
   const dispatch = useDispatch();

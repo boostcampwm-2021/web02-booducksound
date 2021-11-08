@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 
-import theme from '../../../styles/theme';
-import GlassContainer from '../../atoms/GlassContainer';
-import CharacterList from '../../molecules/CharacterList';
-import ChatList from '../../molecules/ChatList';
+import GlassContainer from '~/atoms/GlassContainer';
+import CharacterList from '~/molecules/CharacterList';
+import ChatList from '~/molecules/ChatList';
+import theme from '~/styles/theme';
 
 interface Props {
   type: 'leftTitle' | 'rightTitle' | 'leftCharacter' | 'rightChat';

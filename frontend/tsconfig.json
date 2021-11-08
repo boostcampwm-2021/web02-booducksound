@@ -22,8 +22,9 @@
       "~/types/*": ["src/types/*"],
       "~/utils/*": ["src/utils/*"],
       "~/styles/*": ["src/styles/*"],
-      "~/reducerss/*": ["src/reducers/*"],
-      "~/hooks/*": ["src/hooks/*"]
+      "~/reducers/*": ["src/reducers/*"],
+      "~/hooks/*": ["src/hooks/*"],
+      "~/actions/*": ["src/actions/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

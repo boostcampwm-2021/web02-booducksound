@@ -4,9 +4,9 @@ import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 
-import { handleLoginUser } from '../actions/account';
-import Button from '../components/atoms/Button';
-import theme from '../styles/theme';
+import { handleLoginUser } from '~/actions/account';
+import Button from '~/atoms/Button';
+import theme from '~/styles/theme';
 
 const MainContainer = styled.div`
   position: fixed;
