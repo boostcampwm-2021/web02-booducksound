@@ -6,10 +6,13 @@ import Link from 'next/link';
 
 import InputBox from '~/atoms/InputBox';
 import RoomCard from '~/atoms/RoomCard';
+import useSocketEmit from '~/hooks/useSocketEmit';
+import useSocketOn from '~/hooks/useSocketOn';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import CreateRoomModal from '~/organisms/CreateRoomModal';
 import theme from '~/styles/theme';
 import { LobbyRoom } from '~/types/LobbyRoom';
+import { SocketEvents } from '~/types/SocketEvents';
 
 const Container = styled.div`
   display: flex;
@@ -275,6 +278,18 @@ const dummyRooms: LobbyRoom[] = [
 const Lobby: NextPage = () => {
   const [search, setSearch] = useState('');
   const [createRoomModalOnOff, setCreateRoomModalOnOff] = useState(false);
+  const [rooms, setRooms] = useState<{ [uuid: string]: LobbyRoom }>({});
+
+  useSocketEmit(SocketEvents.SET_LOBBY_ROOMS, (lobbyRooms: { [uuid: string]: LobbyRoom }) => {
+    setRooms(lobbyRooms);
+  });
+
+  useSocketOn(SocketEvents.SET_LOBBY_ROOM, (uuid: string, lobbyRoom: LobbyRoom) => {
+    setRooms((rooms) => {
+      rooms = { ...rooms, [uuid]: lobbyRoom };
+      return rooms;
+    });
+  });
 
   const handleCreateRoomModalBtn = () => {
     setCreateRoomModalOnOff(true);
@@ -351,9 +366,9 @@ const Lobby: NextPage = () => {
         </SearchContainer>
         <GridContainer>
           <GridWrapper>
-            {dummyRooms &&
-              dummyRooms.map((room, i) => {
-                return <RoomCard key={i} {...room} />;
+            {rooms &&
+              Object.entries(rooms).map(([uuid, room]) => {
+                return <RoomCard key={uuid} {...room} />;
               })}
           </GridWrapper>
         </GridContainer>

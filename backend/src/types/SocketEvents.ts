@@ -1,4 +1,6 @@
 export enum SocketEvents {
   CREATE_ROOM = 'CREATE_ROOM',
   JOIN_ROOM = 'JOIN_ROOM',
+  SET_LOBBY_ROOMS = 'SET_LOBBY_ROOMS',
+  SET_LOBBY_ROOM = 'SET_LOBBY_ROOM',
 }
