@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import useSocket from '~/hooks/useSocket';
 
-const useSocketOn = (event: string, callback: (data: any) => void) => {
+const useSocketOn = (event: string, callback: (...data: any) => void) => {
   const socket = useSocket();
 
   useEffect(() => {
