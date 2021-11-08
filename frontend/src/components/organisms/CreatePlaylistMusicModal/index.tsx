@@ -1,4 +1,4 @@
-import { PropsWithChildren, useCallback, useState } from 'react';
+import { ChangeEvent, PropsWithChildren, useCallback, useState } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -8,10 +8,15 @@ import Chip from '~/molecules/Chip';
 import Modal from '~/molecules/Modal';
 import theme from '~/styles/theme';
 import { Music } from '~/types/Music';
+import { showAlert } from '~/utils/showAlert';
 
 interface Props {
   setMusics: Function;
-  setIsOpenModal: Function;
+  setModalOption: Function;
+  musicInfo?: Music | null;
+}
+interface InputType {
+  inputType: 'info' | 'hint' | 'url' | 'answers';
 }
 
 const MusicModalTop = styled.div`
@@ -47,41 +52,41 @@ const MusicModalInputText = styled(InputText)`
   padding: 12px 10px 12px 45px;
 `;
 
-const CreatePlaylistMusicModal = ({ setMusics, setIsOpenModal }: PropsWithChildren<Props>) => {
-  const [info, setInfo] = useState<string>('');
-  const [hint, setHint] = useState<string>('');
-  const [url, setUrl] = useState<string>('');
+const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: PropsWithChildren<Props>) => {
+  const [music, setMusic] = useState<Music>({
+    info: musicInfo ? musicInfo.info : '',
+    hint: musicInfo ? musicInfo.hint : '',
+    url: musicInfo ? musicInfo.url : '',
+    answers: musicInfo ? musicInfo.answers : [],
+  });
   const [answer, setAnswer] = useState<string>('');
-  const [answers, setAnswers] = useState<string[]>([]);
+
+  const { info, hint, url, answers } = music;
 
   const handleRegistButton = useCallback(
     (e) => {
-      if (!(info && hint && url && answers.length !== 0)) {
-        alert('노래 정보를 모두 입력해야합니다.');
-        return;
-      }
-      if (!checkValidUrl(url)) {
-        alert('유튜브 URL을 확인해주세요.');
-        return;
-      }
+      if (!showAlert(!(info && hint && url && answers.length !== 0), '노래 정보를 모두 입력해야합니다.')) return;
+      if (!showAlert(!checkValidUrl(url), '유튜브 URL을 확인해주세요.')) return;
       const newState = { info, hint, url, answers };
-      setMusics((preState: Music[]) => [...preState, newState]);
-      setIsOpenModal(false);
+      setMusics(newState);
+      setModalOption({ type: 'close', target: null });
     },
-    [answers, hint, info, setIsOpenModal, setMusics, url],
+    [answers, hint, info, setModalOption, setMusics, url],
   );
   const handleCancelButton = useCallback(
     (e) => {
-      setIsOpenModal(false);
+      setModalOption({ type: 'close', target: null });
     },
-    [setIsOpenModal],
+    [setModalOption],
   );
   const pressEnterHandler = useCallback(
     (e) => {
       if (e.key !== 'Enter') return;
       if (!answer) return;
       setAnswer('');
-      setAnswers((preState) => [...preState, answer]);
+      setMusic((preState) => {
+        return { ...preState, answers: [...preState.answers, answer] };
+      });
     },
     [answer],
   );
@@ -89,6 +94,16 @@ const CreatePlaylistMusicModal = ({ setMusics, setIsOpenModal }: PropsWithChildr
     const youtubeRegExp = /https:\/\/www\.youtube\.com\/watch\?v=[a-zA-Z0-9_]*/g;
     return RegExp(youtubeRegExp).test(url);
   };
+  const handleChange =
+    ({ inputType }: InputType) =>
+    (e: ChangeEvent) => {
+      const value: string | [] = (e.currentTarget as HTMLTextAreaElement).value;
+      const newState: { [key: string]: string | [] } = {};
+      newState[inputType] = value;
+      setMusic((preState) => {
+        return { ...preState, ...newState };
+      });
+    };
 
   return (
     <Modal
@@ -108,25 +123,29 @@ const CreatePlaylistMusicModal = ({ setMusics, setIsOpenModal }: PropsWithChildr
           height={'40px'}
           width={'150px'}
           paddingH={'10px'}
+          onClick={(e) => {
+            setMusic({ info: '', hint: '', url: '', answers: [] });
+            setAnswer('');
+          }}
         ></Button>
       </MusicModalTop>
       <MusicModalInputBox>
         <MusicModalInputText
-          handleChange={(e) => setInfo((e.currentTarget as HTMLTextAreaElement).value)}
+          handleChange={(e) => handleChange({ inputType: 'info' })(e)}
           className="info"
           isSearch={false}
           placeholder="노래 정보를 입력해 주세요. ex) 아이유 - 팔레트"
           value={info}
         ></MusicModalInputText>
         <MusicModalInputText
-          handleChange={(e) => setHint((e.currentTarget as HTMLTextAreaElement).value)}
+          handleChange={(e) => handleChange({ inputType: 'hint' })(e)}
           className="hint"
           isSearch={false}
           placeholder="힌트를 입력해 주세요."
           value={hint}
         ></MusicModalInputText>
         <MusicModalInputText
-          handleChange={(e) => setUrl((e.currentTarget as HTMLTextAreaElement).value)}
+          handleChange={(e) => handleChange({ inputType: 'url' })(e)}
           className="url"
           isSearch={false}
           placeholder="유튜브 URL을 입력해 주세요."
@@ -143,7 +162,14 @@ const CreatePlaylistMusicModal = ({ setMusics, setIsOpenModal }: PropsWithChildr
       </MusicModalInputBox>
       <MusicModalChipContainer>
         {answers.map((answer, idx) => (
-          <Chip key={idx} deleteHandler={(e) => setAnswers((preState) => [...preState.filter((chip, i) => i !== idx)])}>
+          <Chip
+            key={idx}
+            deleteHandler={(e) =>
+              setMusic((preState) => {
+                return { ...preState, answers: [...preState.answers.filter((answer, i) => i !== idx)] };
+              })
+            }
+          >
             {answer}
           </Chip>
         ))}

@@ -1,10 +1,11 @@
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Router from 'next/router';
-import { createPlaylist } from 'src/api/playlist';
+import { useSelector } from 'react-redux';
 
+import { createPlaylist } from '~/api/playlist';
 import Button from '~/atoms/Button';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
@@ -53,6 +54,12 @@ const Container = styled.div`
     }
   }
 `;
+const TARGET_INIT = 0;
+
+interface ModalOption {
+  type: 'close' | 'create' | 'modify';
+  target: number;
+}
 
 const PlaylistCreate: NextPage = () => {
   const [title, setTitle] = useState<string>('');
@@ -60,22 +67,20 @@ const PlaylistCreate: NextPage = () => {
   const [hashTag, setHashTag] = useState<string>('');
   const [chips, setChips] = useState<string[]>([]);
   const [musics, setMusics] = useState<Music[]>([]);
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [modalOption, setModalOption] = useState<ModalOption>({ type: 'close', target: TARGET_INIT });
+  const userInfo = useSelector((state: any) => state.user);
 
   const checkAllValidInput = () => {
     if (!title || !description || !chips.length) return false;
     if (musics.length < 3 || musics.length > 50) return false;
     return true;
   };
-  const handleAddChip = useCallback(
-    (e: globalThis.KeyboardEvent) => {
-      if (e.key !== 'Enter' && e.key !== ' ') return;
-      if (!hashTag) return;
-      setHashTag('');
-      setChips((preState) => [...preState, hashTag.trim()]);
-    },
-    [hashTag],
-  );
+  const handleAddChip = (e: globalThis.KeyboardEvent) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    if (!hashTag) return;
+    setHashTag('');
+    setChips((preState) => [...preState, hashTag.trim()]);
+  };
   const handleSubmit = async () => {
     if (!checkAllValidInput()) {
       alert('입력을 확인해주세요.');
@@ -85,7 +90,7 @@ const PlaylistCreate: NextPage = () => {
       playlistName: title,
       musics: musics,
       hashTags: chips,
-      userId: 'vgihan',
+      userId: userInfo.id,
     });
     const { status } = createResult;
     if (status === FAILED) {
@@ -123,7 +128,7 @@ const PlaylistCreate: NextPage = () => {
           </ChipContainer>
           <CreatePlaylistMusicList
             musics={musics}
-            setIsOpenModal={(e) => setIsOpenModal(true)}
+            setModalOption={setModalOption}
             setMusics={(target: number) =>
               setMusics((preState) => [...preState.filter((music, idx) => idx !== target)])
             }
@@ -140,9 +145,24 @@ const PlaylistCreate: NextPage = () => {
           </SubmitButtonWrapper>
         </Wrapper>
       </PageBox>
-      {isOpenModal && (
-        <CreatePlaylistMusicModal setIsOpenModal={setIsOpenModal} setMusics={setMusics}></CreatePlaylistMusicModal>
-      )}
+      {modalOption.type === 'create' ? (
+        <CreatePlaylistMusicModal
+          setModalOption={setModalOption}
+          setMusics={(newMusic: Music) => setMusics((preMusics) => [...preMusics, newMusic])}
+        ></CreatePlaylistMusicModal>
+      ) : modalOption.type === 'modify' ? (
+        <CreatePlaylistMusicModal
+          setModalOption={setModalOption}
+          setMusics={(newMusic: Music) =>
+            setMusics((preMusics) => {
+              const next = [...preMusics];
+              next[modalOption.target] = newMusic;
+              return next;
+            })
+          }
+          musicInfo={musics[modalOption.target]}
+        ></CreatePlaylistMusicModal>
+      ) : null}
     </Container>
   );
 };

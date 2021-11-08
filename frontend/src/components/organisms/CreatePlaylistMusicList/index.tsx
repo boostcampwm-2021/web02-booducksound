@@ -1,4 +1,4 @@
-import { MouseEventHandler, PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -9,7 +9,7 @@ import { Music } from '~/types/Music';
 
 interface Props {
   musics: Music[];
-  setIsOpenModal: MouseEventHandler;
+  setModalOption: Function;
   setMusics: Function;
 }
 
@@ -63,7 +63,7 @@ const EmptyBox = styled.div`
   height: 100%;
   color: #ddd;
 `;
-const CreatePlaylistMusicList = ({ musics, setIsOpenModal, setMusics }: PropsWithChildren<Props>) => {
+const CreatePlaylistMusicList = ({ musics, setModalOption, setMusics }: PropsWithChildren<Props>) => {
   return (
     <MusicListContainer>
       <MusicListTitleBox>
@@ -75,7 +75,7 @@ const CreatePlaylistMusicList = ({ musics, setIsOpenModal, setMusics }: PropsWit
             fontSize="12px"
             paddingH="7px"
             width="100px"
-            onClick={setIsOpenModal}
+            onClick={(e) => setModalOption({ type: 'create', target: null })}
           ></Button>
         </MusicListTitleTop>
         <MusicListTitleBottom>최소 3개, 최대 50개까지 추가가 가능합니다.</MusicListTitleBottom>
@@ -85,7 +85,13 @@ const CreatePlaylistMusicList = ({ musics, setIsOpenModal, setMusics }: PropsWit
           <EmptyBox>노래를 추가해 주세요.</EmptyBox>
         ) : (
           musics.map((music, idx) => (
-            <CreatePlaylistMusicItem title={music.info} key={idx} idx={idx} deleteItem={setMusics} />
+            <CreatePlaylistMusicItem
+              title={music.info}
+              key={idx}
+              idx={idx}
+              deleteItem={setMusics}
+              modifyItem={() => setModalOption({ type: 'modify', target: idx })}
+            />
           ))
         )}
       </MusicListContentBox>

@@ -6,10 +6,13 @@ import Link from 'next/link';
 
 import InputBox from '~/atoms/InputBox';
 import RoomCard from '~/atoms/RoomCard';
+import useSocketEmit from '~/hooks/useSocketEmit';
+import useSocketOn from '~/hooks/useSocketOn';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import CreateRoomModal from '~/organisms/CreateRoomModal';
 import theme from '~/styles/theme';
 import { LobbyRoom } from '~/types/LobbyRoom';
+import { SocketEvents } from '~/types/SocketEvents';
 
 const Container = styled.div`
   display: flex;
@@ -98,183 +101,21 @@ const GridWrapper = styled.div`
   }
 `;
 
-const dummyRooms: LobbyRoom[] = [
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'playing',
-    hasPassword: true,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'waiting',
-    hasPassword: false,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'playing',
-    hasPassword: false,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'waiting',
-    hasPassword: true,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'waiting',
-    hasPassword: true,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'waiting',
-    hasPassword: false,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'playing',
-    hasPassword: false,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'waiting',
-    hasPassword: true,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'playing',
-    hasPassword: true,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'waiting',
-    hasPassword: false,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'playing',
-    hasPassword: false,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'waiting',
-    hasPassword: true,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'waiting',
-    hasPassword: true,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'waiting',
-    hasPassword: false,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'playing',
-    hasPassword: false,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'waiting',
-    hasPassword: true,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'waiting',
-    hasPassword: false,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'playing',
-    hasPassword: false,
-  },
-  {
-    title: '방 제목입니다',
-    playlistName: '플레이리스트 이름입니다',
-    hashtags: ['해시태그1', '해시태그2'],
-    curPeople: 2,
-    maxPeople: 8,
-    status: 'waiting',
-    hasPassword: true,
-  },
-];
-
 const Lobby: NextPage = () => {
   const [search, setSearch] = useState('');
   const [createRoomModalOnOff, setCreateRoomModalOnOff] = useState(false);
+  const [rooms, setRooms] = useState<{ [uuid: string]: LobbyRoom }>({});
+
+  useSocketEmit(SocketEvents.SET_LOBBY_ROOMS, (lobbyRooms: { [uuid: string]: LobbyRoom }) => {
+    setRooms(lobbyRooms);
+  });
+
+  useSocketOn(SocketEvents.SET_LOBBY_ROOM, (uuid: string, lobbyRoom: LobbyRoom) => {
+    setRooms((rooms) => {
+      rooms = { ...rooms, [uuid]: lobbyRoom };
+      return rooms;
+    });
+  });
 
   const handleCreateRoomModalBtn = () => {
     setCreateRoomModalOnOff(true);
@@ -351,9 +192,9 @@ const Lobby: NextPage = () => {
         </SearchContainer>
         <GridContainer>
           <GridWrapper>
-            {dummyRooms &&
-              dummyRooms.map((room, i) => {
-                return <RoomCard key={i} {...room} />;
+            {rooms &&
+              Object.entries(rooms).map(([uuid, room]) => {
+                return <RoomCard key={uuid} {...room} />;
               })}
           </GridWrapper>
         </GridContainer>

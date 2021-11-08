@@ -133,7 +133,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setPlaylistId, setPlaylistName }: 
       maxWidth="720px"
       // leftButtonText={'leftButtonText'}
       // leftButtonHanlder={handleCreateRoomBtn}
-      rightButtonHanlder={() => setModalOnOff(false)}
+      rightButtonHandler={() => setModalOnOff(false)}
       hasModalBackground={false}
       hasOnlyCancleBtn={true}
     >

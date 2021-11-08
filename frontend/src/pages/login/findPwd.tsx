@@ -1,15 +1,13 @@
-/* eslint-disable @next/next/link-passhref */
 import { useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
-import Link from 'next/link';
 
-import { requestLogin, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG } from '~/api/account';
-import Button from '~/atoms/Button';
+import { requestChangePassword, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG } from '~/api/account';
 import InputBox from '~/atoms/InputBox';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
+import ResponsiveButton from '~/molecules/ResponsiveButton';
 import theme from '~/styles/theme';
 
 const LoginContainer = styled.div`
@@ -22,12 +20,6 @@ const LoginContainer = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-`;
-
-const SearchPwdBtn = styled.a`
-  color: ${theme.colors.deepgray};
-  text-align: center;
-  margin-top: 1.5rem;
 `;
 
 const InputContainer = styled.div`
@@ -53,19 +45,21 @@ const InputContainer = styled.div`
   }
 `;
 
-const Login: NextPage = () => {
+const FindPwd: NextPage = () => {
   const [id, setID] = useState('');
+  const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async () => {
+  const handleFindPwd = async () => {
     if (!id) alert(ID_EMPTY_MSG);
+    else if (!nickname) alert(NICKNAME_EMPTY_MSG);
     else if (!password) alert(PASSWORD_EMPTY_MSG);
-    else await requestLogin(id, password);
+    else await requestChangePassword(id, nickname, password);
   };
 
   return (
     <>
-      <MenuInfoBox name="로그인" />
+      <MenuInfoBox name="비밀번호 재설정" />
       <PageBox>
         <LoginContainer>
           <InputContainer>
@@ -79,26 +73,32 @@ const Login: NextPage = () => {
               onChangeHandler={({ target }) => setID((target as HTMLInputElement).value)}
             ></InputBox>
             <InputBox
+              isSearch={false}
+              placeholder="닉네임을 입력하세요."
+              width={'100%'}
+              height={'80px'}
+              fontSize={'20px'}
+              value={nickname}
+              onChangeHandler={({ target }) => setNickname((target as HTMLInputElement).value)}
+            ></InputBox>
+            <InputBox
               isPassword={true}
               isSearch={false}
-              placeholder="비밀번호를 입력하세요."
+              placeholder="새로운 비밀번호를 입력하세요."
               width={'100%'}
               height={'80px'}
               fontSize={'20px'}
               value={password}
               onChangeHandler={({ target }) => setPassword((target as HTMLInputElement).value)}
             ></InputBox>
-            <Button
+            <ResponsiveButton
               width={'560px'}
               background={theme.colors.sky}
-              fontSize={'30px'}
-              paddingH={'24px'}
-              content={'로그인'}
-              onClick={handleLogin}
+              fontSize={'28px'}
+              smFontSize={'20px'}
+              content={'비밀번호 재설정'}
+              onClick={handleFindPwd}
             />
-            <Link href="login/findPwd">
-              <SearchPwdBtn href="#none">비밀번호를 잊어버리셨나요?</SearchPwdBtn>
-            </Link>
           </InputContainer>
         </LoginContainer>
       </PageBox>
@@ -106,4 +106,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default FindPwd;
