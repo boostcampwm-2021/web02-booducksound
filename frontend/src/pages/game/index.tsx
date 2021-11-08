@@ -23,6 +23,7 @@ const Container = styled.div`
 
 const Game: NextPage = () => {
   const { uuid } = useSelector((state: RootState) => state.room);
+  const userInfo = useSelector((state: any) => state.user);
   const router = useRouter();
 
   useEffect(() => {
@@ -36,6 +37,7 @@ const Game: NextPage = () => {
   useSocketEmit(
     SocketEvents.JOIN_ROOM,
     uuid,
+    userInfo.nickname,
     ({ type, message, gameRoom }: { type: string; message: string; gameRoom: GameRoom }) => {
       if (type === 'fail') {
         // TODO : window.alert이 아니라 모달으로 에러 message를 띄우도록 할 것
