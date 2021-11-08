@@ -62,7 +62,10 @@ const GameRoomContainer = () => {
   const userInfo = useSelector((state: any) => state.user);
   const [text, setText] = useState<string>('');
   const send = () => {
-    socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text);
+    if (text !== '') {
+      socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text);
+      setText('');
+    }
   };
   return (
     <Wrapper>
@@ -76,7 +79,12 @@ const GameRoomContainer = () => {
       <Container type={'rightChat'}>
         <ChatList />
       </Container>
-      <InputBox placeholder={'메세지를 입력해주세요.'} onChange={(e) => setText(e.target.value)} onClick={send} />
+      <InputBox
+        placeholder={'메세지를 입력해주세요.'}
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onClick={send}
+      />
     </Wrapper>
   );
 };
