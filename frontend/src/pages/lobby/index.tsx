@@ -278,10 +278,17 @@ const dummyRooms: LobbyRoom[] = [
 const Lobby: NextPage = () => {
   const [search, setSearch] = useState('');
   const [createRoomModalOnOff, setCreateRoomModalOnOff] = useState(false);
-  const [rooms, setRooms] = useState<{ [uuid: string]: LobbyRoom }>();
+  const [rooms, setRooms] = useState<{ [uuid: string]: LobbyRoom }>({});
 
-  useSocketEmit(SocketEvents.GET_ROOMS, (lobbyRooms: { [uuid: string]: LobbyRoom }) => {
+  useSocketEmit(SocketEvents.SET_LOBBY_ROOMS, (lobbyRooms: { [uuid: string]: LobbyRoom }) => {
     setRooms(lobbyRooms);
+  });
+
+  useSocketOn(SocketEvents.SET_LOBBY_ROOM, (uuid: string, lobbyRoom: LobbyRoom) => {
+    setRooms((rooms) => {
+      rooms = { ...rooms, [uuid]: lobbyRoom };
+      return rooms;
+    });
   });
 
   const handleCreateRoomModalBtn = () => {
