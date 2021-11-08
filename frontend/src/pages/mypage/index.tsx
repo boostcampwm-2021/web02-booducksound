@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
-import Link from 'next/link';
 
+import { requestLogout } from '../../actions/account';
 import Button from '../../components/atoms/Button';
 import MenuInfoBox from '../../components/atoms/MenuInfoBox';
 import PageBox from '../../components/atoms/PageBox';
@@ -180,6 +180,7 @@ const MyPage: NextPage = () => {
                 fontSize={'16px'}
                 paddingH={'16px'}
                 width={'160px'}
+                onClick={requestLogout}
               ></Button>
             </ProfileBtnBox>
           </ProfileBox>

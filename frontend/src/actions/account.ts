@@ -25,7 +25,18 @@ export const removeCookie = () => {
 
 export const handleLoginUser = () => {
   const token = getCookie();
-  if (token) Router.push('/lobby');
+  const notLoginUrlList = ['/', '/login', '/enter', '/join'];
+  const loginUrlList = ['/mypage', '/lobby', '/playlist', '/game'];
+  if (token && notLoginUrlList.some((e) => location.pathname === e)) Router.push('/lobby');
+  if (!token && loginUrlList.some((e) => location.pathname.includes(e))) Router.push('/');
+};
+
+export const getUserInfo = async () => {
+  return await fetch(`${BACKEND_URL}/checkLogin`)
+    .then((res) => res.json())
+    .then((userInfo) => {
+      console.log(userInfo);
+    });
 };
 
 export const requestLogin = async (id: string, password: string) => {
@@ -44,6 +55,11 @@ export const requestLogin = async (id: string, password: string) => {
         Router.push('/lobby');
       } else alert(message);
     });
+};
+
+export const requestLogout = () => {
+  removeCookie();
+  handleLoginUser();
 };
 
 export const requestEnter = async (nickname: string, color: string) => {

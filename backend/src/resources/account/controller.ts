@@ -48,6 +48,7 @@ const guestSignIn = (req: Request, res: Response) => {
 
 const logOut = (req: Request, res: Response) => {
   res.clearCookie('token');
+  res.sendStatus(200);
 };
 
 export default {

@@ -15,7 +15,9 @@ import '../styles/default.css';
 const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
-  useEffect(() => handleLoginUser(), []);
+  useEffect(() => {
+    handleLoginUser();
+  }, []);
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>
