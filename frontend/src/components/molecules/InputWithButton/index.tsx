@@ -13,6 +13,7 @@ interface Props {
   inputFontSize: string;
   inputPaddingW?: string;
   inputDisabled?: boolean;
+  value?: string;
 
   btnWidth: string;
   btnHeight: string;
@@ -48,6 +49,7 @@ const InputWithButton = (props: Props) => {
         placeholder={props.placeholder}
         paddingW={props.inputPaddingW}
         disabled={props.inputDisabled}
+        value={props.value}
       />
       <ButtonContainer>
         <ResponsiveButton

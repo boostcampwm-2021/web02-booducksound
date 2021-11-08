@@ -10,6 +10,7 @@ import InputSection from '~/molecules/InputSection';
 import InputWithButton from '~/molecules/InputWithButton';
 import Modal from '~/molecules/Modal';
 import SelectSection from '~/molecules/SelectSection';
+import SelectPlaylistModal from '~/organisms/SelectPlaylistModal';
 import theme from '~/styles/theme';
 import { RoomActions } from '~/types/Actions';
 import { SocketEvents } from '~/types/SocketEvents';
@@ -26,6 +27,11 @@ const Container = styled.div`
   font-size: 16px;
   overflow-y: scroll;
   padding: 8px;
+
+  input:disabled {
+    background: inherit;
+    color: inherit;
+  }
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 16px;
@@ -58,18 +64,23 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
   const socket = useSocket();
   const dispatch = useDispatch();
 
-  const [title, setTitle] = useState<string>();
-  const [playListId, setPlayListId] = useState<string>();
-  const [password, setPassword] = useState<string>();
-  const [skip, setSkip] = useState<number>(5);
-  const [timePerProblem, setTimePerProblem] = useState<number>(60);
+  const [title, setTitle] = useState('');
+  const [playlistName, setPlaylistName] = useState<string>('');
+  const [playListId, setPlayListId] = useState<string>('');
+  const [password, setPassword] = useState('');
+  const [skip, setSkip] = useState(5);
+  const [timePerProblem, setTimePerProblem] = useState(60);
+
+  const [playlistModalOnOff, setPlaylistModalOnOff] = useState(false);
 
   const handleTitleChange: ChangeEventHandler = (e) => {
     const title = (e.target as HTMLInputElement).value;
     setTitle(title);
   };
 
-  const handleSelectPlaylistBtn = () => {};
+  const handleSelectPlaylistBtn: MouseEventHandler = () => {
+    setPlaylistModalOnOff(true);
+  };
 
   const handlePasswordChange: ChangeEventHandler = (e) => {
     const password = (e.target as HTMLInputElement).value;
@@ -144,8 +155,16 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
             btnHeight="38px"
             inputPaddingW="20px"
             inputDisabled={true}
+            value={playlistName}
             onClick={handleSelectPlaylistBtn}
-          ></InputWithButton>
+          />
+          {playlistModalOnOff && (
+            <SelectPlaylistModal
+              setModalOnOff={setPlaylistModalOnOff}
+              setPlaylistId={setPlayListId}
+              setPlaylistName={setPlaylistName}
+            />
+          )}
         </SelectPlaylistContainer>
         <InputSection
           id="roomPassword"
