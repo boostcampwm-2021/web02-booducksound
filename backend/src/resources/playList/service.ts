@@ -1,14 +1,4 @@
-import PlayList from '../../models/PlayList';
-
-interface PlayListProps {
-  playListName: String;
-  likeCount: Number;
-  playCount: Number;
-  musics: MusicProps;
-  hashTags: [];
-  UserId: String;
-  createdAt: Date;
-}
+import Playlist from '../../models/Playlist';
 
 interface MusicProps {
   order: Number;
@@ -18,27 +8,36 @@ interface MusicProps {
   hint: String;
   answers: [];
 }
+interface PlaylistProps {
+  PlaylistName: String;
+  likeCount: Number;
+  playCount: Number;
+  musics: MusicProps;
+  hashTags: [];
+  UserId: String;
+  createdAt: Date;
+}
 
 // const get = (req) => {};
 
-const add = ({ playListName, musics, hashTags, UserId }: PlayListProps) => {
-  const newPlayList = new PlayList({
-    playListName,
+const add = ({ PlaylistName, musics, hashTags, UserId }: PlaylistProps) => {
+  const newPlaylist = new Playlist({
+    PlaylistName,
     musics,
     hashTags,
     UserId,
     createAt: new Date(),
   });
-  return newPlayList.save();
+  return newPlaylist.save();
 };
 
-const modify = (_id: string, data: PlayListProps) => {
+const modify = (_id: string, data: PlaylistProps) => {
   console.log(data);
-  return PlayList.updateOne({ _id }, data);
+  return Playlist.updateOne({ _id }, data);
 };
 
 const del = (_id: string) => {
-  return PlayList.deleteOne({ _id });
+  return Playlist.deleteOne({ _id });
 };
 
 export default { add, modify, del };

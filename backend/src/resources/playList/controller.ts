@@ -1,17 +1,17 @@
 import { Request, Response } from 'express';
 
-import playListService from './service';
+import PlaylistService from './service';
 
-const playList = {
+const Playlist = {
   // filter: async (req: Request, res: Response) => {
-  //   await playListService
+  //   await PlaylistService
   //     .get(req.body)
   //     .then((result: any) => res.json(result))
   //     .catch((e: Error) => res.json(e));
   // },
   register: async (req: Request, res: Response) => {
     try {
-      const result = await playListService.add(req.body);
+      const result = await PlaylistService.add(req.body);
       res.json({ status: 'SUCCESS', result });
     } catch (e) {
       res.json({ status: 'FAILED', error: e });
@@ -20,7 +20,7 @@ const playList = {
   modify: async (req: Request, res: Response) => {
     const { _id, data } = req.body;
     try {
-      const result = await playListService.modify(_id, data);
+      const result = await PlaylistService.modify(_id, data);
       res.json({ status: 'SUCCESS', result });
     } catch (e) {
       res.json({ status: 'FAILED', error: e });
@@ -28,7 +28,7 @@ const playList = {
   },
   del: async (req: Request, res: Response) => {
     try {
-      const result = await playListService.del(req.body);
+      const result = await PlaylistService.del(req.body);
       res.json({ status: 'SUCCESS', result });
     } catch (e) {
       res.json({ status: 'FAILED', error: e });
@@ -36,4 +36,4 @@ const playList = {
   },
 };
 
-export default playList;
+export default Playlist;
