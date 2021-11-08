@@ -125,6 +125,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
           margin="8px"
           isSearch={false}
           paddingW="20px"
+          value={title}
           onChangeHandler={handleTitleChange}
         />
         <SelectPlaylistContainer>
@@ -157,6 +158,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
           margin="8px"
           isSearch={false}
           paddingW="20px"
+          value={password}
           onChangeHandler={handlePasswordChange}
         />
         <HalfContainer>
