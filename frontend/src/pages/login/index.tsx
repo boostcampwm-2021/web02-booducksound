@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 
-import { requestLogin, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, handleLoginUser } from '~/actions/account';
+import { requestLogin, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG } from '~/api/account';
 import Button from '~/atoms/Button';
 import InputBox from '~/atoms/InputBox';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
@@ -60,10 +60,6 @@ const Login: NextPage = () => {
     else if (!password) alert(PASSWORD_EMPTY_MSG);
     else await requestLogin(id, password);
   };
-
-  useEffect(() => {
-    handleLoginUser();
-  }, []);
 
   return (
     <>

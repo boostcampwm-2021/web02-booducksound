@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
 
-import { requestJoin, handleLoginUser, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG } from '~/actions/account';
+import { requestJoin, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG } from '~/api/account';
 import Button from '~/atoms/Button';
 import InputBox from '~/atoms/InputBox';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
@@ -90,10 +90,6 @@ const Join: NextPage = () => {
     else signUp();
   };
 
-  useEffect(() => {
-    handleLoginUser();
-  }, []);
-
   return (
     <>
       <MenuInfoBox name="회원가입" />
@@ -120,6 +116,7 @@ const Join: NextPage = () => {
             ></Button>
             <InputBox
               isSearch={false}
+              isPassword={true}
               placeholder="비밀번호를 입력해 주세요."
               width={'100%'}
               height={'80px'}

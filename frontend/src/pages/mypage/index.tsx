@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
-import Link from 'next/link';
+import { useSelector } from 'react-redux';
 
+import { requestLogout } from '~/api/account';
 import Button from '~/atoms/Button';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
@@ -38,7 +39,7 @@ const ProfileBtnBox = styled.div`
   @media (min-width: 768px) {
     margin-bottom: 1rem;
 
-    > *:first-child {
+    > *:first-of-type {
       margin-right: 1rem;
     }
   }
@@ -73,7 +74,7 @@ const ProfileBox = styled.div`
   justify-content: center;
   border-bottom: 1px solid ${theme.colors.gray};
 
-  > div:first-child {
+  > div:first-of-type {
     flex-grow: 0;
   }
 
@@ -101,6 +102,7 @@ const UserInfo = styled.div`
   }
 
   .user-id {
+    text-align: left;
     color: ${theme.colors.gray};
   }
 `;
@@ -153,6 +155,11 @@ const BoxTitle = styled.h2<Props>`
 
 const MyPage: NextPage = () => {
   const [color, setColor] = useState('fff');
+  const userInfo = useSelector((state: any) => state.user);
+  useEffect(() => {
+    setColor(userInfo.color);
+  }, [userInfo]);
+
   return (
     <>
       <MenuInfoBox name="마이페이지" />
@@ -162,8 +169,8 @@ const MyPage: NextPage = () => {
             <UserInfoBox>
               <ProfileSelector type="mypage" color={color} setColor={setColor}></ProfileSelector>
               <UserInfo>
-                <p className="user-name">부덕부덕</p>
-                <p className="user-id">sap03110</p>
+                <p className="user-name">{userInfo.nickname}</p>
+                <p className="user-id">{userInfo.id || '비회원'}</p>
               </UserInfo>
             </UserInfoBox>
             <ProfileBtnBox>
@@ -180,6 +187,7 @@ const MyPage: NextPage = () => {
                 fontSize={'16px'}
                 paddingH={'16px'}
                 width={'160px'}
+                onClick={requestLogout}
               ></Button>
             </ProfileBtnBox>
           </ProfileBox>

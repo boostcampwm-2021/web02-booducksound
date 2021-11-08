@@ -25,6 +25,7 @@
       "~/reducers/*": ["src/reducers/*"],
       "~/hooks/*": ["src/hooks/*"],
       "~/actions/*": ["src/actions/*"],
+      "~/api/*": ["src/api/*"],
       "~/constants/*": ["src/constants/*"]
     }
   },
