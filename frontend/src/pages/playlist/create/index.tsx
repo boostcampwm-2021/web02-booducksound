@@ -3,8 +3,8 @@ import { useCallback, useState } from 'react';
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Router from 'next/router';
-import { createPlaylist } from 'src/api/playlist';
 
+import { createPlaylist } from '~/api/playlist';
 import Button from '~/atoms/Button';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
