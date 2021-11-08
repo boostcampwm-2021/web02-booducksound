@@ -4,12 +4,13 @@ import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
 
-import { requestJoin, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG } from '~/api/account';
+import { requestJoin } from '~/api/account';
 import Button from '~/atoms/Button';
 import InputBox from '~/atoms/InputBox';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import ProfileSelector from '~/atoms/ProfileSelector';
+import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG } from '~/constants/index';
 import theme from '~/styles/theme';
 
 const LoginContainer = styled.div`

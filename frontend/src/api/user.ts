@@ -1,5 +1,4 @@
-export const headers = { 'Content-Type': 'application/json' };
-export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+import { BACKEND_URL, HEADERS as headers } from '~/constants/index';
 
 export const changeColor = async (id: string, color: string) => {
   return await fetch(`${BACKEND_URL}/changeColor`, {

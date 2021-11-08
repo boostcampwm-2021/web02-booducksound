@@ -1,11 +1,7 @@
 import Router from 'next/router';
 import { Cookies } from 'react-cookie';
 
-export const ID_EMPTY_MSG = '아이디를 입력해 주세요';
-export const PASSWORD_EMPTY_MSG = '비밀번호를 입력해 주세요';
-export const NICKNAME_EMPTY_MSG = '닉네임을 입력해 주세요';
-export const headers = { 'Content-Type': 'application/json' };
-export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+import { HEADERS as headers, BACKEND_URL } from '~/constants/index';
 
 export const cookie = new Cookies();
 
