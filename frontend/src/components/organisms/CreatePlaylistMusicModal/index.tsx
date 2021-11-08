@@ -1,13 +1,12 @@
 import { PropsWithChildren, useCallback, useState } from 'react';
 
+import Button from '@atoms/Button';
+import InputText from '@atoms/InputText';
 import styled from '@emotion/styled';
-
-import theme from '../../../styles/theme';
-import { Music } from '../../../types/Music';
-import Button from '../../atoms/Button';
-import InputText from '../../atoms/InputText';
-import Chip from '../../molecules/Chip';
-import Modal from '../../molecules/Modal';
+import Chip from '@molecules/Chip';
+import Modal from '@molecules/Modal';
+import theme from '@styles/theme';
+import { Music } from '@type/Music';
 
 interface Props {
   setMusics: Function;
@@ -112,29 +111,29 @@ const CreatePlaylistMusicModal = ({ setMusics, setIsOpenModal }: PropsWithChildr
       </MusicModalTop>
       <MusicModalInputBox>
         <MusicModalInputText
-          onChange={(e) => setInfo((e.currentTarget as HTMLTextAreaElement).value)}
+          handleChange={(e) => setInfo((e.currentTarget as HTMLTextAreaElement).value)}
           className="info"
           isSearch={false}
           placeholder="노래 정보를 입력해 주세요. ex) 아이유 - 팔레트"
           value={info}
         ></MusicModalInputText>
         <MusicModalInputText
-          onChange={(e) => setHint((e.currentTarget as HTMLTextAreaElement).value)}
+          handleChange={(e) => setHint((e.currentTarget as HTMLTextAreaElement).value)}
           className="hint"
           isSearch={false}
           placeholder="힌트를 입력해 주세요."
           value={hint}
         ></MusicModalInputText>
         <MusicModalInputText
-          onChange={(e) => setUrl((e.currentTarget as HTMLTextAreaElement).value)}
+          handleChange={(e) => setUrl((e.currentTarget as HTMLTextAreaElement).value)}
           className="url"
           isSearch={false}
           placeholder="유튜브 URL을 입력해 주세요."
           value={url}
         ></MusicModalInputText>
         <MusicModalInputText
-          onChange={(e) => setAnswer((e.currentTarget as HTMLTextAreaElement).value)}
-          onKeyUp={pressEnterHandler}
+          handleChange={(e) => setAnswer((e.currentTarget as HTMLTextAreaElement).value)}
+          handleEnter={pressEnterHandler}
           className="answer"
           isSearch={false}
           placeholder="정답을 입력 후 Enter를 클릭해 주세요."
