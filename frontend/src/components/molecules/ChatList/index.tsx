@@ -1,6 +1,11 @@
+import { useEffect, useState } from 'react';
+
 import styled from '@emotion/styled';
 
-import Chat from '~/atoms/Chat';
+import ChatComponent from '~/atoms/Chat';
+import useSocket from '~/hooks/useSocket';
+import { Chat } from '~/types/Chat';
+import { SocketEvents } from '~/types/SocketEvents';
 
 const Container = styled.div`
   width: 100%;
@@ -12,44 +17,20 @@ const Container = styled.div`
   overflow: auto;
 `;
 
-interface Props {
-  name: string;
-  text: string;
-  status: 'alert' | 'message';
-}
-
 const ChatList = () => {
-  const dummy: Props[] = [
-    { name: 'max', text: '', status: 'alert' },
-    { name: 'john', text: '', status: 'alert' },
-    { name: 'max', text: '안녕', status: 'message' },
-    { name: 'john', text: '안녕', status: 'message' },
-    { name: 'max', text: '', status: 'alert' },
-    { name: 'john', text: '', status: 'alert' },
-    { name: 'max', text: '안녕', status: 'message' },
-    { name: 'john', text: '안녕', status: 'message' },
-    { name: 'max', text: '', status: 'alert' },
-    { name: 'john', text: '', status: 'alert' },
-    { name: 'max', text: '안녕', status: 'message' },
-    { name: 'john', text: '안녕', status: 'message' },
-    { name: 'max', text: '', status: 'alert' },
-    { name: 'john', text: '', status: 'alert' },
-    { name: 'max', text: '안녕', status: 'message' },
-    { name: 'john', text: '안녕', status: 'message' },
-    { name: 'max', text: '', status: 'alert' },
-    { name: 'john', text: '', status: 'alert' },
-    { name: 'max', text: '안녕', status: 'message' },
-    { name: 'john', text: '안녕', status: 'message' },
-    { name: 'max', text: '', status: 'alert' },
-    { name: 'john', text: '', status: 'alert' },
-    { name: 'max', text: '안녕', status: 'message' },
-    { name: 'john', text: '안녕', status: 'message' },
-  ];
+  const [chatList, setChatList] = useState<Chat[]>([]);
+  const socket = useSocket();
+
+  useEffect(() => {
+    socket?.on(SocketEvents.RECEIVE_CHAT, ({ name, text, status }: Chat) => {
+      setChatList((v) => [...v, { name, text, status }]);
+    });
+  }, []);
 
   return (
     <Container>
-      {dummy.map((element, index) => (
-        <Chat key={index} name={element.name} text={element.text} status={element.status} />
+      {chatList.map((element: Chat, index: number) => (
+        <ChatComponent key={index} name={element.name} text={element.text} status={element.status} />
       ))}
     </Container>
   );
