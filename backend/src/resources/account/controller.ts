@@ -12,7 +12,7 @@ const checkId = async (req: Request, res: Response) => {
 };
 
 const checkLogin = async (req: Request, res: Response) => {
-  const token = req.cookies.token;
+  const token = req.query.token as string;
   if (token) {
     const decoded = UserService.verifyToken(token) as UserToken;
     if (decoded.id) {
@@ -37,7 +37,7 @@ const signIn = async (req: Request, res: Response) => {
 
 const signUp = async (req: Request, res: Response) => {
   const { id, password, nickname, color }: UserType = req.body;
-  const result = await UserService.join({ id, password, nickname, color: `#${color}` });
+  const result = await UserService.join({ id, password, nickname, color });
   res.json(result);
 };
 

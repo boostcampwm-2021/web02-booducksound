@@ -32,11 +32,10 @@ export const handleLoginUser = () => {
 };
 
 export const getUserInfo = async () => {
-  return await fetch(`${BACKEND_URL}/checkLogin`)
-    .then((res) => res.json())
-    .then((userInfo) => {
-      console.log(userInfo);
-    });
+  return await fetch(`${BACKEND_URL}/checkLogin?token=${getCookie()}`, {
+    method: 'GET',
+    credentials: 'same-origin',
+  }).then((res) => res.json());
 };
 
 export const requestLogin = async (id: string, password: string) => {
