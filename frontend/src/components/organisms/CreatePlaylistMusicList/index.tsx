@@ -1,10 +1,11 @@
 import { MouseEventHandler, PropsWithChildren } from 'react';
 
-import Button from '@atoms/Button';
 import styled from '@emotion/styled';
-import CreatePlaylistMusicItem from '@molecules/CreatePlaylistMusicItem';
-import theme from '@styles/theme';
-import { Music } from '@type/Music';
+
+import Button from '~/atoms/Button';
+import CreatePlaylistMusicItem from '~/molecules/CreatePlaylistMusicItem';
+import theme from '~/styles/theme';
+import { Music } from '~/types/Music';
 
 interface Props {
   musics: Music[];

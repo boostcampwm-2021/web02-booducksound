@@ -5,14 +5,14 @@ import Router from 'next/router';
 import { useDispatch } from 'react-redux';
 import { Socket } from 'socket.io-client';
 
-import useSocket from '../../../hooks/useSocket';
-import theme from '../../../styles/theme';
-import { RoomActions } from '../../../types/Actions';
-import { SocketEvents } from '../../../types/SocketEvents';
-import InputSection from '../../molecules/InputSection';
-import InputWithButton from '../../molecules/InputWithButton';
-import Modal from '../../molecules/Modal';
-import SelectSection from '../../molecules/SelectSection';
+import useSocket from '~/hooks/useSocket';
+import InputSection from '~/molecules/InputSection';
+import InputWithButton from '~/molecules/InputWithButton';
+import Modal from '~/molecules/Modal';
+import SelectSection from '~/molecules/SelectSection';
+import theme from '~/styles/theme';
+import { RoomActions } from '~/types/Actions';
+import { SocketEvents } from '~/types/SocketEvents';
 
 const Container = styled.div`
   display: flex;
