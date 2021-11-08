@@ -1,4 +1,6 @@
 export enum SocketEvents {
   CREATE_ROOM = 'CREATE_ROOM',
   JOIN_ROOM = 'JOIN_ROOM',
+  RECEIVE_CHAT = 'RECEIVE_CHAT',
+  SEND_CHAT = 'SEND_CHAT',
 }
