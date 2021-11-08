@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/link-passhref */
 import { useState } from 'react';
 
 import styled from '@emotion/styled';
@@ -96,9 +97,7 @@ const Login: NextPage = () => {
               onClick={handleLogin}
             />
             <Link href="login/findPwd">
-              <a>
-                <SearchPwdBtn href="#none">비밀번호를 잊어버리셨나요?</SearchPwdBtn>
-              </a>
+              <SearchPwdBtn href="#none">비밀번호를 잊어버리셨나요?</SearchPwdBtn>
             </Link>
           </InputContainer>
         </LoginContainer>

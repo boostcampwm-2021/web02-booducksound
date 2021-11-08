@@ -9,7 +9,7 @@ export const getUser = () => async (dispatch: ThunkDispatch<UserState, void, Act
   try {
     const userInfo = await getUserInfo();
     const { id, nickname, color, likes } = userInfo;
-    dispatch({ type: UserActions.SET_USER, payload: { id, nickname, color, likes } });
+    userInfo && dispatch({ type: UserActions.SET_USER, payload: { id, nickname, color, likes } });
   } catch (err) {
     console.error(err);
   }

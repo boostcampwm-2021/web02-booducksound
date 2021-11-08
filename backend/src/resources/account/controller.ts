@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import UserService, { LoginInfo, GuestLoginInfo, UserType, LoginResponse, UserToken } from './service';
+import UserService, { LoginInfo, GuestLoginInfo, UserType, UserToken } from './service';
 
 const checkId = async (req: Request, res: Response) => {
   const id: string = req.query.id as string;
@@ -12,7 +12,7 @@ const checkId = async (req: Request, res: Response) => {
 };
 
 const checkLogin = async (req: Request, res: Response) => {
-  const token = req.query.token as string;
+  const token = req.cookies.token;
   if (token) {
     const decoded = UserService.verifyToken(token) as UserToken;
     if (decoded.id) {
@@ -32,18 +32,35 @@ const resetPwd = async (req: Request, res: Response) => {
 
 const signIn = async (req: Request, res: Response) => {
   const { id, password }: LoginInfo = req.body;
-  await UserService.login({ id, password }, (e: LoginResponse) => res.json(e));
+  const result = await UserService.login({ id, password });
+  const date = new Date();
+  date.setTime(date.getTime() + 24 * 60 * 60 * 1000); // 1day
+  res.cookie('token', UserService.createUserToken(id), {
+    expires: date,
+  });
+  res.json(result);
 };
 
 const signUp = async (req: Request, res: Response) => {
   const { id, password, nickname, color }: UserType = req.body;
   const result = await UserService.join({ id, password, nickname, color });
+  const date = new Date();
+  date.setTime(date.getTime() + 24 * 60 * 60 * 1000); // 1day
+  res.cookie('token', UserService.createUserToken(id), {
+    expires: date,
+  });
   res.json(result);
 };
 
 const guestSignIn = (req: Request, res: Response) => {
   const { nickname, color }: GuestLoginInfo = req.body;
-  UserService.enter({ nickname, color }, (e: LoginResponse) => res.json(e));
+  const result = UserService.enter({ nickname, color });
+  const date = new Date();
+  date.setTime(date.getTime() + 24 * 60 * 60 * 1000); // 1day
+  res.cookie('token', UserService.createNonUserToken(nickname, color), {
+    expires: date,
+  });
+  res.json(result);
 };
 
 const logOut = (req: Request, res: Response) => {

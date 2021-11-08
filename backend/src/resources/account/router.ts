@@ -10,6 +10,6 @@ router.post('/resetPwd', UserController.resetPwd);
 router.post('/signIn', UserController.signIn);
 router.post('/signUp', UserController.signUp);
 router.post('/guestSignIn', UserController.guestSignIn);
-router.post('/logOut', UserController.logOut);
+router.get('/logOut', UserController.logOut);
 
 export default router;
