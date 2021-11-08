@@ -312,7 +312,7 @@ const Lobby: NextPage = () => {
               smFontSize="12px"
               content="초대코드 입력"
             />
-            <Link href="playlist/create">
+            <Link href="/playlist/create">
               <a>
                 <ResponsiveButton
                   background={theme.colors.peach}
