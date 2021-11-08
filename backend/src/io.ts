@@ -32,11 +32,11 @@ io.on('connection', (socket) => {
     done(uuid);
   });
 
-  socket.on(SocketEvents.JOIN_ROOM, (uuid: string, done) => {
+  socket.on(SocketEvents.JOIN_ROOM, (uuid: string, nickname: string, done) => {
     if (!serverRooms[uuid]) {
       done({ type: 'fail', messsage: '존재 하지 않는 방입니다' });
     }
-
+    socket.join(uuid);
     const serverRoom = serverRooms[uuid];
 
     const gameRoom: GameRoom = {
@@ -48,8 +48,11 @@ io.on('connection', (socket) => {
       timePerProblem: serverRoom.timePerProblem,
       title: serverRoom.title,
     };
-
+    io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name: nickname, text: '', status: 'alert' });
     done({ type: 'success', gameRoom });
+  });
+  socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string) => {
+    io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message' });
   });
 });
 
