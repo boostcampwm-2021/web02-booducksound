@@ -72,7 +72,7 @@ const CreatePlaylistInputBox = ({
       <SectionBox>
         <Label>플레이리스트 제목</Label>
         <PlaylistInputText
-          changeHandler={setTitle}
+          handleChange={setTitle}
           value={title}
           className="title"
           isSearch={false}
@@ -82,7 +82,7 @@ const CreatePlaylistInputBox = ({
       <SectionBox>
         <Label>플레이리스트 설명</Label>
         <PlaylistInputText
-          changeHandler={setDescription}
+          handleChange={setDescription}
           value={description}
           className="description"
           isSearch={false}
@@ -92,7 +92,7 @@ const CreatePlaylistInputBox = ({
       <SectionBox>
         <Label>플레이리스트 해시태그</Label>
         <PlaylistInputText
-          changeHandler={setHashTag}
+          handleChange={setHashTag}
           value={hashTag}
           className="hashTag"
           isSearch={false}
