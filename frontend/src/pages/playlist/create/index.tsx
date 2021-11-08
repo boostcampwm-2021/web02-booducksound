@@ -1,17 +1,18 @@
 import { useCallback, useState } from 'react';
 
-import Button from '@atoms/Button';
-import MenuInfoBox from '@atoms/MenuInfoBox';
-import PageBox from '@atoms/PageBox';
 import styled from '@emotion/styled';
-import useEventListener from '@hooks/useEventListener';
-import Chip from '@molecules/Chip';
-import CreatePlaylistInputBox from '@organisms/CreatePlaylistInputBox';
-import CreatePlaylistMusicList from '@organisms/CreatePlaylistMusicList';
-import CreatePlaylistMusicModal from '@organisms/CreatePlaylistMusicModal';
-import theme from '@styles/theme';
-import { Music } from '@type/Music';
 import type { NextPage } from 'next';
+
+import Button from '~/atoms/Button';
+import MenuInfoBox from '~/atoms/MenuInfoBox';
+import PageBox from '~/atoms/PageBox';
+import useEventListener from '~/hooks/useEventListener';
+import Chip from '~/molecules/Chip';
+import CreatePlaylistInputBox from '~/organisms/CreatePlaylistInputBox';
+import CreatePlaylistMusicList from '~/organisms/CreatePlaylistMusicList';
+import CreatePlaylistMusicModal from '~/organisms/CreatePlaylistMusicModal';
+import theme from '~/styles/theme';
+import { Music } from '~/types/Music';
 
 const ChipContainer = styled.div`
   display: flex;
@@ -85,12 +86,13 @@ const PlaylistCreate: NextPage = () => {
           <ChipContainer>
             {chips.map((chip, idx) => (
               <Chip
-                content={chip}
                 key={idx}
                 deleteHandler={(e) => {
                   setChips((preState) => [...preState.filter((chip, i) => i !== idx)]);
                 }}
-              ></Chip>
+              >
+                {chip}
+              </Chip>
             ))}
           </ChipContainer>
           <CreatePlaylistMusicList
