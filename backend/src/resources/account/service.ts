@@ -104,7 +104,7 @@ const join = async ({ id, password, nickname, color }: UserType) => {
   });
 };
 
-const enter = ({ nickname, color }: GuestLoginInfo) => {
+const enter = () => {
   const result = {
     isLogin: true,
     message: '비회원 로그인에 성공했습니다.',
@@ -144,6 +144,11 @@ const getUserInfo = async (id: string) => {
   return result;
 };
 
+const changeColor = async (id: string, color: string) => {
+  console.log(id, color);
+  await User.update({ id }, { color });
+};
+
 export default {
   idCheck,
   createUserToken,
@@ -155,4 +160,5 @@ export default {
   checkChangePasswordAvailable,
   changePassword,
   getUserInfo,
+  changeColor,
 };

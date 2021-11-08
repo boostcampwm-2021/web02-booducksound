@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
 import { requestLogout } from '~/api/account';
+import { changeColor } from '~/api/user';
 import Button from '~/atoms/Button';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
@@ -157,11 +158,16 @@ const BoxTitle = styled.h2<Props>`
 const MyPage: NextPage = () => {
   const [color, setColor] = useState('fff');
   const userInfo = useSelector((state: any) => state.user);
-  const { id, nickname, likes } = userInfo;
+  const { id, nickname, color: userColor, likes, myPlaylist } = userInfo;
+  const changeBooduckColor = (newColor: string) => {
+    setColor(() => {
+      changeColor(id, newColor);
+      return newColor;
+    });
+  };
   useEffect(() => {
-    setColor(userInfo.color);
-    console.log(id);
-  }, [userInfo]);
+    setColor(userColor);
+  }, [userColor]);
 
   return (
     <>
@@ -170,7 +176,7 @@ const MyPage: NextPage = () => {
         <MyPageContainer>
           <ProfileBox>
             <UserInfoBox>
-              <ProfileSelector type="mypage" color={color} setColor={setColor}></ProfileSelector>
+              <ProfileSelector type="mypage" color={color} setColor={changeBooduckColor}></ProfileSelector>
               <UserInfo>
                 <p className="user-name">{userInfo.nickname}</p>
                 <p className="user-id">{userInfo.id || '비회원'}</p>

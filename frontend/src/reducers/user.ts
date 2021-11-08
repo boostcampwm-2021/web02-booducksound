@@ -5,6 +5,7 @@ export type UserState = {
   nickname: string;
   color?: string;
   likes?: any;
+  myPlaylist?: any;
 };
 
 const initialState: UserState = {
@@ -12,6 +13,7 @@ const initialState: UserState = {
   nickname: '',
   color: '',
   likes: [],
+  myPlaylist: [],
 };
 
 const userReducer = (state = initialState, action: { type: UserActions; payload: UserState }) => {
@@ -19,8 +21,8 @@ const userReducer = (state = initialState, action: { type: UserActions; payload:
 
   switch (type) {
     case UserActions.SET_USER: {
-      const { id, nickname, color, likes } = payload;
-      return { ...state, id, nickname, color, likes };
+      const { id, nickname, color, likes, myPlaylist } = payload;
+      return { ...state, id, nickname, color, likes, myPlaylist };
     }
     default: {
       return state;

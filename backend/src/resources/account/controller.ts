@@ -54,7 +54,7 @@ const signUp = async (req: Request, res: Response) => {
 
 const guestSignIn = (req: Request, res: Response) => {
   const { nickname, color }: GuestLoginInfo = req.body;
-  const result = UserService.enter({ nickname, color });
+  const result = UserService.enter();
   const date = new Date();
   date.setTime(date.getTime() + 24 * 60 * 60 * 1000); // 1day
   res.cookie('token', UserService.createNonUserToken(nickname, color), {
@@ -68,6 +68,12 @@ const logOut = (req: Request, res: Response) => {
   res.sendStatus(200);
 };
 
+const changeColor = async (req: Request, res: Response) => {
+  const { id, color }: { id: string; color: string } = req.body;
+  await UserService.changeColor(id, color);
+  res.sendStatus(200);
+};
+
 export default {
   checkId,
   checkLogin,
@@ -76,4 +82,5 @@ export default {
   signUp,
   guestSignIn,
   logOut,
+  changeColor,
 };

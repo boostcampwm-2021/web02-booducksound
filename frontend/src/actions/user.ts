@@ -8,8 +8,8 @@ import { UserActions } from '~/types/Actions';
 export const getUser = () => async (dispatch: ThunkDispatch<UserState, void, Action>) => {
   try {
     const userInfo = await getUserInfo();
-    const { id, nickname, color, likes } = userInfo;
-    userInfo && dispatch({ type: UserActions.SET_USER, payload: { id, nickname, color, likes } });
+    const { id, nickname, color, likes, myPlaylist } = userInfo;
+    userInfo && dispatch({ type: UserActions.SET_USER, payload: { id, nickname, color, likes, myPlaylist } });
   } catch (err) {
     console.error(err);
   }
