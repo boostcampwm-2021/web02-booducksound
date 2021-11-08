@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import { Room } from '../../../types/Room';
+import { LobbyRoom } from '../../../types/LobbyRoom';
 
 interface ContainerProps {
   status: 'playing' | 'waiting';
@@ -99,7 +99,7 @@ const Hashtag = styled.span`
   }
 `;
 
-const RoomCard = ({ title, playlistName, hashtags, curPeople, maxPeople, status, hasPassword }: Room) => {
+const RoomCard = ({ title, playlistName, hashtags, curPeople, maxPeople, status, hasPassword }: LobbyRoom) => {
   return (
     <Container status={status}>
       <FirstLineContainer>

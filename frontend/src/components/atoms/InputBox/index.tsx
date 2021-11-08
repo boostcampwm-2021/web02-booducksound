@@ -17,6 +17,7 @@ interface ImageContainerProps {
 }
 interface Props {
   isSearch: boolean;
+  isPassword?: boolean;
   placeholder: string;
   width: string;
   height: string;
@@ -61,6 +62,7 @@ const ReadingGlass = styled.img`
 
 const InputBox = ({
   isSearch,
+  isPassword,
   placeholder,
   width,
   height,
@@ -78,11 +80,12 @@ const InputBox = ({
         </ImageContainer>
       ) : null}
       <TextInputContainer
+        type={isPassword ? 'password' : 'text'}
         disabled={disabled}
         placeholder={placeholder}
         height={height}
         fontSize={fontSize}
-        value={value}
+        value={value || ''}
         onChange={onChangeHandler}
       ></TextInputContainer>
     </InputBoxContainer>

@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 
 import Chat from '../../atoms/Chat';
-import GlassContainer from '../../atoms/GlassContainer';
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -47,13 +46,11 @@ const ChatList = () => {
   ];
 
   return (
-    <GlassContainer>
-      <Container>
-        {dummy.map((element, index) => (
-          <Chat key={index} name={element.name} text={element.text} status={element.status} />
-        ))}
-      </Container>
-    </GlassContainer>
+    <Container>
+      {dummy.map((element, index) => (
+        <Chat key={index} name={element.name} text={element.text} status={element.status} />
+      ))}
+    </Container>
   );
 };
 

@@ -7,7 +7,7 @@ import { SocketActions } from '../types/Actions';
 
 export const connectSocket = () => (dispatch: ThunkDispatch<SocketState, void, Action>) => {
   try {
-    const socket = io('http://localhost:5000');
+    const socket = io(process.env.NEXT_PUBLIC_SOCKET_URI as string);
     const socketId = socket.id;
     dispatch({ type: SocketActions.SET_SOCKET, payload: { socket, socketId } });
   } catch (error) {

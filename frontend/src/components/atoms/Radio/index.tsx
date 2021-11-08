@@ -1,7 +1,12 @@
 import styled from '@emotion/styled';
 
 import theme from '../../../styles/theme';
-import { radio } from '../../../types/radio';
+
+interface radio {
+  name: string;
+  value: string;
+  checked: boolean;
+}
 
 const RadioBtnGroup = styled.label`
   display: inline-flex;

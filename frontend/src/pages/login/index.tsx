@@ -1,16 +1,14 @@
+import { useState, useEffect } from 'react';
+
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
-import Link from 'next/link';
 
-import Button from '../components/atoms/Button';
-import InputBox from '../components/atoms/InputBox';
-import MenuInfoBox from '../components/atoms/MenuInfoBox';
-import PageBox from '../components/atoms/PageBox';
-import theme from '../styles/theme';
-
-const handleLogin = () => {
-  console.log(123);
-};
+import { requestLogin, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, handleLoginUser } from '../../actions/account';
+import Button from '../../components/atoms/Button';
+import InputBox from '../../components/atoms/InputBox';
+import MenuInfoBox from '../../components/atoms/MenuInfoBox';
+import PageBox from '../../components/atoms/PageBox';
+import theme from '../../styles/theme';
 
 const LoginContainer = styled.div`
   position: fixed;
@@ -54,6 +52,19 @@ const InputContainer = styled.div`
 `;
 
 const Login: NextPage = () => {
+  const [id, setID] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    if (!id) alert(ID_EMPTY_MSG);
+    else if (!password) alert(PASSWORD_EMPTY_MSG);
+    else await requestLogin(id, password);
+  };
+
+  useEffect(() => {
+    handleLoginUser();
+  }, []);
+
   return (
     <>
       <MenuInfoBox name="로그인" />
@@ -66,13 +77,18 @@ const Login: NextPage = () => {
               width={'100%'}
               height={'80px'}
               fontSize={'20px'}
+              value={id}
+              onChangeHandler={({ target }) => setID((target as HTMLInputElement).value)}
             ></InputBox>
             <InputBox
+              isPassword={true}
               isSearch={false}
               placeholder="비밀번호를 입력하세요."
               width={'100%'}
               height={'80px'}
               fontSize={'20px'}
+              value={password}
+              onChangeHandler={({ target }) => setPassword((target as HTMLInputElement).value)}
             ></InputBox>
             <Button
               width={'560px'}
