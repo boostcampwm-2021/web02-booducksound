@@ -1,10 +1,15 @@
+import { useState } from 'react';
+
 import styled from '@emotion/styled';
+import { useSelector } from 'react-redux';
 
 import GlassContainer from '~/atoms/GlassContainer';
+import useSocket from '~/hooks/useSocket';
 import CharacterList from '~/molecules/CharacterList';
 import ChatList from '~/molecules/ChatList';
+import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
-
+import { SocketEvents } from '~/types/SocketEvents';
 interface Props {
   type: 'leftTitle' | 'rightTitle' | 'leftCharacter' | 'rightChat';
 }
@@ -52,6 +57,13 @@ const InputBox = styled.input`
 `;
 
 const GameRoomContainer = () => {
+  const socket = useSocket();
+  const { uuid } = useSelector((state: RootState) => state.room);
+  const userInfo = useSelector((state: any) => state.user);
+  const [text, setText] = useState<string>('');
+  const send = () => {
+    socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text);
+  };
   return (
     <Wrapper>
       <Container type={'leftTitle'}>
@@ -64,7 +76,7 @@ const GameRoomContainer = () => {
       <Container type={'rightChat'}>
         <ChatList />
       </Container>
-      <InputBox placeholder={'메세지를 입력해주세요.'} />
+      <InputBox placeholder={'메세지를 입력해주세요.'} onChange={(e) => setText(e.target.value)} onClick={send} />
     </Wrapper>
   );
 };
