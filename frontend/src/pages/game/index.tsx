@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { MutableRefObject, ReactEventHandler, useEffect, useRef, useState } from 'react';
 
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
@@ -113,12 +113,18 @@ const Game: NextPage = () => {
     socket.emit(SocketEvents.LEAVE_ROOM, uuid);
   });
 
+  const handleAudioEnded: ReactEventHandler<HTMLAudioElement> = (e) => {
+    const audio = e.target as HTMLAudioElement;
+    audio.currentTime = 0;
+    audio.play();
+  };
+
   return (
     <Container>
       <GameRoomNav player={player} />
       <GameRoomContainer players={players} />
-      <audio ref={music1} controls loop preload="none" />
-      <audio ref={music2} controls loop preload="none" />
+      <audio ref={music1} controls loop preload="none" onDurationChange={handleAudioEnded} />
+      <audio ref={music2} controls loop preload="none" onDurationChange={handleAudioEnded} />
       <button
         onClick={() => {
           socket?.emit(SocketEvents.START_GAME);
