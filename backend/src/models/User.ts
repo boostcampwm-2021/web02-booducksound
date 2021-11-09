@@ -1,10 +1,6 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import mongoose, { NativeError } from 'mongoose';
 
-require('dotenv').config();
-
-const SECRET_KEY: string = process.env.JWT_SECRET || '';
 const SALT_ROUNDS = 10;
 const Schema = mongoose.Schema;
 
@@ -59,9 +55,11 @@ UserSchema.pre('save', async function (next) {
 UserSchema.pre('updateOne', async function (next) {
   try {
     const user: any = this.getUpdate();
-    const salt = await bcrypt.genSalt(SALT_ROUNDS);
-    const hash = await bcrypt.hash(user.password, salt);
-    user.password = hash;
+    if (user.password) {
+      const salt = await bcrypt.genSalt(SALT_ROUNDS);
+      const hash = await bcrypt.hash(user.password, salt);
+      user.password = hash;
+    }
     next();
   } catch (err) {
     if (err instanceof NativeError) {

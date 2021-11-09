@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import JSX, { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
@@ -6,12 +6,14 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
 import { requestLogout } from '~/api/account';
-import { changeColor } from '~/api/user';
+import { changeColor, deleteLikes } from '~/api/user';
 import Button from '~/atoms/Button';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import ProfileSelector from '~/atoms/ProfileSelector';
+import { PLAYLIST_EMPTY_MSG } from '~/constants/index';
 import theme from '~/styles/theme';
+import Playlist from '~/types/Playlist';
 
 interface Props {
   num: number;
@@ -24,13 +26,6 @@ const MyPageContainer = styled.div`
 
   @media (max-width: 768px) {
     a > button {
-      width: calc(100% - 2rem);
-    }
-  }
-
-  @media (max-width: 480px) {
-    a > button {
-      width: 90%;
     }
   }
 `;
@@ -57,7 +52,7 @@ const ProfileBtnBox = styled.div`
     button {
       padding: 8px 0;
       font-size: 0.8rem;
-      width: 120px;
+      width: 90%;
       display: block;
       margin: 0 auto 0.4rem auto;
     }
@@ -111,6 +106,7 @@ const UserInfo = styled.div`
 
 const PlayListTable = styled.table`
   margin: 0;
+  width: 100%;
 
   > li {
     .play-title {
@@ -119,7 +115,7 @@ const PlayListTable = styled.table`
     }
   }
 
-  tr {
+  tr:not(.no-result) {
     &:not(:last-child) {
       border-bottom: 1px solid ${theme.colors.gray};
     }
@@ -155,10 +151,72 @@ const BoxTitle = styled.h2<Props>`
   }
 `;
 
+const EmptyPlayList = styled.tr`
+  border: 1px solid ${theme.colors.gray};
+  border-width: 1px 0 1px 0;
+  color: ${theme.colors.gray};
+
+  > td {
+    padding: 8rem 0 !important;
+  }
+`;
+
+const handleUserMenu = (id: string, dom: JSX.ReactElement) => {
+  if (id) return dom;
+};
+
+const updatePlaylist = () => {};
+const deletePlaylist = () => {};
+const deleteLikeslist = ({ target }: any) => {
+  const { writer: id, id: _id } = target?.parentElement?.closest('tr').dataset;
+  deleteLikes(id, _id);
+};
+const drawMyPlaylist = (myPlaylist: Array<any>, isMine: boolean = false) => {
+  if (myPlaylist.length) {
+    return myPlaylist?.map((e) => {
+      return (
+        <tr key={e._id} data-id={e._id} data-writer={e.userId}>
+          <td>
+            <PlayTitle>{e.playlistName}</PlayTitle>
+          </td>
+          <td>
+            <TableBtnBox>
+              {isMine && (
+                <Button
+                  content={'수정'}
+                  background={theme.colors.sky}
+                  fontSize={'14px'}
+                  paddingH={'8px'}
+                  width={'100px'}
+                  onClick={updatePlaylist}
+                ></Button>
+              )}
+              <Button
+                content={'삭제'}
+                background={theme.colors.peach}
+                fontSize={'14px'}
+                paddingH={'8px'}
+                width={'100px'}
+                onClick={isMine ? deletePlaylist : deleteLikeslist}
+              ></Button>
+            </TableBtnBox>
+          </td>
+        </tr>
+      );
+    });
+  } else {
+    return (
+      <EmptyPlayList className="no-result">
+        <td colSpan={2}>{PLAYLIST_EMPTY_MSG}</td>
+      </EmptyPlayList>
+    );
+  }
+};
+
 const MyPage: NextPage = () => {
   const [color, setColor] = useState('fff');
   const userInfo = useSelector((state: any) => state.user);
-  const { id, nickname, color: userColor, likes, myPlaylist } = userInfo;
+  const { id, nickname, color: userColor, likes, myPlaylist } = userInfo || {};
   const changeBooduckColor = (newColor: string) => {
     setColor(() => {
       changeColor(id, newColor);
@@ -166,6 +224,7 @@ const MyPage: NextPage = () => {
       return newColor;
     });
   };
+
   useEffect(() => {
     setColor(userColor);
   }, [userColor]);
@@ -179,12 +238,13 @@ const MyPage: NextPage = () => {
             <UserInfoBox>
               <ProfileSelector type="mypage" color={color} setColor={changeBooduckColor}></ProfileSelector>
               <UserInfo>
-                <p className="user-name">{userInfo.nickname}</p>
-                <p className="user-id">{userInfo.id || '비회원'}</p>
+                <p className="user-name">{nickname}</p>
+                <p className="user-id">{id || '비회원'}</p>
               </UserInfo>
             </UserInfoBox>
             <ProfileBtnBox>
-              {!!id && (
+              {handleUserMenu(
+                id,
                 <Link href="/findPwd">
                   <a>
                     <Button
@@ -195,7 +255,7 @@ const MyPage: NextPage = () => {
                       width={'160px'}
                     ></Button>
                   </a>
-                </Link>
+                </Link>,
               )}
               <Button
                 content={'로그아웃'}
@@ -207,47 +267,26 @@ const MyPage: NextPage = () => {
               ></Button>
             </ProfileBtnBox>
           </ProfileBox>
-          {!!id && (
+          {handleUserMenu(
+            id,
             <>
-              <BoxTitle num={5}>내가 작성한 플레이리스트</BoxTitle>
+              <BoxTitle num={myPlaylist?.length}>내가 작성한 플레이리스트</BoxTitle>
               <PlayListTable>
                 <colgroup>
                   <col width="100%" />
                   <col width="*" />
                 </colgroup>
-                <tbody>
-                  {Array(5)
-                    .fill(null)
-                    .map((_, i) => {
-                      return (
-                        <tr key={i}>
-                          <td>
-                            <PlayTitle>플레이리스트 {i + 1}</PlayTitle>
-                          </td>
-                          <td>
-                            <TableBtnBox>
-                              <Button
-                                content={'수정'}
-                                background={theme.colors.sky}
-                                fontSize={'14px'}
-                                paddingH={'8px'}
-                                width={'100px'}
-                              ></Button>
-                              <Button
-                                content={'삭제'}
-                                background={theme.colors.peach}
-                                fontSize={'14px'}
-                                paddingH={'8px'}
-                                width={'100px'}
-                              ></Button>
-                            </TableBtnBox>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
+                <tbody>{myPlaylist && drawMyPlaylist(myPlaylist, true)}</tbody>
               </PlayListTable>
-            </>
+              <BoxTitle num={likes?.length}>내가 좋아요한 플레이리스트</BoxTitle>
+              <PlayListTable>
+                <colgroup>
+                  <col width="100%" />
+                  <col width="*" />
+                </colgroup>
+                <tbody>{likes && drawMyPlaylist(likes)}</tbody>
+              </PlayListTable>
+            </>,
           )}
         </MyPageContainer>
       </PageBox>
