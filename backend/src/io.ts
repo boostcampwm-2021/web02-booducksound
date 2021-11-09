@@ -92,6 +92,14 @@ io.on('connection', (socket) => {
     socket.on('disconnecting', () => {
       leaveRoom(uuid);
     });
+
+    socket.on(SocketEvents.START_GAME, () => {
+      io.to(uuid).emit(SocketEvents.START_GAME);
+    });
+
+    socket.on(SocketEvents.NEXT_ROUND, () => {
+      io.to(uuid).emit(SocketEvents.NEXT_ROUND);
+    });
   });
 
   socket.on(SocketEvents.SET_GAME_ROOM, (uuid: string, player: Player) => {
