@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 
 import CharacterProfile from '~/molecules/CharacterProfile';
 import theme from '~/styles/theme';
+import { Player } from '~/types/Player';
 
 const Title = styled.p`
   margin-right: auto;
@@ -19,13 +20,8 @@ const Container = styled.div`
     justify-content: space-between;
   }
 `;
-interface props {
-  color: string;
-  nickname: string;
-  status: 'king' | 'ready' | 'prepare';
-}
 
-const CharacterList = ({ data }: { data: props[] }) => {
+const CharacterList = ({ players }: { players: { [socketId: string]: Player } }) => {
   // const dummy: props[] = [
   //   { color: 'ff', name: 'max', status: 'king' },
   //   { color: 'dwff', name: 'john', status: 'ready' },
@@ -41,7 +37,7 @@ const CharacterList = ({ data }: { data: props[] }) => {
     <>
       <Title>사용자 목록</Title>
       <Container>
-        {data.map((element, index) => (
+        {Object.values(players).map((element, index) => (
           <CharacterProfile key={index} color={element.color} name={element.nickname} status={element.status} />
         ))}
       </Container>

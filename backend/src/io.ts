@@ -61,18 +61,18 @@ io.on('connection', (socket) => {
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
 
     socket.on('disconnecting', () => {
+      const isKing = serverRooms[uuid].players[socket.id].status === 'king';
       socket.leave(uuid);
       delete serverRooms[uuid].players[socket.id];
-
-      if (serverRooms[uuid].players[socket.id].status === 'king') {
-        delete serverRooms[uuid].players[socket.id];
-        serverRooms[uuid].players[Object.keys(serverRooms[uuid].players)[0]].status = 'king';
-      }
 
       if (!Object.keys(serverRooms[uuid].players).length) {
         delete serverRooms[uuid];
         io.emit(SocketEvents.DELETE_LOBBY_ROOM, uuid);
         return;
+      }
+
+      if (isKing) {
+        serverRooms[uuid].players[Object.keys(serverRooms[uuid].players)[0]].status = 'king';
       }
 
       delete serverRooms[uuid].players[socket.id];
@@ -84,17 +84,18 @@ io.on('connection', (socket) => {
   });
 
   socket.on(SocketEvents.LEAVE_ROOM, (uuid: string, data: Player) => {
+    const isKing = serverRooms[uuid].players[socket.id].status === 'king';
     socket.leave(uuid);
-
-    if (serverRooms[uuid].players[socket.id].status === 'king') {
-      delete serverRooms[uuid].players[socket.id];
-      serverRooms[uuid].players[Object.keys(serverRooms[uuid].players)[0]].status = 'king';
-    }
+    delete serverRooms[uuid].players[socket.id];
 
     if (!Object.keys(serverRooms[uuid].players).length) {
       delete serverRooms[uuid];
       io.emit(SocketEvents.DELETE_LOBBY_ROOM, uuid);
       return;
+    }
+
+    if (isKing) {
+      serverRooms[uuid].players[Object.keys(serverRooms[uuid].players)[0]].status = 'king';
     }
 
     delete serverRooms[uuid].players[socket.id];

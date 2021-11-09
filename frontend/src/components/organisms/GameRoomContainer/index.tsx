@@ -5,10 +5,12 @@ import { useSelector } from 'react-redux';
 
 import GlassContainer from '~/atoms/GlassContainer';
 import useSocket from '~/hooks/useSocket';
+import useSocketOn from '~/hooks/useSocketOn';
 import CharacterList from '~/molecules/CharacterList';
 import ChatList from '~/molecules/ChatList';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
+import { Player } from '~/types/Player';
 import { SocketEvents } from '~/types/SocketEvents';
 interface Props {
   type: 'leftTitle' | 'rightTitle' | 'leftCharacter' | 'rightChat';
@@ -58,7 +60,7 @@ const InputBox = styled.input`
 
 const GameRoomContainer = () => {
   const socket = useSocket();
-  const [players, setPlayers] = useState([]);
+  const [players, setPlayers] = useState<{ [socketId: string]: Player }>({});
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: any) => state.user);
   const [text, setText] = useState<string>('');
@@ -69,12 +71,10 @@ const GameRoomContainer = () => {
     }
   };
 
-  useEffect(() => {
-    socket?.on(SocketEvents.UPDATE_ROOM, ({ players }) => {
-      setPlayers(players);
-      console.log(players);
-    });
-  }, []);
+  useSocketOn(SocketEvents.SET_GAME_ROOM, ({ players }) => {
+    setPlayers(players);
+    console.log(players);
+  });
 
   return (
     <Wrapper>
@@ -82,7 +82,7 @@ const GameRoomContainer = () => {
         <RoomStateTitle>대기중 입니다.</RoomStateTitle>
       </Container>
       <Container type={'leftCharacter'}>
-        <CharacterList data={players} />
+        <CharacterList players={players} />
       </Container>
       <Container type={'rightTitle'}>대기중 입니다.</Container>
       <Container type={'rightChat'}>
