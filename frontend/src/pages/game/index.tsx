@@ -52,8 +52,8 @@ const Game: NextPage = () => {
     userInfo,
     ({ type, message, gameRoom }: { type: string; message: string; gameRoom: GameRoom }) => {
       if (type === 'fail') {
-        // TODO : window.alert이 아니라 모달으로 에러 message를 띄우도록 할 것
-        window.alert(message);
+        // // TODO : window.alert이 아니라 모달으로 에러 message를 띄우도록 할 것
+        // window.alert(message);
         router.push('/lobby');
       }
 
@@ -67,7 +67,15 @@ const Game: NextPage = () => {
 
     curMusic.current = music1.current;
     nextMusic.current = music2.current;
-    curMusic.current.play();
+
+    curMusic.current.src = `${BACKEND_URL}/game/${uuid}/init`;
+    nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
+
+    const playPromise = curMusic.current.play();
+
+    playPromise.then(() => {
+      curMusic.current?.play();
+    });
   });
 
   useSocketOn(SocketEvents.NEXT_ROUND, () => {
@@ -78,9 +86,18 @@ const Game: NextPage = () => {
     curMusic.current.pause();
     curMusic.current = nextMusic.current;
     nextMusic.current = temp;
-    curMusic.current.play();
 
-    nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/3`; // TODO : roundNum으로 변경할 것
+    const playPromise = curMusic.current.play();
+
+    playPromise.then(() => {
+      curMusic.current?.play();
+    });
+
+    nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
+  });
+
+  useSocketOn(SocketEvents.GAME_END, () => {
+    window.alert('마지막 라운드에 다다랐습니다. GAME_END');
   });
 
   useSocketOn(SocketEvents.SET_GAME_ROOM, ({ players }) => {
@@ -100,8 +117,8 @@ const Game: NextPage = () => {
     <Container>
       <GameRoomNav player={player} />
       <GameRoomContainer players={players} />
-      <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/0`} controls loop />
-      <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/1`} controls loop />
+      <audio ref={music1} controls loop />
+      <audio ref={music2} controls loop />
       <button
         onClick={() => {
           socket?.emit(SocketEvents.START_GAME);
