@@ -15,7 +15,6 @@ export type ServerRoom = {
   // 게임 진행 중(status === playing)에만 존재하는 데이터
   musics: { youtubeId: string; answers: string[]; hint: string }[];
   streams: PassThrough[];
-  // streams: ReadStream[];
   curRound: number;
   maxRound: number;
   skipCount: number;
