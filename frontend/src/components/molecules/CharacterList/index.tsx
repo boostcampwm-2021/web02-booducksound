@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import styled from '@emotion/styled';
 
 import CharacterProfile from '~/molecules/CharacterProfile';
@@ -19,27 +21,28 @@ const Container = styled.div`
 `;
 interface props {
   color: string;
-  name: string;
+  nickname: string;
   status: 'king' | 'ready' | 'prepare';
 }
 
-const CharacterList = () => {
-  const dummy: props[] = [
-    { color: 'ff', name: 'max', status: 'king' },
-    { color: 'dwff', name: 'john', status: 'ready' },
-    { color: 'dw1121', name: 'ben', status: 'prepare' },
-    { color: '234def', name: 'dd', status: 'ready' },
-    { color: '234def', name: 'dd', status: 'ready' },
-    { color: '234def', name: 'dd', status: 'ready' },
-    { color: '234def', name: 'dd', status: 'ready' },
-    { color: '234def', name: 'dd', status: 'ready' },
-  ];
+const CharacterList = ({ data }: { data: props[] }) => {
+  // const dummy: props[] = [
+  //   { color: 'ff', name: 'max', status: 'king' },
+  //   { color: 'dwff', name: 'john', status: 'ready' },
+  //   { color: 'dw1121', name: 'ben', status: 'prepare' },
+  //   { color: '234def', name: 'dd', status: 'ready' },
+  //   { color: '234def', name: 'dd', status: 'ready' },
+  //   { color: '234def', name: 'dd', status: 'ready' },
+  //   { color: '234def', name: 'dd', status: 'ready' },
+  //   { color: '234def', name: 'dd', status: 'ready' },
+  // ];
+
   return (
     <>
       <Title>사용자 목록</Title>
       <Container>
-        {dummy.map((element, index) => (
-          <CharacterProfile key={index} color={element.color} name={element.name} status={element.status} />
+        {data.map((element, index) => (
+          <CharacterProfile key={index} color={element.color} name={element.nickname} status={element.status} />
         ))}
       </Container>
     </>

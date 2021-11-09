@@ -35,7 +35,7 @@ io.on('connection', (socket) => {
     const { title, playListId, password, skip, timePerProblem } = room;
 
     const uuid = short.generate();
-    const players: Player[] = [{ socketId: socket.id, nickname: 'TODO: 닉네임 설정' }];
+    const players: Player[] = [];
 
     const serverRoom: ServerRoom = {
       title,
@@ -65,12 +65,18 @@ io.on('connection', (socket) => {
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
   });
 
-  socket.on(SocketEvents.JOIN_ROOM, (uuid: string, nickname: string, done) => {
+  socket.on(SocketEvents.JOIN_ROOM, (uuid: string, data: Player, done) => {
     if (!serverRooms[uuid]) {
       done({ type: 'fail', messsage: '존재 하지 않는 방입니다' });
       return;
     }
     socket.join(uuid);
+    serverRooms[uuid].players.push({
+      socketId: socket.id,
+      nickname: data.nickname,
+      color: data.color,
+      status: serverRooms[uuid].players.length === 0 ? 'king' : 'prepare',
+    });
     const serverRoom = serverRooms[uuid];
 
     const gameRoom: GameRoom = {
@@ -82,9 +88,18 @@ io.on('connection', (socket) => {
       timePerProblem: serverRoom.timePerProblem,
       title: serverRoom.title,
     };
-    io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name: nickname, text: '', status: 'alert' });
+    io.to(uuid).emit(SocketEvents.UPDATE_ROOM, { players: serverRoom.players });
+    io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name: data.nickname, text: '', status: 'alert' });
     done({ type: 'success', gameRoom });
   });
+
+  socket.on(SocketEvents.LEAVE_ROOM, (uuid: string, data: Player) => {
+    serverRooms[uuid].players = serverRooms[uuid].players.filter((element) => element.nickname !== data.nickname);
+    serverRooms[uuid].players[0].nickname !== data.nickname ? (serverRooms[uuid].players[0].status = 'king') : null;
+    socket.leave(uuid);
+    io.to(uuid).emit(SocketEvents.UPDATE_ROOM, { players: serverRooms[uuid].players });
+  });
+
   socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string) => {
     io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message' });
   });
