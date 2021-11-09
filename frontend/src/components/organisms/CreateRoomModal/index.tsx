@@ -60,22 +60,39 @@ interface Props {
   leftButtonText: string;
 }
 
+interface Form {
+  title: string;
+  playlistName: string;
+  playlistId: string;
+  password: string;
+  skip: number;
+  timePerProblem: number;
+}
+
 const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
   const socket = useSocket();
   const dispatch = useDispatch();
 
-  const [title, setTitle] = useState('');
-  const [playlistName, setPlaylistName] = useState<string>('');
-  const [playListId, setPlayListId] = useState<string>('');
-  const [password, setPassword] = useState('');
-  const [skip, setSkip] = useState(5);
-  const [timePerProblem, setTimePerProblem] = useState(60);
+  const [form, setForm] = useState({
+    title: '',
+    playlistName: '',
+    playlistId: '',
+    password: '',
+    skip: 5,
+    timePerProblem: 60,
+  });
 
+  const [leftButtonDisabled, setLeftButtonDisabled] = useState(true);
   const [playlistModalOnOff, setPlaylistModalOnOff] = useState(false);
 
   const handleTitleChange: ChangeEventHandler = (e) => {
     const title = (e.target as HTMLInputElement).value;
-    setTitle(title);
+
+    setForm((prev) => {
+      const form = { ...prev, title };
+      validateForm(form);
+      return form;
+    });
   };
 
   const handleSelectPlaylistBtn: MouseEventHandler = () => {
@@ -84,28 +101,26 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
 
   const handlePasswordChange: ChangeEventHandler = (e) => {
     const password = (e.target as HTMLInputElement).value;
-    setPassword(password);
+    setForm((form) => ({ ...form, password }));
   };
 
   const handleSkipChange: ChangeEventHandler = (e) => {
     const skipStr = (e.target as HTMLSelectElement).value;
-    const skipNum = Number(skipStr.replace(/[^0-9]/g, ''));
-    setSkip(skipNum);
+    const skip = Number(skipStr.replace(/[^0-9]/g, ''));
+    setForm((form) => ({ ...form, skip }));
   };
 
   const hanldeTimePerProlbemChange: ChangeEventHandler = (e) => {
     const timePerProblemStr = (e.target as HTMLSelectElement).value;
-    const timePerProblemNum = Number(timePerProblemStr.replace(/[^0-9]/g, ''));
-    setTimePerProblem(timePerProblemNum);
+    const timePerProblem = Number(timePerProblemStr.replace(/[^0-9]/g, ''));
+    setForm((form) => ({ ...form, timePerProblem }));
   };
 
   const handleCreateRoomBtn: MouseEventHandler = () => {
     if (socket === null) return;
+    if (!validateForm) return;
 
-    const room = { title, playListId, password, skip, timePerProblem };
-    // TODO: title, playlistId 이 정의되지 않았을 경우 골라달라는 경고창과 함께 return 할 것
-
-    (socket as Socket).emit(SocketEvents.CREATE_ROOM, room, (uuid: string) => {
+    (socket as Socket).emit(SocketEvents.CREATE_ROOM, form, (uuid: string) => {
       setModalOnOff(false);
       dispatch({ type: RoomActions.SET_UUID, payload: { uuid } });
       Router.push(`/game`);
@@ -116,6 +131,16 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
     setModalOnOff(false);
   };
 
+  const validateForm = (form: Form) => {
+    if (!form.title || !form.playlistId) {
+      setLeftButtonDisabled(true);
+      return false;
+    }
+
+    setLeftButtonDisabled(false);
+    return true;
+  };
+
   return (
     <Modal
       height="480px"
@@ -123,6 +148,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
       leftButtonText={leftButtonText}
       leftButtonHandler={handleCreateRoomBtn}
       rightButtonHandler={handleNoBtn}
+      leftButtonDisabled={leftButtonDisabled}
     >
       <Container>
         <InputSection
@@ -136,7 +162,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
           margin="8px"
           isSearch={false}
           paddingW="20px"
-          value={title}
+          value={form.title}
           onChangeHandler={handleTitleChange}
         />
         <SelectPlaylistContainer>
@@ -155,15 +181,11 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
             btnHeight="38px"
             inputPaddingW="20px"
             inputDisabled={true}
-            value={playlistName}
+            value={form.playlistName}
             onClick={handleSelectPlaylistBtn}
           />
           {playlistModalOnOff && (
-            <SelectPlaylistModal
-              setModalOnOff={setPlaylistModalOnOff}
-              setPlaylistId={setPlayListId}
-              setPlaylistName={setPlaylistName}
-            />
+            <SelectPlaylistModal setModalOnOff={setPlaylistModalOnOff} setForm={setForm} validateForm={validateForm} />
           )}
         </SelectPlaylistContainer>
         <InputSection
@@ -177,7 +199,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
           margin="8px"
           isSearch={false}
           paddingW="20px"
-          value={password}
+          value={form.password}
           onChangeHandler={handlePasswordChange}
         />
         <HalfContainer>

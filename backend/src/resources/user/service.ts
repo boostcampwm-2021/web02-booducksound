@@ -1,4 +1,4 @@
-import Playlist from '../../models/PlayList';
+import Playlist from '../../models/Playlist';
 import User from '../../models/User';
 
 const changeColor = async (id: string, color: string) => {
