@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 
+import UserService from '../user/service';
+
 import PlaylistService from './service';
 
 const Playlist = {
@@ -11,8 +13,9 @@ const Playlist = {
   // },
   register: async (req: Request, res: Response) => {
     try {
-      const result = await PlaylistService.add(req.body);
-      res.json({ status: 'SUCCESS', result });
+      const playlist = await PlaylistService.add(req.body);
+      await UserService.postMyPlaylist(req.body.userId, playlist._id);
+      res.json({ status: 'SUCCESS', playlist });
     } catch (e) {
       res.json({ status: 'FAILED', error: e });
     }

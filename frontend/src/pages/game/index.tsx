@@ -5,6 +5,7 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
+import { useLeavePage } from '~/hooks/useLeavePage';
 import useSocket from '~/hooks/useSocket';
 import useSocketEmit from '~/hooks/useSocketEmit';
 import useSocketOn from '~/hooks/useSocketOn';
@@ -27,7 +28,8 @@ const Game: NextPage = () => {
   const [players, setPlayers] = useState<{ [socketId: string]: Player }>({});
   const [player, setPlayer] = useState<Player>({ nickname: '', color: '', status: 'prepare' });
   const { uuid } = useSelector((state: RootState) => state.room);
-  const userInfo = useSelector((state: any) => state.user);
+  const userInfo = useSelector((state: RootState) => state.user);
+  const socket = useSocket();
   const router = useRouter();
   const socket = useSocket();
 
@@ -61,6 +63,11 @@ const Game: NextPage = () => {
       setPlayer(players[socket?.id]);
     }
     console.log(players);
+  });
+        
+  useLeavePage(() => {
+    if (!socket) return;
+    socket.emit(SocketEvents.LEAVE_ROOM, uuid);
   });
 
   return (
