@@ -144,10 +144,6 @@ const getUserInfo = async (id: string) => {
   return result;
 };
 
-const changeColor = async (id: string, color: string) => {
-  await User.update({ id }, { color });
-};
-
 export default {
   idCheck,
   createUserToken,
@@ -159,5 +155,4 @@ export default {
   checkChangePasswordAvailable,
   changePassword,
   getUserInfo,
-  changeColor,
 };

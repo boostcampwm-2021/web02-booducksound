@@ -11,6 +11,5 @@ router.post('/signIn', UserController.signIn);
 router.post('/signUp', UserController.signUp);
 router.post('/guestSignIn', UserController.guestSignIn);
 router.get('/logOut', UserController.logOut);
-router.post('/changeColor', UserController.changeColor);
 
 export default router;

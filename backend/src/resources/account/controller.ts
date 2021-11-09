@@ -67,12 +67,6 @@ const logOut = (req: Request, res: Response) => {
   res.sendStatus(200);
 };
 
-const changeColor = async (req: Request, res: Response) => {
-  const { id, color }: { id: string; color: string } = req.body;
-  await UserService.changeColor(id, color);
-  res.sendStatus(200);
-};
-
 export default {
   checkId,
   checkLogin,
@@ -81,5 +75,4 @@ export default {
   signUp,
   guestSignIn,
   logOut,
-  changeColor,
 };
