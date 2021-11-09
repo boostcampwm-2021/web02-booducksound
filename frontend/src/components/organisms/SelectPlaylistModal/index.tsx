@@ -54,8 +54,17 @@ const Title = styled.h4`
 
 interface Props {
   setModalOnOff: Dispatch<SetStateAction<boolean>>;
-  setPlaylistId: Dispatch<SetStateAction<string>>;
-  setPlaylistName: Dispatch<SetStateAction<string>>;
+  setForm: Dispatch<
+    SetStateAction<{
+      title: string;
+      playlistName: string;
+      playlistId: string;
+      password: string;
+      skip: number;
+      timePerProblem: number;
+    }>
+  >;
+  validateForm: Function;
 }
 
 const playlists = [
@@ -110,7 +119,7 @@ const playlists = [
   },
 ];
 
-const SelectPlaylistModal = ({ setModalOnOff, setPlaylistId, setPlaylistName }: Props) => {
+const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) => {
   const [search, setSearch] = useState('');
 
   const handleSelectPlaylistClick: MouseEventHandler = (e) => {
@@ -122,8 +131,11 @@ const SelectPlaylistModal = ({ setModalOnOff, setPlaylistId, setPlaylistName }: 
 
     const playlistId = li.dataset.playlistId as string;
     const playlistName = li.dataset.playlistName as string;
-    setPlaylistId(playlistId);
-    setPlaylistName(playlistName);
+    setForm((prev) => {
+      const form = { ...prev, playlistId, playlistName };
+      validateForm(form);
+      return form;
+    });
     setModalOnOff(false);
   };
 

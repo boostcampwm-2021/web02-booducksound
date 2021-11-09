@@ -30,6 +30,11 @@ const ButtonContainer = styled.button<ButtonContainerProps>`
     filter: brightness(0.9);
   }
 
+  &:disabled {
+    filter: none;
+    cursor: auto;
+  }
+
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     border: 1px solid ${({ theme }) => theme.colors.black};
     box-shadow: 3px 1px 0 ${({ theme }) => theme.colors.black};
@@ -44,9 +49,10 @@ interface Props {
   paddingH?: string;
   content: string;
   onClick?: MouseEventHandler;
+  disabled?: boolean;
 }
 
-const Button = ({ width, height, background, fontSize, paddingH, content, onClick }: Props) => {
+const Button = ({ width, height, background, fontSize, paddingH, content, onClick, disabled }: Props) => {
   return (
     <ButtonContainer
       width={width}
@@ -55,6 +61,7 @@ const Button = ({ width, height, background, fontSize, paddingH, content, onClic
       fontSize={fontSize}
       paddingH={paddingH}
       onClick={onClick}
+      disabled={disabled}
     >
       {content}
     </ButtonContainer>

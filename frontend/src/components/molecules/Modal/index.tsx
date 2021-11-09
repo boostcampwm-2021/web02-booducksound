@@ -61,6 +61,7 @@ interface Props extends ModalContainerProps {
   rightButtonHandler?: MouseEventHandler;
   hasModalBackground?: boolean;
   hasOnlyCancleBtn?: boolean;
+  leftButtonDisabled?: boolean;
 }
 
 const Modal = ({
@@ -73,6 +74,7 @@ const Modal = ({
   rightButtonHandler,
   hasModalBackground = true,
   hasOnlyCancleBtn = false,
+  leftButtonDisabled,
 }: PropsWithChildren<Props>) => {
   return (
     <Portal>
@@ -92,6 +94,7 @@ const Modal = ({
                 background={theme.colors.sky}
                 content={leftButtonText || '확인'}
                 onClick={leftButtonHandler}
+                disabled={leftButtonDisabled}
               />
             )}
             <ResponsiveButton

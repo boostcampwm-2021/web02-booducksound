@@ -21,6 +21,7 @@ interface ResponsiveButtonProps extends ButtonWrapperProps {
   content: string;
   height?: string;
   paddingH?: string;
+  disabled?: boolean;
 }
 
 const ButtonWrapper = styled.div<ButtonWrapperProps>`
@@ -44,11 +45,11 @@ const ButtonWrapper = styled.div<ButtonWrapperProps>`
 `;
 
 const ResponsiveButton = (props: ResponsiveButtonProps) => {
-  const { content, background, height, paddingH } = props;
+  const { content, background, height, paddingH, disabled } = props;
 
   return (
     <ButtonWrapper {...props}>
-      <Button content={content} background={background} height={height} paddingH={paddingH} />
+      <Button content={content} background={background} height={height} paddingH={paddingH} disabled={disabled} />
     </ButtonWrapper>
   );
 };
