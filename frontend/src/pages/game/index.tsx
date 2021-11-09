@@ -5,6 +5,8 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
+import { useLeavePage } from '~/hooks/useLeavePage';
+import useSocket from '~/hooks/useSocket';
 import useSocketEmit from '~/hooks/useSocketEmit';
 import GameRoomContainer from '~/organisms/GameRoomContainer';
 import GameRoomNav from '~/organisms/GameRoomNav';
@@ -23,7 +25,8 @@ const Container = styled.div`
 
 const Game: NextPage = () => {
   const { uuid } = useSelector((state: RootState) => state.room);
-  const userInfo = useSelector((state: any) => state.user);
+  const userInfo = useSelector((state: RootState) => state.user);
+  const socket = useSocket();
   const router = useRouter();
 
   useEffect(() => {
@@ -49,6 +52,11 @@ const Game: NextPage = () => {
       console.log('GameRoom Data :', gameRoom);
     },
   );
+
+  useLeavePage(() => {
+    if (!socket) return;
+    socket.emit(SocketEvents.LEAVE_ROOM, uuid);
+  });
 
   return (
     <Container>

@@ -10,6 +10,30 @@ import { serverRooms, getLobbyRoom, getGameRoom } from './utils/rooms';
 const io = new socketio.Server();
 
 io.on('connection', (socket) => {
+  const leaveRoom = (uuid: string) => {
+    if (!serverRooms[uuid]?.players[socket.id]) return;
+
+    const isKing = serverRooms[uuid].players[socket.id].status === 'king';
+    socket.leave(uuid);
+    delete serverRooms[uuid].players[socket.id];
+
+    if (!Object.keys(serverRooms[uuid].players).length) {
+      delete serverRooms[uuid];
+      io.emit(SocketEvents.DELETE_LOBBY_ROOM, uuid);
+      return;
+    }
+
+    if (isKing) {
+      serverRooms[uuid].players[Object.keys(serverRooms[uuid].players)[0]].status = 'king';
+    }
+
+    delete serverRooms[uuid].players[socket.id];
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, { players: serverRooms[uuid].players });
+
+    const lobbyRoom = getLobbyRoom(uuid);
+    io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+  };
+
   socket.on(SocketEvents.SET_LOBBY_ROOMS, (done) => {
     const lobbyRooms: { [uuid: string]: LobbyRoom } = {};
     Object.keys(serverRooms).forEach((uuid) => {
@@ -66,48 +90,12 @@ io.on('connection', (socket) => {
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
 
     socket.on('disconnecting', () => {
-      const isKing = serverRooms[uuid].players[socket.id].status === 'king';
-      socket.leave(uuid);
-      delete serverRooms[uuid].players[socket.id];
-
-      if (!Object.keys(serverRooms[uuid].players).length) {
-        delete serverRooms[uuid];
-        io.emit(SocketEvents.DELETE_LOBBY_ROOM, uuid);
-        return;
-      }
-
-      if (isKing) {
-        serverRooms[uuid].players[Object.keys(serverRooms[uuid].players)[0]].status = 'king';
-      }
-
-      delete serverRooms[uuid].players[socket.id];
-      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, { players: serverRooms[uuid].players });
-
-      const lobbyRoom = getLobbyRoom(uuid);
-      io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+      leaveRoom(uuid);
     });
   });
 
-  socket.on(SocketEvents.LEAVE_ROOM, (uuid: string, data: Player) => {
-    const isKing = serverRooms[uuid].players[socket.id].status === 'king';
-    socket.leave(uuid);
-    delete serverRooms[uuid].players[socket.id];
-
-    if (!Object.keys(serverRooms[uuid].players).length) {
-      delete serverRooms[uuid];
-      io.emit(SocketEvents.DELETE_LOBBY_ROOM, uuid);
-      return;
-    }
-
-    if (isKing) {
-      serverRooms[uuid].players[Object.keys(serverRooms[uuid].players)[0]].status = 'king';
-    }
-
-    delete serverRooms[uuid].players[socket.id];
-    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, { players: serverRooms[uuid].players });
-
-    const lobbyRoom = getLobbyRoom(uuid);
-    io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+  socket.on(SocketEvents.LEAVE_ROOM, (uuid: string) => {
+    leaveRoom(uuid);
   });
 
   socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string) => {
