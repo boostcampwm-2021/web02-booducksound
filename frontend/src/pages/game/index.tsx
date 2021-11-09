@@ -28,6 +28,7 @@ const Container = styled.div`
 const Game: NextPage = () => {
   const [players, setPlayers] = useState<{ [socketId: string]: Player }>({});
   const [player, setPlayer] = useState<Player>({ nickname: '', color: '', status: 'prepare' });
+  const [gameRoom, setGameRoom] = useState<GameRoom>();
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
   const socket = useSocket();
@@ -59,6 +60,7 @@ const Game: NextPage = () => {
 
       // TODO : 받아온 gameRoom 데이터에 따라 화면을 렌더링할 것
       console.log('GameRoom Data :', gameRoom);
+      setGameRoom(gameRoom);
     },
   );
 
@@ -99,7 +101,7 @@ const Game: NextPage = () => {
   return (
     <Container>
       <GameRoomNav player={player} />
-      <GameRoomContainer players={players} />
+      <GameRoomContainer players={players} gameRoom={gameRoom} />
       <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/0`} controls loop />
       <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/1`} controls loop />
       <button
