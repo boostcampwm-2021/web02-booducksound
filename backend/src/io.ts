@@ -93,6 +93,12 @@ io.on('connection', (socket) => {
     done({ type: 'success', gameRoom });
   });
 
+  socket.on(SocketEvents.LEAVE_ROOM, (uuid: string, data: Player, done) => {
+    serverRooms[uuid].players = serverRooms[uuid].players.filter((element) => element.nickname !== data.nickname);
+    io.to(uuid).emit(SocketEvents.UPDATE_ROOM, { players: serverRooms[uuid].players });
+    done({ type: 'success', message: '성공적으로 방을 나갔습니다.' });
+  });
+
   socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string) => {
     io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message' });
   });
