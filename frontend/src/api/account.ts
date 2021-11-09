@@ -16,14 +16,16 @@ export const handleLoginUser = () => {
 };
 
 export const getUserInfo = async () => {
-  return await fetch(`${BACKEND_URL}/checkLogin`, {
+  const res = await fetch(`${BACKEND_URL}/checkLogin`, {
     method: 'GET',
+    headers,
     credentials: 'include',
-  }).then((res) => res.json());
+  });
+  return res.json();
 };
 
 export const requestLogin = async (id: string, password: string) => {
-  return await fetch(`${BACKEND_URL}/signIn`, {
+  const res = await fetch(`${BACKEND_URL}/signIn`, {
     method: 'POST',
     headers,
     credentials: 'include',
@@ -31,24 +33,23 @@ export const requestLogin = async (id: string, password: string) => {
       id,
       password,
     }),
-  })
-    .then((res) => res.json())
-    .then(({ isLogin, message }) => {
-      if (isLogin) {
-        Router.push('/lobby');
-      } else alert(message);
-    });
+  }).then((res) => res.json());
+  const { isLogin, message } = res;
+  if (isLogin) {
+    Router.push('/lobby');
+  } else alert(message);
 };
 
 export const requestLogout = () => {
   fetch(`${BACKEND_URL}/logOut`, {
     method: 'GET',
+    headers,
     credentials: 'include',
   }).then(handleLoginUser);
 };
 
 export const requestChangePassword = async (id: string, nickname: string, password: string) => {
-  return await fetch(`${BACKEND_URL}/resetPwd`, {
+  const res = await fetch(`${BACKEND_URL}/resetPwd`, {
     method: 'POST',
     headers,
     credentials: 'include',
@@ -57,16 +58,14 @@ export const requestChangePassword = async (id: string, nickname: string, passwo
       nickname,
       password,
     }),
-  })
-    .then((res) => res.json())
-    .then(({ isChange, message }) => {
-      alert(message);
-      if (isChange) history.back();
-    });
+  }).then((res) => res.json());
+  const { isChange, message } = res;
+  alert(message);
+  if (isChange) history.back();
 };
 
 export const requestEnter = async (nickname: string, color: string) => {
-  return await fetch(`${BACKEND_URL}/guestSignIn`, {
+  const res = await fetch(`${BACKEND_URL}/guestSignIn`, {
     method: 'POST',
     headers,
     credentials: 'include',
@@ -74,17 +73,15 @@ export const requestEnter = async (nickname: string, color: string) => {
       nickname,
       color,
     }),
-  })
-    .then((res) => res.json())
-    .then(({ isLogin, message }) => {
-      if (isLogin) {
-        Router.push('/lobby');
-      } else alert(message);
-    });
+  }).then((res) => res.json());
+  const { isLogin, message } = res;
+  if (isLogin) {
+    Router.push('/lobby');
+  } else alert(message);
 };
 
 export const requestJoin = async (id: string, password: string, nickname: string, color: string) => {
-  return await fetch(`${BACKEND_URL}/signUp`, {
+  const res = await fetch(`${BACKEND_URL}/signUp`, {
     method: 'POST',
     headers,
     credentials: 'include',
@@ -94,11 +91,9 @@ export const requestJoin = async (id: string, password: string, nickname: string
       nickname,
       color,
     }),
-  })
-    .then((res) => res.json())
-    .then(({ isLogin, message }) => {
-      if (isLogin) {
-        Router.push('/lobby');
-      } else alert(message);
-    });
+  }).then((res) => res.json());
+  const { isLogin, message } = res;
+  if (isLogin) {
+    Router.push('/lobby');
+  } else alert(message);
 };
