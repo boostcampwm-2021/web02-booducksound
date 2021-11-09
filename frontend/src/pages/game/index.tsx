@@ -82,7 +82,7 @@ const Game: NextPage = () => {
 
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/3`; // TODO : roundNum으로 변경할 것
   });
-  
+
   useSocketOn(SocketEvents.SET_GAME_ROOM, ({ players }) => {
     setPlayers(players);
     if (players !== null && socket !== null) {
