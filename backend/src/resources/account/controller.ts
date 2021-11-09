@@ -13,7 +13,10 @@ const checkId = async (req: Request, res: Response) => {
 
 const checkLogin = async (req: Request, res: Response) => {
   const token = req.cookies.token;
-  if (!token) res.json({ decoded: null });
+  if (!token) {
+    res.json({ decoded: null });
+    return;
+  }
   const decoded = UserService.verifyToken(token) as UserToken;
   if (decoded.id) {
     const userInfo = await UserService.getUserInfo(decoded.id);
