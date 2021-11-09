@@ -6,12 +6,13 @@ import Button from '~/atoms/Button';
 import CreatePlaylistMusicItem from '~/molecules/CreatePlaylistMusicItem';
 import theme from '~/styles/theme';
 import { Music } from '~/types/Music';
+import { PlaylistInput } from '~/types/PlaylistInput';
 import { swap } from '~/utils/swap';
 
 interface Props {
   musics: Music[];
   setModalOption: Function;
-  setMusics: Function;
+  setPlaylist: Function;
 }
 
 const MusicListContainer = styled.div``;
@@ -69,7 +70,7 @@ const EmptyBox = styled.div`
   height: 100%;
   color: #ddd;
 `;
-const CreatePlaylistMusicList = ({ musics, setModalOption, setMusics }: PropsWithChildren<Props>) => {
+const CreatePlaylistMusicList = ({ musics, setModalOption, setPlaylist }: PropsWithChildren<Props>) => {
   const [grab, setGrab] = useState<EventTarget>();
 
   const handleDragOver: DragEventHandler = (e) => {
@@ -83,8 +84,10 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setMusics }: PropsWit
   const handleDrop: DragEventHandler = (e) => {
     const grabPosition = Number((grab as HTMLElement).dataset.position);
     const targetPosition = Number((e.target as HTMLElement).dataset.position);
-
-    setMusics((preState: Music[]) => swap<Music>(grabPosition, targetPosition, [...preState]));
+    setPlaylist((preState: PlaylistInput) => {
+      const nextMusics = swap<Music>(grabPosition, targetPosition, [...preState.musics]);
+      return { ...preState, musics: nextMusics };
+    });
   };
   const handleDragEnd: DragEventHandler = (e) => {
     (e.target as HTMLElement).classList.remove('grabbing');
@@ -117,7 +120,7 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setMusics }: PropsWit
               key={idx}
               idx={idx}
               deleteItem={(target: number) =>
-                setMusics((preState: Music[]) => [...preState.filter((music, idx) => idx !== target)])
+                setPlaylist((preState: Music[]) => [...preState.filter((music, idx) => idx !== target)])
               }
               modifyItem={() => setModalOption({ type: 'modify', target: idx })}
               dragHandlers={{

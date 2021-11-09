@@ -22,8 +22,8 @@ const postMyPlaylist = async (userId: string, playlistId: mongoose.Types.ObjectI
   );
 };
 
-const deleteLikes = async (id: string, _id: string) => {
-  await User.updateOne({ id }, { $pull: { likes: _id } });
+const deleteLikes = async (id: string, _id: mongoose.Types.ObjectId) => {
+  await User.findOneAndUpdate({ id }, { $pull: { likes: _id } }, { new: true });
 };
 
 export default {
