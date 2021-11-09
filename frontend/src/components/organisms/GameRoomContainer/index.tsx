@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 
 import GlassContainer from '~/atoms/GlassContainer';
 import useSocket from '~/hooks/useSocket';
-import useSocketOn from '~/hooks/useSocketOn';
 import CharacterList from '~/molecules/CharacterList';
 import ChatList from '~/molecules/ChatList';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
 import { Player } from '~/types/Player';
 import { SocketEvents } from '~/types/SocketEvents';
+
 interface Props {
   type: 'leftTitle' | 'rightTitle' | 'leftCharacter' | 'rightChat';
 }
@@ -58,9 +58,9 @@ const InputBox = styled.input`
   background-color: white;
 `;
 
-const GameRoomContainer = () => {
+const GameRoomContainer = ({ players }: { players: { [socketId: string]: Player } }) => {
   const socket = useSocket();
-  const [players, setPlayers] = useState<{ [socketId: string]: Player }>({});
+
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: any) => state.user);
   const [text, setText] = useState<string>('');
@@ -70,11 +70,6 @@ const GameRoomContainer = () => {
       setText('');
     }
   };
-
-  useSocketOn(SocketEvents.SET_GAME_ROOM, ({ players }) => {
-    setPlayers(players);
-    console.log(players);
-  });
 
   return (
     <Wrapper>
