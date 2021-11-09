@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
+import { BACKEND_URL } from '~/constants/index';
 import { useLeavePage } from '~/hooks/useLeavePage';
 import useSocket from '~/hooks/useSocket';
 import useSocketEmit from '~/hooks/useSocketEmit';
@@ -32,6 +33,11 @@ const Game: NextPage = () => {
   const socket = useSocket();
   const router = useRouter();
 
+  const music1 = useRef<HTMLAudioElement>(null);
+  const music2 = useRef<HTMLAudioElement>(null);
+  const curMusic: MutableRefObject<HTMLAudioElement | null> = useRef<HTMLAudioElement | null>(null);
+  const nextMusic: MutableRefObject<HTMLAudioElement | null> = useRef<HTMLAudioElement | null>(null);
+
   useEffect(() => {
     // TODO : 닉네임, 부덕이 색깔 등이 설정되어 있지 않으면(로그인 하지 않았다면) 설정 페이지로 보낼 것
 
@@ -56,6 +62,27 @@ const Game: NextPage = () => {
     },
   );
 
+  useSocketOn(SocketEvents.START_GAME, () => {
+    if (!music1.current || !music2.current) throw Error('START_GAME에서 audio Element를 찾을 수 없습니다');
+
+    curMusic.current = music1.current;
+    nextMusic.current = music2.current;
+    curMusic.current.play();
+  });
+
+  useSocketOn(SocketEvents.NEXT_ROUND, () => {
+    if (!curMusic.current || !nextMusic.current) throw Error('NEXT_ROUND에서 curMusic, nextMusic을 찾을 수 없습니다');
+
+    const temp = curMusic.current;
+
+    curMusic.current.pause();
+    curMusic.current = nextMusic.current;
+    nextMusic.current = temp;
+    curMusic.current.play();
+
+    nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/3`; // TODO : roundNum으로 변경할 것
+  });
+
   useSocketOn(SocketEvents.SET_GAME_ROOM, ({ players }) => {
     setPlayers(players);
     if (players !== null && socket !== null) {
@@ -73,6 +100,22 @@ const Game: NextPage = () => {
     <Container>
       <GameRoomNav player={player} />
       <GameRoomContainer players={players} />
+      <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/0`} controls loop />
+      <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/1`} controls loop />
+      <button
+        onClick={() => {
+          socket?.emit(SocketEvents.START_GAME);
+        }}
+      >
+        GAME_START
+      </button>
+      <button
+        onClick={() => {
+          socket?.emit(SocketEvents.NEXT_ROUND);
+        }}
+      >
+        NEXT_ROUND
+      </button>
     </Container>
   );
 };
