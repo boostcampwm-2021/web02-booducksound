@@ -2,6 +2,7 @@ import short from 'short-uuid';
 import socketio from 'socket.io';
 
 import { LobbyRoom } from './types/LobbyRoom';
+import { Player } from './types/Player';
 import { ServerRoom } from './types/ServerRoom';
 import { SocketEvents } from './types/SocketEvents';
 import { serverRooms, getLobbyRoom, getGameRoom } from './utils/rooms';
@@ -38,18 +39,24 @@ io.on('connection', (socket) => {
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
   });
 
-  socket.on(SocketEvents.JOIN_ROOM, (uuid: string, nickname: string, done) => {
+  socket.on(SocketEvents.JOIN_ROOM, (uuid: string, player: Player, done) => {
     if (!serverRooms[uuid]) {
       done({ type: 'fail', message: '존재 하지 않는 방입니다' });
       return;
     }
     socket.join(uuid);
 
-    serverRooms[uuid].players = { ...serverRooms[uuid].players, ...{ [socket.id]: { nickname } } };
+    const { nickname, color, status } = player;
+
+    serverRooms[uuid].players = { ...serverRooms[uuid].players, ...{ [socket.id]: { nickname, color, status } } };
     const gameRoom = getGameRoom(uuid);
     const lobbyRoom = getLobbyRoom(uuid);
 
+    const serverRoom = serverRooms[uuid];
+
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, { players: serverRoom.players });
     io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name: nickname, text: '', status: 'alert' });
+
     done({ type: 'success', gameRoom });
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
 
@@ -57,15 +64,44 @@ io.on('connection', (socket) => {
       socket.leave(uuid);
       delete serverRooms[uuid].players[socket.id];
 
+      if (serverRooms[uuid].players[socket.id].status === 'king') {
+        delete serverRooms[uuid].players[socket.id];
+        serverRooms[uuid].players[Object.keys(serverRooms[uuid].players)[0]].status = 'king';
+      }
+
       if (!Object.keys(serverRooms[uuid].players).length) {
         delete serverRooms[uuid];
         io.emit(SocketEvents.DELETE_LOBBY_ROOM, uuid);
         return;
       }
 
+      delete serverRooms[uuid].players[socket.id];
+      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, { players: serverRooms[uuid].players });
+
       const lobbyRoom = getLobbyRoom(uuid);
       io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
     });
+  });
+
+  socket.on(SocketEvents.LEAVE_ROOM, (uuid: string, data: Player) => {
+    socket.leave(uuid);
+
+    if (serverRooms[uuid].players[socket.id].status === 'king') {
+      delete serverRooms[uuid].players[socket.id];
+      serverRooms[uuid].players[Object.keys(serverRooms[uuid].players)[0]].status = 'king';
+    }
+
+    if (!Object.keys(serverRooms[uuid].players).length) {
+      delete serverRooms[uuid];
+      io.emit(SocketEvents.DELETE_LOBBY_ROOM, uuid);
+      return;
+    }
+
+    delete serverRooms[uuid].players[socket.id];
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, { players: serverRooms[uuid].players });
+
+    const lobbyRoom = getLobbyRoom(uuid);
+    io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
   });
 
   socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string) => {

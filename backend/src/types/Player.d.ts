@@ -1,5 +1,5 @@
 export type Player = {
   nickname: string;
-  // color: string;
-  // status: 'king' | 'prepare' | 'ready';
+  color: string;
+  status: 'king' | 'ready' | 'prepare';
 };
