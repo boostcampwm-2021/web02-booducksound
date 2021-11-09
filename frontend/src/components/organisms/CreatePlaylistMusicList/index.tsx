@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { DragEventHandler, PropsWithChildren, useState } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -6,6 +6,7 @@ import Button from '~/atoms/Button';
 import CreatePlaylistMusicItem from '~/molecules/CreatePlaylistMusicItem';
 import theme from '~/styles/theme';
 import { Music } from '~/types/Music';
+import { swap } from '~/utils/swap';
 
 interface Props {
   musics: Music[];
@@ -23,7 +24,12 @@ const MusicListTitleBox = styled.div`
 const MusicListContentBox = styled.div`
   height: 350px;
   border-bottom: 2px solid #eee;
-  overflow-y: scroll;
+  overflow-y: auto;
+  :not(:hover) {
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
 const MusicListTitleTop = styled.div`
   display: flex;
@@ -64,6 +70,27 @@ const EmptyBox = styled.div`
   color: #ddd;
 `;
 const CreatePlaylistMusicList = ({ musics, setModalOption, setMusics }: PropsWithChildren<Props>) => {
+  const [grab, setGrab] = useState<EventTarget>();
+
+  const handleDragOver: DragEventHandler = (e) => {
+    e.preventDefault();
+  };
+  const handleDragStart: DragEventHandler = (e) => {
+    setGrab(e.target);
+    (e.target as HTMLElement).classList.add('grabbing');
+    e.dataTransfer.effectAllowed = 'move';
+  };
+  const handleDrop: DragEventHandler = (e) => {
+    const grabPosition = Number((grab as HTMLElement).dataset.position);
+    const targetPosition = Number((e.target as HTMLElement).dataset.position);
+
+    setMusics((preState: Music[]) => swap<Music>(grabPosition, targetPosition, [...preState]));
+  };
+  const handleDragEnd: DragEventHandler = (e) => {
+    (e.target as HTMLElement).classList.remove('grabbing');
+    e.dataTransfer.dropEffect = 'move';
+  };
+
   return (
     <MusicListContainer>
       <MusicListTitleBox>
@@ -89,8 +116,16 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setMusics }: PropsWit
               title={music.info}
               key={idx}
               idx={idx}
-              deleteItem={setMusics}
+              deleteItem={(target: number) =>
+                setMusics((preState: Music[]) => [...preState.filter((music, idx) => idx !== target)])
+              }
               modifyItem={() => setModalOption({ type: 'modify', target: idx })}
+              dragHandlers={{
+                handleDragOver,
+                handleDragStart,
+                handleDrop,
+                handleDragEnd,
+              }}
             />
           ))
         )}
