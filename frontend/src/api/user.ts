@@ -13,3 +13,12 @@ export const changeColor = async (id: string, color: string) => {
     });
   id && handleColor();
 };
+
+export const getMyPlaylist = async (_id: Array<string>) => {
+  const res = await fetch(`${BACKEND_URL}/user/getMyPlaylist?_id=${JSON.stringify(_id)}`, {
+    method: 'GET',
+    headers,
+    credentials: 'include',
+  });
+  return res.json();
+};

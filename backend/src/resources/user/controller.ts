@@ -8,6 +8,13 @@ const changeColor = async (req: Request, res: Response) => {
   res.sendStatus(200);
 };
 
+const getMyPlaylist = async (req: Request, res: Response) => {
+  const _id = req.query._id as string;
+  const result = await UserService.getMyPlaylist(_id);
+  res.json(result);
+};
+
 export default {
   changeColor,
+  getMyPlaylist,
 };

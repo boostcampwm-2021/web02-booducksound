@@ -1,10 +1,6 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import mongoose, { NativeError } from 'mongoose';
 
-require('dotenv').config();
-
-const SECRET_KEY: string = process.env.JWT_SECRET || '';
 const SALT_ROUNDS = 10;
 const Schema = mongoose.Schema;
 
