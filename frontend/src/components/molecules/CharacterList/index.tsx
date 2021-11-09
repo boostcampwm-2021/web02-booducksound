@@ -22,17 +22,6 @@ const Container = styled.div`
 `;
 
 const CharacterList = ({ players }: { players: { [socketId: string]: Player } }) => {
-  // const dummy: props[] = [
-  //   { color: 'ff', name: 'max', status: 'king' },
-  //   { color: 'dwff', name: 'john', status: 'ready' },
-  //   { color: 'dw1121', name: 'ben', status: 'prepare' },
-  //   { color: '234def', name: 'dd', status: 'ready' },
-  //   { color: '234def', name: 'dd', status: 'ready' },
-  //   { color: '234def', name: 'dd', status: 'ready' },
-  //   { color: '234def', name: 'dd', status: 'ready' },
-  //   { color: '234def', name: 'dd', status: 'ready' },
-  // ];
-
   return (
     <>
       <Title>사용자 목록</Title>

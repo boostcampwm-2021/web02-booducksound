@@ -46,9 +46,14 @@ io.on('connection', (socket) => {
     }
     socket.join(uuid);
 
-    const { nickname, color, status } = player;
+    const { nickname, color } = player;
 
-    serverRooms[uuid].players = { ...serverRooms[uuid].players, ...{ [socket.id]: { nickname, color, status } } };
+    serverRooms[uuid].players = {
+      ...serverRooms[uuid].players,
+      ...{
+        [socket.id]: { nickname, color, status: Object.keys(serverRooms[uuid].players).length ? 'prepare' : 'king' },
+      },
+    };
     const gameRoom = getGameRoom(uuid);
     const lobbyRoom = getLobbyRoom(uuid);
 
