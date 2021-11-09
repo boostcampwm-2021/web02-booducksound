@@ -116,8 +116,16 @@ const Lobby: NextPage = () => {
   });
 
   useSocketOn(SocketEvents.SET_LOBBY_ROOM, (uuid: string, lobbyRoom: LobbyRoom) => {
-    setRooms((rooms) => {
-      rooms = { ...rooms, [uuid]: lobbyRoom };
+    setRooms((prev) => {
+      const rooms = { ...prev, [uuid]: lobbyRoom };
+      return rooms;
+    });
+  });
+
+  useSocketOn(SocketEvents.DELETE_LOBBY_ROOM, (uuid: string) => {
+    setRooms((prev) => {
+      const rooms = { ...prev };
+      delete rooms[uuid];
       return rooms;
     });
   });
