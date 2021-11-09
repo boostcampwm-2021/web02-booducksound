@@ -1,14 +1,13 @@
-import { ChangeEventHandler, PropsWithChildren } from 'react';
+import { KeyboardEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
 import InputText from '~/atoms/InputText';
 
 interface Props {
-  setTitle: ChangeEventHandler;
-  setDescription: ChangeEventHandler;
-  setHashTag: ChangeEventHandler;
-  title: string;
+  setPlaylist: Function;
+  handleAddChip: KeyboardEventHandler;
+  playlistName: string;
   description: string;
   hashTag: string;
 }
@@ -61,10 +60,9 @@ const SectionBox = styled.div`
 `;
 
 const CreatePlaylistInputBox = ({
-  setTitle,
-  setDescription,
-  setHashTag,
-  title,
+  setPlaylist,
+  playlistName,
+  handleAddChip,
   description,
   hashTag,
 }: PropsWithChildren<Props>) => {
@@ -73,8 +71,8 @@ const CreatePlaylistInputBox = ({
       <SectionBox>
         <Label>플레이리스트 제목</Label>
         <PlaylistInputText
-          handleChange={setTitle}
-          value={title}
+          handleChange={(e) => setPlaylist({ playlistName: (e.currentTarget as HTMLTextAreaElement).value })}
+          value={playlistName}
           className="title"
           isSearch={false}
           placeholder="플레이리스트 제목을 입력해주세요."
@@ -83,7 +81,7 @@ const CreatePlaylistInputBox = ({
       <SectionBox>
         <Label>플레이리스트 설명</Label>
         <PlaylistInputText
-          handleChange={setDescription}
+          handleChange={(e) => setPlaylist({ description: (e.currentTarget as HTMLTextAreaElement).value })}
           value={description}
           className="description"
           isSearch={false}
@@ -93,7 +91,8 @@ const CreatePlaylistInputBox = ({
       <SectionBox>
         <Label>플레이리스트 해시태그</Label>
         <PlaylistInputText
-          handleChange={setHashTag}
+          handleEnter={handleAddChip}
+          handleChange={(e) => setPlaylist({ hashTag: (e.currentTarget as HTMLTextAreaElement).value })}
           value={hashTag}
           className="hashTag"
           isSearch={false}
