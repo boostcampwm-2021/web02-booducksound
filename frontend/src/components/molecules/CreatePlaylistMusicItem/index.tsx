@@ -8,6 +8,7 @@ import theme from '~/styles/theme';
 interface Props {
   title: string;
   deleteItem: Function;
+  modifyItem: Function;
   idx: number;
 }
 
@@ -28,12 +29,19 @@ const ButtonBox = styled.div`
   row-gap: 5px;
 `;
 
-const CreatePlaylistMusicItem = ({ title, deleteItem, idx }: PropsWithChildren<Props>) => {
+const CreatePlaylistMusicItem = ({ title, deleteItem, modifyItem, idx }: PropsWithChildren<Props>) => {
   return (
     <ItemContainer>
       <MusicTitle>{title}</MusicTitle>
       <ButtonBox>
-        <Button content={'수정'} background={theme.colors.sky} fontSize={'12px'} paddingH={'7px'} width={'100px'} />
+        <Button
+          content={'수정'}
+          background={theme.colors.sky}
+          fontSize={'12px'}
+          paddingH={'7px'}
+          width={'100px'}
+          onClick={(e) => modifyItem()}
+        />
         <Button
           content="삭제"
           background={theme.colors.peach}
