@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
@@ -58,6 +58,7 @@ const InputBox = styled.input`
 
 const GameRoomContainer = () => {
   const socket = useSocket();
+  const [players, setPlayers] = useState([]);
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: any) => state.user);
   const [text, setText] = useState<string>('');
@@ -67,13 +68,21 @@ const GameRoomContainer = () => {
       setText('');
     }
   };
+
+  useEffect(() => {
+    socket?.on(SocketEvents.UPDATE_ROOM, ({ players }) => {
+      setPlayers(players);
+      console.log(players);
+    });
+  }, []);
+
   return (
     <Wrapper>
       <Container type={'leftTitle'}>
         <RoomStateTitle>대기중 입니다.</RoomStateTitle>
       </Container>
       <Container type={'leftCharacter'}>
-        <CharacterList />
+        <CharacterList data={players} />
       </Container>
       <Container type={'rightTitle'}>대기중 입니다.</Container>
       <Container type={'rightChat'}>
