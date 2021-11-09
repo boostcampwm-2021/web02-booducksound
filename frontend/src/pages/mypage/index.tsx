@@ -1,8 +1,9 @@
-import JSX, { useEffect, useState } from 'react';
+import JSX, { MouseEvent, useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import Router from 'next/router';
 import { useSelector } from 'react-redux';
 
 import { requestLogout } from '~/api/account';
@@ -12,8 +13,10 @@ import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import ProfileSelector from '~/atoms/ProfileSelector';
 import { PLAYLIST_EMPTY_MSG } from '~/constants/index';
+import { RootState } from '~/reducers/index';
+import { UserState } from '~/reducers/user';
 import theme from '~/styles/theme';
-import Playlist from '~/types/Playlist';
+import { Playlist } from '~/types/Playlist';
 
 interface Props {
   num: number;
@@ -165,57 +168,57 @@ const handleUserMenu = (id: string, dom: JSX.ReactElement) => {
   if (id) return dom;
 };
 
-const updatePlaylist = () => {};
+const updatePlaylist = (_id: string | undefined) => (e: MouseEvent) => {
+  if (!_id) return;
+  Router.push(`/playlist/${_id}`);
+};
 const deletePlaylist = () => {};
 const deleteLikeslist = ({ target }: any) => {
   const { writer: id, id: _id } = target?.parentElement?.closest('tr').dataset;
   deleteLikes(id, _id);
 };
-const drawMyPlaylist = (myPlaylist: Array<any>, isMine: boolean = false) => {
-  if (myPlaylist.length) {
-    return myPlaylist?.map((e) => {
-      return (
-        <tr key={e._id} data-id={e._id} data-writer={e.userId}>
-          <td>
-            <PlayTitle>{e.playlistName}</PlayTitle>
-          </td>
-          <td>
-            <TableBtnBox>
-              {isMine && (
-                <Button
-                  content={'수정'}
-                  background={theme.colors.sky}
-                  fontSize={'14px'}
-                  paddingH={'8px'}
-                  width={'100px'}
-                  onClick={updatePlaylist}
-                ></Button>
-              )}
-              <Button
-                content={'삭제'}
-                background={theme.colors.peach}
-                fontSize={'14px'}
-                paddingH={'8px'}
-                width={'100px'}
-                onClick={isMine ? deletePlaylist : deleteLikeslist}
-              ></Button>
-            </TableBtnBox>
-          </td>
-        </tr>
-      );
-    });
-  } else {
+const drawMyPlaylist = (myPlaylist: Playlist[], isMine: boolean = false) => {
+  if (!myPlaylist.length) {
     return (
       <EmptyPlayList className="no-result">
         <td colSpan={2}>{PLAYLIST_EMPTY_MSG}</td>
       </EmptyPlayList>
     );
   }
+  return myPlaylist.map((e) => (
+    <tr key={e._id} data-id={e._id} data-writer={e.userId}>
+      <td>
+        <PlayTitle>{e.playlistName}</PlayTitle>
+      </td>
+      <td>
+        <TableBtnBox>
+          {isMine && (
+            <Button
+              content={'수정'}
+              background={theme.colors.sky}
+              fontSize={'14px'}
+              paddingH={'8px'}
+              width={'100px'}
+              onClick={updatePlaylist(e._id)}
+            ></Button>
+          )}
+          <Button
+            content={'삭제'}
+            background={theme.colors.peach}
+            fontSize={'14px'}
+            paddingH={'8px'}
+            width={'100px'}
+            onClick={isMine ? deletePlaylist : deleteLikeslist}
+          ></Button>
+        </TableBtnBox>
+      </td>
+    </tr>
+  ));
 };
 
 const MyPage: NextPage = () => {
   const [color, setColor] = useState('fff');
-  const userInfo = useSelector((state: any) => state.user);
+  const userInfo: UserState = useSelector((state: RootState) => state.user);
   const { id, nickname, color: userColor, likes, myPlaylist } = userInfo || {};
   const changeBooduckColor = (newColor: string) => {
     setColor(() => {
