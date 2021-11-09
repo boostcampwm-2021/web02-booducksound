@@ -4,7 +4,7 @@ import UserController from './controller';
 
 const router = express.Router();
 
-router.get('/getMyPlaylist', UserController.getMyPlaylist);
-router.post('/changeColor', UserController.changeColor);
-router.post('/deleteLikes', UserController.deleteLikes);
+router.get('/playlist', UserController.getMyPlaylist);
+router.post('/color', UserController.changeColor);
+router.delete('/likes', UserController.deleteLikes);
 export default router;
