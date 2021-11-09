@@ -1,15 +1,22 @@
-import { PropsWithChildren } from 'react';
+import { DragEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
 import Button from '~/atoms/Button';
 import theme from '~/styles/theme';
 
+interface DragHandlers {
+  handleDragOver: DragEventHandler;
+  handleDragStart: DragEventHandler;
+  handleDrop: DragEventHandler;
+  handleDragEnd: DragEventHandler;
+}
 interface Props {
+  idx: number;
   title: string;
   deleteItem: Function;
   modifyItem: Function;
-  idx: number;
+  dragHandlers: DragHandlers;
 }
 
 const ItemContainer = styled.div`
@@ -18,6 +25,11 @@ const ItemContainer = styled.div`
   align-items: center;
   padding: 10px 5px 10px 5px;
   border-bottom: 2px solid #eee;
+  width: 100%;
+  cursor: grab;
+  :hover {
+    background-color: #eee;
+  }
 `;
 const MusicTitle = styled.p`
   font-size: 20px;
@@ -29,17 +41,25 @@ const ButtonBox = styled.div`
   row-gap: 5px;
 `;
 
-const CreatePlaylistMusicItem = ({ title, deleteItem, modifyItem, idx }: PropsWithChildren<Props>) => {
+const CreatePlaylistMusicItem = ({ idx, title, deleteItem, modifyItem, dragHandlers }: PropsWithChildren<Props>) => {
+  const { handleDragOver, handleDragStart, handleDrop, handleDragEnd } = dragHandlers;
   return (
-    <ItemContainer>
+    <ItemContainer
+      draggable
+      onDragOver={handleDragOver}
+      onDragStart={handleDragStart}
+      onDrop={handleDrop}
+      onDragEnd={handleDragEnd}
+      data-position={idx}
+    >
       <MusicTitle>{title}</MusicTitle>
       <ButtonBox>
         <Button
-          content={'수정'}
+          content="수정"
           background={theme.colors.sky}
-          fontSize={'12px'}
-          paddingH={'7px'}
-          width={'100px'}
+          fontSize="12px"
+          paddingH="7px"
+          width="100px"
           onClick={(e) => modifyItem()}
         />
         <Button
