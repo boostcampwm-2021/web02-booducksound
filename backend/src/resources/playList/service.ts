@@ -30,7 +30,7 @@ const add = (playlistInfo: PlaylistProps) => {
   return newPlaylist.save();
 };
 
-const modify = (_id: string, data: PlaylistProps) => {
+const update = (_id: string, data: PlaylistProps) => {
   console.log(data);
   return Playlist.updateOne({ _id }, data);
 };
@@ -39,4 +39,4 @@ const del = (_id: string) => {
   return Playlist.deleteOne({ _id });
 };
 
-export default { get, add, modify, del };
+export default { get, add, update, del };

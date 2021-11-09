@@ -23,10 +23,10 @@ const Playlist = {
       res.json({ status: 'FAILED', error: e });
     }
   },
-  modify: async (req: Request, res: Response) => {
+  update: async (req: Request, res: Response) => {
     const { _id, data } = req.body;
     try {
-      const result = await PlaylistService.modify(_id, data);
+      const result = await PlaylistService.update(_id, data);
       res.json({ status: 'SUCCESS', result });
     } catch (e) {
       res.json({ status: 'FAILED', error: e });
