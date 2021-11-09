@@ -11,8 +11,7 @@ export const getUser = () => async (dispatch: ThunkDispatch<UserState, void, Act
     const userInfo = await getUserInfo();
     const { id, nickname, color, likes, myPlaylist } = userInfo;
     const likesList = likes && (await getMyPlaylist(likes));
-    const myList = likes && (await getMyPlaylist(myPlaylist));
-
+    const myList = myPlaylist && (await getMyPlaylist(myPlaylist));
     userInfo &&
       dispatch({ type: UserActions.SET_USER, payload: { id, nickname, color, likes: likesList, myPlaylist: myList } });
   } catch (err) {

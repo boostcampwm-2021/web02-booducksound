@@ -33,4 +33,5 @@ export const deleteLikes = async (id: string, _id: string) => {
       _id,
     }),
   });
+  return true;
 };

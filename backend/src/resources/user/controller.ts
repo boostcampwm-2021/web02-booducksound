@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-
+import mongoose from 'mongoose';
 import UserService from './service';
 
 const changeColor = async (req: Request, res: Response) => {
@@ -15,7 +15,7 @@ const getMyPlaylist = async (req: Request, res: Response) => {
 };
 
 const deleteLikes = async (req: Request, res: Response) => {
-  const { id, _id }: { id: string; _id: string } = req.body;
+  const { id, _id }: { id: string; _id: mongoose.Types.ObjectId } = req.body;
   await UserService.deleteLikes(id, _id);
   res.sendStatus(200);
 };
