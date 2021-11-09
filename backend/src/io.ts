@@ -88,6 +88,11 @@ io.on('connection', (socket) => {
     });
   });
 
+  socket.on(SocketEvents.SET_GAME_ROOM, (uuid: string, player: Player) => {
+    serverRooms[uuid].players[socket.id] = player;
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, { players: serverRooms[uuid].players });
+  });
+
   socket.on(SocketEvents.LEAVE_ROOM, (uuid: string, data: Player) => {
     const isKing = serverRooms[uuid].players[socket.id].status === 'king';
     socket.leave(uuid);
