@@ -6,13 +6,13 @@ import Character from '~/atoms/Character';
 import StatusChip from '~/atoms/StatusChip';
 import theme from '~/styles/theme';
 
-interface props {
+interface Props {
   color: string;
   name: string;
   status: 'king' | 'ready' | 'prepare';
 }
 
-const Container = styled.div`
+const Container = styled.div<any>`
   margin: 2%;
   display: flex;
   align-items: center;
@@ -20,6 +20,7 @@ const Container = styled.div`
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     flex-direction: column;
   }
+  opacity: ${({ status }) => (status === 'prepare' ? `50%` : `100%`)};
 `;
 
 const ChipContainer = styled.div`
@@ -46,9 +47,9 @@ const ProfileContainer = styled.div`
   }
 `;
 
-const CharacterProfile = ({ color, name, status }: PropsWithChildren<props>) => {
+const CharacterProfile = ({ color, name, status }: PropsWithChildren<Props>) => {
   return (
-    <Container>
+    <Container status={status}>
       <ProfileContainer>
         <Character color={color} width={'100%'} />
       </ProfileContainer>
