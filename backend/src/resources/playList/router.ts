@@ -4,7 +4,7 @@ import Playlist from './controller';
 
 const router = express.Router();
 
-// router.get('Playlist/filter', Playlist.filter);
+router.get('/', Playlist.get);
 router.post('/', Playlist.register);
 router.put('/', Playlist.modify);
 router.delete('/', Playlist.del);

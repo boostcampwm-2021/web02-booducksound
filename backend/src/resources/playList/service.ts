@@ -18,6 +18,10 @@ interface PlaylistProps {
   createdAt: Date;
 }
 
+const get = async (_id: string) => {
+  return await Playlist.findOne({ _id });
+};
+
 const add = (playlistInfo: PlaylistProps) => {
   const newPlaylist = new Playlist({
     ...playlistInfo,
@@ -35,4 +39,4 @@ const del = (_id: string) => {
   return Playlist.deleteOne({ _id });
 };
 
-export default { add, modify, del };
+export default { get, add, modify, del };
