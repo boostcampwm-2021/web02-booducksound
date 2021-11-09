@@ -13,15 +13,14 @@ const checkId = async (req: Request, res: Response) => {
 
 const checkLogin = async (req: Request, res: Response) => {
   const token = req.cookies.token;
-  if (token) {
-    const decoded = UserService.verifyToken(token) as UserToken;
-    if (decoded.id) {
-      const userInfo = await UserService.getUserInfo(decoded.id);
-      res.json(userInfo[0]);
-    }
-    res.json(decoded);
+  if (!token) res.json({ decoded: null });
+  const decoded = UserService.verifyToken(token) as UserToken;
+  if (decoded.id) {
+    const userInfo = await UserService.getUserInfo(decoded.id);
+    res.json(userInfo[0]);
+    return;
   }
-  res.json({ decoded: null });
+  res.json(decoded);
 };
 
 const resetPwd = async (req: Request, res: Response) => {
