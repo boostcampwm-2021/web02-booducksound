@@ -13,7 +13,6 @@ import SelectSection from '~/molecules/SelectSection';
 import SelectPlaylistModal from '~/organisms/SelectPlaylistModal';
 import theme from '~/styles/theme';
 import { RoomActions } from '~/types/Actions';
-import { LobbyRoom } from '~/types/LobbyRoom';
 import { SocketEvents } from '~/types/SocketEvents';
 
 const Container = styled.div`

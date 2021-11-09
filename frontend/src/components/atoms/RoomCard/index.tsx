@@ -99,9 +99,18 @@ const Hashtag = styled.span`
   }
 `;
 
-const RoomCard = ({ title, playlistName, hashtags, curPeople, maxPeople, status, hasPassword }: LobbyRoom) => {
+const RoomCard = ({
+  title,
+  playlistName,
+  hashtags,
+  curPeople,
+  maxPeople,
+  status,
+  hasPassword,
+  uuid,
+}: { uuid: string } & LobbyRoom) => {
   return (
-    <Container status={status}>
+    <Container className="roomcard" status={status} data-uuid={uuid}>
       <FirstLineContainer>
         <Title>{title}</Title>
         <FirstLineRightContainer>

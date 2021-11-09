@@ -1,8 +1,10 @@
-import { ChangeEventHandler, useState } from 'react';
+import { ChangeEventHandler, MouseEventHandler, useState } from 'react';
 
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Link from 'next/link';
+import Router from 'next/router';
+import { useDispatch } from 'react-redux';
 
 import InputBox from '~/atoms/InputBox';
 import RoomCard from '~/atoms/RoomCard';
@@ -11,6 +13,7 @@ import useSocketOn from '~/hooks/useSocketOn';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import CreateRoomModal from '~/organisms/CreateRoomModal';
 import theme from '~/styles/theme';
+import { RoomActions } from '~/types/Actions';
 import { LobbyRoom } from '~/types/LobbyRoom';
 import { SocketEvents } from '~/types/SocketEvents';
 
@@ -102,6 +105,8 @@ const GridWrapper = styled.div`
 `;
 
 const Lobby: NextPage = () => {
+  const dispatch = useDispatch();
+
   const [search, setSearch] = useState('');
   const [createRoomModalOnOff, setCreateRoomModalOnOff] = useState(false);
   const [rooms, setRooms] = useState<{ [uuid: string]: LobbyRoom }>({});
@@ -124,6 +129,17 @@ const Lobby: NextPage = () => {
   const handleSearchChange: ChangeEventHandler = (e) => {
     const search = (e.target as HTMLInputElement).value;
     setSearch(search);
+  };
+
+  const handleRoomClick: MouseEventHandler = (e) => {
+    const roomcard = (e.target as Element).closest('.roomcard') as HTMLDivElement;
+    if (!roomcard) return;
+
+    const { uuid } = roomcard.dataset;
+    if (!uuid) return;
+
+    dispatch({ type: RoomActions.SET_UUID, payload: { uuid } });
+    Router.push(`/game`);
   };
 
   return (
@@ -191,10 +207,10 @@ const Lobby: NextPage = () => {
           </SearchWrapper>
         </SearchContainer>
         <GridContainer>
-          <GridWrapper>
+          <GridWrapper onClick={handleRoomClick}>
             {rooms &&
               Object.entries(rooms).map(([uuid, room]) => {
-                return <RoomCard key={uuid} {...room} />;
+                return <RoomCard key={uuid} uuid={uuid} {...room} />;
               })}
           </GridWrapper>
         </GridContainer>
