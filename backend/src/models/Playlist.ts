@@ -13,6 +13,7 @@ interface Props {
 
 const PlaylistSchema = new Schema({
   playlistName: String,
+  description: String,
   likeCount: {
     type: Number,
     default: 0,
