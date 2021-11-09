@@ -154,6 +154,7 @@ body {
   animation: background 30s linear infinite reverse running;
   background-attachment: fixed;
   background-size: cover;
+  cursor: url('/images/cursor.cur') 2 2, pointer;
 }
 
 @keyframes background {

@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef } from 'react';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
 
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
@@ -14,8 +14,8 @@ import GameRoomContainer from '~/organisms/GameRoomContainer';
 import GameRoomNav from '~/organisms/GameRoomNav';
 import { RootState } from '~/reducers/index';
 import { GameRoom } from '~/types/GameRoom';
+import { Player } from '~/types/Player';
 import { SocketEvents } from '~/types/SocketEvents';
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -26,6 +26,8 @@ const Container = styled.div`
 `;
 
 const Game: NextPage = () => {
+  const [players, setPlayers] = useState<{ [socketId: string]: Player }>({});
+  const [player, setPlayer] = useState<Player>({ nickname: '', color: '', status: 'prepare' });
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
   const socket = useSocket();
@@ -80,6 +82,14 @@ const Game: NextPage = () => {
 
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/3`; // TODO : roundNum으로 변경할 것
   });
+  
+  useSocketOn(SocketEvents.SET_GAME_ROOM, ({ players }) => {
+    setPlayers(players);
+    if (players !== null && socket !== null) {
+      setPlayer(players[socket?.id]);
+    }
+    console.log(players);
+  });
 
   useLeavePage(() => {
     if (!socket) return;
@@ -88,8 +98,8 @@ const Game: NextPage = () => {
 
   return (
     <Container>
-      <GameRoomNav />
-      <GameRoomContainer />
+      <GameRoomNav player={player} />
+      <GameRoomContainer players={players} />
       <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/0`} controls loop />
       <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/1`} controls loop />
       <button

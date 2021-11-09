@@ -1,7 +1,12 @@
 import styled from '@emotion/styled';
+import { useSelector } from 'react-redux';
 
 import Button from '~/atoms/Button';
+import useSocket from '~/hooks/useSocket';
+import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
+import { Player } from '~/types/Player';
+import { SocketEvents } from '~/types/SocketEvents';
 
 const Container = styled.div`
   max-width: 1600px;
@@ -55,22 +60,52 @@ interface ButtonContainerProps {
   content: string;
   fontSize?: number;
   type?: string;
+  onClick: Function;
 }
 
-const ResponsiveButton = ({ background, content, type }: ButtonContainerProps) => {
+const ResponsiveButton = ({ background, content, type, onClick }: ButtonContainerProps) => {
   return (
-    <ButtonWrapper style={{ gridArea: type }}>
+    <ButtonWrapper style={{ gridArea: type }} onClick={() => onClick()}>
       <Button content={content} background={background}></Button>
     </ButtonWrapper>
   );
 };
 
-const GameRoomNav = () => {
+const GameRoomNav = ({ player }: { player: Player }) => {
+  const { uuid } = useSelector((state: RootState) => state.room);
+  const socket = useSocket();
+  const statusEncoder = { king: 'START', prepare: 'PREPARE', ready: 'READY' };
+  const changeStatus = (player: Player) => {
+    switch (player.status) {
+      case 'king':
+        break;
+      case 'prepare':
+        player = { ...player, status: 'ready' };
+        socket?.emit(SocketEvents.SET_GAME_ROOM, uuid, player);
+        break;
+      case 'ready':
+        player = { ...player, status: 'prepare' };
+        socket?.emit(SocketEvents.SET_GAME_ROOM, uuid, player);
+        break;
+    }
+  };
   return (
     <Container>
       <MuteButton type="button" />
-      <ResponsiveButton type={'start'} background={theme.colors.whitesmoke} fontSize={20} content={'START'} />
-      <ResponsiveButton type={'exit'} background={theme.colors.sand} fontSize={20} content={'나가기'} />
+      <ResponsiveButton
+        type={'start'}
+        background={theme.colors.whitesmoke}
+        fontSize={20}
+        content={statusEncoder[player.status]}
+        onClick={() => changeStatus(player)}
+      />
+      <ResponsiveButton
+        type={'exit'}
+        background={theme.colors.sand}
+        fontSize={20}
+        content={'나가기'}
+        onClick={() => console.log('나가기')}
+      />
     </Container>
   );
 };
