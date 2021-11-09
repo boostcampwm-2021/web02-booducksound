@@ -1,8 +1,14 @@
 import { BACKEND_URL, HEADERS as headers } from '~/constants/index';
 
 const handleNonUserColor = async (color: string) => {
-  console.log(color);
-  await fetch(`${BACKEND_URL}/user/`);
+  await fetch(`${BACKEND_URL}/user/guest-color`, {
+    method: 'POST',
+    headers,
+    credentials: 'include',
+    body: JSON.stringify({
+      color,
+    }),
+  });
 };
 
 export const changeColor = async (id: string, color: string) => {
