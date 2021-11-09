@@ -14,3 +14,7 @@ export const getUser = () => async (dispatch: ThunkDispatch<UserState, void, Act
     console.error(err);
   }
 };
+
+export const setColor = (color: string) => (dispatch: ThunkDispatch<UserState, void, Action>) => {
+  dispatch({ type: UserActions.SET_COLOR, payload: { color } });
+};

@@ -145,7 +145,6 @@ const getUserInfo = async (id: string) => {
 };
 
 const changeColor = async (id: string, color: string) => {
-  console.log(id, color);
   await User.update({ id }, { color });
 };
 
