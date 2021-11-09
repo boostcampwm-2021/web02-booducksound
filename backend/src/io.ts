@@ -5,6 +5,7 @@ import { LobbyRoom } from './types/LobbyRoom';
 import { ServerRoom } from './types/ServerRoom';
 import { SocketEvents } from './types/SocketEvents';
 import { serverRooms, getLobbyRoom, getGameRoom } from './utils/rooms';
+
 const io = new socketio.Server();
 
 io.on('connection', (socket) => {
@@ -23,7 +24,7 @@ io.on('connection', (socket) => {
     const serverRoom: ServerRoom = {
       title,
       password,
-      players: [],
+      players: {},
       playListId,
       skip,
       timePerProblem,
@@ -44,7 +45,7 @@ io.on('connection', (socket) => {
     }
     socket.join(uuid);
 
-    serverRooms[uuid].players = [...serverRooms[uuid].players, { socketId: socket.id, nickname }];
+    serverRooms[uuid].players = { ...serverRooms[uuid].players, ...{ [socket.id]: { nickname } } };
     const gameRoom = getGameRoom(uuid);
     const lobbyRoom = getLobbyRoom(uuid);
 
@@ -53,9 +54,10 @@ io.on('connection', (socket) => {
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
 
     socket.on('disconnecting', () => {
-      serverRooms[uuid].players = serverRooms[uuid].players.filter(({ socketId }) => socketId !== socket.id);
+      socket.leave(uuid);
+      delete serverRooms[uuid].players[socket.id];
 
-      if (!serverRooms[uuid].players.length) {
+      if (!Object.keys(serverRooms[uuid].players).length) {
         delete serverRooms[uuid];
         io.emit(SocketEvents.DELETE_LOBBY_ROOM, uuid);
         return;

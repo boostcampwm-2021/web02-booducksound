@@ -10,7 +10,7 @@ export const getLobbyRoom = (uuid: string) => {
 
   const lobbyRoom: LobbyRoom = {
     title: serverRoom.title,
-    curPeople: serverRoom.players.length,
+    curPeople: Object.keys(serverRoom.players).length,
     maxPeople: 8, // TODO: 방 슬롯 열고 닫는 거에 따라 maxPeople 설정
     hasPassword: !!serverRoom.password,
     hashtags: ['해시태그1', '해시태그2'], // TODO: playlistId를 통해 hashtags 가져오기

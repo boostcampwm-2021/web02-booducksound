@@ -2,7 +2,7 @@ import { Player } from './Player';
 
 export type ServerRoom = {
   status: 'playing' | 'waiting';
-  players: Player[];
+  players: { [socketId: string]: Player };
   title: string;
   playListId: string;
   password?: string | null;
