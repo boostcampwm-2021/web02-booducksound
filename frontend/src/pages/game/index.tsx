@@ -117,8 +117,8 @@ const Game: NextPage = () => {
     <Container>
       <GameRoomNav player={player} />
       <GameRoomContainer players={players} />
-      <audio ref={music1} controls loop />
-      <audio ref={music2} controls loop />
+      <audio ref={music1} controls loop preload="none" />
+      <audio ref={music2} controls loop preload="none" />
       <button
         onClick={() => {
           socket?.emit(SocketEvents.START_GAME);
