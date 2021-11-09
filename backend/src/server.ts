@@ -7,6 +7,7 @@ import morgan from 'morgan';
 
 import io from './io';
 import accRouter from './resources/account/router';
+import gameRouter from './resources/game/router';
 import playListRouter from './resources/playList/router';
 import userRouter from './resources/user/router';
 
@@ -19,9 +20,11 @@ app.use(cookieParser());
 app.use(morgan('common'));
 
 app.use('/assets', express.static('assets'));
-app.use('/playList', playListRouter);
 app.use('/', accRouter);
+app.use('/playList', playListRouter);
 app.use('/user', userRouter);
+app.use('/game', gameRouter);
+
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
