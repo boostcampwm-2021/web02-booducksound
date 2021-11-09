@@ -162,7 +162,7 @@ const MyPage: NextPage = () => {
   const changeBooduckColor = (newColor: string) => {
     setColor(() => {
       changeColor(id, newColor);
-    
+
       return newColor;
     });
   };

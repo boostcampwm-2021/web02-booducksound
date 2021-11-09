@@ -3,12 +3,13 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 
-import { requestEnter, NICKNAME_EMPTY_MSG } from '~/api/account';
+import { requestEnter } from '~/api/account';
 import Button from '~/atoms/Button';
 import InputBox from '~/atoms/InputBox';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import ProfileSelector from '~/atoms/ProfileSelector';
+import { NICKNAME_EMPTY_MSG } from '~/constants/index';
 import theme from '~/styles/theme';
 
 const EnterContainer = styled.div`
