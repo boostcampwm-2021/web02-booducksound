@@ -65,8 +65,8 @@ const createNonUserToken = (nickname: string, color: string) => {
 };
 
 const verifyToken = (token: string) => {
-  const decoded = jwt.verify(token, SECRET_KEY);
   try {
+    const decoded = jwt.verify(token, SECRET_KEY);
     if (decoded) return decoded as UserToken;
   } catch (err) {
     return {};
