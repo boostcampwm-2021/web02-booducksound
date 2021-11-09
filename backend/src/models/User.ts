@@ -29,9 +29,12 @@ const UserSchema = new Schema({
       ref: 'User',
     },
   ],
-  likes: {
-    type: Array,
-  },
+  likes: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
   createdAt: {
     type: Date,
     default: new Date(),

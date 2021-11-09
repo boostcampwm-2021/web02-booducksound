@@ -3,8 +3,9 @@ import JSX, { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
+import { getUser } from '~/actions/user';
 import { requestLogout } from '~/api/account';
 import { changeColor, deleteLikes } from '~/api/user';
 import Button from '~/atoms/Button';
@@ -12,6 +13,7 @@ import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import ProfileSelector from '~/atoms/ProfileSelector';
 import { PLAYLIST_EMPTY_MSG } from '~/constants/index';
+import Modal from '~/molecules/Modal';
 import theme from '~/styles/theme';
 import Playlist from '~/types/Playlist';
 
@@ -161,62 +163,39 @@ const EmptyPlayList = styled.tr`
   }
 `;
 
+const AlertMsg = styled.p`
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 1.5rem 0;
+`;
+
 const handleUserMenu = (id: string, dom: JSX.ReactElement) => {
   if (id) return dom;
 };
 
 const updatePlaylist = () => {};
 const deletePlaylist = () => {};
-const deleteLikeslist = ({ target }: any) => {
-  const { writer: id, id: _id } = target?.parentElement?.closest('tr').dataset;
-  deleteLikes(id, _id);
-};
-const drawMyPlaylist = (myPlaylist: Array<any>, isMine: boolean = false) => {
-  if (myPlaylist.length) {
-    return myPlaylist?.map((e) => {
-      return (
-        <tr key={e._id} data-id={e._id} data-writer={e.userId}>
-          <td>
-            <PlayTitle>{e.playlistName}</PlayTitle>
-          </td>
-          <td>
-            <TableBtnBox>
-              {isMine && (
-                <Button
-                  content={'수정'}
-                  background={theme.colors.sky}
-                  fontSize={'14px'}
-                  paddingH={'8px'}
-                  width={'100px'}
-                  onClick={updatePlaylist}
-                ></Button>
-              )}
-              <Button
-                content={'삭제'}
-                background={theme.colors.peach}
-                fontSize={'14px'}
-                paddingH={'8px'}
-                width={'100px'}
-                onClick={isMine ? deletePlaylist : deleteLikeslist}
-              ></Button>
-            </TableBtnBox>
-          </td>
-        </tr>
-      );
-    });
-  } else {
-    return (
-      <EmptyPlayList className="no-result">
-        <td colSpan={2}>{PLAYLIST_EMPTY_MSG}</td>
-      </EmptyPlayList>
-    );
-  }
-};
 
 const MyPage: NextPage = () => {
   const [color, setColor] = useState('fff');
+  const [removeModalOnOff, setRemoveModalOnOff] = useState(false);
+  const [oid, selectOid] = useState('');
+
+  const dispatch = useDispatch();
   const userInfo = useSelector((state: any) => state.user);
   const { id, nickname, color: userColor, likes, myPlaylist } = userInfo || {};
+
+  const deleteLikeslist = async (id: string, oid: string) => {
+    await deleteLikes(id, oid);
+    dispatch(getUser());
+  };
+
+  const openRemoveModal = ({ target }: any) => {
+    const { id } = target?.parentElement?.closest('tr').dataset;
+    setRemoveModalOnOff(true);
+    selectOid(id);
+  };
+
   const changeBooduckColor = (newColor: string) => {
     setColor(() => {
       changeColor(id, newColor);
@@ -225,9 +204,55 @@ const MyPage: NextPage = () => {
     });
   };
 
+  const drawMyPlaylist = (myPlaylist: Array<any>, isMine: boolean = false) => {
+    if (myPlaylist.length) {
+      return myPlaylist?.map((e) => {
+        return (
+          <tr key={e._id} data-id={e._id}>
+            <td>
+              <PlayTitle>{e.playlistName}</PlayTitle>
+            </td>
+            <td>
+              <TableBtnBox>
+                {isMine && (
+                  <Button
+                    content={'수정'}
+                    background={theme.colors.sky}
+                    fontSize={'14px'}
+                    paddingH={'8px'}
+                    width={'100px'}
+                    onClick={updatePlaylist}
+                  ></Button>
+                )}
+                <Button
+                  content={'삭제'}
+                  background={theme.colors.peach}
+                  fontSize={'14px'}
+                  paddingH={'8px'}
+                  width={'100px'}
+                  onClick={isMine ? deletePlaylist : openRemoveModal}
+                ></Button>
+              </TableBtnBox>
+            </td>
+          </tr>
+        );
+      });
+    } else {
+      return (
+        <EmptyPlayList className="no-result">
+          <td colSpan={2}>{PLAYLIST_EMPTY_MSG}</td>
+        </EmptyPlayList>
+      );
+    }
+  };
+
   useEffect(() => {
     setColor(userColor);
   }, [userColor]);
+
+  useEffect(() => {
+    setRemoveModalOnOff(false);
+  }, [likes, myPlaylist]);
 
   return (
     <>
@@ -290,6 +315,17 @@ const MyPage: NextPage = () => {
           )}
         </MyPageContainer>
       </PageBox>
+      {removeModalOnOff && (
+        <Modal
+          leftButtonHandler={(e) => deleteLikeslist(id, oid)}
+          rightButtonHandler={() => setRemoveModalOnOff(false)}
+          leftButtonText="YES"
+          rightButtonText="NO"
+          height="150px"
+        >
+          <AlertMsg>정말 삭제하시겠습니까?</AlertMsg>
+        </Modal>
+      )}
     </>
   );
 };

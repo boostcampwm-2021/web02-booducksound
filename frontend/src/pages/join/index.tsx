@@ -64,7 +64,7 @@ const Join: NextPage = () => {
   const [color, setColor] = useState('fff');
 
   const idCheck = async () => {
-    return await fetch(`http://localhost:5000/checkId?id=${id}`)
+    return await fetch(`http://localhost:5000/check-id?id=${id}`)
       .then((res) => res.json())
       .then((res) => res);
   };
