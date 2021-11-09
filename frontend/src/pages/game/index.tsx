@@ -113,18 +113,12 @@ const Game: NextPage = () => {
     socket.emit(SocketEvents.LEAVE_ROOM, uuid);
   });
 
-  const handleAudioEnded: ReactEventHandler<HTMLAudioElement> = (e) => {
-    const audio = e.target as HTMLAudioElement;
-    audio.currentTime = 0;
-    audio.play();
-  };
-
   return (
     <Container>
       <GameRoomNav player={player} />
       <GameRoomContainer players={players} />
-      <audio ref={music1} controls loop preload="none" onDurationChange={handleAudioEnded} />
-      <audio ref={music2} controls loop preload="none" onDurationChange={handleAudioEnded} />
+      <audio ref={music1} controls loop />
+      <audio ref={music2} controls loop />
       <button
         onClick={() => {
           socket?.emit(SocketEvents.START_GAME);
