@@ -1,11 +1,11 @@
 import { KeyboardEventHandler, MouseEvent, useState } from 'react';
 
 import styled from '@emotion/styled';
-import type { NextPage } from 'next';
+import type { NextPage, NextPageContext } from 'next';
 import Router, { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
-import { createPlaylist } from '~/api/playlist';
+import { createPlaylist, selectPlaylist, updatePlaylist } from '~/api/playlist';
 import Button from '~/atoms/Button';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
@@ -16,6 +16,7 @@ import CreatePlaylistMusicList from '~/organisms/CreatePlaylistMusicList';
 import CreatePlaylistMusicModal from '~/organisms/CreatePlaylistMusicModal';
 import theme from '~/styles/theme';
 import { Music } from '~/types/Music';
+import { Playlist } from '~/types/Playlist';
 import { PlaylistInput } from '~/types/PlaylistInput';
 
 const ChipContainer = styled.div`
@@ -60,16 +61,54 @@ interface ModalOption {
   type: 'close' | 'create' | 'modify';
   target: number;
 }
+interface Props {
+  type: 'create' | 'update';
+  content: PlaylistInput;
+}
 
-const PlaylistCreate: NextPage = () => {
+export const getServerSideProps = async ({ query }: NextPageContext) => {
+  const { playlistId } = query;
+  if (typeof playlistId !== 'string') return;
+  if (playlistId === 'create') {
+    return {
+      props: {
+        type: 'create',
+        content: {
+          playlistName: '',
+          description: '',
+          hashTag: '',
+          hashTags: [],
+          musics: [],
+        },
+      },
+    };
+  }
+  const { playlist } = await selectPlaylist(playlistId);
+  const { playlistName, description, hashTags, musics } = playlist;
+  return {
+    props: {
+      type: 'update',
+      content: {
+        playlistName,
+        description,
+        hashTags,
+        musics,
+        hashTag: '',
+      },
+    },
+  };
+};
+
+const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
+  const { playlistId } = useRouter().query;
   const userInfo = useSelector((state: any) => state.user);
   const [modalOption, setModalOption] = useState<ModalOption>({ type: 'close', target: TARGET_INIT });
   const [playlist, setPlaylistAll] = useState<PlaylistInput>({
-    playlistName: '',
-    description: '',
-    hashTag: '',
-    hashTags: [],
-    musics: [],
+    playlistName: content.playlistName,
+    description: content.description,
+    hashTag: content.hashTag,
+    hashTags: content.hashTags,
+    musics: content.musics,
   });
   const { playlistName, description, hashTag, hashTags, musics } = playlist;
 
@@ -95,12 +134,32 @@ const PlaylistCreate: NextPage = () => {
       alert('입력을 확인해주세요.');
       return;
     }
-    const createResult = await createPlaylist({ playlistName, musics, hashTags, userId: userInfo.id });
-    const { status } = createResult;
+    const result = await mapSubmitFunction({
+      type,
+      playlistId,
+      playlist: { playlistName, description, musics, hashTags, userId: userInfo.id },
+    });
+    const { status } = result;
     if (status === FAILED) {
       alert('플레이리스트 등록에 실패하였습니다.');
     } else if (status === SUCCESS) {
       Router.push('/lobby');
+    }
+  };
+  const mapSubmitFunction = async ({
+    type,
+    playlistId,
+    playlist,
+  }: {
+    type: string;
+    playlistId: string | string[] | undefined;
+    playlist: Playlist;
+  }) => {
+    if (typeof playlistId !== 'string') return;
+    if (type === 'create') {
+      return await createPlaylist(playlist);
+    } else if (type === 'update') {
+      return await updatePlaylist(playlistId, playlist);
     }
   };
   const addMusics = (newMusic: Music) => {
