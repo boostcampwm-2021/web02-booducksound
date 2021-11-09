@@ -8,4 +8,5 @@ export enum RoomActions {
 
 export enum UserActions {
   SET_USER = 'user/SET_USER',
+  SET_COLOR = 'user/SET_COLOR',
 }

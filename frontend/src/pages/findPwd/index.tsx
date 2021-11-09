@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
+import { useSelector } from 'react-redux';
 
-import { requestChangePassword, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG } from '~/api/account';
+import { requestChangePassword } from '~/api/account';
 import InputBox from '~/atoms/InputBox';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
+import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG } from '~/constants/index';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import theme from '~/styles/theme';
 
@@ -49,6 +51,13 @@ const FindPwd: NextPage = () => {
   const [id, setID] = useState('');
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
+  const userInfo = useSelector((state: any) => state.user);
+
+  useEffect(() => {
+    const { id, nickname } = userInfo;
+    setID(id);
+    setNickname(nickname);
+  }, [userInfo]);
 
   const handleFindPwd = async () => {
     if (!id) alert(ID_EMPTY_MSG);

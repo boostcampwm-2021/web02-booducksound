@@ -5,11 +5,12 @@ import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
 
-import { requestLogin, ID_EMPTY_MSG, PASSWORD_EMPTY_MSG } from '~/api/account';
+import { requestLogin } from '~/api/account';
 import Button from '~/atoms/Button';
 import InputBox from '~/atoms/InputBox';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
+import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG } from '~/constants/index';
 import theme from '~/styles/theme';
 
 const LoginContainer = styled.div`
@@ -96,7 +97,7 @@ const Login: NextPage = () => {
               content={'로그인'}
               onClick={handleLogin}
             />
-            <Link href="login/findPwd">
+            <Link href="/findPwd">
               <SearchPwdBtn href="#none">비밀번호를 잊어버리셨나요?</SearchPwdBtn>
             </Link>
           </InputContainer>

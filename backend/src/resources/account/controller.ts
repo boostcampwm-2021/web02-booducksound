@@ -13,21 +13,20 @@ const checkId = async (req: Request, res: Response) => {
 
 const checkLogin = async (req: Request, res: Response) => {
   const token = req.cookies.token;
-  if (token) {
-    const decoded = UserService.verifyToken(token) as UserToken;
-    if (decoded.id) {
-      const userInfo = await UserService.getUserInfo(decoded.id);
-      res.json(userInfo[0]);
-    }
-    res.json(decoded);
+  if (!token) res.json({ decoded: null });
+  const decoded = UserService.verifyToken(token) as UserToken;
+  if (decoded.id) {
+    const userInfo = await UserService.getUserInfo(decoded.id);
+    res.json(userInfo[0]);
+    return;
   }
-  res.json({ decoded: null });
+  res.json(decoded);
 };
 
 const resetPwd = async (req: Request, res: Response) => {
-  const { id, password }: LoginInfo = req.body;
-  await UserService.changePassword(id, password);
-  res.json({ result: true });
+  const { id, nickname, password }: { id: string; nickname: string; password: string } = req.body;
+  const result = await UserService.checkChangePasswordAvailable(id, nickname, password);
+  res.json(result);
 };
 
 const signIn = async (req: Request, res: Response) => {
@@ -54,7 +53,7 @@ const signUp = async (req: Request, res: Response) => {
 
 const guestSignIn = (req: Request, res: Response) => {
   const { nickname, color }: GuestLoginInfo = req.body;
-  const result = UserService.enter({ nickname, color });
+  const result = UserService.enter();
   const date = new Date();
   date.setTime(date.getTime() + 24 * 60 * 60 * 1000); // 1day
   res.cookie('token', UserService.createNonUserToken(nickname, color), {

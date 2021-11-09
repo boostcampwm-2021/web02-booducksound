@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
+import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
 import { requestLogout } from '~/api/account';
+import { changeColor } from '~/api/user';
 import Button from '~/atoms/Button';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
@@ -95,6 +97,7 @@ const UserInfoBox = styled.div`
 const UserInfo = styled.div`
   padding: 0 2rem;
   margin-bottom: 2.4rem;
+  text-align: left;
 
   .user-name {
     font-size: 1.2rem;
@@ -102,7 +105,6 @@ const UserInfo = styled.div`
   }
 
   .user-id {
-    text-align: left;
     color: ${theme.colors.gray};
   }
 `;
@@ -156,9 +158,17 @@ const BoxTitle = styled.h2<Props>`
 const MyPage: NextPage = () => {
   const [color, setColor] = useState('fff');
   const userInfo = useSelector((state: any) => state.user);
+  const { id, nickname, color: userColor, likes, myPlaylist } = userInfo;
+  const changeBooduckColor = (newColor: string) => {
+    setColor(() => {
+      changeColor(id, newColor);
+    
+      return newColor;
+    });
+  };
   useEffect(() => {
-    setColor(userInfo.color);
-  }, [userInfo]);
+    setColor(userColor);
+  }, [userColor]);
 
   return (
     <>
@@ -167,20 +177,26 @@ const MyPage: NextPage = () => {
         <MyPageContainer>
           <ProfileBox>
             <UserInfoBox>
-              <ProfileSelector type="mypage" color={color} setColor={setColor}></ProfileSelector>
+              <ProfileSelector type="mypage" color={color} setColor={changeBooduckColor}></ProfileSelector>
               <UserInfo>
                 <p className="user-name">{userInfo.nickname}</p>
                 <p className="user-id">{userInfo.id || '비회원'}</p>
               </UserInfo>
             </UserInfoBox>
             <ProfileBtnBox>
-              <Button
-                content={'비밀번호 변경'}
-                background={theme.colors.lime}
-                fontSize={'16px'}
-                paddingH={'16px'}
-                width={'160px'}
-              ></Button>
+              {!!id && (
+                <Link href="/findPwd">
+                  <a>
+                    <Button
+                      content={'비밀번호 변경'}
+                      background={theme.colors.lime}
+                      fontSize={'16px'}
+                      paddingH={'16px'}
+                      width={'160px'}
+                    ></Button>
+                  </a>
+                </Link>
+              )}
               <Button
                 content={'로그아웃'}
                 background={theme.colors.lightsky}
@@ -191,46 +207,48 @@ const MyPage: NextPage = () => {
               ></Button>
             </ProfileBtnBox>
           </ProfileBox>
-          <div>
-            <BoxTitle num={5}>내가 작성한 플레이리스트</BoxTitle>
-          </div>
-          <PlayListTable>
-            <colgroup>
-              <col width="100%" />
-              <col width="*" />
-            </colgroup>
-            <tbody>
-              {Array(5)
-                .fill(null)
-                .map((_, i) => {
-                  return (
-                    <tr key={i}>
-                      <td>
-                        <PlayTitle>플레이리스트 {i + 1}</PlayTitle>
-                      </td>
-                      <td>
-                        <TableBtnBox>
-                          <Button
-                            content={'수정'}
-                            background={theme.colors.sky}
-                            fontSize={'14px'}
-                            paddingH={'8px'}
-                            width={'100px'}
-                          ></Button>
-                          <Button
-                            content={'삭제'}
-                            background={theme.colors.peach}
-                            fontSize={'14px'}
-                            paddingH={'8px'}
-                            width={'100px'}
-                          ></Button>
-                        </TableBtnBox>
-                      </td>
-                    </tr>
-                  );
-                })}
-            </tbody>
-          </PlayListTable>
+          {!!id && (
+            <>
+              <BoxTitle num={5}>내가 작성한 플레이리스트</BoxTitle>
+              <PlayListTable>
+                <colgroup>
+                  <col width="100%" />
+                  <col width="*" />
+                </colgroup>
+                <tbody>
+                  {Array(5)
+                    .fill(null)
+                    .map((_, i) => {
+                      return (
+                        <tr key={i}>
+                          <td>
+                            <PlayTitle>플레이리스트 {i + 1}</PlayTitle>
+                          </td>
+                          <td>
+                            <TableBtnBox>
+                              <Button
+                                content={'수정'}
+                                background={theme.colors.sky}
+                                fontSize={'14px'}
+                                paddingH={'8px'}
+                                width={'100px'}
+                              ></Button>
+                              <Button
+                                content={'삭제'}
+                                background={theme.colors.peach}
+                                fontSize={'14px'}
+                                paddingH={'8px'}
+                                width={'100px'}
+                              ></Button>
+                            </TableBtnBox>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </PlayListTable>
+            </>
+          )}
         </MyPageContainer>
       </PageBox>
     </>
