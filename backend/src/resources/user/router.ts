@@ -6,4 +6,5 @@ const router = express.Router();
 
 router.get('/getMyPlaylist', UserController.getMyPlaylist);
 router.post('/changeColor', UserController.changeColor);
+router.post('/deleteLikes', UserController.deleteLikes);
 export default router;

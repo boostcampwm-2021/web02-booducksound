@@ -22,3 +22,15 @@ export const getMyPlaylist = async (_id: Array<string>) => {
   });
   return res.json();
 };
+
+export const deleteLikes = async (id: string, _id: string) => {
+  await fetch(`${BACKEND_URL}/user/deleteLikes`, {
+    method: 'POST',
+    headers,
+    credentials: 'include',
+    body: JSON.stringify({
+      id,
+      _id,
+    }),
+  });
+};

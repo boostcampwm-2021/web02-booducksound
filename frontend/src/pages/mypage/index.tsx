@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
 import { requestLogout } from '~/api/account';
-import { changeColor } from '~/api/user';
+import { changeColor, deleteLikes } from '~/api/user';
 import Button from '~/atoms/Button';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
@@ -165,29 +165,39 @@ const handleUserMenu = (id: string, dom: JSX.ReactElement) => {
   if (id) return dom;
 };
 
-const drawMyPlaylist = (myPlaylist: Array<any>) => {
+const updatePlaylist = () => {};
+const deletePlaylist = () => {};
+const deleteLikeslist = ({ target }: any) => {
+  const { writer: id, id: _id } = target?.parentElement?.closest('tr').dataset;
+  deleteLikes(id, _id);
+};
+const drawMyPlaylist = (myPlaylist: Array<any>, isMine: boolean = false) => {
   if (myPlaylist.length) {
-    return myPlaylist?.map((e, i: number) => {
+    return myPlaylist?.map((e) => {
       return (
-        <tr key={i}>
+        <tr key={e._id} data-id={e._id} data-writer={e.userId}>
           <td>
             <PlayTitle>{e.playlistName}</PlayTitle>
           </td>
           <td>
             <TableBtnBox>
-              <Button
-                content={'수정'}
-                background={theme.colors.sky}
-                fontSize={'14px'}
-                paddingH={'8px'}
-                width={'100px'}
-              ></Button>
+              {isMine && (
+                <Button
+                  content={'수정'}
+                  background={theme.colors.sky}
+                  fontSize={'14px'}
+                  paddingH={'8px'}
+                  width={'100px'}
+                  onClick={updatePlaylist}
+                ></Button>
+              )}
               <Button
                 content={'삭제'}
                 background={theme.colors.peach}
                 fontSize={'14px'}
                 paddingH={'8px'}
                 width={'100px'}
+                onClick={isMine ? deletePlaylist : deleteLikeslist}
               ></Button>
             </TableBtnBox>
           </td>
@@ -266,7 +276,7 @@ const MyPage: NextPage = () => {
                   <col width="100%" />
                   <col width="*" />
                 </colgroup>
-                <tbody>{myPlaylist && drawMyPlaylist(myPlaylist)}</tbody>
+                <tbody>{myPlaylist && drawMyPlaylist(myPlaylist, true)}</tbody>
               </PlayListTable>
               <BoxTitle num={likes?.length}>내가 좋아요한 플레이리스트</BoxTitle>
               <PlayListTable>
