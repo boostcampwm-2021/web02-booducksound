@@ -1,17 +1,19 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
+import useSocket from '~/hooks/useSocket';
 import useSocketEmit from '~/hooks/useSocketEmit';
+import useSocketOn from '~/hooks/useSocketOn';
 import GameRoomContainer from '~/organisms/GameRoomContainer';
 import GameRoomNav from '~/organisms/GameRoomNav';
 import { RootState } from '~/reducers/index';
 import { GameRoom } from '~/types/GameRoom';
+import { Player } from '~/types/Player';
 import { SocketEvents } from '~/types/SocketEvents';
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -22,9 +24,12 @@ const Container = styled.div`
 `;
 
 const Game: NextPage = () => {
+  const [players, setPlayers] = useState<{ [socketId: string]: Player }>({});
+  const [player, setPlayer] = useState<Player>({ nickname: '', color: '', status: 'prepare' });
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: any) => state.user);
   const router = useRouter();
+  const socket = useSocket();
 
   useEffect(() => {
     // TODO : 닉네임, 부덕이 색깔 등이 설정되어 있지 않으면(로그인 하지 않았다면) 설정 페이지로 보낼 것
@@ -50,10 +55,18 @@ const Game: NextPage = () => {
     },
   );
 
+  useSocketOn(SocketEvents.SET_GAME_ROOM, ({ players }) => {
+    setPlayers(players);
+    if (players !== null && socket !== null) {
+      setPlayer(players[socket?.id]);
+    }
+    console.log(players);
+  });
+
   return (
     <Container>
-      <GameRoomNav />
-      <GameRoomContainer />
+      <GameRoomNav player={player} />
+      <GameRoomContainer players={players} />
     </Container>
   );
 };
