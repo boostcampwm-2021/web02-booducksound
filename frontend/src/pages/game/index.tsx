@@ -31,7 +31,6 @@ const Game: NextPage = () => {
   const userInfo = useSelector((state: RootState) => state.user);
   const socket = useSocket();
   const router = useRouter();
-  const socket = useSocket();
 
   useEffect(() => {
     // TODO : 닉네임, 부덕이 색깔 등이 설정되어 있지 않으면(로그인 하지 않았다면) 설정 페이지로 보낼 것
@@ -64,7 +63,7 @@ const Game: NextPage = () => {
     }
     console.log(players);
   });
-        
+
   useLeavePage(() => {
     if (!socket) return;
     socket.emit(SocketEvents.LEAVE_ROOM, uuid);
