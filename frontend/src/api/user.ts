@@ -30,7 +30,7 @@ export const getMyPlaylist = async (_id: Array<string>) => {
 
 export const deleteLikes = async (id: string, _id: string) => {
   await fetch(`${BACKEND_URL}/user/likes`, {
-    method: 'POST',
+    method: 'DELETE',
     headers,
     credentials: 'include',
     body: JSON.stringify({
