@@ -8,6 +8,7 @@ interface MusicProps {
   hint: String;
   answers: [];
 }
+
 interface PlaylistProps {
   playlistName: String;
   likeCount: Number;
@@ -18,11 +19,11 @@ interface PlaylistProps {
   createdAt: Date;
 }
 
-const get = async (_id: string) => {
+export const get = async (_id: string) => {
   return await Playlist.findOne({ _id });
 };
 
-const add = (playlistInfo: PlaylistProps) => {
+export const add = (playlistInfo: PlaylistProps) => {
   const newPlaylist = new Playlist({
     ...playlistInfo,
     createAt: new Date(),
@@ -30,13 +31,11 @@ const add = (playlistInfo: PlaylistProps) => {
   return newPlaylist.save();
 };
 
-const update = (_id: string, data: PlaylistProps) => {
+export const update = (_id: string, data: PlaylistProps) => {
   console.log(data);
   return Playlist.updateOne({ _id }, data);
 };
 
-const del = (_id: string) => {
+export const del = (_id: string) => {
   return Playlist.deleteOne({ _id });
 };
-
-export default { get, add, update, del };

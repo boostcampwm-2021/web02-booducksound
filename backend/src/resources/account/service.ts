@@ -32,38 +32,38 @@ export interface UserToken {
   exp?: number;
 }
 
-const idCheck = async (id: string) => {
+export const idCheck = async (id: string) => {
   const result = await User.find({ id });
   return result.length > 0;
 };
 
-const createUserToken = (id: string) => {
+export const createUserToken = (id: string) => {
   const token = jwt.sign({ id }, SECRET_KEY, { expiresIn: '24h' });
   return token;
 };
 
-const createNonUserToken = (nickname: string, color: string) => {
+export const createNonUserToken = (nickname: string, color: string) => {
   const token = jwt.sign({ nickname, color }, SECRET_KEY, { expiresIn: '24h' });
   return token;
 };
 
-const verifyToken = (token: string) => {
+export const verifyToken = (token: string) => {
   const decoded = jwt.verify(token, SECRET_KEY);
   if (decoded) return decoded as UserToken;
 };
 
-const login = async ({ id, password }: LoginInfo) => {
+export const login = async ({ id, password }: LoginInfo) => {
   const user = await User.findOne({ id });
-  if (!user) throw new Error('존재하지 않는 아이디입니다.');
+  if (!user) throw Error('존재하지 않는 아이디입니다.');
   const res = user.checkPassword(password);
-  if (!res) throw new Error('비밀번호가 틀렸습니다.');
+  if (!res) throw Error('비밀번호가 틀렸습니다.');
   return {
     isLogin: res,
     message: '로그인에 성공했습니다.',
   };
 };
 
-const join = async ({ id, password, nickname, color }: UserType) => {
+export const join = async ({ id, password, nickname, color }: UserType) => {
   const newUser = new User({ id, password, nickname, color });
   const res = await newUser.save();
 
@@ -73,7 +73,7 @@ const join = async ({ id, password, nickname, color }: UserType) => {
   };
 };
 
-const enter = () => {
+export const enter = () => {
   const result = {
     isLogin: true,
     message: '비회원 로그인에 성공했습니다.',
@@ -81,10 +81,10 @@ const enter = () => {
   return result;
 };
 
-const checkChangePasswordAvailable = async (id: string, nickname: string, newPw: string) => {
+export const checkChangePasswordAvailable = async (id: string, nickname: string, newPw: string) => {
   const user = await User.findOne({ id, nickname });
 
-  if (!user) throw new Error('ID와 닉네임을 확인해 주세요.');
+  if (!user) throw Error('ID와 닉네임을 확인해 주세요.');
   await User.updateOne({ id }, { password: newPw });
 
   return {
@@ -93,19 +93,7 @@ const checkChangePasswordAvailable = async (id: string, nickname: string, newPw:
   };
 };
 
-const getUserInfo = async (id: string) => {
+export const getUserInfo = async (id: string) => {
   const result = await User.find({ id });
   return result;
-};
-
-export default {
-  idCheck,
-  createUserToken,
-  createNonUserToken,
-  verifyToken,
-  login,
-  join,
-  enter,
-  checkChangePasswordAvailable,
-  getUserInfo,
 };
