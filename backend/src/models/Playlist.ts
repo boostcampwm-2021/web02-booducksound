@@ -11,6 +11,7 @@ const MusicSchema = new Schema({
 
 const PlaylistSchema = new Schema({
   playlistName: { type: String, maxlength: 50 },
+  description: { type: String, maxlength: 100 },
   likeCount: { type: Number, default: 0 },
   playCount: { type: Number, default: 0 },
   musics: [MusicSchema],
