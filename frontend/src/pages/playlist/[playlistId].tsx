@@ -203,7 +203,7 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
           <CreatePlaylistMusicList
             musics={musics}
             setModalOption={setModalOption}
-            setPlaylist={setPlaylist}
+            setPlaylist={setPlaylistAll}
           ></CreatePlaylistMusicList>
           <SubmitButtonWrapper>
             <Button
