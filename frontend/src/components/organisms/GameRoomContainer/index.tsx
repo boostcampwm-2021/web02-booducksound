@@ -60,10 +60,10 @@ const InputBox = styled.input`
 
 const GameRoomContainer = ({ players }: { players: { [socketId: string]: Player } }) => {
   const socket = useSocket();
-
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: any) => state.user);
   const [text, setText] = useState<string>('');
+
   const send = () => {
     if (text !== '') {
       socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text);
