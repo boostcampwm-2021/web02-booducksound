@@ -110,7 +110,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
     setForm((form) => ({ ...form, skip }));
   };
 
-  const hanldeTimePerProlbemChange: ChangeEventHandler = (e) => {
+  const handleTimePerProblemChange: ChangeEventHandler = (e) => {
     const timePerProblemStr = (e.target as HTMLSelectElement).value;
     const timePerProblem = Number(timePerProblemStr.replace(/[^0-9]/g, ''));
     setForm((form) => ({ ...form, timePerProblem }));
@@ -132,13 +132,9 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
   };
 
   const validateForm = (form: Form) => {
-    if (!form.title || !form.playlistId) {
-      setLeftButtonDisabled(true);
-      return false;
-    }
-
-    setLeftButtonDisabled(false);
-    return true;
+    const condition = !form.title || !form.playlistId;
+    setLeftButtonDisabled(condition);
+    return !condition;
   };
 
   return (
@@ -217,7 +213,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
             titleSize="1em"
             options={['10초', '20초', '30초', '40초', '50초', '60초', '70초', '80초', '90초']}
             defaultValue="60초"
-            onChange={hanldeTimePerProlbemChange}
+            onChange={handleTimePerProblemChange}
           />
         </HalfContainer>
       </Container>

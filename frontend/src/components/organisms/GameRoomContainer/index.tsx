@@ -59,16 +59,16 @@ const InputBox = styled.input`
 `;
 
 const GameRoomContainer = ({ players }: { players: { [socketId: string]: Player } }) => {
-  const socket = useSocket();
   const { uuid } = useSelector((state: RootState) => state.room);
-  const userInfo = useSelector((state: any) => state.user);
+  const userInfo = useSelector((state: RootState) => state.user);
   const [text, setText] = useState<string>('');
+  const socket = useSocket();
 
   const send = () => {
-    if (text !== '') {
-      socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text);
-      setText('');
-    }
+    if (!text) return;
+
+    socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text);
+    setText('');
   };
 
   return (

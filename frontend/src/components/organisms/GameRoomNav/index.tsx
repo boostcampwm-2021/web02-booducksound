@@ -73,15 +73,17 @@ const ResponsiveButton = ({ background, children, type, onClick }: PropsWithChil
 };
 
 const converter: { [status: string]: 'ready' | 'prepare' } = { prepare: 'ready', ready: 'prepare' };
+const statusEncoder = { king: 'START', prepare: 'PREPARE', ready: 'READY' };
 
 const GameRoomNav = ({ player }: { player: Player }) => {
   const { uuid } = useSelector((state: RootState) => state.room);
   const socket = useSocket();
-  const statusEncoder = { king: 'START', prepare: 'PREPARE', ready: 'READY' };
+
   const changeStatus = (player: Player) => {
     if (player.status !== 'king') player = { ...player, status: converter[player.status] };
     socket?.emit(SocketEvents.SET_GAME_ROOM, uuid, player);
   };
+
   return (
     <Container>
       <MuteButton type="button" />

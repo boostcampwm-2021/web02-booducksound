@@ -84,15 +84,22 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setPlaylist }: PropsW
   const handleDrop: DragEventHandler = (e) => {
     const grabPosition = Number((grab as HTMLElement).dataset.position);
     const targetPosition = Number((e.target as HTMLElement).dataset.position);
-    setPlaylist((preState: PlaylistInput) => {
-      const nextMusics = swap<Music>(grabPosition, targetPosition, [...preState.musics]);
-      return { ...preState, musics: nextMusics };
+    setPlaylist((prevState: PlaylistInput) => {
+      const nextMusics = swap<Music>(grabPosition, targetPosition, [...prevState.musics]);
+      return { ...prevState, musics: nextMusics };
     });
   };
   const handleDragEnd: DragEventHandler = (e) => {
     (e.target as HTMLElement).classList.remove('grabbing');
     e.dataTransfer.dropEffect = 'move';
   };
+  const deleteMusic = (target: number) =>
+    setPlaylist((prevState: PlaylistInput) => {
+      return {
+        ...prevState,
+        musics: [...prevState.musics.filter((music, idx) => idx !== target)],
+      };
+    });
 
   return (
     <MusicListContainer>
@@ -120,9 +127,7 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setPlaylist }: PropsW
               title={music.info}
               key={idx}
               idx={idx}
-              deleteItem={(target: number) =>
-                setPlaylist((preState: Music[]) => [...preState.filter((music, idx) => idx !== target)])
-              }
+              deleteItem={deleteMusic}
               modifyItem={() => setModalOption({ type: 'modify', target: idx })}
               dragHandlers={{
                 handleDragOver,

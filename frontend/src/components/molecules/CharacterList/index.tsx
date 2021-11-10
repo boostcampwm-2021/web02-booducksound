@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import styled from '@emotion/styled';
 
 import CharacterProfile from '~/molecules/CharacterProfile';
