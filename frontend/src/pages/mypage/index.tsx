@@ -14,9 +14,9 @@ import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import ProfileSelector from '~/atoms/ProfileSelector';
 import { PLAYLIST_EMPTY_MSG } from '~/constants/index';
+import Modal from '~/molecules/Modal';
 import { RootState } from '~/reducers/index';
 import { UserState } from '~/reducers/user';
-import Modal from '~/molecules/Modal';
 import theme from '~/styles/theme';
 import { Playlist } from '~/types/Playlist';
 
@@ -181,45 +181,6 @@ const updatePlaylist = (_id: string | undefined) => (e: MouseEvent) => {
   Router.push(`/playlist/${_id}`);
 };
 const deletePlaylist = () => {};
-const drawMyPlaylist = (myPlaylist: Playlist[], isMine: boolean = false) => {
-  if (!myPlaylist.length) {
-    return (
-      <EmptyPlayList className="no-result">
-        <td colSpan={2}>{PLAYLIST_EMPTY_MSG}</td>
-      </EmptyPlayList>
-    );
-  }
-  return myPlaylist.map((e) => (
-    <tr key={e._id} data-id={e._id} data-writer={e.userId}>
-      <td>
-        <PlayTitle>{e.playlistName}</PlayTitle>
-      </td>
-      <td>
-        <TableBtnBox>
-          {isMine && (
-            <Button
-              content={'수정'}
-              background={theme.colors.sky}
-              fontSize={'14px'}
-              paddingH={'8px'}
-              width={'100px'}
-              onClick={updatePlaylist(e._id)}
-            ></Button>
-          )}
-          <Button
-            content={'삭제'}
-            background={theme.colors.peach}
-            fontSize={'14px'}
-            paddingH={'8px'}
-            width={'100px'}
-            onClick={isMine ? deletePlaylist : 
-                    }
-          ></Button>
-        </TableBtnBox>
-      </td>
-    </tr>
-  ));
-};
 
 const MyPage: NextPage = () => {
   const [color, setColor] = useState('fff');
@@ -239,6 +200,44 @@ const MyPage: NextPage = () => {
     const { id } = target?.parentElement?.closest('tr').dataset;
     setRemoveModalOnOff(true);
     selectOid(id);
+  };
+  const drawMyPlaylist = (myPlaylist: Playlist[], isMine: boolean = false) => {
+    if (!myPlaylist.length) {
+      return (
+        <EmptyPlayList className="no-result">
+          <td colSpan={2}>{PLAYLIST_EMPTY_MSG}</td>
+        </EmptyPlayList>
+      );
+    }
+    return myPlaylist.map((e) => (
+      <tr key={e._id} data-id={e._id} data-writer={e.userId}>
+        <td>
+          <PlayTitle>{e.playlistName}</PlayTitle>
+        </td>
+        <td>
+          <TableBtnBox>
+            {isMine && (
+              <Button
+                content={'수정'}
+                background={theme.colors.sky}
+                fontSize={'14px'}
+                paddingH={'8px'}
+                width={'100px'}
+                onClick={updatePlaylist(e._id)}
+              ></Button>
+            )}
+            <Button
+              content={'삭제'}
+              background={theme.colors.peach}
+              fontSize={'14px'}
+              paddingH={'8px'}
+              width={'100px'}
+              onClick={isMine ? deletePlaylist : openRemoveModal}
+            ></Button>
+          </TableBtnBox>
+        </td>
+      </tr>
+    ));
   };
 
   const changeBooduckColor = (newColor: string) => {
