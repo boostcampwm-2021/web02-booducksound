@@ -1,7 +1,8 @@
 import Router from 'next/router';
 import { Cookies } from 'react-cookie';
 
-import { HEADERS as headers, BACKEND_URL } from '~/constants/index';
+import { BACKEND_URL } from '~/constants/index';
+import API from '~/utils/API';
 
 export const cookie = new Cookies();
 
@@ -16,84 +17,54 @@ export const handleLoginUser = () => {
 };
 
 export const getUserInfo = async () => {
-  const res = await fetch(`${BACKEND_URL}/check-login`, {
-    method: 'GET',
-    headers,
-    credentials: 'include',
-  });
+  const res = await API('GET')(`${BACKEND_URL}/check-login`)();
   return res.json();
 };
 
 export const requestLogin = async (id: string, password: string) => {
-  const res = await fetch(`${BACKEND_URL}/sign-in`, {
-    method: 'POST',
-    headers,
-    credentials: 'include',
-    body: JSON.stringify({
-      id,
-      password,
-    }),
-  }).then((res) => res.json());
-  const { isLogin, message } = res;
-  if (isLogin) {
-    Router.push('/lobby');
-  } else alert(message);
+  const res = await API('POST')(`${BACKEND_URL}/sign-in`)({ body: JSON.stringify({ id, password }) });
+  const { isLogin, message } = await res.json();
+
+  if (!isLogin) {
+    alert(message);
+    return;
+  }
+
+  Router.push('/lobby');
 };
 
-export const requestLogout = () => {
-  fetch(`${BACKEND_URL}/log-out`, {
-    method: 'GET',
-    headers,
-    credentials: 'include',
-  }).then(handleLoginUser);
+export const requestLogout = async () => {
+  await API('GET')(`${BACKEND_URL}/log-out`)();
+  handleLoginUser();
 };
 
 export const requestChangePassword = async (id: string, nickname: string, password: string) => {
-  const res = await fetch(`${BACKEND_URL}/reset-pwd`, {
-    method: 'POST',
-    headers,
-    credentials: 'include',
-    body: JSON.stringify({
-      id,
-      nickname,
-      password,
-    }),
-  }).then((res) => res.json());
-  const { isChange, message } = res;
+  const res = await API('POST')(`${BACKEND_URL}/reset-pwd`)({ body: JSON.stringify({ id, nickname, password }) });
+  const { isChange, message } = await res.json();
   alert(message);
   if (isChange) history.back();
 };
 
 export const requestEnter = async (nickname: string, color: string) => {
-  const res = await fetch(`${BACKEND_URL}/guest-sign-in`, {
-    method: 'POST',
-    headers,
-    credentials: 'include',
-    body: JSON.stringify({
-      nickname,
-      color,
-    }),
-  }).then((res) => res.json());
-  const { isLogin, message } = res;
-  if (isLogin) {
-    Router.push('/lobby');
-  } else alert(message);
+  const res = await API('POST')(`${BACKEND_URL}/guest-sign-in`)({ body: JSON.stringify({ nickname, color }) });
+  const { isLogin, message } = await res.json();
+
+  if (!isLogin) {
+    alert(message);
+    return;
+  }
+
+  Router.push('/lobby');
 };
 
 export const requestJoin = async (id: string, password: string, nickname: string, color: string) => {
-  const res = await fetch(`${BACKEND_URL}/sign-up`, {
-    method: 'POST',
-    headers,
-    credentials: 'include',
-    body: JSON.stringify({
-      id,
-      password,
-      nickname,
-      color,
-    }),
-  }).then((res) => res.json());
-  const { isLogin, message } = res;
-  if (isLogin) {
-    Router.push('/lobby');
-  } else alert(message);
+  const res = await API('POST')(`${BACKEND_URL}/sign-up`)({ body: JSON.stringify({ id, password, nickname, color }) });
+  const { isLogin, message } = await res.json();
+
+  if (!isLogin) {
+    alert(message);
+    return;
+  }
+
+  Router.push('/lobby');
 };

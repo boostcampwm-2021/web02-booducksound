@@ -54,22 +54,18 @@ const CreatePlaylistMusicItem = ({ idx, title, deleteItem, modifyItem, dragHandl
     >
       <MusicTitle>{title}</MusicTitle>
       <ButtonBox>
+        <Button background={theme.colors.sky} fontSize="12px" paddingH="7px" width="100px" onClick={() => modifyItem()}>
+          수정
+        </Button>
         <Button
-          content="수정"
-          background={theme.colors.sky}
-          fontSize="12px"
-          paddingH="7px"
-          width="100px"
-          onClick={(e) => modifyItem()}
-        />
-        <Button
-          content="삭제"
           background={theme.colors.peach}
           fontSize="12px"
           paddingH="7px"
           width="100px"
-          onClick={(e) => deleteItem(idx)}
-        />
+          onClick={() => deleteItem(idx)}
+        >
+          삭제
+        </Button>
       </ButtonBox>
     </ItemContainer>
   );

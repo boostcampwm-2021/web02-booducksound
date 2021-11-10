@@ -218,22 +218,24 @@ const MyPage: NextPage = () => {
           <TableBtnBox>
             {isMine && (
               <Button
-                content={'수정'}
                 background={theme.colors.sky}
                 fontSize={'14px'}
                 paddingH={'8px'}
                 width={'100px'}
                 onClick={updatePlaylist(e._id)}
-              ></Button>
+              >
+                수정
+              </Button>
             )}
             <Button
-              content={'삭제'}
               background={theme.colors.peach}
               fontSize={'14px'}
               paddingH={'8px'}
               width={'100px'}
               onClick={isMine ? deletePlaylist : openRemoveModal}
-            ></Button>
+            >
+              삭제
+            </Button>
           </TableBtnBox>
         </td>
       </tr>
@@ -274,24 +276,21 @@ const MyPage: NextPage = () => {
                 id,
                 <Link href="/findPwd">
                   <a>
-                    <Button
-                      content={'비밀번호 변경'}
-                      background={theme.colors.lime}
-                      fontSize={'16px'}
-                      paddingH={'16px'}
-                      width={'160px'}
-                    ></Button>
+                    <Button background={theme.colors.lime} fontSize={'16px'} paddingH={'16px'} width={'160px'}>
+                      비밀번호 변경
+                    </Button>
                   </a>
                 </Link>,
               )}
               <Button
-                content={'로그아웃'}
                 background={theme.colors.lightsky}
                 fontSize={'16px'}
                 paddingH={'16px'}
                 width={'160px'}
                 onClick={requestLogout}
-              ></Button>
+              >
+                로그아웃
+              </Button>
             </ProfileBtnBox>
           </ProfileBox>
           {handleUserMenu(

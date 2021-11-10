@@ -15,24 +15,26 @@ import '~/styles/default.css';
 
 const store = createStore(rootReducer, compose(applyMiddleware(thunk)));
 
+const Authenticator = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUser());
+    handleLoginUser();
+  }, []);
+
+  return <></>;
+};
+
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        <App />
+        <Authenticator />
         <Component {...pageProps} />
       </Provider>
     </ThemeProvider>
   );
-};
-
-const App = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getUser());
-    handleLoginUser();
-  });
-  return <></>;
 };
 
 export default MyApp;

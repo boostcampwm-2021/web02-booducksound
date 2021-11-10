@@ -58,10 +58,10 @@ const Login: NextPage = () => {
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async () => {
-    if (!id) alert(ID_EMPTY_MSG);
-    else if (!password) alert(PASSWORD_EMPTY_MSG);
-    else await requestLogin(id, password);
+  const handleLogin = () => {
+    if (!id) return alert(ID_EMPTY_MSG);
+    if (!password) return alert(PASSWORD_EMPTY_MSG);
+    requestLogin(id, password);
   };
 
   return (
@@ -94,9 +94,10 @@ const Login: NextPage = () => {
               background={theme.colors.sky}
               fontSize={'30px'}
               paddingH={'24px'}
-              content={'로그인'}
               onClick={handleLogin}
-            />
+            >
+              로그인
+            </Button>
             <Link href="/findPwd">
               <SearchPwdBtn href="#none">비밀번호를 잊어버리셨나요?</SearchPwdBtn>
             </Link>

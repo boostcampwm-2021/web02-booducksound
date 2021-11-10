@@ -5,8 +5,9 @@ import { LobbyRoom } from './types/LobbyRoom';
 import { Player } from './types/Player';
 import { ServerRoom } from './types/ServerRoom';
 import { SocketEvents } from './types/SocketEvents';
-import { serverRooms, getLobbyRoom, getGameRoom } from './utils/rooms';
+import { getLobbyRoom, getGameRoom } from './utils/rooms';
 import streamify from './utils/streamify';
+import serverRooms from './variables/serverRooms';
 
 const io = new socketio.Server();
 

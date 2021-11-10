@@ -27,14 +27,14 @@ const Container = styled.div`
   }
 `;
 
-const Ul = styled.ul`
+const PlayLists = styled.ul`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
   height: 100%;
 `;
 
-const Li = styled.li`
+const PlayList = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -122,7 +122,7 @@ const playlists = [
 const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) => {
   const [search, setSearch] = useState('');
 
-  const handleSelectPlaylistClick: MouseEventHandler = (e) => {
+  const handleSelectPlaylistBtnClick: MouseEventHandler = (e) => {
     const button = (e.target as Element).closest('button');
     if (!button) return;
 
@@ -131,11 +131,13 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
 
     const playlistId = li.dataset.playlistId as string;
     const playlistName = li.dataset.playlistName as string;
+
     setForm((prev) => {
       const form = { ...prev, playlistId, playlistName };
       validateForm(form);
       return form;
     });
+
     setModalOnOff(false);
   };
 
@@ -143,8 +145,6 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
     <Modal
       height="600px"
       maxWidth="720px"
-      // leftButtonText={'leftButtonText'}
-      // leftButtonHanlder={handleCreateRoomBtn}
       rightButtonHandler={() => setModalOnOff(false)}
       hasModalBackground={false}
       hasOnlyCancleBtn={true}
@@ -164,17 +164,19 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
           value={search}
           onChangeHandler={(e) => setSearch((e.target as HTMLInputElement).value)}
         />
-        <Ul onClick={handleSelectPlaylistClick}>
+        <PlayLists onClick={handleSelectPlaylistBtnClick}>
           {playlists &&
             playlists.map(({ title, hashtags, playCount, description, playlistId }, i) => {
               return (
-                <Li data-playlist-id={playlistId} data-playlist-name={title} key={i}>
+                <PlayList data-playlist-id={playlistId} data-playlist-name={title} key={i}>
                   <Title>{title}</Title>
-                  <ResponsiveButton background={theme.colors.lilac} content="선택" fontSize="16px" width="80px" />
-                </Li>
+                  <ResponsiveButton background={theme.colors.lilac} fontSize="16px" width="80px">
+                    선택
+                  </ResponsiveButton>
+                </PlayList>
               );
             })}
-        </Ul>
+        </PlayLists>
       </Container>
     </Modal>
   );

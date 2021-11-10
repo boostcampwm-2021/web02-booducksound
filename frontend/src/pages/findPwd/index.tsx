@@ -10,6 +10,7 @@ import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG } from '~/constants/index';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
+import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
 
 const LoginContainer = styled.div`
@@ -51,7 +52,7 @@ const FindPwd: NextPage = () => {
   const [id, setID] = useState('');
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
-  const userInfo = useSelector((state: any) => state.user);
+  const userInfo = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const { id, nickname } = userInfo;
@@ -59,11 +60,11 @@ const FindPwd: NextPage = () => {
     setNickname(nickname);
   }, [userInfo]);
 
-  const handleFindPwd = async () => {
-    if (!id) alert(ID_EMPTY_MSG);
-    else if (!nickname) alert(NICKNAME_EMPTY_MSG);
-    else if (!password) alert(PASSWORD_EMPTY_MSG);
-    else await requestChangePassword(id, nickname, password);
+  const handleFindPwd = () => {
+    if (!id) return alert(ID_EMPTY_MSG);
+    if (!nickname) return alert(NICKNAME_EMPTY_MSG);
+    if (!password) return alert(PASSWORD_EMPTY_MSG);
+    requestChangePassword(id, nickname, password);
   };
 
   return (
@@ -105,9 +106,10 @@ const FindPwd: NextPage = () => {
               background={theme.colors.sky}
               fontSize={'28px'}
               smFontSize={'20px'}
-              content={'비밀번호 재설정'}
               onClick={handleFindPwd}
-            />
+            >
+              비밀번호 재설정
+            </ResponsiveButton>
           </InputContainer>
         </LoginContainer>
       </PageBox>

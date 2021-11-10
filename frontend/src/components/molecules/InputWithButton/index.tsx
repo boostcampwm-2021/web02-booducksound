@@ -55,14 +55,15 @@ const InputWithButton = (props: Props) => {
         <ResponsiveButton
           width={props.btnWidth}
           fontSize={props.btnFontSize}
-          content={props.btnContent}
           background={props.btnBackground}
           lgWidth={props.btnLgWidth}
           mdWidth={props.btnMdWidth}
           smWidth={props.btnSmWidth}
           height={props.btnHeight}
           onClick={props.onClick}
-        />
+        >
+          {props.btnContent}
+        </ResponsiveButton>
       </ButtonContainer>
     </Container>
   );

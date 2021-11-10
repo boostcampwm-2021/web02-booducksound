@@ -92,10 +92,11 @@ const Modal = ({
                 smWidth={'120px'}
                 smFontSize={'16px'}
                 background={theme.colors.sky}
-                content={leftButtonText || '확인'}
                 onClick={leftButtonHandler}
                 disabled={leftButtonDisabled}
-              />
+              >
+                {leftButtonText || '확인'}
+              </ResponsiveButton>
             )}
             <ResponsiveButton
               width={'180px'}
@@ -105,9 +106,10 @@ const Modal = ({
               smWidth={'120px'}
               smFontSize={'16px'}
               background={theme.colors.alert}
-              content={rightButtonText || '취소'}
               onClick={rightButtonHandler}
-            />
+            >
+              {rightButtonText || '취소'}
+            </ResponsiveButton>
           </ButtonContainer>
         </ModalWrapper>
       </ModalContainer>

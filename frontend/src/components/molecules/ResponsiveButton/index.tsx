@@ -1,4 +1,4 @@
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -16,9 +16,8 @@ interface ButtonWrapperProps {
   onClick?: MouseEventHandler;
 }
 
-interface ResponsiveButtonProps extends ButtonWrapperProps {
+interface Props extends ButtonWrapperProps {
   background: string;
-  content: string;
   height?: string;
   paddingH?: string;
   disabled?: boolean;
@@ -44,12 +43,14 @@ const ButtonWrapper = styled.div<ButtonWrapperProps>`
   }
 `;
 
-const ResponsiveButton = (props: ResponsiveButtonProps) => {
-  const { content, background, height, paddingH, disabled } = props;
+const ResponsiveButton = (props: PropsWithChildren<Props>) => {
+  const { children, background, height, paddingH, disabled } = props;
 
   return (
     <ButtonWrapper {...props}>
-      <Button content={content} background={background} height={height} paddingH={paddingH} disabled={disabled} />
+      <Button background={background} height={height} paddingH={paddingH} disabled={disabled}>
+        {children}
+      </Button>
     </ButtonWrapper>
   );
 };

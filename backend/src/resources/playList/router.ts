@@ -1,6 +1,6 @@
 import express from 'express';
 
-import Playlist from './controller';
+import * as Playlist from './controller';
 
 const router = express.Router();
 

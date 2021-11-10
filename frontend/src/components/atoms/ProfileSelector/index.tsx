@@ -1,5 +1,3 @@
-import { useState, PropsWithChildren, MouseEventHandler } from 'react';
-
 import styled from '@emotion/styled';
 
 import Character from '~/atoms/Character';

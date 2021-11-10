@@ -1,8 +1,6 @@
 import { GameRoom } from '../types/GameRoom';
 import { LobbyRoom } from '../types/LobbyRoom';
-import { ServerRoom } from '../types/ServerRoom';
-
-export const serverRooms: { [uuid: string]: ServerRoom } = {};
+import serverRooms from '../variables/serverRooms';
 
 export const getLobbyRoom = (uuid: string) => {
   const serverRoom = serverRooms[uuid];
@@ -28,6 +26,8 @@ export const getGameRoom = (uuid: string) => {
   const gameRoom: GameRoom = {
     hasPassword: !!serverRoom.password,
     playListId: serverRoom.playListId,
+    hashtags: [], // TODO: playListID를 통해 hashTags를 기져 오기
+    playlistName: '플레이리스트이름', // TODO: playlistId를 통해 playlistName 가져오기
     players: serverRoom.players,
     skip: serverRoom.skip,
     status: serverRoom.status,

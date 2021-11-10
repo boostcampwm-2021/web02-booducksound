@@ -84,15 +84,22 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setPlaylist }: PropsW
   const handleDrop: DragEventHandler = (e) => {
     const grabPosition = Number((grab as HTMLElement).dataset.position);
     const targetPosition = Number((e.target as HTMLElement).dataset.position);
-    setPlaylist((preState: PlaylistInput) => {
-      const nextMusics = swap<Music>(grabPosition, targetPosition, [...preState.musics]);
-      return { ...preState, musics: nextMusics };
+    setPlaylist((prevState: PlaylistInput) => {
+      const nextMusics = swap<Music>(grabPosition, targetPosition, [...prevState.musics]);
+      return { ...prevState, musics: nextMusics };
     });
   };
   const handleDragEnd: DragEventHandler = (e) => {
     (e.target as HTMLElement).classList.remove('grabbing');
     e.dataTransfer.dropEffect = 'move';
   };
+  const deleteMusic = (target: number) =>
+    setPlaylist((prevState: PlaylistInput) => {
+      return {
+        ...prevState,
+        musics: [...prevState.musics.filter((music, idx) => idx !== target)],
+      };
+    });
 
   return (
     <MusicListContainer>
@@ -100,13 +107,14 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setPlaylist }: PropsW
         <MusicListTitleTop>
           <MusicListTitle>노래 목록</MusicListTitle>
           <Button
-            content="추가"
             background={theme.colors.mint}
             fontSize="12px"
             paddingH="7px"
             width="100px"
             onClick={(e) => setModalOption({ type: 'create', target: null })}
-          ></Button>
+          >
+            추가
+          </Button>
         </MusicListTitleTop>
         <MusicListTitleBottom>최소 3개, 최대 50개까지 추가가 가능합니다.</MusicListTitleBottom>
       </MusicListTitleBox>
@@ -119,9 +127,7 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setPlaylist }: PropsW
               title={music.info}
               key={idx}
               idx={idx}
-              deleteItem={(target: number) =>
-                setPlaylist((preState: Music[]) => [...preState.filter((music, idx) => idx !== target)])
-              }
+              deleteItem={deleteMusic}
               modifyItem={() => setModalOption({ type: 'modify', target: idx })}
               dragHandlers={{
                 handleDragOver,

@@ -58,9 +58,9 @@ const Enter: NextPage = () => {
   const [nickname, setNickname] = useState('');
   const [color, setColor] = useState('fff');
 
-  const handleEnter = async () => {
-    if (!nickname) alert(NICKNAME_EMPTY_MSG);
-    else await requestEnter(nickname, color);
+  const handleEnter = () => {
+    if (!nickname) return alert(NICKNAME_EMPTY_MSG);
+    requestEnter(nickname, color);
   };
 
   return (
@@ -85,9 +85,10 @@ const Enter: NextPage = () => {
                 background={theme.colors.sky}
                 fontSize={'30px'}
                 paddingH={'24px'}
-                content={'참여하기'}
                 onClick={handleEnter}
-              />
+              >
+                참여하기
+              </Button>
             </a>
           </InputContainer>
         </EnterContainer>
