@@ -6,6 +6,7 @@ import { Player } from './types/Player';
 import { ServerRoom } from './types/ServerRoom';
 import { SocketEvents } from './types/SocketEvents';
 import { serverRooms, getLobbyRoom, getGameRoom } from './utils/rooms';
+import streamify from './utils/streamify';
 
 const io = new socketio.Server();
 
@@ -46,6 +47,13 @@ io.on('connection', (socket) => {
     const { title, playListId, password, skip, timePerProblem } = room;
     const uuid = short.generate();
 
+    // TODO: serverRooms[uuid].playlistId 를 통해 DB에서 musics를 가져와서 순서를 랜덤하게 섞을 것
+    const dummyMusics = [
+      { youtubeId: 'Ec7TN_11az8', answers: ['stay'], hint: 'hint' },
+      { youtubeId: 'Fc9fVi-_DWE', answers: ['신호등'], hint: 'hint' },
+      { youtubeId: 'v7bnOxV4jAc', answers: ['lilac'], hint: 'hint' },
+    ];
+
     const serverRoom: ServerRoom = {
       title,
       password,
@@ -54,6 +62,11 @@ io.on('connection', (socket) => {
       skip,
       timePerProblem,
       status: 'waiting',
+      musics: dummyMusics,
+      curRound: 1,
+      maxRound: dummyMusics.length,
+      skipCount: 0,
+      streams: [],
     };
 
     serverRooms[uuid] = serverRoom;
@@ -94,10 +107,28 @@ io.on('connection', (socket) => {
     });
 
     socket.on(SocketEvents.START_GAME, () => {
+      const { musics } = serverRooms[uuid];
+
+      serverRooms[uuid].status = 'playing';
+      serverRooms[uuid].streams = [streamify(musics[0].youtubeId), streamify(musics[1].youtubeId)];
       io.to(uuid).emit(SocketEvents.START_GAME);
     });
 
     socket.on(SocketEvents.NEXT_ROUND, () => {
+      const { curRound, maxRound, musics } = serverRooms[uuid];
+
+      if (curRound === maxRound) {
+        io.to(uuid).emit(SocketEvents.GAME_END);
+        return;
+      }
+
+      serverRooms[uuid].curRound += 1;
+      serverRooms[uuid].streams.shift(); // TODO: Queue 자료형으로 구현할 것
+
+      if (curRound + 1 < musics.length) {
+        serverRooms[uuid].streams.push(streamify(musics[curRound + 1].youtubeId));
+      }
+
       io.to(uuid).emit(SocketEvents.NEXT_ROUND);
     });
   });

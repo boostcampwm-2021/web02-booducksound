@@ -16,7 +16,7 @@ export const handleLoginUser = () => {
 };
 
 export const getUserInfo = async () => {
-  const res = await fetch(`${BACKEND_URL}/checkLogin`, {
+  const res = await fetch(`${BACKEND_URL}/check-login`, {
     method: 'GET',
     headers,
     credentials: 'include',
@@ -25,7 +25,7 @@ export const getUserInfo = async () => {
 };
 
 export const requestLogin = async (id: string, password: string) => {
-  const res = await fetch(`${BACKEND_URL}/signIn`, {
+  const res = await fetch(`${BACKEND_URL}/sign-in`, {
     method: 'POST',
     headers,
     credentials: 'include',
@@ -41,7 +41,7 @@ export const requestLogin = async (id: string, password: string) => {
 };
 
 export const requestLogout = () => {
-  fetch(`${BACKEND_URL}/logOut`, {
+  fetch(`${BACKEND_URL}/log-out`, {
     method: 'GET',
     headers,
     credentials: 'include',
@@ -49,7 +49,7 @@ export const requestLogout = () => {
 };
 
 export const requestChangePassword = async (id: string, nickname: string, password: string) => {
-  const res = await fetch(`${BACKEND_URL}/resetPwd`, {
+  const res = await fetch(`${BACKEND_URL}/reset-pwd`, {
     method: 'POST',
     headers,
     credentials: 'include',
@@ -65,7 +65,7 @@ export const requestChangePassword = async (id: string, nickname: string, passwo
 };
 
 export const requestEnter = async (nickname: string, color: string) => {
-  const res = await fetch(`${BACKEND_URL}/guestSignIn`, {
+  const res = await fetch(`${BACKEND_URL}/guest-sign-in`, {
     method: 'POST',
     headers,
     credentials: 'include',
@@ -81,7 +81,7 @@ export const requestEnter = async (nickname: string, color: string) => {
 };
 
 export const requestJoin = async (id: string, password: string, nickname: string, color: string) => {
-  const res = await fetch(`${BACKEND_URL}/signUp`, {
+  const res = await fetch(`${BACKEND_URL}/sign-up`, {
     method: 'POST',
     headers,
     credentials: 'include',
