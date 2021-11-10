@@ -1,11 +1,12 @@
 import { UserActions } from '~/types/Actions';
+import { Playlist } from '~/types/Playlist';
 
 export type UserState = {
-  id?: string;
+  id: string;
   nickname: string;
-  color?: string;
-  likes?: any;
-  myPlaylist?: any;
+  color: string;
+  likes: any;
+  myPlaylist: Playlist[];
 };
 
 const initialState: UserState = {

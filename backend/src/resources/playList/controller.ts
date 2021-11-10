@@ -5,12 +5,15 @@ import UserService from '../user/service';
 import PlaylistService from './service';
 
 const Playlist = {
-  // filter: async (req: Request, res: Response) => {
-  //   await PlaylistService
-  //     .get(req.body)
-  //     .then((result: any) => res.json(result))
-  //     .catch((e: Error) => res.json(e));
-  // },
+  get: async (req: Request, res: Response) => {
+    try {
+      if (typeof req.query._id !== 'string') throw Error('Not Exist ObjectId');
+      const playlist = await PlaylistService.get(req.query._id);
+      res.json({ status: 'SUCCESS', playlist });
+    } catch (e) {
+      res.json({ status: 'FAILED', e });
+    }
+  },
   register: async (req: Request, res: Response) => {
     try {
       const playlist = await PlaylistService.add(req.body);
@@ -20,10 +23,10 @@ const Playlist = {
       res.json({ status: 'FAILED', error: e });
     }
   },
-  modify: async (req: Request, res: Response) => {
+  update: async (req: Request, res: Response) => {
     const { _id, data } = req.body;
     try {
-      const result = await PlaylistService.modify(_id, data);
+      const result = await PlaylistService.update(_id, data);
       res.json({ status: 'SUCCESS', result });
     } catch (e) {
       res.json({ status: 'FAILED', error: e });
