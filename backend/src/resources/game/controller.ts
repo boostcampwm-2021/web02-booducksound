@@ -1,7 +1,7 @@
 import cloneable from 'cloneable-readable';
 import { Request, Response } from 'express';
 
-import { serverRooms } from '../../utils/rooms';
+import serverRooms from '../../variables/serverRooms';
 
 export const getInitialMusic = async (req: Request, res: Response) => {
   try {
