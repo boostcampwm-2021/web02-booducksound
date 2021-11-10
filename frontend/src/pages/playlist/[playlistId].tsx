@@ -206,14 +206,9 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
             setPlaylist={setPlaylistAll}
           ></CreatePlaylistMusicList>
           <SubmitButtonWrapper>
-            <Button
-              content="등록"
-              background={theme.colors.sky}
-              fontSize="1.5em"
-              paddingH="2%"
-              width="45%"
-              onClick={handleSubmit}
-            ></Button>
+            <Button background={theme.colors.sky} fontSize="1.5em" paddingH="2%" width="45%" onClick={handleSubmit}>
+              등록
+            </Button>
           </SubmitButtonWrapper>
         </Wrapper>
       </PageBox>

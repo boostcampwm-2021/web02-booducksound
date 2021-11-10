@@ -1,4 +1,4 @@
-import { MouseEventHandler } from 'react';
+import { MouseEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -47,12 +47,20 @@ interface Props {
   background?: string;
   fontSize?: string;
   paddingH?: string;
-  content: string;
   onClick?: MouseEventHandler;
   disabled?: boolean;
 }
 
-const Button = ({ width, height, background, fontSize, paddingH, content, onClick, disabled }: Props) => {
+const Button = ({
+  width,
+  height,
+  background,
+  fontSize,
+  paddingH,
+  children,
+  onClick,
+  disabled,
+}: PropsWithChildren<Props>) => {
   return (
     <ButtonContainer
       width={width}
@@ -63,7 +71,7 @@ const Button = ({ width, height, background, fontSize, paddingH, content, onClic
       onClick={onClick}
       disabled={disabled}
     >
-      {content}
+      {children}
     </ButtonContainer>
   );
 };

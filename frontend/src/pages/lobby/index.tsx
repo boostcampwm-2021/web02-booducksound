@@ -163,8 +163,9 @@ const Lobby: NextPage = () => {
                   fontSize="20px"
                   smWidth="110px"
                   smFontSize="12px"
-                  content="MY PAGE"
-                />
+                >
+                  MY PAGE
+                </ResponsiveButton>
               </a>
             </Link>
           </NavItem>
@@ -175,8 +176,9 @@ const Lobby: NextPage = () => {
               fontSize="20px"
               smWidth="110px"
               smFontSize="12px"
-              content="초대코드 입력"
-            />
+            >
+              초대코드 입력
+            </ResponsiveButton>
             <Link href="/playlist/create">
               <a>
                 <ResponsiveButton
@@ -185,8 +187,9 @@ const Lobby: NextPage = () => {
                   fontSize="20px"
                   smWidth="110px"
                   smFontSize="12px"
-                  content="플레이리스트 추가"
-                />
+                >
+                  플레이리스트 추가
+                </ResponsiveButton>
               </a>
             </Link>
             <ResponsiveButton
@@ -195,9 +198,10 @@ const Lobby: NextPage = () => {
               fontSize="20px"
               smWidth="110px"
               smFontSize="12px"
-              content="방 생성"
               onClick={handleCreateRoomModalBtn}
-            />
+            >
+              방 생성
+            </ResponsiveButton>
             {createRoomModalOnOff && <CreateRoomModal setModalOnOff={setCreateRoomModalOnOff} leftButtonText="생성" />}
           </NavItem>
         </Nav>

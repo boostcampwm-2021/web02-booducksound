@@ -85,9 +85,10 @@ const Enter: NextPage = () => {
                 background={theme.colors.sky}
                 fontSize={'30px'}
                 paddingH={'24px'}
-                content={'참여하기'}
                 onClick={handleEnter}
-              />
+              >
+                참여하기
+              </Button>
             </a>
           </InputContainer>
         </EnterContainer>

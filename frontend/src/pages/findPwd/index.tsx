@@ -105,9 +105,10 @@ const FindPwd: NextPage = () => {
               background={theme.colors.sky}
               fontSize={'28px'}
               smFontSize={'20px'}
-              content={'비밀번호 재설정'}
               onClick={handleFindPwd}
-            />
+            >
+              비밀번호 재설정
+            </ResponsiveButton>
           </InputContainer>
         </LoginContainer>
       </PageBox>

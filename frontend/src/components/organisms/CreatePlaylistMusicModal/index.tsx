@@ -118,16 +118,17 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
         <MusicModalTitle>노래 추가</MusicModalTitle>
         <MusicModalDescription>(최소 3개, 최대 50개)</MusicModalDescription>
         <Button
-          content={'초기화'}
           background={theme.colors.sky}
-          height={'40px'}
-          width={'150px'}
-          paddingH={'10px'}
+          height="40px"
+          width="150px"
+          paddingH="10px"
           onClick={(e) => {
             setMusic({ info: '', hint: '', url: '', answers: [] });
             setAnswer('');
           }}
-        ></Button>
+        >
+          초기화
+        </Button>
       </MusicModalTop>
       <MusicModalInputBox>
         <MusicModalInputText

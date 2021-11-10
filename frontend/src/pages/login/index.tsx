@@ -94,9 +94,10 @@ const Login: NextPage = () => {
               background={theme.colors.sky}
               fontSize={'30px'}
               paddingH={'24px'}
-              content={'로그인'}
               onClick={handleLogin}
-            />
+            >
+              로그인
+            </Button>
             <Link href="/findPwd">
               <SearchPwdBtn href="#none">비밀번호를 잊어버리셨나요?</SearchPwdBtn>
             </Link>

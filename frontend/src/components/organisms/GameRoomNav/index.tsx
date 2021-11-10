@@ -1,3 +1,5 @@
+import { PropsWithChildren } from 'react';
+
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 
@@ -57,16 +59,15 @@ const MuteButton = styled.button`
 
 interface ButtonContainerProps {
   background: string;
-  content: string;
   fontSize?: number;
   type?: string;
   onClick: Function;
 }
 
-const ResponsiveButton = ({ background, content, type, onClick }: ButtonContainerProps) => {
+const ResponsiveButton = ({ background, children, type, onClick }: PropsWithChildren<ButtonContainerProps>) => {
   return (
     <ButtonWrapper style={{ gridArea: type }} onClick={() => onClick()}>
-      <Button content={content} background={background}></Button>
+      <Button background={background}>{children}</Button>
     </ButtonWrapper>
   );
 };
@@ -85,19 +86,16 @@ const GameRoomNav = ({ player }: { player: Player }) => {
     <Container>
       <MuteButton type="button" />
       <ResponsiveButton
-        type={'start'}
+        type="start"
         background={theme.colors.whitesmoke}
         fontSize={20}
-        content={statusEncoder[player.status]}
         onClick={() => changeStatus(player)}
-      />
-      <ResponsiveButton
-        type={'exit'}
-        background={theme.colors.sand}
-        fontSize={20}
-        content={'나가기'}
-        onClick={() => console.log('나가기')}
-      />
+      >
+        {statusEncoder[player.status]}
+      </ResponsiveButton>
+      <ResponsiveButton type="exit" background={theme.colors.sand} fontSize={20} onClick={() => console.log('나가기')}>
+        나가기
+      </ResponsiveButton>
     </Container>
   );
 };

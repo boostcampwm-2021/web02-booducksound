@@ -108,13 +108,14 @@ const Join: NextPage = () => {
               onChangeHandler={({ target }) => setID((target as HTMLInputElement).value)}
             ></InputBox>
             <Button
-              content={'중복확인'}
               background={theme.colors.peach}
               fontSize={'18px'}
               paddingH={'18px'}
               width={'120px'}
               onClick={handleIdCheck}
-            ></Button>
+            >
+              중복확인
+            </Button>
             <InputBox
               isSearch={false}
               isPassword={true}
@@ -141,9 +142,10 @@ const Join: NextPage = () => {
                   background={theme.colors.sky}
                   fontSize={'30px'}
                   paddingH={'24px'}
-                  content={'가입하기'}
                   onClick={handleJoin}
-                />
+                >
+                  가입하기
+                </Button>
               </a>
             </Link>
           </InputContainer>

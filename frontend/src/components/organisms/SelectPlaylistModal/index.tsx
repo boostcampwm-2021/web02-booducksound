@@ -170,7 +170,9 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
               return (
                 <Li data-playlist-id={playlistId} data-playlist-name={title} key={i}>
                   <Title>{title}</Title>
-                  <ResponsiveButton background={theme.colors.lilac} content="선택" fontSize="16px" width="80px" />
+                  <ResponsiveButton background={theme.colors.lilac} fontSize="16px" width="80px">
+                    선택
+                  </ResponsiveButton>
                 </Li>
               );
             })}

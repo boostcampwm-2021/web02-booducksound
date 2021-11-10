@@ -100,13 +100,14 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setPlaylist }: PropsW
         <MusicListTitleTop>
           <MusicListTitle>노래 목록</MusicListTitle>
           <Button
-            content="추가"
             background={theme.colors.mint}
             fontSize="12px"
             paddingH="7px"
             width="100px"
             onClick={(e) => setModalOption({ type: 'create', target: null })}
-          ></Button>
+          >
+            추가
+          </Button>
         </MusicListTitleTop>
         <MusicListTitleBottom>최소 3개, 최대 50개까지 추가가 가능합니다.</MusicListTitleBottom>
       </MusicListTitleBox>
