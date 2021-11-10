@@ -34,11 +34,11 @@ const NavItem = styled.div`
   height: fit-content;
   column-gap: 10px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  @media (max-width: ${theme.breakpoints.md}) {
     column-gap: 6px;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  @media (max-width: ${theme.breakpoints.sm}) {
     column-gap: 4px;
   }
 `;
@@ -50,14 +50,14 @@ const Nav = styled.nav`
   padding: 32px 8px;
   column-gap: 10px;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  @media (max-width: ${theme.breakpoints.md}) {
     padding: 8px 4px;
     row-gap: 6px;
     column-gap: 6px;
     flex-wrap: wrap;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  @media (max-width: ${theme.breakpoints.sm}) {
     padding: 8px 2px;
     column-gap: 4px;
   }
@@ -75,7 +75,7 @@ const SearchWrapper = styled.div`
   width: 576px;
   justify-content: center;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  @media (max-width: ${theme.breakpoints.md}) {
     width: 100%;
   }
 `;
@@ -95,11 +95,11 @@ const GridWrapper = styled.div`
   column-gap: 12px;
   margin: 0 auto;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
+  @media (max-width: ${theme.breakpoints.lg}) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  @media (max-width: ${theme.breakpoints.md}) {
     grid-template-columns: repeat(1, 1fr);
   }
 `;
@@ -220,10 +220,7 @@ const Lobby: NextPage = () => {
         </SearchContainer>
         <GridContainer>
           <GridWrapper onClick={handleRoomClick}>
-            {rooms &&
-              Object.entries(rooms).map(([uuid, room]) => {
-                return <RoomCard key={uuid} uuid={uuid} {...room} />;
-              })}
+            {rooms && Object.entries(rooms).map(([uuid, room]) => <RoomCard key={uuid} uuid={uuid} {...room} />)}
           </GridWrapper>
         </GridContainer>
       </Wrapper>

@@ -58,10 +58,10 @@ const Login: NextPage = () => {
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async () => {
-    if (!id) alert(ID_EMPTY_MSG);
-    else if (!password) alert(PASSWORD_EMPTY_MSG);
-    else await requestLogin(id, password);
+  const handleLogin = () => {
+    if (!id) return alert(ID_EMPTY_MSG);
+    if (!password) return alert(PASSWORD_EMPTY_MSG);
+    requestLogin(id, password);
   };
 
   return (

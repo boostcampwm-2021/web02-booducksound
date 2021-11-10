@@ -10,8 +10,9 @@ import InputBox from '~/atoms/InputBox';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import ProfileSelector from '~/atoms/ProfileSelector';
-import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG } from '~/constants/index';
+import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG, BACKEND_URL } from '~/constants/index';
 import theme from '~/styles/theme';
+import API from '~/utils/API';
 
 const LoginContainer = styled.div`
   position: fixed;
@@ -64,31 +65,29 @@ const Join: NextPage = () => {
   const [color, setColor] = useState('fff');
 
   const idCheck = async () => {
-    return await fetch(`http://localhost:5000/check-id?id=${id}`)
-      .then((res) => res.json())
-      .then((res) => res);
+    const res = await API('GET')(`${BACKEND_URL}/check-id?id=${id}`)();
+    return res.json();
   };
 
   const signUp = async () => {
     const { result, message } = await idCheck();
 
-    if (result) alert(message);
-    else await requestJoin(id, password, nickname, color);
+    if (result) return alert(message);
+    requestJoin(id, password, nickname, color);
   };
 
   const handleIdCheck = async () => {
-    if (!id) alert(ID_EMPTY_MSG);
-    else {
-      const { result, message } = await idCheck();
-      alert(message);
-    }
+    if (!id) return alert(ID_EMPTY_MSG);
+
+    const { result, message } = await idCheck();
+    alert(message);
   };
 
   const handleJoin = async () => {
-    if (!id) alert(ID_EMPTY_MSG);
-    else if (!password) alert(PASSWORD_EMPTY_MSG);
-    else if (!nickname) alert(NICKNAME_EMPTY_MSG);
-    else signUp();
+    if (!id) return alert(ID_EMPTY_MSG);
+    if (!password) return alert(PASSWORD_EMPTY_MSG);
+    if (!nickname) return alert(NICKNAME_EMPTY_MSG);
+    signUp();
   };
 
   return (

@@ -110,6 +110,7 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
     hashTags: content.hashTags,
     musics: content.musics,
   });
+
   const { playlistName, description, hashTag, hashTags, musics } = playlist;
 
   const setPlaylist = (newState: Object) =>
@@ -140,12 +141,10 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
       playlist: { playlistName, description, musics, hashTags, userId: userInfo.id },
     });
     const { status } = result;
-    if (status === FAILED) {
-      alert('플레이리스트 등록에 실패하였습니다.');
-    } else if (status === SUCCESS) {
-      Router.push('/lobby');
-    }
+    if (status === FAILED) alert('플레이리스트 등록에 실패하였습니다.');
+    if (status === SUCCESS) Router.push('/lobby');
   };
+
   const mapSubmitFunction = async ({
     type,
     playlistId,
