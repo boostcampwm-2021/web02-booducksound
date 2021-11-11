@@ -8,9 +8,20 @@ FFmpeg.setFfmpegPath(path);
 
 const streamify = (url: string) => {
   const video = ytdl(`${url}`, { quality: 'lowestaudio' });
-  const stream = FFmpeg(video).noVideo().format('mp3').stream(new PassThrough());
+  const stream = new PassThrough();
+  const ffmpeg = FFmpeg(video);
 
-  return stream as PassThrough;
+  process.nextTick(() => {
+    const output = ffmpeg.noVideo().format('mp3').pipe(stream);
+
+    ffmpeg.once('error', (error: Error) => stream.emit('error', error));
+    output.once('error', (error: Error) => {
+      video.destroy();
+      stream.emit('error', error);
+    });
+  });
+
+  return stream;
 };
 
 export default streamify;
