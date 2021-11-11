@@ -45,9 +45,8 @@ io.on('connection', (socket) => {
     done(lobbyRooms);
   });
 
-  socket.on(SocketEvents.CREATE_ROOM, (room, done) => {
-
-    const { title, playlistId,playlistName, password, skip, timePerProblem } = room;
+  socket.on(SocketEvents.CREATE_ROOM, async (room, done) => {
+    const { title, playlistId, playlistName, password, skip, timePerProblem } = room;
     const uuid = short.generate();
 
     const setRoomInfo = async (playlistId: string) => {
@@ -70,7 +69,7 @@ io.on('connection', (socket) => {
       serverRooms[uuid] = serverRoom;
       done(uuid);
     };
-    setRoomInfo(playlistId);
+    await setRoomInfo(playlistId);
 
     const lobbyRoom = getLobbyRoom(uuid);
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
@@ -79,10 +78,10 @@ io.on('connection', (socket) => {
   socket.on(SocketEvents.SET_GAME_ROOM, (uuid, password, room, done) => {
     if (room === undefined) return;
     const { title, playlistId, playlistName, skip, timePerProblem } = room;
-    console.log('이전', getGameRoom(uuid));
+
     serverRooms[uuid] = { ...serverRooms[uuid], title, playlistId, playlistName, skip, timePerProblem };
     password !== '' ? (serverRooms[uuid] = { ...serverRooms[uuid], password }) : null;
-    console.log('이후', getGameRoom(uuid));
+
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     const lobbyRoom = getLobbyRoom(uuid);
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);

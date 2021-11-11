@@ -94,7 +94,6 @@ const GameRoomContainer = ({
   players: { [socketId: string]: Player };
   gameRoom: GameRoom | undefined;
 }) => {
-  const socket = useSocket();
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: any) => state.user);
   const [modalOnOff, setModalOnOff] = useState<boolean>(false);

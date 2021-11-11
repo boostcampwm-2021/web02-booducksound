@@ -81,7 +81,7 @@ const GameRoomNav = ({ player }: { player: Player }) => {
 
   const changeStatus = (player: Player) => {
     if (player.status !== 'king') player = { ...player, status: converter[player.status] };
-    socket?.emit(SocketEvents.SET_GAME_ROOM, uuid, player);
+    socket?.emit(SocketEvents.SET_PLAYER, uuid, player);
   };
 
   return (

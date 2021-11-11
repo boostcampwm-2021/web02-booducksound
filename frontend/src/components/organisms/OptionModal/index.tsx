@@ -3,9 +3,9 @@ import { useState, MouseEventHandler, ChangeEventHandler, SetStateAction, Dispat
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 import { Socket } from 'socket.io-client';
-
+import InputText from '~/atoms/InputText';
+import TextLabel from '~/atoms/TextLabel';
 import useSocket from '~/hooks/useSocket';
-import InputSection from '~/molecules/InputSection';
 import InputWithButton from '~/molecules/InputWithButton';
 import Modal from '~/molecules/Modal';
 import SelectSection from '~/molecules/SelectSection';
@@ -42,6 +42,10 @@ const SelectPlaylistContainer = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 8px;
+`;
+
+const ModalInputText = styled(InputText)`
+  padding: 10px 10px 10px 30px;
 `;
 
 const SelectPlaylistLabel = styled.h4`
@@ -155,27 +159,19 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
       leftButtonDisabled={leftButtonDisabled}
     >
       <Container>
-        <InputSection
-          id="roomTitle"
-          title="방 제목"
-          fontSize="0.92em"
-          height="48px"
+        <TextLabel>방 제목</TextLabel>
+        <ModalInputText
+          className="roomTitle"
           placeholder="방 제목을 입력하세요"
-          titleSize="1em"
-          width="100%"
-          margin="8px"
           isSearch={false}
-          paddingW="20px"
           value={form.title}
-          onChangeHandler={handleTitleChange}
+          handleChange={handleTitleChange}
         />
         <SelectPlaylistContainer>
           <SelectPlaylistLabel>플레이리스트</SelectPlaylistLabel>
           <InputWithButton
-            inputFontSize="0.92em"
-            inputHeight="48px"
+            inputClassName="selectPlaylist"
             placeholder={form.playlistName}
-            inputWidth="100%"
             isSearch={false}
             btnWidth="100px"
             btnFontSize="0.8em"
@@ -183,8 +179,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             btnBackground={theme.colors.lime}
             btnSmWidth="60px"
             btnHeight="38px"
-            inputPaddingW="20px"
-            inputDisabled={true}
+            disabled={true}
             value={form.playlistName}
             onClick={handleSelectPlaylistBtn}
           />
@@ -192,19 +187,13 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             <SelectPlaylistModal setModalOnOff={setPlaylistModalOnOff} setForm={setForm} validateForm={validateForm} />
           )}
         </SelectPlaylistContainer>
-        <InputSection
-          id="roomPassword"
-          title="비밀번호"
-          fontSize="0.92em"
-          height="48px"
+        <TextLabel>비밀번호</TextLabel>
+        <ModalInputText
+          className="roomPassword"
           placeholder=""
-          titleSize="1em"
-          width="100%"
-          margin="8px"
           isSearch={false}
-          paddingW="20px"
           value={password}
-          onChangeHandler={handlePasswordChange}
+          handleChange={handlePasswordChange}
         />
         <HalfContainer>
           <SelectSection
