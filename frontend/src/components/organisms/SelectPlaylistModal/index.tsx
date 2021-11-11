@@ -8,6 +8,7 @@ import TextLabel from '~/atoms/TextLabel';
 import Modal from '~/molecules/Modal';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import theme from '~/styles/theme';
+import { Playlist } from '~/types/Playlist';
 
 const Container = styled.div`
   display: flex;
@@ -69,70 +70,18 @@ interface Props {
   validateForm: Function;
 }
 
-const dummyPlaylists = [
-  {
-    title: '플레이리스트1',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: 'playlist',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 2222',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 3233333',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 44',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 44',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 44',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-];
-
 const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) => {
   const [search, setSearch] = useState('');
-  const [playlists, setPlaylists] = useState(dummyPlaylists);
+  const [playlists, setPlaylists] = useState<Playlist[]>([]);
+  const [pageData, setPageData] = useState({ currentPage: 0, maxPage: 0 });
 
   useEffect(() => {
     const initPlaylist = async () => {
-      const { playlists, currentPage, maxPage } = await getPlaylists({ q: '제목' });
-
-      console.log('여기 플레이리스트즈', playlists);
-      console.log('페이지', currentPage, maxPage);
+      const { playlists, currentPage, maxPage }: { playlists: Playlist[]; currentPage: number; maxPage: number } =
+        await getPlaylists();
+      setPlaylists(playlists);
+      setPageData({ currentPage, maxPage });
     };
-
     initPlaylist();
   }, []);
 
@@ -164,16 +113,15 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
         />
         <PlayLists>
           {playlists &&
-            playlists.map(({ title, playlistId, hashtags, playCount, description }, i) => {
+            playlists.map(({ playlistName, _id, hashtags, description }, i) => {
               return (
                 <PlayList key={i}>
-                  {/* TODO: key를 playlistId로 */}
-                  <Title>{title}</Title>
+                  <Title>{playlistName}</Title>
                   <ResponsiveButton
                     background={theme.colors.lilac}
                     fontSize="16px"
                     width="80px"
-                    onClick={(e) => handleSelectPlaylistBtnClick(e, playlistId, title)}
+                    onClick={(e) => handleSelectPlaylistBtnClick(e, _id as string, playlistName)}
                   >
                     선택
                   </ResponsiveButton>

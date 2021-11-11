@@ -82,14 +82,14 @@ const PlaylistName = styled.h4`
   }
 `;
 
-const hashtagContainer = styled.div`
+const HashtagContainer = styled.div`
   display: flex;
   overflow: hidden;
   margin-top: 24px;
   column-gap: 4px;
 `;
 
-const hashtag = styled.span`
+const Hashtag = styled.span`
   font-size: 18px;
   color: ${({ theme }) => theme.colors.ocean};
   white-space: nowrap;
@@ -121,9 +121,9 @@ const RoomCard = ({
         </FirstLineRightContainer>
       </FirstLineContainer>
       <PlaylistName>{playlistName}</PlaylistName>
-      <hashtagContainer>
-        {hashtags && hashtags.map((hashtag, i) => <hashtag key={i}>#{hashtag}</hashtag>)}
-      </hashtagContainer>
+      <HashtagContainer>
+        {hashtags && hashtags.map((hashtag, i) => <Hashtag key={i}>#{hashtag}</Hashtag>)}
+      </HashtagContainer>
     </Container>
   );
 };

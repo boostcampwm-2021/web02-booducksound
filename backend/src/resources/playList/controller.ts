@@ -8,7 +8,7 @@ export const get = async (req: Request, res: Response) => {
   const LIMIT = 10;
 
   try {
-    const { page, q } = req.query as { page: string; q: string };
+    const { page, q } = req.query as { page?: string; q?: string };
     const currentPage = isNaN(Number(page)) ? 1 : Number(page);
     const offset = isNaN(Number(page)) ? 0 : LIMIT * (currentPage - 1);
     const total = await PlaylistService.getLegnth();
