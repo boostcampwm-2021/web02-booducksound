@@ -12,7 +12,7 @@ import { RoomActions } from '~/types/Actions';
 interface Props {
   setModalOnOff: Dispatch<SetStateAction<boolean>>;
   leftButtonText?: string;
-  rooms: Array;
+  rooms: Array<String>;
 }
 
 const ModalInputText = styled(InputText)`
@@ -23,8 +23,8 @@ const ModalInputText = styled(InputText)`
   width: calc(100% - 0.4rem);
 `;
 
-const findAvailableRoom = (roomID: string, rooms: Array) => {
-  const room = rooms.filter((e: Array<String>) => e[0] === roomID);
+const findAvailableRoom = (roomID: string, rooms: Array<String>) => {
+  const room = rooms.filter((e: String) => e === roomID);
   return room.length > 0;
 };
 
