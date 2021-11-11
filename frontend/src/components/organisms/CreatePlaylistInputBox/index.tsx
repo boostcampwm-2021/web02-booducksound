@@ -3,6 +3,7 @@ import { KeyboardEventHandler, PropsWithChildren } from 'react';
 import styled from '@emotion/styled';
 
 import InputText from '~/atoms/InputText';
+import TextLabel from '~/atoms/TextLabel';
 
 interface Props {
   setPlaylist: Function;
@@ -35,10 +36,6 @@ const InputContainer = styled.div`
     }
   }
 `;
-const Label = styled.label`
-  font-size: 1em;
-  font-weight: bold;
-`;
 const PlaylistInputText = styled(InputText)`
   width: 98%;
   height: 3em;
@@ -69,7 +66,7 @@ const CreatePlaylistInputBox = ({
   return (
     <InputContainer>
       <SectionBox>
-        <Label>플레이리스트 제목</Label>
+        <TextLabel>플레이리스트 제목</TextLabel>
         <PlaylistInputText
           handleChange={(e) => setPlaylist({ playlistName: (e.currentTarget as HTMLTextAreaElement).value })}
           value={playlistName}
@@ -79,7 +76,7 @@ const CreatePlaylistInputBox = ({
         ></PlaylistInputText>
       </SectionBox>
       <SectionBox>
-        <Label>플레이리스트 설명</Label>
+        <TextLabel>플레이리스트 설명</TextLabel>
         <PlaylistInputText
           handleChange={(e) => setPlaylist({ description: (e.currentTarget as HTMLTextAreaElement).value })}
           value={description}
@@ -89,7 +86,7 @@ const CreatePlaylistInputBox = ({
         ></PlaylistInputText>
       </SectionBox>
       <SectionBox>
-        <Label>플레이리스트 해시태그</Label>
+        <TextLabel>플레이리스트 해시태그</TextLabel>
         <PlaylistInputText
           handleEnter={handleAddChip}
           handleChange={(e) => setPlaylist({ hashTag: (e.currentTarget as HTMLTextAreaElement).value })}

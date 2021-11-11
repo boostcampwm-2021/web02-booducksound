@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 import { requestLogin } from '~/api/account';
 import Button from '~/atoms/Button';
-import InputBox from '~/atoms/InputBox';
+import InputText from '~/atoms/InputText';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG } from '~/constants/index';
@@ -32,6 +32,8 @@ const SearchPwdBtn = styled.a`
 `;
 
 const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   width: fit-content;
   margin: 0 auto;
 
@@ -54,6 +56,13 @@ const InputContainer = styled.div`
   }
 `;
 
+const LoginInputText = styled(InputText)`
+  width: 100%;
+  font-size: 20px;
+  padding: 24px 20px 24px 80px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+`;
+
 const Login: NextPage = () => {
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
@@ -70,25 +79,21 @@ const Login: NextPage = () => {
       <PageBox>
         <LoginContainer>
           <InputContainer>
-            <InputBox
+            <LoginInputText
+              className="loginId"
               isSearch={false}
               placeholder="아이디를 입력하세요."
-              width={'100%'}
-              height={'80px'}
-              fontSize={'20px'}
               value={id}
-              onChangeHandler={({ target }) => setID((target as HTMLInputElement).value)}
-            ></InputBox>
-            <InputBox
-              isPassword={true}
+              handleChange={({ target }) => setID((target as HTMLInputElement).value)}
+            ></LoginInputText>
+            <LoginInputText
+              className="loginPassword"
+              type="password"
               isSearch={false}
               placeholder="비밀번호를 입력하세요."
-              width={'100%'}
-              height={'80px'}
-              fontSize={'20px'}
               value={password}
-              onChangeHandler={({ target }) => setPassword((target as HTMLInputElement).value)}
-            ></InputBox>
+              handleChange={({ target }) => setPassword((target as HTMLInputElement).value)}
+            ></LoginInputText>
             <Button
               width={'560px'}
               background={theme.colors.sky}
