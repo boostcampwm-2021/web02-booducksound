@@ -227,7 +227,10 @@ const Lobby: NextPage = () => {
         </SearchContainer>
         <GridContainer>
           <GridWrapper onClick={handleRoomClick}>
-            {rooms && Object.entries(rooms).map(([uuid, room]) => <RoomCard key={uuid} uuid={uuid} {...room} />)}
+            {rooms &&
+              Object.entries(rooms)
+                .filter(([uuid, { title, playlistName }]) => title.includes(search) || playlistName.includes(search))
+                .map(([uuid, room]) => <RoomCard key={uuid} uuid={uuid} {...room} />)}
           </GridWrapper>
         </GridContainer>
       </Wrapper>
