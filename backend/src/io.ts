@@ -38,125 +38,164 @@ io.on('connection', (socket) => {
   };
 
   socket.on(SocketEvents.SET_LOBBY_ROOMS, (done) => {
-    const lobbyRooms: { [uuid: string]: LobbyRoom } = {};
-    Object.keys(serverRooms).forEach((uuid) => {
-      lobbyRooms[uuid] = getLobbyRoom(uuid) as LobbyRoom;
-    });
-    done(lobbyRooms);
+    try {
+      const lobbyRooms: { [uuid: string]: LobbyRoom } = {};
+      Object.keys(serverRooms).forEach((uuid) => {
+        lobbyRooms[uuid] = getLobbyRoom(uuid) as LobbyRoom;
+      });
+      done(lobbyRooms);
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   socket.on(SocketEvents.CREATE_ROOM, async (room, done) => {
-    const { title, playlistId, playlistName, password, skip, timePerProblem } = room;
-    const uuid = short.generate();
+    try {
+      const { title, playlistId, playlistName, password, skip, timePerProblem } = room;
+      const uuid = short.generate();
 
-    const setRoomInfo = async (playlistId: string) => {
-      const playlist = await UserService.getById(playlistId);
-      const serverRoom: ServerRoom = {
-        title,
-        password,
-        players: {},
-        playlistId,
-        playlistName,
-        skip,
-        timePerProblem,
-        status: 'waiting',
-        musics: playlist.musics,
-        curRound: 1,
-        maxRound: playlist.musics.length,
-        skipCount: 0,
-        streams: [],
+      const setRoomInfo = async (playlistId: string) => {
+        const playlist = await UserService.getById(playlistId);
+        const serverRoom: ServerRoom = {
+          title,
+          password,
+          players: {},
+          playlistId,
+          playlistName,
+          skip,
+          timePerProblem,
+          status: 'waiting',
+          musics: playlist.musics,
+          curRound: 1,
+          maxRound: playlist.musics.length,
+          skipCount: 0,
+          streams: [],
+        };
+        serverRooms[uuid] = serverRoom;
+        done(uuid);
       };
-      serverRooms[uuid] = serverRoom;
-      done(uuid);
-    };
-    await setRoomInfo(playlistId);
-
-    const lobbyRoom = getLobbyRoom(uuid);
-    io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+      await setRoomInfo(playlistId);
+      const lobbyRoom = getLobbyRoom(uuid);
+      io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   socket.on(SocketEvents.SET_GAME_ROOM, (uuid, password, room, done) => {
-    if (room === undefined) return;
-    const { title, playlistId, playlistName, skip, timePerProblem } = room;
+    try {
+      if (room === undefined) return;
+      const { title, playlistId, playlistName, skip, timePerProblem } = room;
 
-    serverRooms[uuid] = { ...serverRooms[uuid], title, playlistId, playlistName, skip, timePerProblem };
-    password !== '' ? (serverRooms[uuid] = { ...serverRooms[uuid], password }) : null;
+      serverRooms[uuid] = { ...serverRooms[uuid], title, playlistId, playlistName, skip, timePerProblem };
 
-    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
-    const lobbyRoom = getLobbyRoom(uuid);
-    io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+      if (password) serverRooms[uuid] = { ...serverRooms[uuid], password };
 
-    done();
+      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+      const lobbyRoom = getLobbyRoom(uuid);
+      io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+
+      done();
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   socket.on(SocketEvents.JOIN_ROOM, (uuid: string, player: Player, done) => {
-    if (!serverRooms[uuid]) {
-      done({ type: 'fail', message: '존재 하지 않는 방입니다' });
-      return;
+    try {
+      if (!serverRooms[uuid]) {
+        done({ type: 'fail', message: '존재 하지 않는 방입니다' });
+        return;
+      }
+      socket.join(uuid);
+
+      const { nickname, color } = player;
+
+      serverRooms[uuid].players = {
+        ...serverRooms[uuid].players,
+        ...{
+          [socket.id]: { nickname, color, status: Object.keys(serverRooms[uuid].players).length ? 'prepare' : 'king' },
+        },
+      };
+      const gameRoom = getGameRoom(uuid);
+      const lobbyRoom = getLobbyRoom(uuid);
+
+      const serverRoom = serverRooms[uuid];
+
+      io.to(uuid).emit(SocketEvents.SET_PLAYER, { players: serverRoom.players });
+      io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name: nickname, text: '', status: 'alert' });
+
+      done({ type: 'success', gameRoom });
+      io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+    } catch (error) {
+      console.error(error);
     }
-    socket.join(uuid);
-
-    const { nickname, color } = player;
-
-    serverRooms[uuid].players = {
-      ...serverRooms[uuid].players,
-      ...{
-        [socket.id]: { nickname, color, status: Object.keys(serverRooms[uuid].players).length ? 'prepare' : 'king' },
-      },
-    };
-    const gameRoom = getGameRoom(uuid);
-    const lobbyRoom = getLobbyRoom(uuid);
-
-    const serverRoom = serverRooms[uuid];
-
-    io.to(uuid).emit(SocketEvents.SET_PLAYER, { players: serverRoom.players });
-    io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name: nickname, text: '', status: 'alert' });
-
-    done({ type: 'success', gameRoom });
-    io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
 
     socket.on('disconnecting', () => {
-      leaveRoom(uuid);
+      try {
+        leaveRoom(uuid);
+      } catch (error) {
+        console.error(error);
+      }
     });
 
     socket.on(SocketEvents.START_GAME, () => {
-      const { musics } = serverRooms[uuid];
-
-      serverRooms[uuid].status = 'playing';
-      serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
-      io.to(uuid).emit(SocketEvents.START_GAME);
+      try {
+        const { musics } = serverRooms[uuid];
+        serverRooms[uuid].status = 'playing';
+        serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
+        io.to(uuid).emit(SocketEvents.START_GAME);
+      } catch (error) {
+        console.error(error);
+      }
     });
 
     socket.on(SocketEvents.NEXT_ROUND, () => {
-      const { curRound, maxRound, musics } = serverRooms[uuid];
+      try {
+        const { curRound, maxRound, musics } = serverRooms[uuid];
 
-      if (curRound === maxRound) {
-        io.to(uuid).emit(SocketEvents.GAME_END);
-        return;
+        if (curRound === maxRound) {
+          io.to(uuid).emit(SocketEvents.GAME_END);
+          return;
+        }
+
+        serverRooms[uuid].curRound += 1;
+        serverRooms[uuid].streams.shift(); // TODO: Queue 자료형으로 구현할 것
+
+        if (curRound + 1 < musics.length) {
+          serverRooms[uuid].streams.push(streamify(musics[curRound + 1].url));
+        }
+
+        io.to(uuid).emit(SocketEvents.NEXT_ROUND);
+      } catch (error) {
+        console.error(error);
       }
-
-      serverRooms[uuid].curRound += 1;
-      serverRooms[uuid].streams.shift(); // TODO: Queue 자료형으로 구현할 것
-
-      if (curRound + 1 < musics.length) {
-        serverRooms[uuid].streams.push(streamify(musics[curRound + 1].url));
-      }
-
-      io.to(uuid).emit(SocketEvents.NEXT_ROUND);
     });
   });
 
   socket.on(SocketEvents.SET_PLAYER, (uuid: string, player: Player) => {
-    serverRooms[uuid].players[socket.id] = player;
-    io.to(uuid).emit(SocketEvents.SET_PLAYER, { players: serverRooms[uuid].players });
+    try {
+      serverRooms[uuid].players[socket.id] = player;
+      io.to(uuid).emit(SocketEvents.SET_PLAYER, { players: serverRooms[uuid].players });
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   socket.on(SocketEvents.LEAVE_ROOM, (uuid: string) => {
-    leaveRoom(uuid);
+    try {
+      leaveRoom(uuid);
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string) => {
-    io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message' });
+    try {
+      io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message' });
+    } catch (error) {
+      console.error(error);
+    }
   });
 });
 
