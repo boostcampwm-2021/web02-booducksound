@@ -27,7 +27,8 @@ export const getGameRoom = (uuid: string) => {
 
   const gameRoom: GameRoom = {
     hasPassword: !!serverRoom.password,
-    playListId: serverRoom.playListId,
+    playlistId: serverRoom.playlistId,
+    playlistName: serverRoom.playlistName,
     players: serverRoom.players,
     skip: serverRoom.skip,
     status: serverRoom.status,

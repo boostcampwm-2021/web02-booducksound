@@ -7,12 +7,12 @@ import GlassContainer from '~/atoms/GlassContainer';
 import useSocket from '~/hooks/useSocket';
 import CharacterList from '~/molecules/CharacterList';
 import ChatList from '~/molecules/ChatList';
+import OptionModal from '~/organisms/OptionModal';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
 import { Player } from '~/types/Player';
 import { SocketEvents } from '~/types/SocketEvents';
-
 interface Props {
   type: 'leftTitle' | 'rightTitle' | 'leftCharacter' | 'rightChat';
 }
@@ -97,6 +97,7 @@ const GameRoomContainer = ({
   const socket = useSocket();
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: any) => state.user);
+  const [modalOnOff, setModalOnOff] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const send = () => {
     if (text !== '') {
@@ -105,30 +106,44 @@ const GameRoomContainer = ({
     }
   };
 
+  const confirmKing = () => {
+    if (socket !== null && players[socket.id] !== undefined) {
+      if (players[socket.id].status === 'king') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
   return (
-    <Wrapper>
-      <Container type={'leftTitle'}>
-        <RoomStateTitle>대기중 입니다.</RoomStateTitle>
-      </Container>
-      <CharacterContainer type={'leftCharacter'}>
-        <CharacterList players={players} />
-      </CharacterContainer>
-      <Container type={'rightTitle'}>
-        <GridDiv>
-          <GameTitle>{gameRoom?.title}</GameTitle>
-          <SettingButton />
-        </GridDiv>
-      </Container>
-      <Container type={'rightChat'}>
-        <ChatList />
-      </Container>
-      <InputBox
-        placeholder={'메세지를 입력해주세요.'}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        onClick={send}
-      />
-    </Wrapper>
+    <>
+      <Wrapper>
+        <Container type={'leftTitle'}>
+          <RoomStateTitle>대기중 입니다.</RoomStateTitle>
+        </Container>
+        <CharacterContainer type={'leftCharacter'}>
+          <CharacterList players={players} />
+        </CharacterContainer>
+        <Container type={'rightTitle'}>
+          <GridDiv>
+            <GameTitle>{gameRoom?.title}</GameTitle>
+            {confirmKing() && <SettingButton onClick={() => setModalOnOff(true)} />}
+          </GridDiv>
+        </Container>
+        <Container type={'rightChat'}>
+          <ChatList />
+        </Container>
+        <InputBox
+          placeholder={'메세지를 입력해주세요.'}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onClick={send}
+        />
+      </Wrapper>
+      {modalOnOff && gameRoom && (
+        <OptionModal setModalOnOff={setModalOnOff} leftButtonText={'수정하기'} gameRoom={gameRoom} />
+      )}
+    </>
   );
 };
 

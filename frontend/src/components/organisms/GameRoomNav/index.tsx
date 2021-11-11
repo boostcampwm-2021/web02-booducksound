@@ -81,11 +81,11 @@ const GameRoomNav = ({ player }: { player: Player }) => {
         break;
       case 'prepare':
         player = { ...player, status: 'ready' };
-        socket?.emit(SocketEvents.SET_GAME_ROOM, uuid, player);
+        socket?.emit(SocketEvents.SET_PLAYER, uuid, player);
         break;
       case 'ready':
         player = { ...player, status: 'prepare' };
-        socket?.emit(SocketEvents.SET_GAME_ROOM, uuid, player);
+        socket?.emit(SocketEvents.SET_PLAYER, uuid, player);
         break;
     }
   };

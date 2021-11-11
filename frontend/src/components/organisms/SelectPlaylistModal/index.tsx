@@ -6,6 +6,7 @@ import InputSection from '~/molecules/InputSection';
 import Modal from '~/molecules/Modal';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import theme from '~/styles/theme';
+import { GameRoom } from '~/types/GameRoom';
 
 const Container = styled.div`
   display: flex;
@@ -60,8 +61,8 @@ interface Props {
       playlistName: string;
       playlistId: string;
       password: string;
-      skip: number;
-      timePerProblem: number;
+      skip: GameRoom['skip'] | number;
+      timePerProblem: GameRoom['timePerProblem'] | number;
     }>
   >;
   validateForm: Function;
