@@ -1,12 +1,14 @@
-import { useState, SetStateAction, Dispatch, MouseEventHandler, ChangeEvent } from 'react';
+import { useState, useEffect, SetStateAction, Dispatch, ChangeEvent, MouseEvent } from 'react';
 
 import styled from '@emotion/styled';
 
+import { getPlaylists } from '~/api/playlist';
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
 import Modal from '~/molecules/Modal';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import theme from '~/styles/theme';
+import { Playlist } from '~/types/Playlist';
 
 const Container = styled.div`
   display: flex;
@@ -68,77 +70,27 @@ interface Props {
   validateForm: Function;
 }
 
-const playlists = [
-  {
-    title: '플레이리스트1',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: 'playlist',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 2222',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 3233333',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 44',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 44',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 44',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-];
-
 const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) => {
   const [search, setSearch] = useState('');
+  const [playlists, setPlaylists] = useState<Playlist[]>([]);
+  const [pageData, setPageData] = useState({ currentPage: 0, maxPage: 0 });
 
-  const handleSelectPlaylistBtnClick: MouseEventHandler = (e) => {
-    const button = (e.target as Element).closest('button');
-    if (!button) return;
+  useEffect(() => {
+    const initPlaylist = async () => {
+      const { playlists, currentPage, maxPage }: { playlists: Playlist[]; currentPage: number; maxPage: number } =
+        await getPlaylists();
+      setPlaylists(playlists);
+      setPageData({ currentPage, maxPage });
+    };
+    initPlaylist();
+  }, []);
 
-    const li = (e.target as Element).closest('li');
-    if (!li) return;
-
-    const playlistId = li.dataset.playlistId as string;
-    const playlistName = li.dataset.playlistName as string;
-
+  const handleSelectPlaylistBtnClick = (e: MouseEvent, playlistId: string, playlistName: string) => {
     setForm((prev) => {
       const form = { ...prev, playlistId, playlistName };
       validateForm(form);
       return form;
     });
-
     setModalOnOff(false);
   };
 
@@ -159,13 +111,18 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
           value={search}
           handleChange={(e: ChangeEvent) => setSearch((e.target as HTMLInputElement).value)}
         />
-        <PlayLists onClick={handleSelectPlaylistBtnClick}>
+        <PlayLists>
           {playlists &&
-            playlists.map(({ title, hashtags, playCount, description, playlistId }, i) => {
+            playlists.map(({ playlistName, _id, hashtags, description }, i) => {
               return (
-                <PlayList data-playlist-id={playlistId} data-playlist-name={title} key={i}>
-                  <Title>{title}</Title>
-                  <ResponsiveButton background={theme.colors.lilac} fontSize="16px" width="80px">
+                <PlayList key={i}>
+                  <Title>{playlistName}</Title>
+                  <ResponsiveButton
+                    background={theme.colors.lilac}
+                    fontSize="16px"
+                    width="80px"
+                    onClick={(e) => handleSelectPlaylistBtnClick(e, _id as string, playlistName)}
+                  >
                     선택
                   </ResponsiveButton>
                 </PlayList>

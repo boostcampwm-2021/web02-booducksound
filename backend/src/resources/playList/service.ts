@@ -14,13 +14,13 @@ interface PlaylistProps {
   likeCount: Number;
   playCount: Number;
   musics: MusicProps;
-  hashTags: [];
+  hashtags: [];
   userId: String;
   createdAt: Date;
 }
 
-export const get = async (_id: string) => {
-  return await Playlist.findOne({ _id });
+export const getById = async (_id: string) => {
+  return Playlist.findById(_id);
 };
 
 export const add = (playlistInfo: PlaylistProps) => {
@@ -31,11 +31,21 @@ export const add = (playlistInfo: PlaylistProps) => {
   return newPlaylist.save();
 };
 
-export const update = (_id: string, data: PlaylistProps) => {
-  console.log(data);
-  return Playlist.updateOne({ _id }, data);
+export const updateById = (_id: string, data: PlaylistProps) => {
+  return Playlist.findByIdAndUpdate(_id, data);
 };
 
-export const del = (_id: string) => {
-  return Playlist.deleteOne({ _id });
+export const deleteById = (_id: string) => {
+  return Playlist.findByIdAndDelete(_id);
+};
+
+export const getLegnth = () => {
+  return Playlist.count();
+};
+
+export const search = (q: string, offset: number, limit: number) => {
+  const regex = new RegExp(q, 'i');
+  return Playlist.find({ $or: [{ playlistName: regex }, { hashtags: { $in: regex } }] })
+    .skip(offset)
+    .limit(limit);
 };

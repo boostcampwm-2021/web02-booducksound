@@ -10,7 +10,7 @@ interface Props {
   handleAddChip: KeyboardEventHandler;
   playlistName: string;
   description: string;
-  hashTag: string;
+  hashtag: string;
 }
 
 const InputContainer = styled.div`
@@ -61,7 +61,7 @@ const CreatePlaylistInputBox = ({
   playlistName,
   handleAddChip,
   description,
-  hashTag,
+  hashtag,
 }: PropsWithChildren<Props>) => {
   return (
     <InputContainer>
@@ -89,9 +89,9 @@ const CreatePlaylistInputBox = ({
         <TextLabel>플레이리스트 해시태그</TextLabel>
         <PlaylistInputText
           handleEnter={handleAddChip}
-          handleChange={(e) => setPlaylist({ hashTag: (e.currentTarget as HTMLTextAreaElement).value })}
-          value={hashTag}
-          className="hashTag"
+          handleChange={(e) => setPlaylist({ hashtag: (e.currentTarget as HTMLTextAreaElement).value })}
+          value={hashtag}
+          className="hashtag"
           isSearch={false}
           placeholder="추가할 해시태그를 입력 후 Enter를 클릭하세요."
         ></PlaylistInputText>
