@@ -7,10 +7,11 @@ import TextLabel from '~/atoms/TextLabel';
 
 interface Props {
   setPlaylist: Function;
-  handleAddChip: KeyboardEventHandler;
   playlistName: string;
   description: string;
   hashtag: string;
+  handleAddChipKeyUp: KeyboardEventHandler;
+  handleAddChipKeyDown: KeyboardEventHandler;
 }
 
 const InputContainer = styled.div`
@@ -59,9 +60,10 @@ const SectionBox = styled.div`
 const CreatePlaylistInputBox = ({
   setPlaylist,
   playlistName,
-  handleAddChip,
   description,
   hashtag,
+  handleAddChipKeyUp,
+  handleAddChipKeyDown,
 }: PropsWithChildren<Props>) => {
   return (
     <InputContainer>
@@ -88,10 +90,11 @@ const CreatePlaylistInputBox = ({
       <SectionBox>
         <TextLabel>플레이리스트 해시태그</TextLabel>
         <PlaylistInputText
-          handleEnter={handleAddChip}
-          handleChange={(e) => setPlaylist({ hashtag: (e.currentTarget as HTMLTextAreaElement).value })}
-          value={hashtag}
-          className="hashtag"
+          handleEnter={handleAddChipKeyUp}
+          handleKeyDown={handleAddChipKeyDown}
+          handleChange={(e) => setPlaylist({ hashTag: (e.currentTarget as HTMLTextAreaElement).value })}
+          value={hashTag}
+          className="hashag"
           isSearch={false}
           placeholder="추가할 해시태그를 입력 후 Enter를 클릭하세요."
         ></PlaylistInputText>

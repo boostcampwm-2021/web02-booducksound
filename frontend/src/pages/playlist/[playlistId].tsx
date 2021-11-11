@@ -122,12 +122,16 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
     if (musics.length < 3 || musics.length > 50) return false;
     return true;
   };
-  const handleAddChip: KeyboardEventHandler = (e) => {
+  const handleAddChipKeyDown: KeyboardEventHandler = (e) => {
+    if (e.key !== ' ') return;
+    e.preventDefault();
+  };
+  const handleAddChipKeyUp: KeyboardEventHandler = (e) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
-    if (!hashtag) return;
+    if (!hashtag.trim()) return;
     setPlaylist({ hashtag: '' });
     setPlaylistAll((preState: PlaylistInput) => {
-      return { ...preState, hashtags: [...preState.hashtags, hashtag.trim()] };
+      return { ...preState, hashtags: [...preState.hashtags, hashtag.replace(/\s/g, '')] };
     });
   };
   const handleSubmit = async () => {
@@ -187,7 +191,8 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
         <Wrapper>
           <CreatePlaylistInputBox
             setPlaylist={setPlaylist}
-            handleAddChip={handleAddChip}
+            handleAddChipKeyUp={handleAddChipKeyUp}
+            handleAddChipKeyDown={handleAddChipKeyDown}
             playlistName={playlistName}
             description={description}
             hashtag={hashtag}

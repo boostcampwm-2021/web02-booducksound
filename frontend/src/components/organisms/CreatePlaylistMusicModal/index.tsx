@@ -75,10 +75,10 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
 
   const pressEnterHandler: KeyboardEventHandler = (e) => {
     if (e.key !== 'Enter') return;
-    if (!answer) return;
+    if (!answer.trim()) return;
     setAnswer('');
     setMusic((preState) => {
-      return { ...preState, answers: [...preState.answers, answer] };
+      return { ...preState, answers: [...preState.answers, answer.trim()] };
     });
   };
 

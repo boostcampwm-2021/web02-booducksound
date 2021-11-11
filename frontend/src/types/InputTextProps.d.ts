@@ -9,5 +9,6 @@ export default interface InputTextProps {
   className: string;
   value: string;
   handleEnter?: KeyboardEventHandler;
+  handleKeyDown?: KeyboardEventHandler;
   handleChange?: ChangeEventHandler;
 }
