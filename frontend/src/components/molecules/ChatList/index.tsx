@@ -4,17 +4,23 @@ import styled from '@emotion/styled';
 
 import ChatComponent from '~/atoms/Chat';
 import useSocket from '~/hooks/useSocket';
+import theme from '~/styles/theme';
 import { Chat } from '~/types/Chat';
 import { SocketEvents } from '~/types/SocketEvents';
-
 const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: 400px;
+  display: grid;
   margin-right: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  overflow: auto;
+  align-items: center;
+  grid-auto-flow: row;
+  grid-auto-rows: 5%; // play with this to change height of the children, 50% will fill half
+  grid-template-columns: unset; // do not set template columns and rows
+  grid-template-rows: unset;
+  overflow: scroll;
+  @media (max-width: ${theme.breakpoints.sm}) {
+    height: 300px;
+  }
 `;
 
 const ChatList = () => {

@@ -22,8 +22,8 @@ const AlertMsg = styled.p`
 const MyPage: NextPage = () => {
   const [removeModalOnOff, setRemoveModalOnOff] = useState(false);
   const [oid, selectOid] = useState('');
-
   const dispatch = useDispatch();
+
   const userInfo: UserState = useSelector((state: RootState) => state.user);
   const { id, likes, myPlaylist } = userInfo || {};
 
@@ -31,6 +31,7 @@ const MyPage: NextPage = () => {
     const { id } = target?.parentElement?.closest('tr').dataset;
     setRemoveModalOnOff(true);
     selectOid(id);
+    dispatch(getUser());
   };
 
   const deleteLikesList = async (id: string, oid: string) => {
@@ -53,7 +54,6 @@ const MyPage: NextPage = () => {
           leftButtonHandler={(e) => deleteLikesList(id, oid)}
           rightButtonHandler={() => setRemoveModalOnOff(false)}
           leftButtonText="YES"
-          rightButtonText="NO"
           height="150px"
         >
           <AlertMsg>정말 삭제하시겠습니까?</AlertMsg>

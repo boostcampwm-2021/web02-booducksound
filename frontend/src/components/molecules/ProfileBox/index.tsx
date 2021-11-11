@@ -1,10 +1,13 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
+import Router from 'next/router';
+import { useDispatch } from 'react-redux';
 
 import { requestLogout } from '~/api/account';
 import Button from '~/atoms/Button';
 import UserInfoBox from '~/molecules/UserInfoBox';
 import theme from '~/styles/theme';
+import { UserActions } from '~/types/Actions';
 
 const Warper = styled.div`
   display: flex;
@@ -60,6 +63,14 @@ type Info = {
 
 const ProfileBox = ({ info, handleUserMenu }: { info: Info; handleUserMenu: Function }) => {
   const { id, nickname, userColor } = info;
+  const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    await requestLogout();
+    dispatch({ type: UserActions.REMOVE_USER });
+    Router.push('/');
+  };
+
   return (
     <Warper>
       <UserInfoBox info={{ id, nickname, userColor }} />
@@ -79,7 +90,7 @@ const ProfileBox = ({ info, handleUserMenu }: { info: Info; handleUserMenu: Func
           fontSize={'16px'}
           paddingH={'16px'}
           width={'160px'}
-          onClick={requestLogout}
+          onClick={handleLogout}
         >
           로그아웃
         </Button>

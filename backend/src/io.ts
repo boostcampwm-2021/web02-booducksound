@@ -1,6 +1,7 @@
 import short from 'short-uuid';
 import socketio from 'socket.io';
 
+import * as UserService from './resources/playList/service';
 import { LobbyRoom } from './types/LobbyRoom';
 import { Player } from './types/Player';
 import { ServerRoom } from './types/ServerRoom';
@@ -30,7 +31,7 @@ io.on('connection', (socket) => {
     }
 
     delete serverRooms[uuid].players[socket.id];
-    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, { players: serverRooms[uuid].players });
+    io.to(uuid).emit(SocketEvents.SET_PLAYER, { players: serverRooms[uuid].players });
 
     const lobbyRoom = getLobbyRoom(uuid);
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
@@ -44,37 +45,48 @@ io.on('connection', (socket) => {
     done(lobbyRooms);
   });
 
-  socket.on(SocketEvents.CREATE_ROOM, (room, done) => {
-    const { title, playListId, password, skip, timePerProblem } = room;
+  socket.on(SocketEvents.CREATE_ROOM, async (room, done) => {
+    const { title, playlistId, playlistName, password, skip, timePerProblem } = room;
     const uuid = short.generate();
 
-    // TODO: serverRooms[uuid].playlistId 를 통해 DB에서 musics를 가져와서 순서를 랜덤하게 섞을 것
-    const dummyMusics = [
-      { youtubeId: 'Ec7TN_11az8', answers: ['stay'], hint: 'hint' },
-      { youtubeId: 'Fc9fVi-_DWE', answers: ['신호등'], hint: 'hint' },
-      { youtubeId: 'v7bnOxV4jAc', answers: ['lilac'], hint: 'hint' },
-    ];
-
-    const serverRoom: ServerRoom = {
-      title,
-      password,
-      players: {},
-      playListId,
-      skip,
-      timePerProblem,
-      status: 'waiting',
-      musics: dummyMusics,
-      curRound: 1,
-      maxRound: dummyMusics.length,
-      skipCount: 0,
-      streams: [],
+    const setRoomInfo = async (playlistId: string) => {
+      const playlist = await UserService.getById(playlistId);
+      const serverRoom: ServerRoom = {
+        title,
+        password,
+        players: {},
+        playlistId,
+        playlistName,
+        skip,
+        timePerProblem,
+        status: 'waiting',
+        musics: playlist.musics,
+        curRound: 1,
+        maxRound: playlist.musics.length,
+        skipCount: 0,
+        streams: [],
+      };
+      serverRooms[uuid] = serverRoom;
+      done(uuid);
     };
-
-    serverRooms[uuid] = serverRoom;
-    done(uuid);
+    await setRoomInfo(playlistId);
 
     const lobbyRoom = getLobbyRoom(uuid);
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+  });
+
+  socket.on(SocketEvents.SET_GAME_ROOM, (uuid, password, room, done) => {
+    if (room === undefined) return;
+    const { title, playlistId, playlistName, skip, timePerProblem } = room;
+
+    serverRooms[uuid] = { ...serverRooms[uuid], title, playlistId, playlistName, skip, timePerProblem };
+    password !== '' ? (serverRooms[uuid] = { ...serverRooms[uuid], password }) : null;
+
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+    const lobbyRoom = getLobbyRoom(uuid);
+    io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+
+    done();
   });
 
   socket.on(SocketEvents.JOIN_ROOM, (uuid: string, player: Player, done) => {
@@ -97,7 +109,7 @@ io.on('connection', (socket) => {
 
     const serverRoom = serverRooms[uuid];
 
-    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, { players: serverRoom.players });
+    io.to(uuid).emit(SocketEvents.SET_PLAYER, { players: serverRoom.players });
     io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name: nickname, text: '', status: 'alert' });
 
     done({ type: 'success', gameRoom });
@@ -111,7 +123,7 @@ io.on('connection', (socket) => {
       const { musics } = serverRooms[uuid];
 
       serverRooms[uuid].status = 'playing';
-      serverRooms[uuid].streams = [streamify(musics[0].youtubeId), streamify(musics[1].youtubeId)];
+      serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
       io.to(uuid).emit(SocketEvents.START_GAME);
     });
 
@@ -127,16 +139,16 @@ io.on('connection', (socket) => {
       serverRooms[uuid].streams.shift(); // TODO: Queue 자료형으로 구현할 것
 
       if (curRound + 1 < musics.length) {
-        serverRooms[uuid].streams.push(streamify(musics[curRound + 1].youtubeId));
+        serverRooms[uuid].streams.push(streamify(musics[curRound + 1].url));
       }
 
       io.to(uuid).emit(SocketEvents.NEXT_ROUND);
     });
   });
 
-  socket.on(SocketEvents.SET_GAME_ROOM, (uuid: string, player: Player) => {
+  socket.on(SocketEvents.SET_PLAYER, (uuid: string, player: Player) => {
     serverRooms[uuid].players[socket.id] = player;
-    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, { players: serverRooms[uuid].players });
+    io.to(uuid).emit(SocketEvents.SET_PLAYER, { players: serverRooms[uuid].players });
   });
 
   socket.on(SocketEvents.LEAVE_ROOM, (uuid: string) => {
