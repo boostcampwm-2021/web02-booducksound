@@ -5,6 +5,6 @@ export type Playlist = {
   playlistName: string;
   description: string;
   musics: Music[];
-  hashTags: string[];
+  hashtags: string[];
   userId: string;
 };

@@ -14,7 +14,7 @@ interface PlaylistProps {
   likeCount: Number;
   playCount: Number;
   musics: MusicProps;
-  hashTags: [];
+  hashtags: [];
   userId: String;
   createdAt: Date;
 }
