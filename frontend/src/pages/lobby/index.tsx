@@ -219,11 +219,7 @@ const Lobby: NextPage = () => {
               방 생성
             </ResponsiveButton>
             {codeModalOnOff && (
-              <InviteCodeModal
-                rooms={Object.entries(rooms)}
-                setModalOnOff={setCodeModalOnOff}
-                leftButtonText="입장"
-              />
+              <InviteCodeModal rooms={Object.keys(rooms)} setModalOnOff={setCodeModalOnOff} leftButtonText="입장" />
             )}
             {createRoomModalOnOff && <CreateRoomModal setModalOnOff={setCreateRoomModalOnOff} leftButtonText="생성" />}
           </NavItem>
