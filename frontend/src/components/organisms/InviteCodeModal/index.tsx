@@ -1,15 +1,18 @@
 import { useState, MouseEventHandler, ChangeEventHandler, SetStateAction, Dispatch } from 'react';
 
 import styled from '@emotion/styled';
+import Router from 'next/router';
+import { useDispatch } from 'react-redux';
 
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
 import Modal from '~/molecules/Modal';
-import theme from '~/styles/theme';
+import { RoomActions } from '~/types/Actions';
 
 interface Props {
   setModalOnOff: Dispatch<SetStateAction<boolean>>;
   leftButtonText?: string;
+  rooms: Array;
 }
 
 const ModalInputText = styled(InputText)`
@@ -20,14 +23,24 @@ const ModalInputText = styled(InputText)`
   width: calc(100% - 0.4rem);
 `;
 
-const InviteCodeModal = ({ setModalOnOff, leftButtonText }: Props) => {
+const findAvailableRoom = (roomID: string, rooms: Array) => {
+  const room = rooms.filter((e: Array<String>) => e[0] === roomID);
+  return room.length > 0;
+};
+
+const InviteCodeModal = ({ setModalOnOff, leftButtonText, rooms }: Props) => {
   const [code, setCode] = useState('');
+  const dispatch = useDispatch();
+
   const handleEnterRoom = () => {
     if (!code) return alert('초대 코드를 입력해 주세요.');
-    // setModalOnOff(false);
+    const res = findAvailableRoom(code, rooms);
+    if (!res) return alert('존재하지 않는 초대 코드입니다.');
+    dispatch({ type: RoomActions.SET_UUID, payload: { uuid: code } });
+    Router.push(`/game`);
   };
 
-  const handleSetCode: ChangeEventHandler = ({ target }: Event) => {
+  const handleSetCode: Function = ({ target }: Event) => {
     setCode((target as HTMLInputElement).value);
   };
 
@@ -44,7 +57,7 @@ const InviteCodeModal = ({ setModalOnOff, leftButtonText }: Props) => {
         className="roomTitle"
         placeholder="초대 코드를 입력하세요."
         isSearch={false}
-        handleChange={handleSetCode}
+        handleChange={handleSetCode as ChangeEventHandler}
         value={code}
       />
     </Modal>

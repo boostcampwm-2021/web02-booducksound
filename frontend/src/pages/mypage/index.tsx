@@ -54,7 +54,6 @@ const MyPage: NextPage = () => {
           leftButtonHandler={(e) => deleteLikesList(id, oid)}
           rightButtonHandler={() => setRemoveModalOnOff(false)}
           leftButtonText="YES"
-          rightButtonText="NO"
           height="150px"
         >
           <AlertMsg>정말 삭제하시겠습니까?</AlertMsg>
