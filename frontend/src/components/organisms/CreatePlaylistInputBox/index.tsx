@@ -92,8 +92,8 @@ const CreatePlaylistInputBox = ({
         <PlaylistInputText
           handleEnter={handleAddChipKeyUp}
           handleKeyDown={handleAddChipKeyDown}
-          handleChange={(e) => setPlaylist({ hashTag: (e.currentTarget as HTMLTextAreaElement).value })}
-          value={hashTag}
+          handleChange={(e) => setPlaylist({ hashtag: (e.currentTarget as HTMLTextAreaElement).value })}
+          value={hashtag}
           className="hashag"
           isSearch={false}
           placeholder="추가할 해시태그를 입력 후 Enter를 클릭하세요."
