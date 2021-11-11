@@ -79,12 +79,12 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
   const maxPage = useRef(Infinity);
   const timer = useRef<ReturnType<typeof setTimeout>>();
 
-  const getPlaylists = async (page: number, search: string, option?: { init?: boolean; who?: string }) => {
+  const getPlaylists = async (page: number, search: string, option?: { init?: boolean }) => {
     setIsLoading(true);
 
     const { playlists, maxPage: maxPageNumber } = await fetchPlaylists({ page, q: search });
 
-    maxPage.current = maxPageNumber;
+    maxPage.current = Number(maxPageNumber);
 
     if (option?.init) {
       setPage(1);
@@ -95,7 +95,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
   };
 
   useEffect(() => {
-    getPlaylists(page, search, { who: '최초' });
+    getPlaylists(page, search);
 
     return () => {
       if (timer.current) clearTimeout(timer.current);
@@ -108,7 +108,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
 
     setPage((prevState) => prevState + 1);
 
-    getPlaylists(page + 1, search, { who: 'setPage' });
+    getPlaylists(page + 1, search);
   }, [isLastInView, isLoading]);
 
   const handleSearchChange: ChangeEventHandler = (e) => {
@@ -117,7 +117,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
 
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => {
-      getPlaylists(page, search, { init: true, who: 'timeout' });
+      getPlaylists(1, search, { init: true });
     }, 200);
   };
 
@@ -148,7 +148,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
           handleChange={handleSearchChange}
         />
         <PlayLists>
-          {!!playlists.length &&
+          {!!playlists?.length &&
             playlists.map(({ playlistName, _id, hashtags, description }, i) => {
               return (
                 <PlayList key={_id} ref={playlists.length - 1 === i ? lastRef : null}>
