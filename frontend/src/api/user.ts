@@ -1,3 +1,4 @@
+import { updateStoreData } from '~/api/account';
 import { BACKEND_URL } from '~/constants/index';
 import API from '~/utils/API';
 
