@@ -1,19 +1,18 @@
-import { MouseEventHandler } from 'react';
+import { ChangeEventHandler, KeyboardEventHandler, MouseEventHandler } from 'react';
 
 import styled from '@emotion/styled';
 
-import InputBox from '~/atoms/InputBox';
+import InputText from '~/atoms/InputText';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 
 interface Props {
+  inputClassName: string;
+  disabled: boolean;
   isSearch: boolean;
   placeholder: string;
-  inputWidth: string;
-  inputHeight: string;
-  inputFontSize: string;
-  inputPaddingW?: string;
-  inputDisabled?: boolean;
-  value?: string;
+  value: string;
+  handleEnter?: KeyboardEventHandler;
+  handleChange?: ChangeEventHandler;
 
   btnWidth: string;
   btnHeight: string;
@@ -38,17 +37,18 @@ const ButtonContainer = styled.div`
   transform: translate(-10%, 50%);
 `;
 
+const ButtonWithInputText = styled(InputText)`
+  padding: 10px 10px 10px 30px;
+`;
+
 const InputWithButton = (props: Props) => {
   return (
     <Container>
-      <InputBox
-        width={props.inputWidth}
-        height={props.inputHeight}
-        fontSize={props.inputFontSize}
+      <ButtonWithInputText
+        className={props.inputClassName}
         isSearch={props.isSearch}
         placeholder={props.placeholder}
-        paddingW={props.inputPaddingW}
-        disabled={props.inputDisabled}
+        disabled={props.disabled}
         value={props.value}
       />
       <ButtonContainer>

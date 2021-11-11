@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Router from 'next/router';
 import { useDispatch } from 'react-redux';
 
-import InputBox from '~/atoms/InputBox';
+import InputText from '~/atoms/InputText';
 import RoomCard from '~/atoms/RoomCard';
 import useSocketEmit from '~/hooks/useSocketEmit';
 import useSocketOn from '~/hooks/useSocketOn';
@@ -102,6 +102,15 @@ const GridWrapper = styled.div`
   @media (max-width: ${theme.breakpoints.md}) {
     grid-template-columns: repeat(1, 1fr);
   }
+`;
+
+const SearchRoomInputText = styled(InputText)`
+  width: 100%;
+  font-size: 18px;
+  padding: 10px 20px 10px 120px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+  background-position-x: 10%;
+  background-size: 25px;
 `;
 
 const Lobby: NextPage = () => {
@@ -207,15 +216,13 @@ const Lobby: NextPage = () => {
         </Nav>
         <SearchContainer>
           <SearchWrapper>
-            <InputBox
+            <SearchRoomInputText
+              className="searchRoom"
               isSearch={true}
               placeholder="검색어를 입력하세요"
-              width="100%"
-              height="54px"
-              fontSize="18px"
               value={search}
-              onChangeHandler={handleSearchChange}
-            ></InputBox>
+              handleChange={handleSearchChange}
+            ></SearchRoomInputText>
           </SearchWrapper>
         </SearchContainer>
         <GridContainer>
