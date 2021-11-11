@@ -37,7 +37,6 @@ const ModalContainer = styled.div<ModalContainerProps>`
 const ModalWrapper = styled.div`
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
 `;
 
 const ButtonContainer = styled.div<{ hasOnlyCancleBtn: boolean }>`
