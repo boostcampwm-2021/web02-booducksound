@@ -1,4 +1,4 @@
-import JSX from 'react';
+import JSX, { useEffect } from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';

@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
+import { useDispatch } from 'react-redux';
 
+import { getUser } from '~/actions/user';
 import { changeColor } from '~/api/user';
 import ProfileSelector from '~/atoms/ProfileSelector';
 import theme from '~/styles/theme';
@@ -33,11 +35,12 @@ type Info = {
 const UserInfoBox = ({ info }: { info: Info }) => {
   const { id, nickname, userColor } = info;
   const [color, setColor] = useState('fff');
+  const dispatch = useDispatch();
 
   const changeBooduckColor = (newColor: string) => {
     setColor(() => {
       changeColor(id, newColor);
-
+      dispatch(getUser());
       return newColor;
     });
   };

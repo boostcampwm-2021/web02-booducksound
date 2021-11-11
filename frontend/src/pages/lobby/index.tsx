@@ -12,6 +12,7 @@ import useSocketEmit from '~/hooks/useSocketEmit';
 import useSocketOn from '~/hooks/useSocketOn';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import CreateRoomModal from '~/organisms/CreateRoomModal';
+import InviteCodeModal from '~/organisms/InviteCodeModal';
 import theme from '~/styles/theme';
 import { RoomActions } from '~/types/Actions';
 import { LobbyRoom } from '~/types/LobbyRoom';
@@ -117,6 +118,7 @@ const Lobby: NextPage = () => {
   const dispatch = useDispatch();
 
   const [search, setSearch] = useState('');
+  const [codeModalOnOff, setCodeModalOnOff] = useState(false);
   const [createRoomModalOnOff, setCreateRoomModalOnOff] = useState(false);
   const [rooms, setRooms] = useState<{ [uuid: string]: LobbyRoom }>({});
 
@@ -138,6 +140,10 @@ const Lobby: NextPage = () => {
       return rooms;
     });
   });
+
+  const handleCodeModalBtn = () => {
+    setCodeModalOnOff(true);
+  };
 
   const handleCreateRoomModalBtn = () => {
     setCreateRoomModalOnOff(true);
@@ -185,6 +191,7 @@ const Lobby: NextPage = () => {
               fontSize="20px"
               smWidth="110px"
               smFontSize="12px"
+              onClick={handleCodeModalBtn}
             >
               초대코드 입력
             </ResponsiveButton>
@@ -211,6 +218,13 @@ const Lobby: NextPage = () => {
             >
               방 생성
             </ResponsiveButton>
+            {codeModalOnOff && (
+              <InviteCodeModal
+                rooms={Object.entries(rooms)}
+                setModalOnOff={setCodeModalOnOff}
+                leftButtonText="입장"
+              />
+            )}
             {createRoomModalOnOff && <CreateRoomModal setModalOnOff={setCreateRoomModalOnOff} leftButtonText="생성" />}
           </NavItem>
         </Nav>
@@ -227,7 +241,10 @@ const Lobby: NextPage = () => {
         </SearchContainer>
         <GridContainer>
           <GridWrapper onClick={handleRoomClick}>
-            {rooms && Object.entries(rooms).map(([uuid, room]) => <RoomCard key={uuid} uuid={uuid} {...room} />)}
+            {rooms &&
+              Object.entries(rooms)
+                .filter(([uuid, { title, playlistName }]) => title.includes(search) || playlistName.includes(search))
+                .map(([uuid, room]) => <RoomCard key={uuid} uuid={uuid} {...room} />)}
           </GridWrapper>
         </GridContainer>
       </Wrapper>

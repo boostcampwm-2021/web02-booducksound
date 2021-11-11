@@ -21,16 +21,15 @@ export const getUserInfo = async () => {
   return res.json();
 };
 
+export const updateStoreData = (getUser: Function) => {
+  getUser() && handleLoginUser();
+};
+
 export const requestLogin = async (id: string, password: string) => {
   const res = await API('POST')(`${BACKEND_URL}/sign-in`)({ body: JSON.stringify({ id, password }) });
   const { isLogin, message } = await res.json();
 
-  if (!isLogin) {
-    alert(message);
-    return;
-  }
-
-  Router.push('/lobby');
+  if (!isLogin) return alert(message);
 };
 
 export const requestLogout = async () => {
@@ -49,22 +48,12 @@ export const requestEnter = async (nickname: string, color: string) => {
   const res = await API('POST')(`${BACKEND_URL}/guest-sign-in`)({ body: JSON.stringify({ nickname, color }) });
   const { isLogin, message } = await res.json();
 
-  if (!isLogin) {
-    alert(message);
-    return;
-  }
-
-  Router.push('/lobby');
+  if (!isLogin) alert(message);
 };
 
 export const requestJoin = async (id: string, password: string, nickname: string, color: string) => {
   const res = await API('POST')(`${BACKEND_URL}/sign-up`)({ body: JSON.stringify({ id, password, nickname, color }) });
   const { isLogin, message } = await res.json();
 
-  if (!isLogin) {
-    alert(message);
-    return;
-  }
-
-  Router.push('/lobby');
+  if (!isLogin) alert(message);
 };

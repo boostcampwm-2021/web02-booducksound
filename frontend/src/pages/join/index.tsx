@@ -3,7 +3,10 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import Router from 'next/router';
+import { useDispatch } from 'react-redux';
 
+import { getUser } from '~/actions/user';
 import { requestJoin } from '~/api/account';
 import Button from '~/atoms/Button';
 import InputText from '~/atoms/InputText';
@@ -71,6 +74,7 @@ const Join: NextPage = () => {
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
   const [color, setColor] = useState('fff');
+  const dispatch = useDispatch();
 
   const idCheck = async () => {
     const res = await API('GET')(`${BACKEND_URL}/check-id?id=${id}`)();
@@ -81,7 +85,9 @@ const Join: NextPage = () => {
     const { result, message } = await idCheck();
 
     if (result) return alert(message);
-    requestJoin(id, password, nickname, color);
+    await requestJoin(id, password, nickname, color);
+    dispatch(getUser());
+    Router.push('/lobby');
   };
 
   const handleIdCheck = async () => {
