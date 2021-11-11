@@ -25,6 +25,9 @@ const userReducer = (state = initialState, action: { type: UserActions; payload:
       const { id, nickname, color, likes, myPlaylist } = payload;
       return { ...state, id, nickname, color, likes, myPlaylist };
     }
+    case UserActions.REMOVE_USER: {
+      return initialState;
+    }
     case UserActions.SET_COLOR: {
       const { color } = payload;
       return { ...state, color };
