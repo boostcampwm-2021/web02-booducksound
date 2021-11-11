@@ -6,11 +6,11 @@ import * as PlaylistService from './service';
 
 export const get = async (req: Request, res: Response) => {
   try {
-    if (typeof req.query._id !== 'string') throw Error('Not Exist ObjectId');
-    const playlist = await PlaylistService.get(req.query._id);
+    const { _id } = req.params;
+    const playlist = await PlaylistService.get(_id);
     res.json({ status: 'SUCCESS', playlist });
-  } catch (e) {
-    res.json({ status: 'FAILED', e });
+  } catch (error) {
+    res.json({ status: 'FAILED', error });
   }
 };
 
@@ -19,9 +19,8 @@ export const register = async (req: Request, res: Response) => {
     const playlist = await PlaylistService.add(req.body);
     await UserService.postMyPlaylist(req.body.userId, playlist._id);
     res.json({ status: 'SUCCESS', playlist });
-  } catch (e) {
-    console.error('here', e);
-    res.json({ status: 'FAILED', error: e });
+  } catch (error) {
+    res.json({ status: 'FAILED', error });
   }
 };
 
@@ -30,16 +29,17 @@ export const update = async (req: Request, res: Response) => {
   try {
     const result = await PlaylistService.update(_id, data);
     res.json({ status: 'SUCCESS', result });
-  } catch (e) {
-    res.json({ status: 'FAILED', error: e });
+  } catch (error) {
+    res.json({ status: 'FAILED', error });
   }
 };
 
 export const del = async (req: Request, res: Response) => {
   try {
-    const result = await PlaylistService.del(req.body);
+    const { _id } = req.params;
+    const result = await PlaylistService.del(_id);
     res.json({ status: 'SUCCESS', result });
-  } catch (e) {
-    res.json({ status: 'FAILED', error: e });
+  } catch (error) {
+    res.json({ status: 'FAILED', error });
   }
 };

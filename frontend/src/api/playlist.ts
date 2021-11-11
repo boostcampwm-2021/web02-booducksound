@@ -4,7 +4,7 @@ import API from '~/utils/API';
 import { BACKEND_URL } from '../constants';
 
 export const selectPlaylist = async (_id: string) => {
-  const res = await API('GET')(`${BACKEND_URL}/playlist?_id=${_id}`)();
+  const res = await API('GET')(`${BACKEND_URL}/playlist/${_id}`)();
   return await res.json();
 };
 
@@ -19,6 +19,6 @@ export const updatePlaylist = async (_id: string, playlistInfo: Playlist) => {
 };
 
 export const deletePlaylist = async (_id: string) => {
-  const res = await API('DELETE')(`${BACKEND_URL}/playlist?_id=${_id}`)();
+  const res = await API('DELETE')(`${BACKEND_URL}/playlist/${_id}`)();
   return await res.json();
 };
