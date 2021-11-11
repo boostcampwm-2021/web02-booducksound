@@ -28,6 +28,7 @@ const Container = styled.div`
 const Game: NextPage = () => {
   const [players, setPlayers] = useState<{ [socketId: string]: Player }>({});
   const [player, setPlayer] = useState<Player>({ nickname: '', color: '', status: 'prepare' });
+  const [gameRoom, setGameRoom] = useState<GameRoom>();
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
   const socket = useSocket();
@@ -59,6 +60,7 @@ const Game: NextPage = () => {
 
       // TODO : 받아온 gameRoom 데이터에 따라 화면을 렌더링할 것
       console.log('GameRoom Data :', gameRoom);
+      setGameRoom(gameRoom);
     },
   );
 
@@ -100,7 +102,7 @@ const Game: NextPage = () => {
     window.alert('마지막 라운드에 다다랐습니다. GAME_END');
   });
 
-  useSocketOn(SocketEvents.SET_GAME_ROOM, ({ players }) => {
+  useSocketOn(SocketEvents.SET_PLAYER, ({ players }) => {
     setPlayers(players);
     if (players !== null && socket !== null) {
       setPlayer(players[socket?.id]);
@@ -113,6 +115,13 @@ const Game: NextPage = () => {
     socket.emit(SocketEvents.LEAVE_ROOM, uuid);
   });
 
+  useEffect(() => {
+    socket?.on(SocketEvents.SET_GAME_ROOM, (gameRoom: GameRoom) => {
+      if (gameRoom !== undefined) {
+        setGameRoom(gameRoom);
+      }
+    });
+  }, []);
   const handleAudioEnded: ReactEventHandler<HTMLAudioElement> = (e) => {
     const audio = e.target as HTMLAudioElement;
     audio.currentTime = 0;
@@ -122,9 +131,9 @@ const Game: NextPage = () => {
   return (
     <Container>
       <GameRoomNav player={player} />
-      <GameRoomContainer players={players} />
-      <audio ref={music1} controls onEnded={handleAudioEnded} />
-      <audio ref={music2} controls onEnded={handleAudioEnded} />
+      <GameRoomContainer players={players} gameRoom={gameRoom} />
+      <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/0`} controls loop />
+      <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/1`} controls loop />
       <button
         onClick={() => {
           socket?.emit(SocketEvents.START_GAME);

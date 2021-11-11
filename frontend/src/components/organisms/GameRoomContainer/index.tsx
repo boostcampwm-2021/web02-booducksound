@@ -7,11 +7,12 @@ import GlassContainer from '~/atoms/GlassContainer';
 import useSocket from '~/hooks/useSocket';
 import CharacterList from '~/molecules/CharacterList';
 import ChatList from '~/molecules/ChatList';
+import OptionModal from '~/organisms/OptionModal';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
+import { GameRoom } from '~/types/GameRoom';
 import { Player } from '~/types/Player';
 import { SocketEvents } from '~/types/SocketEvents';
-
 interface Props {
   type: 'leftTitle' | 'rightTitle' | 'leftCharacter' | 'rightChat';
 }
@@ -29,9 +30,9 @@ const Wrapper = styled.div`
     /1fr 6fr 1fr 8fr 1fr;
   @media (max-width: ${theme.breakpoints.sm}) {
     grid-template:
-      '.  leftCharacter leftCharacter leftCharacter .' 3fr
+      '.  leftCharacter leftCharacter leftCharacter .' 1fr
       '. leftTitle rightTitle rightTitle .' 2fr
-      '. rightChat rightChat rightChat .' 8fr
+      '. rightChat rightChat rightChat .' 4fr
       '. rightSearch rightSearch rightSearch .' 1fr
       / 1fr 3fr 1fr 6fr 1fr;
     font-size: 12px;
@@ -40,6 +41,34 @@ const Wrapper = styled.div`
 
 const Container = styled(GlassContainer)<Props>`
   grid-area: ${({ type }) => type};
+`;
+
+const CharacterContainer = styled(Container)`
+  display: flex;
+  justify-content: flex-start;
+`;
+const GridDiv = styled.div`
+  width: 100%;
+  gap: 10px;
+  display: grid;
+  grid-template:
+    '. . title setting .' 1fr
+    '. description description description . ' 1fr
+    /1fr 1fr 3fr 1fr 1fr;
+`;
+const GameTitle = styled.div`
+  align-self: center;
+  justify-self: center;
+  grid-area: title;
+`;
+
+const SettingButton = styled.button`
+  grid-area: setting;
+  border: 0;
+  outline: 0;
+  width: 60px;
+  height: 60px;
+  background: url('images/settings.png') no-repeat center/45%;
 `;
 
 const RoomStateTitle = styled.p`
@@ -58,9 +87,17 @@ const InputBox = styled.input`
   background-color: white;
 `;
 
-const GameRoomContainer = ({ players }: { players: { [socketId: string]: Player } }) => {
+const GameRoomContainer = ({
+  players,
+  gameRoom,
+}: {
+  players: { [socketId: string]: Player };
+  gameRoom: GameRoom | undefined;
+}) => {
+  const socket = useSocket();
   const { uuid } = useSelector((state: RootState) => state.room);
-  const userInfo = useSelector((state: RootState) => state.user);
+  const userInfo = useSelector((state: any) => state.user);
+  const [modalOnOff, setModalOnOff] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const socket = useSocket();
 
@@ -71,25 +108,44 @@ const GameRoomContainer = ({ players }: { players: { [socketId: string]: Player 
     setText('');
   };
 
+  const confirmKing = () => {
+    if (socket !== null && players[socket.id] !== undefined) {
+      if (players[socket.id].status === 'king') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  };
   return (
-    <Wrapper>
-      <Container type={'leftTitle'}>
-        <RoomStateTitle>대기중 입니다.</RoomStateTitle>
-      </Container>
-      <Container type={'leftCharacter'}>
-        <CharacterList players={players} />
-      </Container>
-      <Container type={'rightTitle'}>대기중 입니다.</Container>
-      <Container type={'rightChat'}>
-        <ChatList />
-      </Container>
-      <InputBox
-        placeholder={'메세지를 입력해주세요.'}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        onClick={send}
-      />
-    </Wrapper>
+    <>
+      <Wrapper>
+        <Container type={'leftTitle'}>
+          <RoomStateTitle>대기중 입니다.</RoomStateTitle>
+        </Container>
+        <CharacterContainer type={'leftCharacter'}>
+          <CharacterList players={players} />
+        </CharacterContainer>
+        <Container type={'rightTitle'}>
+          <GridDiv>
+            <GameTitle>{gameRoom?.title}</GameTitle>
+            {confirmKing() && <SettingButton onClick={() => setModalOnOff(true)} />}
+          </GridDiv>
+        </Container>
+        <Container type={'rightChat'}>
+          <ChatList />
+        </Container>
+        <InputBox
+          placeholder={'메세지를 입력해주세요.'}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onClick={send}
+        />
+      </Wrapper>
+      {modalOnOff && gameRoom && (
+        <OptionModal setModalOnOff={setModalOnOff} leftButtonText={'수정하기'} gameRoom={gameRoom} />
+      )}
+    </>
   );
 };
 

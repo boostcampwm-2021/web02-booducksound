@@ -8,6 +8,7 @@ import TextLabel from '~/atoms/TextLabel';
 import Modal from '~/molecules/Modal';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import theme from '~/styles/theme';
+import { GameRoom } from '~/types/GameRoom';
 import { Playlist } from '~/types/Playlist';
 
 const Container = styled.div`
@@ -63,8 +64,8 @@ interface Props {
       playlistName: string;
       playlistId: string;
       password: string;
-      skip: number;
-      timePerProblem: number;
+      skip: GameRoom['skip'] | number;
+      timePerProblem: GameRoom['timePerProblem'] | number;
     }>
   >;
   validateForm: Function;

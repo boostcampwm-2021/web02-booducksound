@@ -3,9 +3,9 @@ import { Player } from './Player';
 export type GameRoom = {
   status: 'playing' | 'waiting';
   players: { [socketId: string]: Player };
+  playlistName: string;
   title: string;
   playlistId: string;
-  playlistName: string;
   hashtags: string[];
   hasPassword: boolean;
   skip: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;

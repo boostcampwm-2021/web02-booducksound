@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
     }
 
     delete serverRooms[uuid].players[socket.id];
-    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, { players: serverRooms[uuid].players });
+    io.to(uuid).emit(SocketEvents.SET_PLAYER, { players: serverRooms[uuid].players });
 
     const lobbyRoom = getLobbyRoom(uuid);
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
@@ -46,17 +46,18 @@ io.on('connection', (socket) => {
   });
 
   socket.on(SocketEvents.CREATE_ROOM, (room, done) => {
-    const { title, playlistId, password, skip, timePerProblem } = room;
+
+    const { title, playlistId,playlistName, password, skip, timePerProblem } = room;
     const uuid = short.generate();
 
     const setRoomInfo = async (playlistId: string) => {
       const playlist = await UserService.getById(playlistId);
-      console.log(playlistId, playlist);
       const serverRoom: ServerRoom = {
         title,
         password,
         players: {},
         playlistId,
+        playlistName,
         skip,
         timePerProblem,
         status: 'waiting',
@@ -73,6 +74,20 @@ io.on('connection', (socket) => {
 
     const lobbyRoom = getLobbyRoom(uuid);
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+  });
+
+  socket.on(SocketEvents.SET_GAME_ROOM, (uuid, password, room, done) => {
+    if (room === undefined) return;
+    const { title, playlistId, playlistName, skip, timePerProblem } = room;
+    console.log('이전', getGameRoom(uuid));
+    serverRooms[uuid] = { ...serverRooms[uuid], title, playlistId, playlistName, skip, timePerProblem };
+    password !== '' ? (serverRooms[uuid] = { ...serverRooms[uuid], password }) : null;
+    console.log('이후', getGameRoom(uuid));
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+    const lobbyRoom = getLobbyRoom(uuid);
+    io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+
+    done();
   });
 
   socket.on(SocketEvents.JOIN_ROOM, (uuid: string, player: Player, done) => {
@@ -95,7 +110,7 @@ io.on('connection', (socket) => {
 
     const serverRoom = serverRooms[uuid];
 
-    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, { players: serverRoom.players });
+    io.to(uuid).emit(SocketEvents.SET_PLAYER, { players: serverRoom.players });
     io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name: nickname, text: '', status: 'alert' });
 
     done({ type: 'success', gameRoom });
@@ -132,9 +147,9 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on(SocketEvents.SET_GAME_ROOM, (uuid: string, player: Player) => {
+  socket.on(SocketEvents.SET_PLAYER, (uuid: string, player: Player) => {
     serverRooms[uuid].players[socket.id] = player;
-    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, { players: serverRooms[uuid].players });
+    io.to(uuid).emit(SocketEvents.SET_PLAYER, { players: serverRooms[uuid].players });
   });
 
   socket.on(SocketEvents.LEAVE_ROOM, (uuid: string) => {

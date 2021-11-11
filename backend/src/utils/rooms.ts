@@ -26,8 +26,8 @@ export const getGameRoom = (uuid: string) => {
   const gameRoom: GameRoom = {
     hasPassword: !!serverRoom.password,
     playlistId: serverRoom.playlistId,
+    playlistName: serverRoom.playlistName,
     hashtags: [], // TODO: playListID를 통해 hashtags를 기져 오기
-    playlistName: '플레이리스트이름', // TODO: playlistId를 통해 playlistName 가져오기
     players: serverRoom.players,
     skip: serverRoom.skip,
     status: serverRoom.status,
