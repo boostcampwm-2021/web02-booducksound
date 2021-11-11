@@ -4,7 +4,7 @@ export type GameRoom = {
   status: 'playing' | 'waiting';
   players: { [socketId: string]: Player };
   title: string;
-  playListId: string;
+  playlistId: string;
   playlistName: string;
   hashtags: string[];
   hasPassword: boolean;
