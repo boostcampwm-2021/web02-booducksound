@@ -1,4 +1,5 @@
 import { PassThrough } from 'stream';
+import { URL } from 'url';
 
 import { path } from '@ffmpeg-installer/ffmpeg';
 import FFmpeg from 'fluent-ffmpeg';
@@ -7,7 +8,10 @@ import ytdl from 'ytdl-core';
 FFmpeg.setFfmpegPath(path);
 
 const streamify = (url: string) => {
-  const video = ytdl(`${url}`, { quality: 'lowestaudio' });
+  const regex = /(.*?)(^|\/|v=)([a-z0-9_-]{11})(.*)?/i;
+  const videoId = (url.match(regex) as RegExpExecArray)[3];
+
+  const video = ytdl(`https://youtube.com/watch?v=${videoId}`, { quality: 'lowestaudio' });
   const stream = new PassThrough();
   const ffmpeg = FFmpeg(video);
 

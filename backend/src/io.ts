@@ -73,6 +73,8 @@ io.on('connection', (socket) => {
         };
         serverRooms[uuid] = serverRoom;
         done(uuid);
+        // TODO: 방장은 원래 GAME_START가 비활성화 되어있다가, done()을 받고서야 누를 수 있도록 할 것
+        // 데이터베이스와 통신하는데 시간이 걸리므로 serverRooms[uuid]가 세팅되고 나서야 플레이를 누를 수 있게 해야한다
       };
       await setRoomInfo(playlistId);
       const lobbyRoom = getLobbyRoom(uuid);
@@ -141,6 +143,8 @@ io.on('connection', (socket) => {
 
     socket.on(SocketEvents.START_GAME, () => {
       try {
+        // TODO: !serverRooms[uuid] 인 경우에는 실행이 안 되도록
+
         const { musics } = serverRooms[uuid];
         serverRooms[uuid].status = 'playing';
         serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
