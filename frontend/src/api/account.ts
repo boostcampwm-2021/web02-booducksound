@@ -48,11 +48,7 @@ export const requestEnter = async (nickname: string, color: string) => {
   const res = await API('POST')(`${BACKEND_URL}/guest-sign-in`)({ body: JSON.stringify({ nickname, color }) });
   const { isLogin, message } = await res.json();
 
-  if (!isLogin) {
-    alert(message);
-  }
-
-  // Router.push('/lobby');
+  if (!isLogin) alert(message);
 };
 
 export const requestJoin = async (id: string, password: string, nickname: string, color: string) => {

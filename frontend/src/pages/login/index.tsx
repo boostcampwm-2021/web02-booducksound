@@ -4,7 +4,10 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import Router from 'next/router';
+import { useDispatch } from 'react-redux';
 
+import { getUser } from '~/actions/user';
 import { requestLogin } from '~/api/account';
 import Button from '~/atoms/Button';
 import InputText from '~/atoms/InputText';
@@ -66,11 +69,14 @@ const LoginInputText = styled(InputText)`
 const Login: NextPage = () => {
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!id) return alert(ID_EMPTY_MSG);
     if (!password) return alert(PASSWORD_EMPTY_MSG);
-    requestLogin(id, password);
+    await requestLogin(id, password);
+    dispatch(getUser());
+    Router.push('/lobby');
   };
 
   return (
