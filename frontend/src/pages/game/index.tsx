@@ -85,7 +85,7 @@ const Game: NextPage = () => {
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/3`; // TODO : roundNum으로 변경할 것
   });
 
-  useSocketOn(SocketEvents.SET_GAME_ROOM, ({ players }) => {
+  useSocketOn(SocketEvents.SET_PLAYER, ({ players }) => {
     setPlayers(players);
     if (players !== null && socket !== null) {
       setPlayer(players[socket?.id]);
@@ -97,6 +97,14 @@ const Game: NextPage = () => {
     if (!socket) return;
     socket.emit(SocketEvents.LEAVE_ROOM, uuid);
   });
+
+  useEffect(() => {
+    socket?.on(SocketEvents.SET_GAME_ROOM, (gameRoom: GameRoom) => {
+      if (gameRoom !== undefined) {
+        setGameRoom(gameRoom);
+      }
+    });
+  }, []);
 
   return (
     <Container>
