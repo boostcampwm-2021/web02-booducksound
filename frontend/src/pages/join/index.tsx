@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 import { requestJoin } from '~/api/account';
 import Button from '~/atoms/Button';
-import InputBox from '~/atoms/InputBox';
+import InputText from '~/atoms/InputText';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import ProfileSelector from '~/atoms/ProfileSelector';
@@ -38,6 +38,8 @@ const LoginContainer = styled.div`
 `;
 
 const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   width: fit-content;
   margin: 0 auto;
   position: relative;
@@ -56,6 +58,12 @@ const InputContainer = styled.div`
     right: 1rem;
     top: 10px;
   }
+`;
+
+const JoinInputText = styled(InputText)`
+  font-size: 20px;
+  padding: 20px 20px 20px 80px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
 `;
 
 const Join: NextPage = () => {
@@ -97,15 +105,13 @@ const Join: NextPage = () => {
         <LoginContainer>
           <ProfileSelector color={color} setColor={setColor}></ProfileSelector>
           <InputContainer>
-            <InputBox
+            <JoinInputText
+              className="newId"
               isSearch={false}
               placeholder="아이디를 입력하세요."
-              width={'100%'}
-              height={'80px'}
-              fontSize={'20px'}
               value={id}
-              onChangeHandler={({ target }) => setID((target as HTMLInputElement).value)}
-            ></InputBox>
+              handleChange={({ target }) => setID((target as HTMLInputElement).value)}
+            ></JoinInputText>
             <Button
               background={theme.colors.peach}
               fontSize={'18px'}
@@ -115,25 +121,21 @@ const Join: NextPage = () => {
             >
               중복확인
             </Button>
-            <InputBox
+            <JoinInputText
+              className="newPassword"
+              type="password"
               isSearch={false}
-              isPassword={true}
               placeholder="비밀번호를 입력해 주세요."
-              width={'100%'}
-              height={'80px'}
-              fontSize={'20px'}
               value={password}
-              onChangeHandler={({ target }) => setPassword((target as HTMLInputElement).value)}
-            ></InputBox>
-            <InputBox
+              handleChange={({ target }) => setPassword((target as HTMLInputElement).value)}
+            ></JoinInputText>
+            <JoinInputText
+              className="newNickname"
               isSearch={false}
               placeholder="닉네임을 입력하세요."
-              width={'100%'}
-              height={'80px'}
-              fontSize={'20px'}
               value={nickname}
-              onChangeHandler={({ target }) => setNickname((target as HTMLInputElement).value)}
-            ></InputBox>
+              handleChange={({ target }) => setNickname((target as HTMLInputElement).value)}
+            ></JoinInputText>
             <Link href="/join">
               <a>
                 <Button

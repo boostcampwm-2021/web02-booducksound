@@ -1,8 +1,9 @@
-import { useState, SetStateAction, Dispatch, MouseEventHandler } from 'react';
+import { useState, SetStateAction, Dispatch, MouseEventHandler, ChangeEvent } from 'react';
 
 import styled from '@emotion/styled';
 
-import InputSection from '~/molecules/InputSection';
+import InputText from '~/atoms/InputText';
+import TextLabel from '~/atoms/TextLabel';
 import Modal from '~/molecules/Modal';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import theme from '~/styles/theme';
@@ -150,19 +151,13 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
       hasOnlyCancleBtn={true}
     >
       <Container>
-        <InputSection
-          id="playlistSearch"
-          fontSize="0.92em"
-          width="100%"
-          height="48px"
+        <TextLabel>플레이리스트 선택</TextLabel>
+        <InputText
+          className="playlistSearch"
           isSearch={true}
-          title="플레이리스트 선택"
-          margin="24px"
           placeholder="검색어를 입력해주세요"
-          titleSize="1.2em"
-          paddingW="20px"
           value={search}
-          onChangeHandler={(e) => setSearch((e.target as HTMLInputElement).value)}
+          handleChange={(e: ChangeEvent) => setSearch((e.target as HTMLInputElement).value)}
         />
         <PlayLists onClick={handleSelectPlaylistBtnClick}>
           {playlists &&
