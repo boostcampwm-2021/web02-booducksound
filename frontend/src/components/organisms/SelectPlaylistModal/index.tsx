@@ -1,4 +1,4 @@
-import { useState, SetStateAction, Dispatch, MouseEventHandler } from 'react';
+import { useState, SetStateAction, Dispatch, MouseEvent } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -67,7 +67,7 @@ interface Props {
   validateForm: Function;
 }
 
-const playlists = [
+const dummyPlaylists = [
   {
     title: '플레이리스트1',
     hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
@@ -121,23 +121,18 @@ const playlists = [
 
 const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) => {
   const [search, setSearch] = useState('');
+  const [playlists, setPlaylists] = useState(dummyPlaylists);
 
-  const handleSelectPlaylistBtnClick: MouseEventHandler = (e) => {
-    const button = (e.target as Element).closest('button');
-    if (!button) return;
+  // useEffect(() => {
+  //   return () => {};
+  // }, []);
 
-    const li = (e.target as Element).closest('li');
-    if (!li) return;
-
-    const playlistId = li.dataset.playlistId as string;
-    const playlistName = li.dataset.playlistName as string;
-
+  const handleSelectPlaylistBtnClick = (e: MouseEvent, playlistId: string, playlistName: string) => {
     setForm((prev) => {
       const form = { ...prev, playlistId, playlistName };
       validateForm(form);
       return form;
     });
-
     setModalOnOff(false);
   };
 
@@ -164,13 +159,18 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
           value={search}
           onChangeHandler={(e) => setSearch((e.target as HTMLInputElement).value)}
         />
-        <PlayLists onClick={handleSelectPlaylistBtnClick}>
+        <PlayLists>
           {playlists &&
-            playlists.map(({ title, hashtags, playCount, description, playlistId }, i) => {
+            playlists.map(({ title, playlistId, hashtags, playCount, description }) => {
               return (
-                <PlayList data-playlist-id={playlistId} data-playlist-name={title} key={i}>
+                <PlayList key={playlistId}>
                   <Title>{title}</Title>
-                  <ResponsiveButton background={theme.colors.lilac} fontSize="16px" width="80px">
+                  <ResponsiveButton
+                    background={theme.colors.lilac}
+                    fontSize="16px"
+                    width="80px"
+                    onClick={(e) => handleSelectPlaylistBtnClick(e, playlistId, title)}
+                  >
                     선택
                   </ResponsiveButton>
                 </PlayList>
