@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { useDispatch } from 'react-redux';
 
+import { getUser } from '~/actions/user';
 import { changeColor } from '~/api/user';
 import ProfileSelector from '~/atoms/ProfileSelector';
 import theme from '~/styles/theme';
-import { getUser } from '~/actions/user';
 
 const Container = styled.div`
   display: flex;

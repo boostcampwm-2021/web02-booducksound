@@ -2,7 +2,10 @@ import { useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
+import Router from 'next/router';
+import { useDispatch } from 'react-redux';
 
+import { getUser } from '~/actions/user';
 import { requestEnter } from '~/api/account';
 import Button from '~/atoms/Button';
 import InputText from '~/atoms/InputText';
@@ -64,10 +67,13 @@ const EnterInputText = styled(InputText)`
 const Enter: NextPage = () => {
   const [nickname, setNickname] = useState('');
   const [color, setColor] = useState('fff');
+  const dispatch = useDispatch();
 
-  const handleEnter = () => {
+  const handleEnter = async () => {
     if (!nickname) return alert(NICKNAME_EMPTY_MSG);
-    requestEnter(nickname, color);
+    await requestEnter(nickname, color);
+    dispatch(getUser());
+    Router.push('/lobby');
   };
 
   return (

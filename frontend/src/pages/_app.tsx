@@ -24,7 +24,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        <Component dispatch={dispatch} {...pageProps} />
+        <Component {...pageProps} />
       </Provider>
     </ThemeProvider>
   );

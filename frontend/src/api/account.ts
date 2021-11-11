@@ -29,12 +29,7 @@ export const requestLogin = async (id: string, password: string) => {
   const res = await API('POST')(`${BACKEND_URL}/sign-in`)({ body: JSON.stringify({ id, password }) });
   const { isLogin, message } = await res.json();
 
-  if (!isLogin) {
-    alert(message);
-    return;
-  }
-
-  Router.push('/lobby');
+  if (!isLogin) return alert(message);
 };
 
 export const requestLogout = async () => {
@@ -55,10 +50,9 @@ export const requestEnter = async (nickname: string, color: string) => {
 
   if (!isLogin) {
     alert(message);
-    return;
   }
 
-  Router.push('/lobby');
+  // Router.push('/lobby');
 };
 
 export const requestJoin = async (id: string, password: string, nickname: string, color: string) => {
