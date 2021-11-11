@@ -76,24 +76,24 @@ export const getServerSideProps = async ({ query }: NextPageContext) => {
         content: {
           playlistName: '',
           description: '',
-          hashTag: '',
-          hashTags: [],
+          hashtag: '',
+          hashtags: [],
           musics: [],
         },
       },
     };
   }
   const { playlist } = await selectPlaylist(playlistId);
-  const { playlistName, description, hashTags, musics } = playlist;
+  const { playlistName, description, hashtags, musics } = playlist;
   return {
     props: {
       type: 'update',
       content: {
         playlistName,
         description,
-        hashTags,
+        hashtags,
         musics,
-        hashTag: '',
+        hashtag: '',
       },
     },
   };
@@ -106,19 +106,19 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
   const [playlist, setPlaylistAll] = useState<PlaylistInput>({
     playlistName: content.playlistName,
     description: content.description,
-    hashTag: content.hashTag,
-    hashTags: content.hashTags,
+    hashtag: content.hashtag,
+    hashtags: content.hashtags,
     musics: content.musics,
   });
 
-  const { playlistName, description, hashTag, hashTags, musics } = playlist;
+  const { playlistName, description, hashtag, hashtags, musics } = playlist;
 
   const setPlaylist = (newState: Object) =>
     setPlaylistAll((preState) => {
       return { ...preState, ...newState };
     });
   const checkAllValidInput = () => {
-    if (!playlistName || !description || !hashTags.length) return false;
+    if (!playlistName || !description || !hashtags.length) return false;
     if (musics.length < 3 || musics.length > 50) return false;
     return true;
   };
@@ -128,10 +128,10 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
   };
   const handleAddChipKeyUp: KeyboardEventHandler = (e) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
-    if (!hashTag.trim()) return;
-    setPlaylist({ hashTag: '' });
+    if (!hashtag.trim()) return;
+    setPlaylist({ hashtag: '' });
     setPlaylistAll((preState: PlaylistInput) => {
-      return { ...preState, hashTags: [...preState.hashTags, hashTag.replace(/\s/g, '')] };
+      return { ...preState, hashtags: [...preState.hashtags, hashtag.replace(/\s/g, '')] };
     });
   };
   const handleSubmit = async () => {
@@ -142,7 +142,7 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
     const result = await mapSubmitFunction({
       type,
       playlistId,
-      playlist: { playlistName, description, musics, hashTags, userId: userInfo.id },
+      playlist: { playlistName, description, musics, hashtags, userId: userInfo.id },
     });
     const { status } = result;
     if (status === FAILED) alert('플레이리스트 등록에 실패하였습니다.');
@@ -179,8 +179,8 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
   };
   const deleteMusics = (idx: number) => (e: MouseEvent) => {
     setPlaylistAll((preState: PlaylistInput) => {
-      const nextMusics = preState.hashTags.filter((hashTag, i) => i !== idx);
-      return { ...preState, hashTags: [...nextMusics] };
+      const nextMusics = preState.hashtags.filter((hashtag, i) => i !== idx);
+      return { ...preState, hashtags: [...nextMusics] };
     });
   };
 
@@ -195,12 +195,12 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
             handleAddChipKeyDown={handleAddChipKeyDown}
             playlistName={playlistName}
             description={description}
-            hashTag={hashTag}
+            hashtag={hashtag}
           />
           <ChipContainer>
-            {hashTags.map((hashTag, idx) => (
+            {hashtags.map((hashtag, idx) => (
               <Chip key={idx} deleteHandler={deleteMusics(idx)}>
-                {hashTag}
+                {hashtag}
               </Chip>
             ))}
           </ChipContainer>

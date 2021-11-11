@@ -9,7 +9,7 @@ interface Props {
   setPlaylist: Function;
   playlistName: string;
   description: string;
-  hashTag: string;
+  hashtag: string;
   handleAddChipKeyUp: KeyboardEventHandler;
   handleAddChipKeyDown: KeyboardEventHandler;
 }
@@ -61,7 +61,7 @@ const CreatePlaylistInputBox = ({
   setPlaylist,
   playlistName,
   description,
-  hashTag,
+  hashtag,
   handleAddChipKeyUp,
   handleAddChipKeyDown,
 }: PropsWithChildren<Props>) => {
@@ -94,7 +94,7 @@ const CreatePlaylistInputBox = ({
           handleKeyDown={handleAddChipKeyDown}
           handleChange={(e) => setPlaylist({ hashTag: (e.currentTarget as HTMLTextAreaElement).value })}
           value={hashTag}
-          className="hashTag"
+          className="hashag"
           isSearch={false}
           placeholder="추가할 해시태그를 입력 후 Enter를 클릭하세요."
         ></PlaylistInputText>

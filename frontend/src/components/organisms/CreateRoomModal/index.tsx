@@ -56,12 +56,6 @@ const HalfContainer = styled.div`
   column-gap: 12px;
 `;
 
-const SelectPlaylistTextWithButton = styled(InputWithButton)`
-  :first-child {
-    padding: 20px 20px;
-  }
-`;
-
 const ModalInputText = styled(InputText)`
   padding: 10px 10px 10px 30px;
 `;
@@ -170,7 +164,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
         </ContentContainer>
         <ContentContainer>
           <SelectPlaylistLabel>플레이리스트</SelectPlaylistLabel>
-          <SelectPlaylistTextWithButton
+          <InputWithButton
             inputClassName="selectPlaylist"
             placeholder="플레이리스트를 선택해주세요"
             isSearch={false}

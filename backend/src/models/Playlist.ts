@@ -15,7 +15,7 @@ const PlaylistSchema = new Schema({
   likeCount: { type: Number, default: 0 },
   playCount: { type: Number, default: 0 },
   musics: [MusicSchema],
-  hashTags: [{ type: String, maxlength: 30 }],
+  hashtags: [{ type: String, maxlength: 30 }],
   userId: { type: String, maxlength: 20 },
   createdAt: { type: Date, default: new Date() },
 });
