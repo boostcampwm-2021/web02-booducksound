@@ -55,10 +55,5 @@ export const requestJoin = async (id: string, password: string, nickname: string
   const res = await API('POST')(`${BACKEND_URL}/sign-up`)({ body: JSON.stringify({ id, password, nickname, color }) });
   const { isLogin, message } = await res.json();
 
-  if (!isLogin) {
-    alert(message);
-    return;
-  }
-
-  Router.push('/lobby');
+  if (!isLogin) alert(message);
 };
