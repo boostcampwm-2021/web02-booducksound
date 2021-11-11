@@ -99,11 +99,13 @@ const GameRoomContainer = ({
   const userInfo = useSelector((state: any) => state.user);
   const [modalOnOff, setModalOnOff] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
+  const socket = useSocket();
+
   const send = () => {
-    if (text !== '') {
-      socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text);
-      setText('');
-    }
+    if (!text) return;
+
+    socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text);
+    setText('');
   };
 
   const confirmKing = () => {

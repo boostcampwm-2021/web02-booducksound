@@ -6,12 +6,13 @@ import Button from '~/atoms/Button';
 import CreatePlaylistMusicItem from '~/molecules/CreatePlaylistMusicItem';
 import theme from '~/styles/theme';
 import { Music } from '~/types/Music';
+import { PlaylistInput } from '~/types/PlaylistInput';
 import { swap } from '~/utils/swap';
 
 interface Props {
   musics: Music[];
   setModalOption: Function;
-  setMusics: Function;
+  setPlaylist: Function;
 }
 
 const MusicListContainer = styled.div``;
@@ -69,7 +70,7 @@ const EmptyBox = styled.div`
   height: 100%;
   color: #ddd;
 `;
-const CreatePlaylistMusicList = ({ musics, setModalOption, setMusics }: PropsWithChildren<Props>) => {
+const CreatePlaylistMusicList = ({ musics, setModalOption, setPlaylist }: PropsWithChildren<Props>) => {
   const [grab, setGrab] = useState<EventTarget>();
 
   const handleDragOver: DragEventHandler = (e) => {
@@ -83,13 +84,22 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setMusics }: PropsWit
   const handleDrop: DragEventHandler = (e) => {
     const grabPosition = Number((grab as HTMLElement).dataset.position);
     const targetPosition = Number((e.target as HTMLElement).dataset.position);
-
-    setMusics((preState: Music[]) => swap<Music>(grabPosition, targetPosition, [...preState]));
+    setPlaylist((prevState: PlaylistInput) => {
+      const nextMusics = swap<Music>(grabPosition, targetPosition, [...prevState.musics]);
+      return { ...prevState, musics: nextMusics };
+    });
   };
   const handleDragEnd: DragEventHandler = (e) => {
     (e.target as HTMLElement).classList.remove('grabbing');
     e.dataTransfer.dropEffect = 'move';
   };
+  const deleteMusic = (target: number) =>
+    setPlaylist((prevState: PlaylistInput) => {
+      return {
+        ...prevState,
+        musics: [...prevState.musics.filter((music, idx) => idx !== target)],
+      };
+    });
 
   return (
     <MusicListContainer>
@@ -97,13 +107,14 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setMusics }: PropsWit
         <MusicListTitleTop>
           <MusicListTitle>노래 목록</MusicListTitle>
           <Button
-            content="추가"
             background={theme.colors.mint}
             fontSize="12px"
             paddingH="7px"
             width="100px"
             onClick={(e) => setModalOption({ type: 'create', target: null })}
-          ></Button>
+          >
+            추가
+          </Button>
         </MusicListTitleTop>
         <MusicListTitleBottom>최소 3개, 최대 50개까지 추가가 가능합니다.</MusicListTitleBottom>
       </MusicListTitleBox>
@@ -116,9 +127,7 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setMusics }: PropsWit
               title={music.info}
               key={idx}
               idx={idx}
-              deleteItem={(target: number) =>
-                setMusics((preState: Music[]) => [...preState.filter((music, idx) => idx !== target)])
-              }
+              deleteItem={deleteMusic}
               modifyItem={() => setModalOption({ type: 'modify', target: idx })}
               dragHandlers={{
                 handleDragOver,

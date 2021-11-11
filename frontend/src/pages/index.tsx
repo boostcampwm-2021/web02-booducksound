@@ -82,36 +82,24 @@ const Home: NextPage = () => {
       <BtnBox>
         <Link href="/login">
           <a>
-            <Button
-              width={'320px'}
-              background={theme.colors.sand}
-              paddingH={'24px'}
-              fontSize={'28px'}
-              content={'로그인'}
-            />
+            <Button width={'320px'} background={theme.colors.sand} paddingH={'24px'} fontSize={'28px'}>
+              로그인
+            </Button>
           </a>
         </Link>
         <Link href="/join">
           <a>
-            <Button
-              width={'320px'}
-              background={theme.colors.sand}
-              paddingH={'24px'}
-              fontSize={'28px'}
-              content={'회원가입'}
-            />
+            <Button width={'320px'} background={theme.colors.sand} paddingH={'24px'} fontSize={'28px'}>
+              회원가입
+            </Button>
           </a>
         </Link>
       </BtnBox>
       <Link href="/enter">
         <a>
-          <Button
-            width={'656px'}
-            background={theme.colors.mint}
-            fontSize={'28px'}
-            paddingH={'24px'}
-            content={'비회원 로그인'}
-          />
+          <Button width={'656px'} background={theme.colors.mint} fontSize={'28px'} paddingH={'24px'}>
+            비회원 로그인
+          </Button>
         </a>
       </Link>
     </MainContainer>

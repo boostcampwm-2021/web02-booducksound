@@ -1,4 +1,4 @@
-import { ChangeEvent, PropsWithChildren, useCallback, useState } from 'react';
+import { ChangeEvent, KeyboardEventHandler, PropsWithChildren, useState } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -54,46 +54,39 @@ const MusicModalInputText = styled(InputText)`
 
 const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: PropsWithChildren<Props>) => {
   const [music, setMusic] = useState<Music>({
-    info: musicInfo ? musicInfo.info : '',
-    hint: musicInfo ? musicInfo.hint : '',
-    url: musicInfo ? musicInfo.url : '',
-    answers: musicInfo ? musicInfo.answers : [],
+    info: musicInfo?.info || '',
+    hint: musicInfo?.hint || '',
+    url: musicInfo?.url || '',
+    answers: musicInfo?.answers || [],
   });
   const [answer, setAnswer] = useState<string>('');
 
-  const { info, hint, url, answers } = music;
+  const handleRegistButton = () => {
+    const { info, hint, url, answers } = music;
 
-  const handleRegistButton = useCallback(
-    (e) => {
-      if (!showAlert(!(info && hint && url && answers.length !== 0), '노래 정보를 모두 입력해야합니다.')) return;
-      if (!showAlert(!checkValidUrl(url), '유튜브 URL을 확인해주세요.')) return;
-      const newState = { info, hint, url, answers };
-      setMusics(newState);
-      setModalOption({ type: 'close', target: null });
-    },
-    [answers, hint, info, setModalOption, setMusics, url],
-  );
-  const handleCancelButton = useCallback(
-    (e) => {
-      setModalOption({ type: 'close', target: null });
-    },
-    [setModalOption],
-  );
-  const pressEnterHandler = useCallback(
-    (e) => {
-      if (e.key !== 'Enter') return;
-      if (!answer) return;
-      setAnswer('');
-      setMusic((preState) => {
-        return { ...preState, answers: [...preState.answers, answer] };
-      });
-    },
-    [answer],
-  );
+    if (!showAlert(!(info && hint && url && answers.length !== 0), '노래 정보를 모두 입력해야합니다.')) return;
+    if (!showAlert(!checkValidUrl(url), '유튜브 URL을 확인해주세요.')) return;
+    const newState = { info, hint, url, answers };
+    setMusics(newState);
+    setModalOption({ type: 'close', target: null });
+  };
+
+  const handleCancelButton = () => setModalOption({ type: 'close', target: null });
+
+  const pressEnterHandler: KeyboardEventHandler = (e) => {
+    if (e.key !== 'Enter') return;
+    if (!answer.trim()) return;
+    setAnswer('');
+    setMusic((preState) => {
+      return { ...preState, answers: [...preState.answers, answer.trim()] };
+    });
+  };
+
   const checkValidUrl = (url: string) => {
-    const youtubeRegExp = /https:\/\/www\.youtube\.com\/watch\?v=[a-zA-Z0-9_]*/g;
+    const youtubeRegExp = /(https:\/\/)?(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_]*/g;
     return RegExp(youtubeRegExp).test(url);
   };
+
   const handleChange =
     ({ inputType }: InputType) =>
     (e: ChangeEvent) => {
@@ -118,16 +111,17 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
         <MusicModalTitle>노래 추가</MusicModalTitle>
         <MusicModalDescription>(최소 3개, 최대 50개)</MusicModalDescription>
         <Button
-          content={'초기화'}
           background={theme.colors.sky}
-          height={'40px'}
-          width={'150px'}
-          paddingH={'10px'}
+          height="40px"
+          width="150px"
+          paddingH="10px"
           onClick={(e) => {
             setMusic({ info: '', hint: '', url: '', answers: [] });
             setAnswer('');
           }}
-        ></Button>
+        >
+          초기화
+        </Button>
       </MusicModalTop>
       <MusicModalInputBox>
         <MusicModalInputText
@@ -135,21 +129,21 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
           className="info"
           isSearch={false}
           placeholder="노래 정보를 입력해 주세요. ex) 아이유 - 팔레트"
-          value={info}
+          value={music.info}
         ></MusicModalInputText>
         <MusicModalInputText
           handleChange={(e) => handleChange({ inputType: 'hint' })(e)}
           className="hint"
           isSearch={false}
           placeholder="힌트를 입력해 주세요."
-          value={hint}
+          value={music.hint}
         ></MusicModalInputText>
         <MusicModalInputText
           handleChange={(e) => handleChange({ inputType: 'url' })(e)}
           className="url"
           isSearch={false}
           placeholder="유튜브 URL을 입력해 주세요."
-          value={url}
+          value={music.url}
         ></MusicModalInputText>
         <MusicModalInputText
           handleChange={(e) => setAnswer((e.currentTarget as HTMLTextAreaElement).value)}
@@ -161,7 +155,7 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
         ></MusicModalInputText>
       </MusicModalInputBox>
       <MusicModalChipContainer>
-        {answers.map((answer, idx) => (
+        {music.answers.map((answer, idx) => (
           <Chip
             key={idx}
             deleteHandler={(e) =>

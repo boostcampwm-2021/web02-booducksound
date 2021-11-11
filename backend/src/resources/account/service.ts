@@ -32,79 +32,48 @@ export interface UserToken {
   exp?: number;
 }
 
-const idCheck = async (id: string) => {
+export const idCheck = async (id: string) => {
   const result = await User.find({ id });
   return result.length > 0;
 };
 
-const createUserToken = (id: string) => {
-  const token = jwt.sign(
-    {
-      id,
-    },
-    SECRET_KEY,
-    {
-      expiresIn: '24h',
-    },
-  );
+export const createUserToken = (id: string) => {
+  const token = jwt.sign({ id }, SECRET_KEY, { expiresIn: '24h' });
   return token;
 };
 
-const createNonUserToken = (nickname: string, color: string) => {
-  const token = jwt.sign(
-    {
-      nickname,
-      color,
-    },
-    SECRET_KEY,
-    {
-      expiresIn: '24h',
-    },
-  );
+export const createNonUserToken = (nickname: string, color: string) => {
+  const token = jwt.sign({ nickname, color }, SECRET_KEY, { expiresIn: '24h' });
   return token;
 };
 
-const verifyToken = (token: string) => {
-  try {
-    const decoded = jwt.verify(token, SECRET_KEY);
-    if (decoded) return decoded as UserToken;
-  } catch (err) {
-    return {};
-  }
+export const verifyToken = (token: string) => {
+  const decoded = jwt.verify(token, SECRET_KEY);
+  if (decoded) return decoded as UserToken;
 };
 
-const login = async ({ id, password }: LoginInfo) => {
-  try {
-    const user = await User.findOne({ id });
-    const res = user.checkPassword(password);
-    return {
-      isLogin: res,
-      message: res ? '로그인에 성공했습니다.' : '비밀번호가 틀렸습니다.',
-    };
-  } catch (err) {
-    return {
-      isLogin: false,
-      message: '존재하지 않는 아이디입니다.',
-    };
-  }
+export const login = async ({ id, password }: LoginInfo) => {
+  const user = await User.findOne({ id });
+  if (!user) throw Error('존재하지 않는 아이디입니다.');
+  const res = user.checkPassword(password);
+  if (!res) throw Error('비밀번호가 틀렸습니다.');
+  return {
+    isLogin: res,
+    message: '로그인에 성공했습니다.',
+  };
 };
 
-const join = async ({ id, password, nickname, color }: UserType) => {
-  const newUser = new User({
-    id,
-    password,
-    nickname,
-    color,
-  });
-  return await newUser.save().then((res: any) => {
-    return {
-      isLogin: true,
-      message: res ? '회원가입에 성공했습니다.' : '회원가입에 실패했습니다.',
-    };
-  });
+export const join = async ({ id, password, nickname, color }: UserType) => {
+  const newUser = new User({ id, password, nickname, color });
+  const res = await newUser.save();
+
+  return {
+    isLogin: !!res,
+    message: res ? '회원가입에 성공했습니다.' : '회원가입에 실패했습니다.',
+  };
 };
 
-const enter = () => {
+export const enter = () => {
   const result = {
     isLogin: true,
     message: '비회원 로그인에 성공했습니다.',
@@ -112,47 +81,19 @@ const enter = () => {
   return result;
 };
 
-const checkChangePasswordAvailable = async (id: string, nickname: string, newPw: string) => {
-  try {
-    const user = await User.findOne({ id, nickname });
-    if (user) {
-      console.log(user);
-      await changePassword(id, newPw);
-      return {
-        isChange: true,
-        message: '비밀번호가 성공적으로 변경되었습니다.',
-      };
-    }
-    return {
-      isChange: false,
-      message: 'ID와 닉네임을 확인해 주세요.',
-    };
-  } catch (err) {
-    return {
-      isChange: false,
-      message: '오류가 발생했습니다.',
-    };
-  }
-};
+export const checkChangePasswordAvailable = async (id: string, nickname: string, newPw: string) => {
+  const user = await User.findOne({ id, nickname });
 
-const changePassword = async (id: string, newPw: string) => {
+  if (!user) throw Error('ID와 닉네임을 확인해 주세요.');
   await User.updateOne({ id }, { password: newPw });
+
+  return {
+    isChange: true,
+    message: '비밀번호가 성공적으로 변경되었습니다.',
+  };
 };
 
-const getUserInfo = async (id: string) => {
+export const getUserInfo = async (id: string) => {
   const result = await User.find({ id });
   return result;
-};
-
-export default {
-  idCheck,
-  createUserToken,
-  createNonUserToken,
-  verifyToken,
-  login,
-  join,
-  enter,
-  checkChangePasswordAvailable,
-  changePassword,
-  getUserInfo,
 };

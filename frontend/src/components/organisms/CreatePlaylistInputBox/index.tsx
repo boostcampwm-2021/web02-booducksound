@@ -1,16 +1,17 @@
-import { ChangeEventHandler, PropsWithChildren } from 'react';
+import { KeyboardEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
 import InputText from '~/atoms/InputText';
+import TextLabel from '~/atoms/TextLabel';
 
 interface Props {
-  setTitle: ChangeEventHandler;
-  setDescription: ChangeEventHandler;
-  setHashTag: ChangeEventHandler;
-  title: string;
+  setPlaylist: Function;
+  playlistName: string;
   description: string;
-  hashTag: string;
+  hashtag: string;
+  handleAddChipKeyUp: KeyboardEventHandler;
+  handleAddChipKeyDown: KeyboardEventHandler;
 }
 
 const InputContainer = styled.div`
@@ -36,10 +37,6 @@ const InputContainer = styled.div`
     }
   }
 `;
-const Label = styled.label`
-  font-size: 1em;
-  font-weight: bold;
-`;
 const PlaylistInputText = styled(InputText)`
   width: 98%;
   height: 3em;
@@ -61,29 +58,29 @@ const SectionBox = styled.div`
 `;
 
 const CreatePlaylistInputBox = ({
-  setTitle,
-  setDescription,
-  setHashTag,
-  title,
+  setPlaylist,
+  playlistName,
   description,
-  hashTag,
+  hashtag,
+  handleAddChipKeyUp,
+  handleAddChipKeyDown,
 }: PropsWithChildren<Props>) => {
   return (
     <InputContainer>
       <SectionBox>
-        <Label>플레이리스트 제목</Label>
+        <TextLabel>플레이리스트 제목</TextLabel>
         <PlaylistInputText
-          handleChange={setTitle}
-          value={title}
+          handleChange={(e) => setPlaylist({ playlistName: (e.currentTarget as HTMLTextAreaElement).value })}
+          value={playlistName}
           className="title"
           isSearch={false}
           placeholder="플레이리스트 제목을 입력해주세요."
         ></PlaylistInputText>
       </SectionBox>
       <SectionBox>
-        <Label>플레이리스트 설명</Label>
+        <TextLabel>플레이리스트 설명</TextLabel>
         <PlaylistInputText
-          handleChange={setDescription}
+          handleChange={(e) => setPlaylist({ description: (e.currentTarget as HTMLTextAreaElement).value })}
           value={description}
           className="description"
           isSearch={false}
@@ -91,11 +88,13 @@ const CreatePlaylistInputBox = ({
         ></PlaylistInputText>
       </SectionBox>
       <SectionBox>
-        <Label>플레이리스트 해시태그</Label>
+        <TextLabel>플레이리스트 해시태그</TextLabel>
         <PlaylistInputText
-          handleChange={setHashTag}
-          value={hashTag}
-          className="hashTag"
+          handleEnter={handleAddChipKeyUp}
+          handleKeyDown={handleAddChipKeyDown}
+          handleChange={(e) => setPlaylist({ hashtag: (e.currentTarget as HTMLTextAreaElement).value })}
+          value={hashtag}
+          className="hashag"
           isSearch={false}
           placeholder="추가할 해시태그를 입력 후 Enter를 클릭하세요."
         ></PlaylistInputText>

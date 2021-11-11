@@ -5,11 +5,12 @@ import { NextPage } from 'next';
 import { useSelector } from 'react-redux';
 
 import { requestChangePassword } from '~/api/account';
-import InputBox from '~/atoms/InputBox';
+import InputText from '~/atoms/InputText';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG } from '~/constants/index';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
+import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
 
 const LoginContainer = styled.div`
@@ -25,6 +26,8 @@ const LoginContainer = styled.div`
 `;
 
 const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   width: fit-content;
   margin: 0 auto;
 
@@ -47,11 +50,18 @@ const InputContainer = styled.div`
   }
 `;
 
+const FindPwdInputText = styled(InputText)`
+  width: 100%;
+  font-size: 20px;
+  padding: 24px 20px 24px 80px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+`;
+
 const FindPwd: NextPage = () => {
   const [id, setID] = useState('');
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
-  const userInfo = useSelector((state: any) => state.user);
+  const userInfo = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
     const { id, nickname } = userInfo;
@@ -59,11 +69,11 @@ const FindPwd: NextPage = () => {
     setNickname(nickname);
   }, [userInfo]);
 
-  const handleFindPwd = async () => {
-    if (!id) alert(ID_EMPTY_MSG);
-    else if (!nickname) alert(NICKNAME_EMPTY_MSG);
-    else if (!password) alert(PASSWORD_EMPTY_MSG);
-    else await requestChangePassword(id, nickname, password);
+  const handleFindPwd = () => {
+    if (!id) return alert(ID_EMPTY_MSG);
+    if (!nickname) return alert(NICKNAME_EMPTY_MSG);
+    if (!password) return alert(PASSWORD_EMPTY_MSG);
+    requestChangePassword(id, nickname, password);
   };
 
   return (
@@ -72,42 +82,37 @@ const FindPwd: NextPage = () => {
       <PageBox>
         <LoginContainer>
           <InputContainer>
-            <InputBox
+            <FindPwdInputText
+              className="id"
               isSearch={false}
               placeholder="아이디를 입력하세요."
-              width={'100%'}
-              height={'80px'}
-              fontSize={'20px'}
               value={id}
-              onChangeHandler={({ target }) => setID((target as HTMLInputElement).value)}
-            ></InputBox>
-            <InputBox
+              handleChange={({ target }) => setID((target as HTMLInputElement).value)}
+            ></FindPwdInputText>
+            <FindPwdInputText
+              className="nick"
               isSearch={false}
               placeholder="닉네임을 입력하세요."
-              width={'100%'}
-              height={'80px'}
-              fontSize={'20px'}
               value={nickname}
-              onChangeHandler={({ target }) => setNickname((target as HTMLInputElement).value)}
-            ></InputBox>
-            <InputBox
-              isPassword={true}
+              handleChange={({ target }) => setNickname((target as HTMLInputElement).value)}
+            ></FindPwdInputText>
+            <FindPwdInputText
+              className="password"
+              type="password"
               isSearch={false}
               placeholder="새로운 비밀번호를 입력하세요."
-              width={'100%'}
-              height={'80px'}
-              fontSize={'20px'}
               value={password}
-              onChangeHandler={({ target }) => setPassword((target as HTMLInputElement).value)}
-            ></InputBox>
+              handleChange={({ target }) => setPassword((target as HTMLInputElement).value)}
+            ></FindPwdInputText>
             <ResponsiveButton
               width={'560px'}
               background={theme.colors.sky}
               fontSize={'28px'}
               smFontSize={'20px'}
-              content={'비밀번호 재설정'}
               onClick={handleFindPwd}
-            />
+            >
+              비밀번호 재설정
+            </ResponsiveButton>
           </InputContainer>
         </LoginContainer>
       </PageBox>

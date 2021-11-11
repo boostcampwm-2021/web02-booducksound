@@ -1,11 +1,14 @@
 import short from 'short-uuid';
 import socketio from 'socket.io';
 
+import * as UserService from './resources/playList/service';
 import { LobbyRoom } from './types/LobbyRoom';
 import { Player } from './types/Player';
 import { ServerRoom } from './types/ServerRoom';
 import { SocketEvents } from './types/SocketEvents';
-import { serverRooms, getLobbyRoom, getGameRoom } from './utils/rooms';
+import { getLobbyRoom, getGameRoom } from './utils/rooms';
+import streamify from './utils/streamify';
+import serverRooms from './variables/serverRooms';
 
 const io = new socketio.Server();
 
@@ -43,22 +46,31 @@ io.on('connection', (socket) => {
   });
 
   socket.on(SocketEvents.CREATE_ROOM, (room, done) => {
-    const { title, playlistId, playlistName, password, skip, timePerProblem } = room;
+
+    const { title, playlistId,playlistName, password, skip, timePerProblem } = room;
     const uuid = short.generate();
 
-    const serverRoom: ServerRoom = {
-      title,
-      password,
-      players: {},
-      playlistId,
-      playlistName,
-      skip,
-      timePerProblem,
-      status: 'waiting',
+    const setRoomInfo = async (playlistId: string) => {
+      const playlist = await UserService.getById(playlistId);
+      const serverRoom: ServerRoom = {
+        title,
+        password,
+        players: {},
+        playlistId,
+        playlistName,
+        skip,
+        timePerProblem,
+        status: 'waiting',
+        musics: playlist.musics,
+        curRound: 1,
+        maxRound: playlist.musics.length,
+        skipCount: 0,
+        streams: [],
+      };
+      serverRooms[uuid] = serverRoom;
+      done(uuid);
     };
-
-    serverRooms[uuid] = serverRoom;
-    done(uuid);
+    setRoomInfo(playlistId);
 
     const lobbyRoom = getLobbyRoom(uuid);
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
@@ -109,10 +121,28 @@ io.on('connection', (socket) => {
     });
 
     socket.on(SocketEvents.START_GAME, () => {
+      const { musics } = serverRooms[uuid];
+
+      serverRooms[uuid].status = 'playing';
+      serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
       io.to(uuid).emit(SocketEvents.START_GAME);
     });
 
     socket.on(SocketEvents.NEXT_ROUND, () => {
+      const { curRound, maxRound, musics } = serverRooms[uuid];
+
+      if (curRound === maxRound) {
+        io.to(uuid).emit(SocketEvents.GAME_END);
+        return;
+      }
+
+      serverRooms[uuid].curRound += 1;
+      serverRooms[uuid].streams.shift(); // TODO: Queue 자료형으로 구현할 것
+
+      if (curRound + 1 < musics.length) {
+        serverRooms[uuid].streams.push(streamify(musics[curRound + 1].url));
+      }
+
       io.to(uuid).emit(SocketEvents.NEXT_ROUND);
     });
   });

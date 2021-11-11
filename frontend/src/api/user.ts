@@ -1,36 +1,23 @@
-import { BACKEND_URL, HEADERS as headers } from '~/constants/index';
+import { BACKEND_URL } from '~/constants/index';
+import API from '~/utils/API';
+
+const handleNonUserColor = (color: string) =>
+  API('POST')(`${BACKEND_URL}/user/guest-color`)({ body: JSON.stringify({ color }) });
+
+const handleColor = (id: string, color: string) =>
+  API('POST')(`${BACKEND_URL}/user/color`)({ body: JSON.stringify({ id, color }) });
 
 export const changeColor = async (id: string, color: string) => {
-  const handleColor = async () =>
-    await fetch(`${BACKEND_URL}/user/changeColor`, {
-      method: 'POST',
-      headers,
-      credentials: 'include',
-      body: JSON.stringify({
-        id,
-        color,
-      }),
-    });
-  id && handleColor();
+  id ? handleColor(id, color) : handleNonUserColor(color);
 };
 
 export const getMyPlaylist = async (_id: Array<string>) => {
-  const res = await fetch(`${BACKEND_URL}/user/getMyPlaylist?_id=${JSON.stringify(_id)}`, {
-    method: 'GET',
-    headers,
-    credentials: 'include',
-  });
+  if (!_id) return;
+  const res = await API('GET')(`${BACKEND_URL}/user/playlist?_id=${JSON.stringify(_id)}`)();
   return res.json();
 };
 
 export const deleteLikes = async (id: string, _id: string) => {
-  await fetch(`${BACKEND_URL}/user/deleteLikes`, {
-    method: 'POST',
-    headers,
-    credentials: 'include',
-    body: JSON.stringify({
-      id,
-      _id,
-    }),
-  });
+  await API('DELETE')(`${BACKEND_URL}/user/likes`)({ body: JSON.stringify({ id, _id }) });
+  return true;
 };

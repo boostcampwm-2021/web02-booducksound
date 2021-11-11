@@ -1,15 +1,7 @@
-import { ChangeEventHandler, KeyboardEventHandler } from 'react';
-
 import styled from '@emotion/styled';
 
-interface Props {
-  isSearch: boolean;
-  placeholder: string;
-  className: string;
-  value: string;
-  handleEnter?: KeyboardEventHandler;
-  handleChange: ChangeEventHandler;
-}
+import InputTextProps from '~/types/InputTextProps';
+
 interface ContainerProps {
   isSearch: boolean;
 }
@@ -23,8 +15,8 @@ const Container = styled.input<ContainerProps>`
   background-position: left;
 `;
 
-const InputText = ({ handleChange, handleEnter, ...props }: Props) => (
-  <Container type="text" onKeyUp={handleEnter} onChange={handleChange} {...props}></Container>
+const InputText = ({ type = 'text', handleKeyDown, handleChange, handleEnter, ...props }: InputTextProps) => (
+  <Container type={type} onKeyDown={handleKeyDown} onKeyUp={handleEnter} onChange={handleChange} {...props}></Container>
 );
 
 export default InputText;

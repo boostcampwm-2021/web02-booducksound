@@ -8,17 +8,22 @@ interface MusicProps {
   hint: String;
   answers: [];
 }
+
 interface PlaylistProps {
   playlistName: String;
   likeCount: Number;
   playCount: Number;
   musics: MusicProps;
-  hashTags: [];
+  hashtags: [];
   userId: String;
   createdAt: Date;
 }
 
-const add = (playlistInfo: PlaylistProps) => {
+export const getById = async (_id: string) => {
+  return Playlist.findById(_id);
+};
+
+export const add = (playlistInfo: PlaylistProps) => {
   const newPlaylist = new Playlist({
     ...playlistInfo,
     createAt: new Date(),
@@ -26,13 +31,21 @@ const add = (playlistInfo: PlaylistProps) => {
   return newPlaylist.save();
 };
 
-const modify = (_id: string, data: PlaylistProps) => {
-  console.log(data);
-  return Playlist.updateOne({ _id }, data);
+export const updateById = (_id: string, data: PlaylistProps) => {
+  return Playlist.findByIdAndUpdate(_id, data);
 };
 
-const del = (_id: string) => {
-  return Playlist.deleteOne({ _id });
+export const deleteById = (_id: string) => {
+  return Playlist.findByIdAndDelete(_id);
 };
 
-export default { add, modify, del };
+export const getLegnth = () => {
+  return Playlist.count();
+};
+
+export const search = (q: string, offset: number, limit: number) => {
+  const regex = new RegExp(q, 'i');
+  return Playlist.find({ $or: [{ playlistName: regex }, { hashtags: { $in: regex } }] })
+    .skip(offset)
+    .limit(limit);
+};

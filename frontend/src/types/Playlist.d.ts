@@ -1,8 +1,10 @@
 import { Music } from './Music';
 
 export type Playlist = {
+  _id?: string;
   playlistName: string;
+  description: string;
   musics: Music[];
-  hashTags: string[];
+  hashtags: string[];
   userId: string;
 };

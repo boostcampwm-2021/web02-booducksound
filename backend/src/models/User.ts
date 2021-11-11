@@ -5,37 +5,13 @@ const SALT_ROUNDS = 10;
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-  id: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  nickname: {
-    type: String,
-    required: true,
-  },
-  color: {
-    type: String,
-    required: true,
-    default: '#fff',
-  },
-  myPlaylist: [
-    {
-      type: mongoose.Types.ObjectId,
-      ref: 'User',
-    },
-  ],
-  likes: {
-    type: Array,
-  },
-  createdAt: {
-    type: Date,
-    default: new Date(),
-  },
+  id: { type: String, required: true, unique: true, maxlength: 20 },
+  password: { type: String, required: true, maxlength: 30 },
+  nickname: { type: String, required: true, maxlength: 20 },
+  color: { type: String, required: true, default: 'fff', maxlength: 6 },
+  myPlaylist: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
+  likes: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
+  createdAt: { type: Date, default: new Date() },
 });
 
 UserSchema.pre('save', async function (next) {
@@ -72,6 +48,6 @@ UserSchema.methods.checkPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.models.User || mongoose.model('User', UserSchema);
 
 export default User;

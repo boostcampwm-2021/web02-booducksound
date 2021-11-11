@@ -3,15 +3,19 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Link from 'next/link';
+import Router from 'next/router';
+import { useDispatch } from 'react-redux';
 
+import { getUser } from '~/actions/user';
 import { requestJoin } from '~/api/account';
 import Button from '~/atoms/Button';
-import InputBox from '~/atoms/InputBox';
+import InputText from '~/atoms/InputText';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import ProfileSelector from '~/atoms/ProfileSelector';
-import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG } from '~/constants/index';
+import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG, BACKEND_URL } from '~/constants/index';
 import theme from '~/styles/theme';
+import API from '~/utils/API';
 
 const LoginContainer = styled.div`
   position: fixed;
@@ -37,6 +41,8 @@ const LoginContainer = styled.div`
 `;
 
 const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   width: fit-content;
   margin: 0 auto;
   position: relative;
@@ -57,38 +63,45 @@ const InputContainer = styled.div`
   }
 `;
 
+const JoinInputText = styled(InputText)`
+  font-size: 20px;
+  padding: 20px 20px 20px 80px;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+`;
+
 const Join: NextPage = () => {
   const [id, setID] = useState('');
   const [password, setPassword] = useState('');
   const [nickname, setNickname] = useState('');
   const [color, setColor] = useState('fff');
+  const dispatch = useDispatch();
 
   const idCheck = async () => {
-    return await fetch(`http://localhost:5000/checkId?id=${id}`)
-      .then((res) => res.json())
-      .then((res) => res);
+    const res = await API('GET')(`${BACKEND_URL}/check-id?id=${id}`)();
+    return res.json();
   };
 
   const signUp = async () => {
     const { result, message } = await idCheck();
 
-    if (result) alert(message);
-    else await requestJoin(id, password, nickname, color);
+    if (result) return alert(message);
+    await requestJoin(id, password, nickname, color);
+    dispatch(getUser());
+    Router.push('/lobby');
   };
 
   const handleIdCheck = async () => {
-    if (!id) alert(ID_EMPTY_MSG);
-    else {
-      const { result, message } = await idCheck();
-      alert(message);
-    }
+    if (!id) return alert(ID_EMPTY_MSG);
+
+    const { result, message } = await idCheck();
+    alert(message);
   };
 
   const handleJoin = async () => {
-    if (!id) alert(ID_EMPTY_MSG);
-    else if (!password) alert(PASSWORD_EMPTY_MSG);
-    else if (!nickname) alert(NICKNAME_EMPTY_MSG);
-    else signUp();
+    if (!id) return alert(ID_EMPTY_MSG);
+    if (!password) return alert(PASSWORD_EMPTY_MSG);
+    if (!nickname) return alert(NICKNAME_EMPTY_MSG);
+    signUp();
   };
 
   return (
@@ -98,42 +111,37 @@ const Join: NextPage = () => {
         <LoginContainer>
           <ProfileSelector color={color} setColor={setColor}></ProfileSelector>
           <InputContainer>
-            <InputBox
+            <JoinInputText
+              className="newId"
               isSearch={false}
               placeholder="아이디를 입력하세요."
-              width={'100%'}
-              height={'80px'}
-              fontSize={'20px'}
               value={id}
-              onChangeHandler={({ target }) => setID((target as HTMLInputElement).value)}
-            ></InputBox>
+              handleChange={({ target }) => setID((target as HTMLInputElement).value)}
+            ></JoinInputText>
             <Button
-              content={'중복확인'}
               background={theme.colors.peach}
               fontSize={'18px'}
               paddingH={'18px'}
               width={'120px'}
               onClick={handleIdCheck}
-            ></Button>
-            <InputBox
+            >
+              중복확인
+            </Button>
+            <JoinInputText
+              className="newPassword"
+              type="password"
               isSearch={false}
-              isPassword={true}
               placeholder="비밀번호를 입력해 주세요."
-              width={'100%'}
-              height={'80px'}
-              fontSize={'20px'}
               value={password}
-              onChangeHandler={({ target }) => setPassword((target as HTMLInputElement).value)}
-            ></InputBox>
-            <InputBox
+              handleChange={({ target }) => setPassword((target as HTMLInputElement).value)}
+            ></JoinInputText>
+            <JoinInputText
+              className="newNickname"
               isSearch={false}
               placeholder="닉네임을 입력하세요."
-              width={'100%'}
-              height={'80px'}
-              fontSize={'20px'}
               value={nickname}
-              onChangeHandler={({ target }) => setNickname((target as HTMLInputElement).value)}
-            ></InputBox>
+              handleChange={({ target }) => setNickname((target as HTMLInputElement).value)}
+            ></JoinInputText>
             <Link href="/join">
               <a>
                 <Button
@@ -141,9 +149,10 @@ const Join: NextPage = () => {
                   background={theme.colors.sky}
                   fontSize={'30px'}
                   paddingH={'24px'}
-                  content={'가입하기'}
                   onClick={handleJoin}
-                />
+                >
+                  가입하기
+                </Button>
               </a>
             </Link>
           </InputContainer>

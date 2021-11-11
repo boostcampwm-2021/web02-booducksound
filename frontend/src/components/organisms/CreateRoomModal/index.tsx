@@ -5,8 +5,9 @@ import Router from 'next/router';
 import { useDispatch } from 'react-redux';
 import { Socket } from 'socket.io-client';
 
+import InputText from '~/atoms/InputText';
+import TextLabel from '~/atoms/TextLabel';
 import useSocket from '~/hooks/useSocket';
-import InputSection from '~/molecules/InputSection';
 import InputWithButton from '~/molecules/InputWithButton';
 import Modal from '~/molecules/Modal';
 import SelectSection from '~/molecules/SelectSection';
@@ -38,7 +39,7 @@ const Container = styled.div`
   }
 `;
 
-const SelectPlaylistContainer = styled.div`
+const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 8px;
@@ -53,6 +54,10 @@ const HalfContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   column-gap: 12px;
+`;
+
+const ModalInputText = styled(InputText)`
+  padding: 10px 10px 10px 30px;
 `;
 
 interface Props {
@@ -110,7 +115,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
     setForm((form) => ({ ...form, skip }));
   };
 
-  const hanldeTimePerProlbemChange: ChangeEventHandler = (e) => {
+  const handleTimePerProblemChange: ChangeEventHandler = (e) => {
     const timePerProblemStr = (e.target as HTMLSelectElement).value;
     const timePerProblem = Number(timePerProblemStr.replace(/[^0-9]/g, ''));
     setForm((form) => ({ ...form, timePerProblem }));
@@ -132,13 +137,9 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
   };
 
   const validateForm = (form: Form) => {
-    if (!form.title || !form.playlistId) {
-      setLeftButtonDisabled(true);
-      return false;
-    }
-
-    setLeftButtonDisabled(false);
-    return true;
+    const condition = !form.title || !form.playlistId;
+    setLeftButtonDisabled(condition);
+    return !condition;
   };
 
   return (
@@ -151,27 +152,21 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
       leftButtonDisabled={leftButtonDisabled}
     >
       <Container>
-        <InputSection
-          id="roomTitle"
-          title="방 제목"
-          fontSize="0.92em"
-          height="48px"
-          placeholder="방 제목을 입력하세요"
-          titleSize="1em"
-          width="100%"
-          margin="8px"
-          isSearch={false}
-          paddingW="20px"
-          value={form.title}
-          onChangeHandler={handleTitleChange}
-        />
-        <SelectPlaylistContainer>
+        <ContentContainer>
+          <TextLabel>방 제목</TextLabel>
+          <ModalInputText
+            className="roomTitle"
+            placeholder="방 제목을 입력하세요"
+            isSearch={false}
+            value={form.title}
+            handleChange={handleTitleChange}
+          />
+        </ContentContainer>
+        <ContentContainer>
           <SelectPlaylistLabel>플레이리스트</SelectPlaylistLabel>
           <InputWithButton
-            inputFontSize="0.92em"
-            inputHeight="48px"
+            inputClassName="selectPlaylist"
             placeholder="플레이리스트를 선택해주세요"
-            inputWidth="100%"
             isSearch={false}
             btnWidth="100px"
             btnFontSize="0.8em"
@@ -179,29 +174,24 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
             btnBackground={theme.colors.lime}
             btnSmWidth="60px"
             btnHeight="38px"
-            inputPaddingW="20px"
-            inputDisabled={true}
+            disabled={true}
             value={form.playlistName}
             onClick={handleSelectPlaylistBtn}
           />
           {playlistModalOnOff && (
             <SelectPlaylistModal setModalOnOff={setPlaylistModalOnOff} setForm={setForm} validateForm={validateForm} />
           )}
-        </SelectPlaylistContainer>
-        <InputSection
-          id="roomPassword"
-          title="비밀번호"
-          fontSize="0.92em"
-          height="48px"
-          placeholder=""
-          titleSize="1em"
-          width="100%"
-          margin="8px"
-          isSearch={false}
-          paddingW="20px"
-          value={form.password}
-          onChangeHandler={handlePasswordChange}
-        />
+        </ContentContainer>
+        <ContentContainer>
+          <TextLabel>비밀번호</TextLabel>
+          <ModalInputText
+            className="roomPassword"
+            placeholder=""
+            isSearch={false}
+            value={form.password}
+            handleChange={handlePasswordChange}
+          />
+        </ContentContainer>
         <HalfContainer>
           <SelectSection
             title="스킵 인원 수"
@@ -217,7 +207,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
             titleSize="1em"
             options={['10초', '20초', '30초', '40초', '50초', '60초', '70초', '80초', '90초']}
             defaultValue="60초"
-            onChange={hanldeTimePerProlbemChange}
+            onChange={handleTimePerProblemChange}
           />
         </HalfContainer>
       </Container>

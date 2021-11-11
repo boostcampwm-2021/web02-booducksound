@@ -1,11 +1,12 @@
 import { UserActions } from '~/types/Actions';
+import { Playlist } from '~/types/Playlist';
 
 export type UserState = {
-  id?: string;
+  id: string;
   nickname: string;
-  color?: string;
-  likes?: any;
-  myPlaylist?: any;
+  color: string;
+  likes: any;
+  myPlaylist: Playlist[];
 };
 
 const initialState: UserState = {
@@ -23,6 +24,9 @@ const userReducer = (state = initialState, action: { type: UserActions; payload:
     case UserActions.SET_USER: {
       const { id, nickname, color, likes, myPlaylist } = payload;
       return { ...state, id, nickname, color, likes, myPlaylist };
+    }
+    case UserActions.REMOVE_USER: {
+      return initialState;
     }
     case UserActions.SET_COLOR: {
       const { color } = payload;

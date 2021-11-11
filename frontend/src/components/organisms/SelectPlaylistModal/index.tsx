@@ -1,12 +1,15 @@
-import { useState, SetStateAction, Dispatch, MouseEventHandler } from 'react';
+import { useState, useEffect, SetStateAction, Dispatch, ChangeEvent, MouseEvent } from 'react';
 
 import styled from '@emotion/styled';
 
-import InputSection from '~/molecules/InputSection';
+import { getPlaylists } from '~/api/playlist';
+import InputText from '~/atoms/InputText';
+import TextLabel from '~/atoms/TextLabel';
 import Modal from '~/molecules/Modal';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
+import { Playlist } from '~/types/Playlist';
 
 const Container = styled.div`
   display: flex;
@@ -28,14 +31,14 @@ const Container = styled.div`
   }
 `;
 
-const Ul = styled.ul`
+const PlayLists = styled.ul`
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
   height: 100%;
 `;
 
-const Li = styled.li`
+const PlayList = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -68,70 +71,22 @@ interface Props {
   validateForm: Function;
 }
 
-const playlists = [
-  {
-    title: '플레이리스트1',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: 'playlist',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 2222',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 3233333',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 44',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 44',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-  {
-    title: '플레이리스트 44',
-    hashtags: ['ㅁㄴㅇㄹ', '해시1', '해시태그2'],
-    playCount: 8,
-    description: '플레이리스트 설명입니다~~@!#!@#@!',
-    playlistId: 'asdfdsafsadf12f2ef2f',
-  },
-];
-
 const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) => {
   const [search, setSearch] = useState('');
+  const [playlists, setPlaylists] = useState<Playlist[]>([]);
+  const [pageData, setPageData] = useState({ currentPage: 0, maxPage: 0 });
 
-  const handleSelectPlaylistClick: MouseEventHandler = (e) => {
-    const button = (e.target as Element).closest('button');
-    if (!button) return;
+  useEffect(() => {
+    const initPlaylist = async () => {
+      const { playlists, currentPage, maxPage }: { playlists: Playlist[]; currentPage: number; maxPage: number } =
+        await getPlaylists();
+      setPlaylists(playlists);
+      setPageData({ currentPage, maxPage });
+    };
+    initPlaylist();
+  }, []);
 
-    const li = (e.target as Element).closest('li');
-    if (!li) return;
-
-    const playlistId = li.dataset.playlistId as string;
-    const playlistName = li.dataset.playlistName as string;
+  const handleSelectPlaylistBtnClick = (e: MouseEvent, playlistId: string, playlistName: string) => {
     setForm((prev) => {
       const form = { ...prev, playlistId, playlistName };
       validateForm(form);
@@ -144,38 +99,37 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
     <Modal
       height="600px"
       maxWidth="720px"
-      // leftButtonText={'leftButtonText'}
-      // leftButtonHanlder={handleCreateRoomBtn}
       rightButtonHandler={() => setModalOnOff(false)}
       hasModalBackground={false}
       hasOnlyCancleBtn={true}
     >
       <Container>
-        <InputSection
-          id="playlistSearch"
-          fontSize="0.92em"
-          width="100%"
-          height="48px"
+        <TextLabel>플레이리스트 선택</TextLabel>
+        <InputText
+          className="playlistSearch"
           isSearch={true}
-          title="플레이리스트 선택"
-          margin="24px"
           placeholder="검색어를 입력해주세요"
-          titleSize="1.2em"
-          paddingW="20px"
           value={search}
-          onChangeHandler={(e) => setSearch((e.target as HTMLInputElement).value)}
+          handleChange={(e: ChangeEvent) => setSearch((e.target as HTMLInputElement).value)}
         />
-        <Ul onClick={handleSelectPlaylistClick}>
+        <PlayLists>
           {playlists &&
-            playlists.map(({ title, hashtags, playCount, description, playlistId }, i) => {
+            playlists.map(({ playlistName, _id, hashtags, description }, i) => {
               return (
-                <Li data-playlist-id={playlistId} data-playlist-name={title} key={i}>
-                  <Title>{title}</Title>
-                  <ResponsiveButton background={theme.colors.lilac} content="선택" fontSize="16px" width="80px" />
-                </Li>
+                <PlayList key={i}>
+                  <Title>{playlistName}</Title>
+                  <ResponsiveButton
+                    background={theme.colors.lilac}
+                    fontSize="16px"
+                    width="80px"
+                    onClick={(e) => handleSelectPlaylistBtnClick(e, _id as string, playlistName)}
+                  >
+                    선택
+                  </ResponsiveButton>
+                </PlayList>
               );
             })}
-        </Ul>
+        </PlayLists>
       </Container>
     </Modal>
   );
