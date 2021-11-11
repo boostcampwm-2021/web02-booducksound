@@ -30,9 +30,9 @@ const Wrapper = styled.div`
     /1fr 6fr 1fr 8fr 1fr;
   @media (max-width: ${theme.breakpoints.sm}) {
     grid-template:
-      '.  leftCharacter leftCharacter leftCharacter .' 3fr
+      '.  leftCharacter leftCharacter leftCharacter .' 1fr
       '. leftTitle rightTitle rightTitle .' 2fr
-      '. rightChat rightChat rightChat .' 8fr
+      '. rightChat rightChat rightChat .' 4fr
       '. rightSearch rightSearch rightSearch .' 1fr
       / 1fr 3fr 1fr 6fr 1fr;
     font-size: 12px;
@@ -42,9 +42,13 @@ const Wrapper = styled.div`
 const Container = styled(GlassContainer)<Props>`
   grid-area: ${({ type }) => type};
 `;
+
+const CharacterContainer = styled(Container)`
+  display: flex;
+  justify-content: flex-start;
+`;
 const GridDiv = styled.div`
   width: 100%;
-  height: 100%;
   gap: 10px;
   display: grid;
   grid-template:
@@ -106,9 +110,9 @@ const GameRoomContainer = ({
       <Container type={'leftTitle'}>
         <RoomStateTitle>대기중 입니다.</RoomStateTitle>
       </Container>
-      <Container type={'leftCharacter'}>
+      <CharacterContainer type={'leftCharacter'}>
         <CharacterList players={players} />
-      </Container>
+      </CharacterContainer>
       <Container type={'rightTitle'}>
         <GridDiv>
           <GameTitle>{gameRoom?.title}</GameTitle>
