@@ -73,13 +73,7 @@ export const getServerSideProps = async ({ query }: NextPageContext) => {
     return {
       props: {
         type: 'create',
-        content: {
-          playlistName: '',
-          description: '',
-          hashtag: '',
-          hashtags: [],
-          musics: [],
-        },
+        content: { playlistName: '', description: '', hashtag: '', hashtags: [], musics: [] },
       },
     };
   }
@@ -88,13 +82,7 @@ export const getServerSideProps = async ({ query }: NextPageContext) => {
   return {
     props: {
       type: 'update',
-      content: {
-        playlistName,
-        description,
-        hashtags,
-        musics,
-        hashtag: '',
-      },
+      content: { playlistName, description, hashtags, musics, hashtag: '' },
     },
   };
 };
