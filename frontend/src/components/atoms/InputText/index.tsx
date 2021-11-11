@@ -15,8 +15,8 @@ const Container = styled.input<ContainerProps>`
   background-position: left;
 `;
 
-const InputText = ({ type = 'text', handleChange, handleEnter, ...props }: InputTextProps) => (
-  <Container type={type} onKeyUp={handleEnter} onChange={handleChange} {...props}></Container>
+const InputText = ({ type = 'text', handleKeyDown, handleChange, handleEnter, ...props }: InputTextProps) => (
+  <Container type={type} onKeyDown={handleKeyDown} onKeyUp={handleEnter} onChange={handleChange} {...props}></Container>
 );
 
 export default InputText;
