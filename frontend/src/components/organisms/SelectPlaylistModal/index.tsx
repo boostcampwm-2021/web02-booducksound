@@ -1,7 +1,8 @@
-import { useState, SetStateAction, Dispatch, MouseEventHandler, ChangeEvent } from 'react';
+import { useState, useEffect, SetStateAction, Dispatch, ChangeEvent, MouseEvent } from 'react';
 
 import styled from '@emotion/styled';
 
+import { getPlaylists } from '~/api/playlist';
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
 import Modal from '~/molecules/Modal';
@@ -124,9 +125,16 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
   const [search, setSearch] = useState('');
   const [playlists, setPlaylists] = useState(dummyPlaylists);
 
-  // useEffect(() => {
-  //   return () => {};
-  // }, []);
+  useEffect(() => {
+    const initPlaylist = async () => {
+      const { playlists, currentPage, maxPage } = await getPlaylists({ q: '제목' });
+
+      console.log('여기 플레이리스트즈', playlists);
+      console.log('페이지', currentPage, maxPage);
+    };
+
+    initPlaylist();
+  }, []);
 
   const handleSelectPlaylistBtnClick = (e: MouseEvent, playlistId: string, playlistName: string) => {
     setForm((prev) => {
@@ -156,9 +164,10 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
         />
         <PlayLists>
           {playlists &&
-            playlists.map(({ title, playlistId, hashtags, playCount, description }) => {
+            playlists.map(({ title, playlistId, hashtags, playCount, description }, i) => {
               return (
-                <PlayList key={playlistId}>
+                <PlayList key={i}>
+                  {/* TODO: key를 playlistId로 */}
                   <Title>{title}</Title>
                   <ResponsiveButton
                     background={theme.colors.lilac}
