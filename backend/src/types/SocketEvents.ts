@@ -12,5 +12,4 @@ export enum SocketEvents {
   NEXT_ROUND = 'NEXT_ROUND',
   SET_GAME_ROOM = 'SET_GAME_ROOM',
   GAME_END = 'GAME_END',
-  ALL_READY = 'ALL_READY',
 }
