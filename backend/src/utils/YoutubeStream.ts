@@ -1,8 +1,10 @@
 import { PassThrough } from 'stream';
 
 import { path } from '@ffmpeg-installer/ffmpeg';
-import FFmpeg from 'fluent-ffmpeg';
+import Ffmpeg from 'fluent-ffmpeg';
 import ytdl from 'ytdl-core';
+
+Ffmpeg.setFfmpegPath(path);
 
 class YoutubeStream {
   stream: any;
@@ -15,7 +17,7 @@ class YoutubeStream {
 
     this.video = ytdl(`https://youtube.com/watch?v=${videoId}`, { quality: 'lowestaudio' });
     this.stream = new PassThrough();
-    const ffmpeg = FFmpeg(this.video);
+    const ffmpeg = Ffmpeg(this.video);
 
     process.nextTick(() => {
       this.output = ffmpeg.noVideo().format('mp3').pipe(this.stream);
