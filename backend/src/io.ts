@@ -31,7 +31,10 @@ io.on('connection', (socket) => {
     }
 
     delete serverRooms[uuid].players[socket.id];
-    io.to(uuid).emit(SocketEvents.SET_PLAYER, { players: serverRooms[uuid].players });
+    io.to(uuid).emit(SocketEvents.SET_PLAYER, {
+      players: serverRooms[uuid].players,
+      isAllReady: !(Object.keys(serverRooms[uuid].players).length > 1),
+    });
 
     const lobbyRoom = getLobbyRoom(uuid);
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
@@ -129,7 +132,10 @@ io.on('connection', (socket) => {
 
       const serverRoom = serverRooms[uuid];
 
-      io.to(uuid).emit(SocketEvents.SET_PLAYER, { players: serverRoom.players });
+      io.to(uuid).emit(SocketEvents.SET_PLAYER, {
+        players: serverRoom.players,
+        isAllReady: !(Object.keys(serverRooms[uuid].players).length > 1),
+      });
       io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name: nickname, text: '', status: 'alert' });
 
       done({ type: 'success', gameRoom });
@@ -153,7 +159,7 @@ io.on('connection', (socket) => {
         const { musics } = serverRooms[uuid];
         serverRooms[uuid].status = 'playing';
         serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
-        io.to(uuid).emit(SocketEvents.START_GAME);
+        io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid));
       } catch (error) {
         console.error(error);
       }
@@ -196,7 +202,6 @@ io.on('connection', (socket) => {
 
   socket.on(SocketEvents.SET_PLAYER, (uuid: string, player: Player) => {
     try {
-      console.log(serverRooms[uuid].players);
       const checkAllReady = (players: { [key: string]: Player }) =>
         Object.keys(players).every((socketId) => players[socketId].status !== 'prepare');
       serverRooms[uuid].players[socket.id] = player;

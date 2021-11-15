@@ -70,7 +70,7 @@ const Game: NextPage = () => {
     },
   );
 
-  useSocketOn(SocketEvents.START_GAME, () => {
+  useSocketOn(SocketEvents.START_GAME, (gameRoom: GameRoom) => {
     if (!music1.current || !music2.current) throw Error('START_GAME에서 audio Element를 찾을 수 없습니다');
 
     curMusic.current = music1.current;
@@ -78,6 +78,8 @@ const Game: NextPage = () => {
 
     curMusic.current.src = `${BACKEND_URL}/game/${uuid}/init`;
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
+
+    setGameRoom(gameRoom);
 
     const playPromise = curMusic.current.play();
 
