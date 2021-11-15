@@ -1,5 +1,4 @@
 import { PassThrough } from 'stream';
-import { URL } from 'url';
 
 import { path } from '@ffmpeg-installer/ffmpeg';
 import FFmpeg from 'fluent-ffmpeg';
