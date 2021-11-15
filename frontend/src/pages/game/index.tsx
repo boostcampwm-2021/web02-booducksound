@@ -27,7 +27,7 @@ const Container = styled.div`
 
 const Game: NextPage = () => {
   const [players, setPlayers] = useState<{ [socketId: string]: Player }>({});
-  const [player, setPlayer] = useState<Player>({ nickname: '', color: '', status: 'prepare' });
+  const [player, setPlayer] = useState<Player>({ nickname: '', color: '', status: 'prepare', skip: false });
   const [gameRoom, setGameRoom] = useState<GameRoom>();
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
@@ -122,6 +122,7 @@ const Game: NextPage = () => {
       }
     });
   }, []);
+
   const handleAudioEnded: ReactEventHandler<HTMLAudioElement> = (e) => {
     const audio = e.target as HTMLAudioElement;
     audio.currentTime = 0;
@@ -130,7 +131,7 @@ const Game: NextPage = () => {
 
   return (
     <Container>
-      <GameRoomNav player={player} />
+      <GameRoomNav player={player} status={gameRoom?.status} />
       <GameRoomContainer players={players} gameRoom={gameRoom} />
       <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/0`} controls loop />
       <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/1`} controls loop />
