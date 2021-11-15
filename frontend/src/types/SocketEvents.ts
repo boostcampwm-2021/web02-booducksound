@@ -14,4 +14,5 @@ export enum SocketEvents {
   GAME_END = 'GAME_END',
   SEND_ANSWER = 'SEND_ANSWER',
   RECEIVE_ANSWER = 'RECEIVE_ANSWER',
+  SKIP = 'SKIP',
 }
