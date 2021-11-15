@@ -27,8 +27,8 @@ const Container = styled.div`
 
 const Game: NextPage = () => {
   const [players, setPlayers] = useState<{ [socketId: string]: Player }>({});
-  const [player, setPlayer] = useState<Player>({ nickname: '', color: '', status: 'prepare' });
   const [gameRoom, setGameRoom] = useState<GameRoom>();
+  const [isAllReady, setIsAllReady] = useState<boolean>(false);
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
   const socket = useSocket();
@@ -98,16 +98,10 @@ const Game: NextPage = () => {
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
   });
 
-  useSocketOn(SocketEvents.GAME_END, () => {
-    window.alert('마지막 라운드에 다다랐습니다. GAME_END');
-  });
-
-  useSocketOn(SocketEvents.SET_PLAYER, ({ players }) => {
+  useSocketOn(SocketEvents.GAME_END, () => window.alert('마지막 라운드에 다다랐습니다. GAME_END'));
+  useSocketOn(SocketEvents.SET_PLAYER, ({ players, isAllReady }) => {
     setPlayers(players);
-    if (players !== null && socket !== null) {
-      setPlayer(players[socket?.id]);
-    }
-    console.log(players);
+    setIsAllReady(isAllReady);
   });
 
   useLeavePage(() => {
@@ -122,6 +116,7 @@ const Game: NextPage = () => {
       }
     });
   }, []);
+
   const handleAudioEnded: ReactEventHandler<HTMLAudioElement> = (e) => {
     const audio = e.target as HTMLAudioElement;
     audio.currentTime = 0;
@@ -130,24 +125,10 @@ const Game: NextPage = () => {
 
   return (
     <Container>
-      <GameRoomNav player={player} />
+      <GameRoomNav players={players} isAllReady={isAllReady} />
       <GameRoomContainer players={players} gameRoom={gameRoom} />
-      <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/0`} controls loop />
-      <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/1`} controls loop />
-      <button
-        onClick={() => {
-          socket?.emit(SocketEvents.START_GAME);
-        }}
-      >
-        GAME_START
-      </button>
-      <button
-        onClick={() => {
-          socket?.emit(SocketEvents.NEXT_ROUND);
-        }}
-      >
-        NEXT_ROUND
-      </button>
+      <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/0`} loop />
+      <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/1`} loop />
     </Container>
   );
 };

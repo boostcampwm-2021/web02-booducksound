@@ -1,13 +1,15 @@
-import { PropsWithChildren } from 'react';
+import { MouseEventHandler, PropsWithChildren, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 
 import Button from '~/atoms/Button';
 import useSocket from '~/hooks/useSocket';
+import useSocketOn from '~/hooks/useSocketOn';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
 import { Player } from '~/types/Player';
+import { Players } from '~/types/Players';
 import { SocketEvents } from '~/types/SocketEvents';
 
 const Container = styled.div`
@@ -61,13 +63,22 @@ interface ButtonContainerProps {
   background: string;
   fontSize?: number;
   type?: string;
-  onClick: Function;
+  onClick: MouseEventHandler;
+  disabled?: boolean;
 }
 
-const ResponsiveButton = ({ background, children, type, onClick }: PropsWithChildren<ButtonContainerProps>) => {
+const ResponsiveButton = ({
+  background,
+  children,
+  type,
+  onClick,
+  disabled = false,
+}: PropsWithChildren<ButtonContainerProps>) => {
   return (
-    <ButtonWrapper style={{ gridArea: type }} onClick={() => onClick()}>
-      <Button background={background}>{children}</Button>
+    <ButtonWrapper style={{ gridArea: type }} onClick={onClick}>
+      <Button background={background} disabled={disabled}>
+        {children}
+      </Button>
     </ButtonWrapper>
   );
 };
@@ -75,26 +86,32 @@ const ResponsiveButton = ({ background, children, type, onClick }: PropsWithChil
 const converter: { [status: string]: 'ready' | 'prepare' } = { prepare: 'ready', ready: 'prepare' };
 const statusEncoder = { king: 'START', prepare: 'PREPARE', ready: 'READY' };
 
-const GameRoomNav = ({ player }: { player: Player }) => {
+const GameRoomNav = ({ players, isAllReady }: { players: Players; isAllReady: boolean }) => {
   const { uuid } = useSelector((state: RootState) => state.room);
   const socket = useSocket();
+  const player = socket && players[socket.id];
 
-  const changeStatus = (player: Player) => {
+  const changeStatus = (player: Player) => () => {
     if (player.status !== 'king') player = { ...player, status: converter[player.status] };
     socket?.emit(SocketEvents.SET_PLAYER, uuid, player);
   };
+  const startGame = () => socket?.emit(SocketEvents.START_GAME);
+  const handleStartBtnClick = (player: Player) => (player.status === 'king' ? startGame : changeStatus(player));
 
   return (
     <Container>
       <MuteButton type="button" />
-      <ResponsiveButton
-        type="start"
-        background={theme.colors.whitesmoke}
-        fontSize={20}
-        onClick={() => changeStatus(player)}
-      >
-        {statusEncoder[player.status]}
-      </ResponsiveButton>
+      {player && (
+        <ResponsiveButton
+          type="start"
+          background={theme.colors.whitesmoke}
+          fontSize={20}
+          onClick={handleStartBtnClick(player)}
+          disabled={player.status === 'king' && !isAllReady}
+        >
+          {statusEncoder[player.status]}
+        </ResponsiveButton>
+      )}
       <ResponsiveButton type="exit" background={theme.colors.sand} fontSize={20} onClick={() => console.log('나가기')}>
         나가기
       </ResponsiveButton>
