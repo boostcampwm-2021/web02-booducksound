@@ -9,6 +9,15 @@ interface props {
 }
 
 const Message = styled.p``;
+
+const Name = styled.span`
+  font-weight: 600;
+`;
+
+const Content = styled.span`
+  font-weight: 400;
+`;
+
 const AlertMessage = styled.p`
   color: ${theme.colors.ocean};
 `;
@@ -18,12 +27,13 @@ const Chat = ({ name, text, status }: props) => {
     <>
       {status === 'message' ? (
         <Message>
-          {name}:{text}
+          <Name>{name}: </Name>
+          <Content>{text}</Content>
         </Message>
-      ) : status === 'answer' ? (
-        <AlertMessage>{name} 님께서 정답을 맞추셨습니다.</AlertMessage>
-      ) : (
+      ) : status === 'alert' ? (
         <AlertMessage>{name} 님께서 입장하셨습니다.</AlertMessage>
+      ) : (
+        <AlertMessage>{name} 님께서 정답을 맞추셨습니다.</AlertMessage>
       )}
     </>
   );

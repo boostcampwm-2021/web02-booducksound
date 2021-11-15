@@ -13,22 +13,28 @@ import useSocketOn from '~/hooks/useSocketOn';
 import GameRoomContainer from '~/organisms/GameRoomContainer';
 import GameRoomNav from '~/organisms/GameRoomNav';
 import { RootState } from '~/reducers/index';
+import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
 import { Player } from '~/types/Player';
 import { SocketEvents } from '~/types/SocketEvents';
+
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
-  padding-bottom: 32px;
+  width: 100%;
+  max-width: 1360px;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 4px 32px;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    padding: 4px 8px;
+  }
 `;
 
 const Game: NextPage = () => {
   const [players, setPlayers] = useState<{ [socketId: string]: Player }>({});
-  const [player, setPlayer] = useState<Player>({ nickname: '', color: '', status: 'prepare' });
   const [gameRoom, setGameRoom] = useState<GameRoom>();
+  const [isAllReady, setIsAllReady] = useState<boolean>(false);
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
   const socket = useSocket();
@@ -64,7 +70,7 @@ const Game: NextPage = () => {
     },
   );
 
-  useSocketOn(SocketEvents.START_GAME, () => {
+  useSocketOn(SocketEvents.START_GAME, (gameRoom: GameRoom) => {
     if (!music1.current || !music2.current) throw Error('START_GAME에서 audio Element를 찾을 수 없습니다');
 
     curMusic.current = music1.current;
@@ -72,6 +78,8 @@ const Game: NextPage = () => {
 
     curMusic.current.src = `${BACKEND_URL}/game/${uuid}/init`;
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
+
+    setGameRoom(gameRoom);
 
     const playPromise = curMusic.current.play();
 
@@ -98,16 +106,10 @@ const Game: NextPage = () => {
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
   });
 
-  useSocketOn(SocketEvents.GAME_END, () => {
-    window.alert('마지막 라운드에 다다랐습니다. GAME_END');
-  });
-
-  useSocketOn(SocketEvents.SET_PLAYER, ({ players }) => {
+  useSocketOn(SocketEvents.GAME_END, () => window.alert('마지막 라운드에 다다랐습니다. GAME_END'));
+  useSocketOn(SocketEvents.SET_PLAYER, ({ players, isAllReady }) => {
     setPlayers(players);
-    if (players !== null && socket !== null) {
-      setPlayer(players[socket?.id]);
-    }
-    console.log(players);
+    setIsAllReady(isAllReady);
   });
 
   useLeavePage(() => {
@@ -122,6 +124,7 @@ const Game: NextPage = () => {
       }
     });
   }, []);
+
   const handleAudioEnded: ReactEventHandler<HTMLAudioElement> = (e) => {
     const audio = e.target as HTMLAudioElement;
     audio.currentTime = 0;
@@ -130,24 +133,10 @@ const Game: NextPage = () => {
 
   return (
     <Container>
-      <GameRoomNav player={player} />
+      <GameRoomNav players={players} status={gameRoom?.status} isAllReady={isAllReady} />
       <GameRoomContainer players={players} gameRoom={gameRoom} />
-      <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/0`} controls loop />
-      <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/1`} controls loop />
-      <button
-        onClick={() => {
-          socket?.emit(SocketEvents.START_GAME);
-        }}
-      >
-        GAME_START
-      </button>
-      <button
-        onClick={() => {
-          socket?.emit(SocketEvents.NEXT_ROUND);
-        }}
-      >
-        NEXT_ROUND
-      </button>
+      <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/init`} onEnded={handleAudioEnded} />
+      <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/next`} onEnded={handleAudioEnded} />
     </Container>
   );
 };

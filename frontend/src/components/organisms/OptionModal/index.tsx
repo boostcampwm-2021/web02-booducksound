@@ -191,7 +191,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
         <TextLabel>비밀번호</TextLabel>
         <ModalInputText
           className="roomPassword"
-          placeholder=""
+          placeholder={gameRoom.hasPassword ? '********' : ''}
           isSearch={false}
           value={password}
           handleChange={handlePasswordChange}
