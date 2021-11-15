@@ -20,7 +20,7 @@ class YoutubeStream {
     const ffmpeg = Ffmpeg(this.video);
 
     process.nextTick(() => {
-      this.output = ffmpeg.noVideo().format('mp3').pipe(this.stream);
+      this.output = ffmpeg.noVideo().inputOptions('-t 90').format('mp3').pipe(this.stream);
 
       ffmpeg.once('error', (error: Error) => this.stream.emit('error', error));
       this.output.once('error', (error: Error) => {
