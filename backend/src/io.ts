@@ -226,13 +226,13 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string) => {
+  socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string, color: string) => {
     try {
       const chatCont = replaceText(text);
       const currentMusicInfo = serverRooms[uuid]?.musics[serverRooms[uuid].curRound - 1];
       const isAnswer = currentMusicInfo.answers.filter((e) => replaceText(e) === chatCont).length;
       if (serverRooms[uuid].status === 'waiting' || !isAnswer) {
-        return io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message' });
+        return io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message', color });
       }
       io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
     } catch (error) {
