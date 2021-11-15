@@ -5,11 +5,13 @@ import { useSelector } from 'react-redux';
 
 import GlassContainer from '~/atoms/GlassContainer';
 import useSocket from '~/hooks/useSocket';
+import useSocketOn from '~/hooks/useSocketOn';
 import CharacterList from '~/molecules/CharacterList';
 import ChatList from '~/molecules/ChatList';
 import OptionModal from '~/organisms/OptionModal';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
+import { Chat } from '~/types/Chat';
 import { GameRoom } from '~/types/GameRoom';
 import { Player } from '~/types/Player';
 import { SocketEvents } from '~/types/SocketEvents';
@@ -74,7 +76,7 @@ const ChatListContainer = styled(Container)`
   justify-content: flex-start;
   align-items: flex-start;
   row-gap: 2px;
-  padding: 20px;
+  padding: 20px 20px 10px 20px;
   overflow-y: scroll;
 `;
 
@@ -150,14 +152,21 @@ const GameRoomContainer = ({
   const userInfo = useSelector((state: RootState) => state.user);
   const [modalOnOff, setModalOnOff] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
+  const chatListContainer = useRef<HTMLDivElement>(null);
+  const [chatList, setChatList] = useState<Chat[]>([]);
   const socket = useSocket();
-  const chatListContainer = useRef(null);
 
   const handlePressEnter: KeyboardEventHandler = (e) => {
     if (e.key !== 'Enter') return;
     if (!text.trim()) return;
+
     socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text, userInfo.color);
     setText('');
+  };
+
+  const scorllToBottom = () => {
+    if (!chatListContainer.current) return;
+    chatListContainer.current.scrollTo({ top: chatListContainer.current.scrollHeight, behavior: 'smooth' });
   };
 
   const confirmKing = () => {
@@ -165,6 +174,18 @@ const GameRoomContainer = ({
     if (players[socket.id].status !== 'king') return false;
     return true;
   };
+
+  useSocketOn(SocketEvents.RECEIVE_CHAT, ({ name, text, status, color }: Chat) => {
+    setChatList((v) => [...v, { name, text, status, color }]);
+    scorllToBottom();
+  });
+
+  useSocketOn(SocketEvents.RECEIVE_ANSWER, ({ name, text, status }: Chat) => {
+    setChatList((v) => [...v, { name, text, status }]);
+    // socket?.emit(SocketEvents.NEXT_ROUND);
+    scorllToBottom();
+  });
+
   return (
     <>
       <Wrapper>
@@ -179,8 +200,8 @@ const GameRoomContainer = ({
         <Container type={'rightTitle'}>
           <RightTitle></RightTitle>
         </Container>
-        <ChatListContainer type={'rightChat'}>
-          <ChatList />
+        <ChatListContainer type={'rightChat'} ref={chatListContainer}>
+          <ChatList chatList={chatList} />
         </ChatListContainer>
         <InputContainer>
           <Input

@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 import theme from '~/styles/theme';
 
-interface props {
+interface Props {
   name: string;
   text: string;
   status: 'alert' | 'message' | 'answer';
@@ -28,23 +28,18 @@ const AlertMessage = styled.p`
   color: ${theme.colors.ocean};
 `;
 
-const Chat = ({ name, text, status, color }: props) => {
-  console.log('컬러', color);
+const Chat = ({ name, text, status, color }: Props) => {
+  if (status === 'message')
+    return (
+      <Message>
+        <Name color={color}>{name}: </Name>
+        <Content>{text}</Content>
+      </Message>
+    );
 
-  return (
-    <>
-      {status === 'message' ? (
-        <Message>
-          <Name color={color}>{name}: </Name>
-          <Content>{text}</Content>
-        </Message>
-      ) : status === 'answer' ? (
-        <AlertMessage>{name} 님께서 정답을 맞추셨습니다.</AlertMessage>
-      ) : (
-        <AlertMessage>{name} 님께서 입장하셨습니다.</AlertMessage>
-      )}
-    </>
-  );
+  if (status === 'answer') return <AlertMessage>{name} 님께서 정답을 맞추셨습니다.</AlertMessage>;
+
+  return <AlertMessage>{name} 님께서 입장하셨습니다.</AlertMessage>;
 };
 
 export default Chat;
