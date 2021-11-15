@@ -26,7 +26,13 @@ const CharacterList = ({ players }: { players: { [socketId: string]: Player } })
       <Title>사용자 목록</Title>
       <CharacterContainer>
         {Object.values(players).map((element, index) => (
-          <CharacterProfile key={index} color={element.color} name={element.nickname} status={element.status} />
+          <CharacterProfile
+            key={index}
+            color={element.color}
+            name={element.nickname}
+            status={element.status}
+            skip={element.skip}
+          />
         ))}
       </CharacterContainer>
     </>

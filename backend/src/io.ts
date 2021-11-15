@@ -10,10 +10,6 @@ import { getLobbyRoom, getGameRoom } from './utils/rooms';
 import streamify from './utils/streamify';
 import serverRooms from './variables/serverRooms';
 
-const replaceText = (str: string) => {
-  return str.split(' ').join('').toLowerCase();
-};
-
 const io = new socketio.Server();
 
 io.on('connection', (socket) => {
@@ -120,7 +116,12 @@ io.on('connection', (socket) => {
       serverRooms[uuid].players = {
         ...serverRooms[uuid].players,
         ...{
-          [socket.id]: { nickname, color, status: Object.keys(serverRooms[uuid].players).length ? 'prepare' : 'king' },
+          [socket.id]: {
+            nickname,
+            color,
+            status: Object.keys(serverRooms[uuid].players).length ? 'prepare' : 'king',
+            skip: false,
+          },
         },
       };
       const gameRoom = getGameRoom(uuid);
@@ -158,6 +159,18 @@ io.on('connection', (socket) => {
       }
     });
 
+    socket.on(SocketEvents.SKIP, (uuid: string, id: string) => {
+      try {
+        serverRooms[uuid].players[id].skip = true;
+        serverRooms[uuid].skipCount += 1;
+        serverRooms[uuid].skipCount === getGameRoom(uuid)?.skip
+          ? socket.emit(SocketEvents.NEXT_ROUND)
+          : io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
     socket.on(SocketEvents.NEXT_ROUND, () => {
       try {
         const { curRound, maxRound, musics } = serverRooms[uuid];
@@ -174,7 +187,7 @@ io.on('connection', (socket) => {
           serverRooms[uuid].streams.push(streamify(musics[curRound + 1].url));
         }
 
-        socket?.emit(SocketEvents.NEXT_ROUND);
+        io.to(uuid).emit(SocketEvents.NEXT_ROUND);
       } catch (error) {
         console.error(error);
       }
@@ -200,13 +213,7 @@ io.on('connection', (socket) => {
 
   socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string) => {
     try {
-      const chatCont = replaceText(text);
-      const currentMusicInfo = serverRooms[uuid]?.musics[serverRooms[uuid].curRound - 1];
-      const isAnswer = currentMusicInfo.answers.filter((e) => replaceText(e) === chatCont).length;
-      if (serverRooms[uuid].status === 'waiting' || !isAnswer) {
-        return io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message' });
-      }
-      io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
+      io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message' });
     } catch (error) {
       console.error(error);
     }

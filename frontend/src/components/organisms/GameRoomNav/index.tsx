@@ -48,7 +48,6 @@ const MuteButton = styled.button`
   height: 60px;
   grid-area: speaker;
   background: url('images/ic_speaker.png') no-repeat center/45%;
-  cursor: pointer;
   @media (max-width: ${theme.breakpoints.sm}) {
     width: 30px;
     height: 30px;
@@ -76,7 +75,7 @@ const ResponsiveButton = ({ background, children, type, onClick }: PropsWithChil
 const converter: { [status: string]: 'ready' | 'prepare' } = { prepare: 'ready', ready: 'prepare' };
 const statusEncoder = { king: 'START', prepare: 'PREPARE', ready: 'READY' };
 
-const GameRoomNav = ({ player }: { player: Player }) => {
+const GameRoomNav = ({ player, status }: { player: Player; status: 'playing' | 'waiting' | undefined }) => {
   const { uuid } = useSelector((state: RootState) => state.room);
   const socket = useSocket();
 
@@ -84,7 +83,9 @@ const GameRoomNav = ({ player }: { player: Player }) => {
     if (player.status !== 'king') player = { ...player, status: converter[player.status] };
     socket?.emit(SocketEvents.SET_PLAYER, uuid, player);
   };
-
+  const makeSkip = () => {
+    socket?.emit(SocketEvents.SKIP, uuid, socket.id);
+  };
   return (
     <Container>
       <MuteButton type="button" />
@@ -92,9 +93,9 @@ const GameRoomNav = ({ player }: { player: Player }) => {
         type="start"
         background={theme.colors.whitesmoke}
         fontSize={20}
-        onClick={() => changeStatus(player)}
+        onClick={() => (status === 'waiting' ? changeStatus(player) : makeSkip())}
       >
-        {statusEncoder[player.status]}
+        {status === 'waiting' ? statusEncoder[player.status] : 'SKIP'}
       </ResponsiveButton>
       <ResponsiveButton type="exit" background={theme.colors.sand} fontSize={20} onClick={() => console.log('나가기')}>
         나가기
