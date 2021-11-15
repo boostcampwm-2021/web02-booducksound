@@ -222,9 +222,9 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string) => {
+  socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string, color: string) => {
     try {
-      io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message' });
+      io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message', color });
     } catch (error) {
       console.error(error);
     }

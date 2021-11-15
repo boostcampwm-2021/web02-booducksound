@@ -147,7 +147,7 @@ const GameRoomContainer = ({
   gameRoom: GameRoom | undefined;
 }) => {
   const { uuid } = useSelector((state: RootState) => state.room);
-  const userInfo = useSelector((state: any) => state.user);
+  const userInfo = useSelector((state: RootState) => state.user);
   const [modalOnOff, setModalOnOff] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const socket = useSocket();
@@ -156,18 +156,14 @@ const GameRoomContainer = ({
   const handlePressEnter: KeyboardEventHandler = (e) => {
     if (e.key !== 'Enter') return;
     if (!text.trim()) return;
-    socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text);
+    socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text, userInfo.color);
     setText('');
   };
 
   const confirmKing = () => {
-    if (socket !== null && players[socket.id] !== undefined) {
-      if (players[socket.id].status === 'king') {
-        return true;
-      } else {
-        return false;
-      }
-    }
+    if (!socket || !players[socket.id]) return false;
+    if (players[socket.id].status !== 'king') return false;
+    return true;
   };
   return (
     <>

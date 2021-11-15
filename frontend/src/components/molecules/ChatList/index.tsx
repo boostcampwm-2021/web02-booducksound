@@ -10,8 +10,8 @@ const ChatList = () => {
   const socket = useSocket();
 
   useEffect(() => {
-    socket?.on(SocketEvents.RECEIVE_CHAT, ({ name, text, status }: Chat) => {
-      setChatList((v) => [...v, { name, text, status }]);
+    socket?.on(SocketEvents.RECEIVE_CHAT, ({ name, text, status, color }: Chat) => {
+      setChatList((v) => [...v, { name, text, status, color }]);
     });
 
     socket?.on(SocketEvents.RECEIVE_ANSWER, ({ name, text, status }: Chat) => {
@@ -23,7 +23,7 @@ const ChatList = () => {
   return (
     <>
       {chatList.map((element: Chat, index: number) => (
-        <ChatComponent key={index} name={element.name} text={element.text} status={element.status} />
+        <ChatComponent key={index} {...element} />
       ))}
     </>
   );
