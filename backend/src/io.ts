@@ -10,6 +10,10 @@ import { getLobbyRoom, getGameRoom } from './utils/rooms';
 import streamify from './utils/streamify';
 import serverRooms from './variables/serverRooms';
 
+const replaceText = (str: string) => {
+  return str.split(' ').join('').toLowerCase();
+};
+
 const io = new socketio.Server();
 
 io.on('connection', (socket) => {
@@ -170,7 +174,7 @@ io.on('connection', (socket) => {
           serverRooms[uuid].streams.push(streamify(musics[curRound + 1].url));
         }
 
-        io.to(uuid).emit(SocketEvents.NEXT_ROUND);
+        socket?.emit(SocketEvents.NEXT_ROUND);
       } catch (error) {
         console.error(error);
       }
@@ -196,7 +200,13 @@ io.on('connection', (socket) => {
 
   socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string) => {
     try {
-      io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message' });
+      const chatCont = replaceText(text);
+      const currentMusicInfo = serverRooms[uuid]?.musics[serverRooms[uuid].curRound - 1];
+      const isAnswer = currentMusicInfo.answers.filter((e) => replaceText(e) === chatCont).length;
+      if (serverRooms[uuid].status === 'waiting' || !isAnswer) {
+        return io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message' });
+      }
+      io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
     } catch (error) {
       console.error(error);
     }
