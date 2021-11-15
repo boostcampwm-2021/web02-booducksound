@@ -48,6 +48,7 @@ const MuteButton = styled.button`
   height: 60px;
   grid-area: speaker;
   background: url('images/ic_speaker.png') no-repeat center/45%;
+  cursor: pointer;
   @media (max-width: ${theme.breakpoints.sm}) {
     width: 30px;
     height: 30px;

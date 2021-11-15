@@ -7,13 +7,14 @@ import MyPlayListBox from '~/molecules/MyPlayListBox';
 import ProfileBox from '~/molecules/ProfileBox';
 import { RootState } from '~/reducers/index';
 import { UserState } from '~/reducers/user';
+import theme from '~/styles/theme';
 
 const Container = styled.div`
   height: max-content;
   margin: auto;
   text-align: center;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${theme.breakpoints.md}px) {
     a > button {
     }
   }

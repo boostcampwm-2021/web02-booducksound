@@ -23,14 +23,14 @@ const Warper = styled.div`
     flex-grow: 1;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: ${theme.breakpoints.sm}px) {
     display: block;
   }
 `;
 const ProfileBtnBox = styled.div`
   text-align: right;
 
-  @media (min-width: 768px) {
+  @media (min-width: ${theme.breakpoints.md}px) {
     margin-bottom: 1rem;
 
     > *:first-of-type {
@@ -38,12 +38,12 @@ const ProfileBtnBox = styled.div`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${theme.breakpoints.md}px) {
     button {
       margin-bottom: 0.4rem;
     }
   }
-  @media (max-width: 480px) {
+  @media (max-width: ${theme.breakpoints.sm}px) {
     margin-bottom: 1rem;
 
     button {
