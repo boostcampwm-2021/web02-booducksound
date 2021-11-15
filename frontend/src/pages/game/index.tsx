@@ -135,8 +135,8 @@ const Game: NextPage = () => {
     <Container>
       <GameRoomNav players={players} status={gameRoom?.status} isAllReady={isAllReady} />
       <GameRoomContainer players={players} gameRoom={gameRoom} />
-      <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/init`} onEnded={handleAudioEnded} />
-      <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/next`} onEnded={handleAudioEnded} />
+      <audio ref={music1} onEnded={handleAudioEnded} />
+      <audio ref={music2} onEnded={handleAudioEnded} />
     </Container>
   );
 };

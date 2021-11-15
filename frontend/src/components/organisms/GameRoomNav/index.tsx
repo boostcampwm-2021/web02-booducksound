@@ -1,5 +1,3 @@
-import { MouseEventHandler, PropsWithChildren } from 'react';
-
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
@@ -70,10 +68,13 @@ const GameRoomNav = ({
     if (player.status !== 'king') player = { ...player, status: converter[player.status] };
     socket?.emit(SocketEvents.SET_PLAYER, uuid, player);
   };
+
   const startGame = () => socket?.emit(SocketEvents.START_GAME);
+
   const makeSkip = () => {
     socket?.emit(SocketEvents.SKIP, uuid, socket.id);
   };
+
   const handleStartBtnClick = (player: Player) => {
     if (status === 'playing') return makeSkip;
     if (player.status === 'king') return startGame;

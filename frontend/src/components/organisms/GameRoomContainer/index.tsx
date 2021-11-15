@@ -187,13 +187,6 @@ const GameRoomContainer = ({
           <ChatList />
         </ChatListContainer>
         <InputContainer>
-          {/* <InputBox
-            placeholder={'메세지를 입력해주세요.'}
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            onClick={send}
-          /> */}
-
           <Input
             value={text}
             placeholder="메시지를 입력하세요"

@@ -18,47 +18,54 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   column-gap: 8px;
+  font-size: 16px;
 
   @media (max-width: ${theme.breakpoints.md}) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-  }
-`;
-
-const Name = styled.p`
-  white-space: nowrap;
-  overflow: hidden;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    font-size: 12px;
-  }
-`;
-
-const ChipContainer = styled.div`
-  flex-shrink: 0;
-  font-size: 12px;
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    font-size: 8px;
+    font-size: 14px;
   }
 `;
 
 const ProfileContainer = styled.div`
+  flex: 0 0 60px;
+  width: 0;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    flex: none;
+    width: auto;
+  }
+`;
+
+const ProfileCircle = styled.div`
   border-radius: 50%;
   border: 1px solid ${theme.colors.gray};
   width: 40px;
   height: 40px;
   flex-shrink: 0;
 
-  /* @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    width: 10px;
-    height: 10px;
-  } */
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    width: 28px;
+    height: 28px;
+  }
+`;
+
+const Name = styled.p`
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 1.2em;
+`;
+
+const ChipContainer = styled.div`
+  flex: 0 0 60px;
+  width: 0;
+  font-size: 0.8em;
+  text-align: right;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    width: 24px;
-    height: 24px;
+    flex: none;
+    width: auto;
   }
 `;
 
@@ -66,7 +73,9 @@ const CharacterProfile = ({ color, name, status, skip }: PropsWithChildren<Props
   return (
     <Container>
       <ProfileContainer>
-        <Character color={color} width={'100%'} />
+        <ProfileCircle>
+          <Character color={color} width={'100%'} />
+        </ProfileCircle>
       </ProfileContainer>
       <Name>{name}</Name>
       <ChipContainer>
