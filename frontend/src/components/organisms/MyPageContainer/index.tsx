@@ -1,4 +1,4 @@
-import JSX, { useEffect } from 'react';
+import JSX from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
@@ -7,17 +7,11 @@ import MyPlayListBox from '~/molecules/MyPlayListBox';
 import ProfileBox from '~/molecules/ProfileBox';
 import { RootState } from '~/reducers/index';
 import { UserState } from '~/reducers/user';
-import theme from '~/styles/theme';
 
 const Container = styled.div`
   height: max-content;
   margin: auto;
   text-align: center;
-
-  @media (max-width: ${theme.breakpoints.md}px) {
-    a > button {
-    }
-  }
 `;
 
 const MyPageContainer = ({ openRemoveModal }: { openRemoveModal: ({ target }: any) => void }) => {
