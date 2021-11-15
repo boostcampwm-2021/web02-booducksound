@@ -30,10 +30,10 @@ const Chat = ({ name, text, status }: props) => {
           <Name>{name}: </Name>
           <Content>{text}</Content>
         </Message>
-      ) : status === 'answer' ? (
-        <AlertMessage>{name} 님께서 정답을 맞추셨습니다.</AlertMessage>
-      ) : (
+      ) : status === 'alert' ? (
         <AlertMessage>{name} 님께서 입장하셨습니다.</AlertMessage>
+      ) : (
+        <AlertMessage>{name} 님께서 정답을 맞추셨습니다.</AlertMessage>
       )}
     </>
   );
