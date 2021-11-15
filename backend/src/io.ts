@@ -179,8 +179,14 @@ io.on('connection', (socket) => {
 
   socket.on(SocketEvents.SET_PLAYER, (uuid: string, player: Player) => {
     try {
+      console.log(serverRooms[uuid].players);
+      const checkAllReady = (players: { [key: string]: Player }) =>
+        Object.keys(players).every((socketId) => players[socketId].status !== 'prepare');
       serverRooms[uuid].players[socket.id] = player;
-      io.to(uuid).emit(SocketEvents.SET_PLAYER, { players: serverRooms[uuid].players });
+      io.to(uuid).emit(SocketEvents.SET_PLAYER, {
+        players: serverRooms[uuid].players,
+        isAllReady: checkAllReady(serverRooms[uuid].players),
+      });
     } catch (error) {
       console.error(error);
     }
