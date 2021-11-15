@@ -116,7 +116,7 @@ const Join: NextPage = () => {
               isSearch={false}
               placeholder="아이디를 입력하세요."
               value={id}
-              handleChange={({ target }) => setID((target as HTMLInputElement).value)}
+              handleChange={({ target }) => setID((target as HTMLInputElement).value.trim())}
             ></JoinInputText>
             <Button
               background={theme.colors.peach}
@@ -133,14 +133,14 @@ const Join: NextPage = () => {
               isSearch={false}
               placeholder="비밀번호를 입력해 주세요."
               value={password}
-              handleChange={({ target }) => setPassword((target as HTMLInputElement).value)}
+              handleChange={({ target }) => setPassword((target as HTMLInputElement).value.trim())}
             ></JoinInputText>
             <JoinInputText
               className="newNickname"
               isSearch={false}
               placeholder="닉네임을 입력하세요."
               value={nickname}
-              handleChange={({ target }) => setNickname((target as HTMLInputElement).value)}
+              handleChange={({ target }) => setNickname((target as HTMLInputElement).value.trim())}
             ></JoinInputText>
             <Link href="/join">
               <a>

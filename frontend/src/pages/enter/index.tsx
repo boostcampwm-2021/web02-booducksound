@@ -88,7 +88,7 @@ const Enter: NextPage = () => {
               isSearch={false}
               placeholder="닉네임을 입력하세요."
               value={nickname}
-              handleChange={({ target }) => setNickname((target as HTMLInputElement).value)}
+              handleChange={({ target }) => setNickname((target as HTMLInputElement).value.trim())}
             ></EnterInputText>
             <a>
               <Button

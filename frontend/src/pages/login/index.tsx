@@ -90,7 +90,7 @@ const Login: NextPage = () => {
               isSearch={false}
               placeholder="아이디를 입력하세요."
               value={id}
-              handleChange={({ target }) => setID((target as HTMLInputElement).value)}
+              handleChange={({ target }) => setID((target as HTMLInputElement).value.trim())}
             ></LoginInputText>
             <LoginInputText
               className="loginPassword"
@@ -98,7 +98,7 @@ const Login: NextPage = () => {
               isSearch={false}
               placeholder="비밀번호를 입력하세요."
               value={password}
-              handleChange={({ target }) => setPassword((target as HTMLInputElement).value)}
+              handleChange={({ target }) => setPassword((target as HTMLInputElement).value.trim())}
             ></LoginInputText>
             <Button
               width={'560px'}
