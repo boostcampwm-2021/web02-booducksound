@@ -1,3 +1,5 @@
+import { MouseEventHandler, PropsWithChildren } from 'react';
+
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
@@ -7,6 +9,7 @@ import ResponsiveButton from '~/molecules/ResponsiveButton';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
 import { Player } from '~/types/Player';
+import { Players } from '~/types/Players';
 import { SocketEvents } from '~/types/SocketEvents';
 
 const Container = styled.nav`
@@ -50,39 +53,52 @@ const MuteButton = styled.button`
 const converter: { [status: string]: 'ready' | 'prepare' } = { prepare: 'ready', ready: 'prepare' };
 const statusEncoder = { king: 'START', prepare: 'PREPARE', ready: 'READY' };
 
-const GameRoomNav = ({ player, status }: { player: Player; status: 'playing' | 'waiting' | undefined }) => {
+const GameRoomNav = ({
+  players,
+  status,
+  isAllReady,
+}: {
+  players: Players;
+  status: 'playing' | 'waiting' | undefined;
+  isAllReady: boolean;
+}) => {
   const { uuid } = useSelector((state: RootState) => state.room);
   const socket = useSocket();
+  const player = socket && players[socket.id];
 
-  const changeStatus = (player: Player) => {
+  const changeStatus = (player: Player) => () => {
     if (player.status !== 'king') player = { ...player, status: converter[player.status] };
     socket?.emit(SocketEvents.SET_PLAYER, uuid, player);
   };
+  const startGame = () => socket?.emit(SocketEvents.START_GAME);
   const makeSkip = () => {
     socket?.emit(SocketEvents.SKIP, uuid, socket.id);
   };
+  const handleStartBtnClick = (player: Player) => {
+    if (status === 'playing') return makeSkip;
+    if (player.status === 'king') return startGame;
+    return changeStatus(player);
+  };
+
   return (
     <Container>
       <MuteButton type="button" />
       <FlexItem>
-        <ResponsiveButton
-          width="160px"
-          fontSize="1em"
-          background={theme.colors.whitesmoke}
-          mdWidth="84px"
-          onClick={() => (status === 'waiting' ? changeStatus(player) : makeSkip())}
-        >
-          {status === 'waiting' ? statusEncoder[player.status] : 'SKIP'}
-        </ResponsiveButton>
+        {player && (
+          <ResponsiveButton
+            width="160px"
+            mdWidth="84px"
+            background={theme.colors.whitesmoke}
+            fontSize="1em"
+            onClick={handleStartBtnClick(player)}
+            disabled={player.status === 'king' && !isAllReady}
+          >
+            {status === 'waiting' ? statusEncoder[player.status] : 'SKIP'}
+          </ResponsiveButton>
+        )}
         <Link href="/lobby">
           <a>
-            <ResponsiveButton
-              width="160px"
-              fontSize="1em"
-              background={theme.colors.sand}
-              mdWidth="84px"
-              onClick={() => console.log('나가기')}
-            >
+            <ResponsiveButton width="160px" fontSize="1em" background={theme.colors.sand} mdWidth="84px">
               나가기
             </ResponsiveButton>
           </a>
