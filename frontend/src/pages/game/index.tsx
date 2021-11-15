@@ -137,6 +137,14 @@ const Game: NextPage = () => {
       <GameRoomContainer players={players} gameRoom={gameRoom} />
       <audio ref={music1} onEnded={handleAudioEnded} />
       <audio ref={music2} onEnded={handleAudioEnded} />
+      <button
+        style={{ width: '1000px', position: 'absolute', top: '0' }}
+        onClick={() => {
+          socket?.emit('TEST_DESTROY');
+        }}
+      >
+        디스트로이
+      </button>
     </Container>
   );
 };

@@ -13,7 +13,7 @@ export type ServerRoom = {
   timePerProblem: 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90;
 
   musics: { url: string; info: string; answers: string[]; hint: string }[];
-  streams: PassThrough[];
+  streams: any[];
   curRound: number;
   maxRound: number;
   skipCount: number;

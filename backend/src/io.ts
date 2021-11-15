@@ -7,7 +7,7 @@ import { Player } from './types/Player';
 import { ServerRoom } from './types/ServerRoom';
 import { SocketEvents } from './types/SocketEvents';
 import { getLobbyRoom, getGameRoom } from './utils/rooms';
-import streamify from './utils/streamify';
+import YoutubeStream from './utils/YoutubeStream';
 import serverRooms from './variables/serverRooms';
 
 const replaceText = (str: string) => {
@@ -162,7 +162,7 @@ io.on('connection', (socket) => {
 
         const { musics } = serverRooms[uuid];
         serverRooms[uuid].status = 'playing';
-        serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
+        serverRooms[uuid].streams = [new YoutubeStream(musics[0].url), new YoutubeStream(musics[1].url)];
         io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid));
       } catch (error) {
         console.error(error);
@@ -194,13 +194,19 @@ io.on('connection', (socket) => {
         serverRooms[uuid].streams.shift(); // TODO: Queue 자료형으로 구현할 것
 
         if (curRound + 1 < musics.length) {
-          serverRooms[uuid].streams.push(streamify(musics[curRound + 1].url));
+          serverRooms[uuid].streams.push(new YoutubeStream(musics[curRound + 1].url));
         }
 
         io.to(uuid).emit(SocketEvents.NEXT_ROUND);
       } catch (error) {
         console.error(error);
       }
+    });
+
+    socket.on('TEST_DESTROY', () => {
+      console.log('테스트 디스트로이 실행', uuid);
+      serverRooms[uuid].streams[0].destroy();
+      serverRooms[uuid].streams[1].destroy();
     });
   });
 
