@@ -1,11 +1,10 @@
-import { MouseEventHandler, PropsWithChildren, useState } from 'react';
+import { MouseEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 
 import Button from '~/atoms/Button';
 import useSocket from '~/hooks/useSocket';
-import useSocketOn from '~/hooks/useSocketOn';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
 import { Player } from '~/types/Player';
