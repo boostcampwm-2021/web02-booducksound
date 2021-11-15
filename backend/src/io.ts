@@ -116,7 +116,12 @@ io.on('connection', (socket) => {
       serverRooms[uuid].players = {
         ...serverRooms[uuid].players,
         ...{
-          [socket.id]: { nickname, color, status: Object.keys(serverRooms[uuid].players).length ? 'prepare' : 'king' },
+          [socket.id]: {
+            nickname,
+            color,
+            status: Object.keys(serverRooms[uuid].players).length ? 'prepare' : 'king',
+            skip: false,
+          },
         },
       };
       const gameRoom = getGameRoom(uuid);
@@ -149,6 +154,18 @@ io.on('connection', (socket) => {
         serverRooms[uuid].status = 'playing';
         serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
         io.to(uuid).emit(SocketEvents.START_GAME);
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    socket.on(SocketEvents.SKIP, (uuid: string, id: string) => {
+      try {
+        serverRooms[uuid].players[id].skip = true;
+        serverRooms[uuid].skipCount += 1;
+        serverRooms[uuid].skipCount === getGameRoom(uuid)?.skip
+          ? socket.emit(SocketEvents.NEXT_ROUND)
+          : io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
       } catch (error) {
         console.error(error);
       }

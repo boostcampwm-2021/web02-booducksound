@@ -134,7 +134,7 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
     });
     const { status } = result;
     if (status === FAILED) alert('플레이리스트 등록에 실패하였습니다.');
-    if (status === SUCCESS) Router.push('/lobby');
+    if (status === SUCCESS) Router.back();
   };
 
   const mapSubmitFunction = async ({

@@ -1,4 +1,4 @@
-import JSX, { useEffect } from 'react';
+import JSX from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
@@ -12,11 +12,6 @@ const Container = styled.div`
   height: max-content;
   margin: auto;
   text-align: center;
-
-  @media (max-width: 768px) {
-    a > button {
-    }
-  }
 `;
 
 const MyPageContainer = ({ openRemoveModal }: { openRemoveModal: ({ target }: any) => void }) => {
