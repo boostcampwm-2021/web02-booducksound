@@ -50,7 +50,7 @@ const MuteButton = styled.button`
 const converter: { [status: string]: 'ready' | 'prepare' } = { prepare: 'ready', ready: 'prepare' };
 const statusEncoder = { king: 'START', prepare: 'PREPARE', ready: 'READY' };
 
-const GameRoomNav = ({ player }: { player: Player }) => {
+const GameRoomNav = ({ player, status }: { player: Player; status: 'playing' | 'waiting' | undefined }) => {
   const { uuid } = useSelector((state: RootState) => state.room);
   const socket = useSocket();
 
@@ -58,7 +58,9 @@ const GameRoomNav = ({ player }: { player: Player }) => {
     if (player.status !== 'king') player = { ...player, status: converter[player.status] };
     socket?.emit(SocketEvents.SET_PLAYER, uuid, player);
   };
-
+  const makeSkip = () => {
+    socket?.emit(SocketEvents.SKIP, uuid, socket.id);
+  };
   return (
     <Container>
       <MuteButton type="button" />
@@ -68,9 +70,9 @@ const GameRoomNav = ({ player }: { player: Player }) => {
           fontSize="1em"
           background={theme.colors.whitesmoke}
           mdWidth="84px"
-          onClick={() => changeStatus(player)}
+          onClick={() => (status === 'waiting' ? changeStatus(player) : makeSkip())}
         >
-          {statusEncoder[player.status]}
+          {status === 'waiting' ? statusEncoder[player.status] : 'SKIP'}
         </ResponsiveButton>
         <Link href="/lobby">
           <a>

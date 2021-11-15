@@ -10,6 +10,7 @@ interface Props {
   color: string;
   name: string;
   status: 'king' | 'ready' | 'prepare';
+  skip: boolean;
 }
 
 const Container = styled.div`
@@ -61,7 +62,7 @@ const ProfileContainer = styled.div`
   }
 `;
 
-const CharacterProfile = ({ color, name, status }: PropsWithChildren<Props>) => {
+const CharacterProfile = ({ color, name, status, skip }: PropsWithChildren<Props>) => {
   return (
     <Container>
       <ProfileContainer>
@@ -71,6 +72,11 @@ const CharacterProfile = ({ color, name, status }: PropsWithChildren<Props>) => 
       <ChipContainer>
         <StatusChip status={status} />
       </ChipContainer>
+      {skip && (
+        <ChipContainer>
+          <StatusChip status={'skip'} />
+        </ChipContainer>
+      )}
     </Container>
   );
 };

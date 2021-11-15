@@ -23,27 +23,32 @@ const Warper = styled.div`
     flex-grow: 1;
   }
 
-  @media (max-width: 480px) {
+  @media (max-width: ${theme.breakpoints.sm}) {
     display: block;
   }
 `;
 const ProfileBtnBox = styled.div`
   text-align: right;
 
-  @media (min-width: 768px) {
-    margin-bottom: 1rem;
+  > *:first-of-type {
+    text-decoration: auto;
+    margin-right: 1rem;
+  }
 
-    > *:first-of-type {
-      margin-right: 1rem;
+  @media (min-width: ${theme.breakpoints.md}) {
+    margin: 0 1rem 0;
+
+    > * {
+      margin: 0 1rem 0;
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${theme.breakpoints.md}) {
     button {
       margin-bottom: 0.4rem;
     }
   }
-  @media (max-width: 480px) {
+  @media (max-width: ${theme.breakpoints.sm}) {
     margin-bottom: 1rem;
 
     button {

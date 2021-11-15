@@ -13,6 +13,11 @@ const ChatList = () => {
     socket?.on(SocketEvents.RECEIVE_CHAT, ({ name, text, status }: Chat) => {
       setChatList((v) => [...v, { name, text, status }]);
     });
+
+    socket?.on(SocketEvents.RECEIVE_ANSWER, ({ name, text, status }: Chat) => {
+      setChatList((v) => [...v, { name, text, status }]);
+      socket?.emit(SocketEvents.NEXT_ROUND);
+    });
   }, []);
 
   return (
