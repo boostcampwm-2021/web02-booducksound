@@ -13,16 +13,22 @@ import useSocketOn from '~/hooks/useSocketOn';
 import GameRoomContainer from '~/organisms/GameRoomContainer';
 import GameRoomNav from '~/organisms/GameRoomNav';
 import { RootState } from '~/reducers/index';
+import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
 import { Player } from '~/types/Player';
 import { SocketEvents } from '~/types/SocketEvents';
+
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
-  padding-bottom: 32px;
+  width: 100%;
+  max-width: 1360px;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 4px 32px;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    padding: 4px 8px;
+  }
 `;
 
 const Game: NextPage = () => {
@@ -125,10 +131,10 @@ const Game: NextPage = () => {
 
   return (
     <Container>
-      <GameRoomNav players={players} isAllReady={isAllReady} />
+      <GameRoomNav players={players} status={gameRoom?.status} isAllReady={isAllReady} />
       <GameRoomContainer players={players} gameRoom={gameRoom} />
-      <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/0`} loop />
-      <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/1`} loop />
+      <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/init`} onEnded={handleAudioEnded} />
+      <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/next`} onEnded={handleAudioEnded} />
     </Container>
   );
 };

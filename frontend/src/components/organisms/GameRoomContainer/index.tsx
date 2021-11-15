@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { KeyboardEventHandler, useState, useRef } from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
@@ -13,29 +13,49 @@ import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
 import { Player } from '~/types/Player';
 import { SocketEvents } from '~/types/SocketEvents';
+
 interface Props {
   type: 'leftTitle' | 'rightTitle' | 'leftCharacter' | 'rightChat';
 }
 
 const Wrapper = styled.div`
-  max-width: 1600px;
   width: 100%;
+  height: 100%;
   display: grid;
-  gap: 10px;
+  row-gap: 12px;
+  column-gap: 64px;
+  font-size: 16px;
+  padding-bottom: 128px;
+
   grid-template:
-    '. leftTitle . rightTitle .' 1fr
-    '. leftCharacter . rightTitle .' 1fr
-    '. leftCharacter . rightChat .' 6fr
-    '. leftCharacter . rightSearch .' 1fr
-    /1fr 6fr 1fr 8fr 1fr;
-  @media (max-width: ${theme.breakpoints.sm}) {
+    'leftTitle rightTitle' 2fr
+    'leftCharacter rightTitle' 1fr
+    'leftCharacter rightChat' 10fr
+    'leftCharacter rightSearch' 1fr
+    / 348px 1fr;
+
+  @media (max-width: ${theme.breakpoints.lg}) {
+    column-gap: 28px;
+
     grid-template:
-      '.  leftCharacter leftCharacter leftCharacter .' 1fr
-      '. leftTitle rightTitle rightTitle .' 2fr
-      '. rightChat rightChat rightChat .' 4fr
-      '. rightSearch rightSearch rightSearch .' 1fr
-      / 1fr 3fr 1fr 6fr 1fr;
-    font-size: 12px;
+      'leftTitle rightTitle' 2fr
+      'leftCharacter rightTitle' 1fr
+      'leftCharacter rightChat' 10fr
+      'leftCharacter rightSearch' 1fr
+      / 300px 1fr;
+  }
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    grid-template:
+      'leftTitle leftTitle leftTitle' 1fr
+      'leftCharacter leftCharacter leftCharacter' 1fr
+      'rightTitle rightTitle rightTitle' 2fr
+      'rightChat rightChat rightChat' 6fr
+      'rightSearch rightSearch rightSearch' 1fr
+      / 3fr 1fr 6fr;
+
+    font-size: 14px;
+    padding-bottom: 62px;
   }
 `;
 
@@ -46,45 +66,77 @@ const Container = styled(GlassContainer)<Props>`
 const CharacterContainer = styled(Container)`
   display: flex;
   justify-content: flex-start;
+  padding: 12px;
 `;
-const GridDiv = styled.div`
+
+const ChatListContainer = styled(Container)`
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  row-gap: 2px;
+  padding: 20px;
+  overflow-y: scroll;
+`;
+
+const RightTitle = styled.div`
   width: 100%;
-  gap: 10px;
-  display: grid;
-  grid-template:
-    '. . title setting .' 1fr
-    '. description description description . ' 1fr
-    /1fr 1fr 3fr 1fr 1fr;
 `;
-const GameTitle = styled.div`
-  align-self: center;
-  justify-self: center;
-  grid-area: title;
+
+const LeftTitleContainer = styled(Container)`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  padding: 16px;
+`;
+
+const RoomTitle = styled.h3`
+  width: 100%;
+  font-size: 1em;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+`;
+
+const PlaylistName = styled.h4`
+  width: 100%;
+  font-size: 1em;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
 `;
 
 const SettingButton = styled.button`
-  grid-area: setting;
+  position: absolute;
+  top: 0;
+  right: 0;
   border: 0;
   outline: 0;
-  width: 60px;
-  height: 60px;
+  width: 48px;
+  height: 48px;
   background: url('images/settings.png') no-repeat center/45%;
+  cursor: pointer;
 `;
 
-const RoomStateTitle = styled.p`
-  font-weight: bolder;
-`;
-
-const InputBox = styled.input`
-  grid-area: rightSearch;
-  border: 2px solid black;
-  padding: 0px 10%;
+const InputContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  grid-area: rightSearch;
+`;
 
-  font-size: 20px;
+const Input = styled.input`
+  border: 2px solid black;
+  font-size: 1em;
+  padding: 10px 24px;
   border-radius: 100px;
   box-shadow: 2px 2px 10px gray;
-  background-color: white;
+  width: 100%;
+  outline: none;
 `;
 
 const GameRoomContainer = ({
@@ -99,10 +151,11 @@ const GameRoomContainer = ({
   const [modalOnOff, setModalOnOff] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
   const socket = useSocket();
+  const chatListContainer = useRef(null);
 
-  const send = () => {
-    if (!text) return;
-
+  const handlePressEnter: KeyboardEventHandler = (e) => {
+    if (e.key !== 'Enter') return;
+    if (!text.trim()) return;
     socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text);
     setText('');
   };
@@ -119,27 +172,35 @@ const GameRoomContainer = ({
   return (
     <>
       <Wrapper>
-        <Container type={'leftTitle'}>
-          <RoomStateTitle>대기중 입니다.</RoomStateTitle>
-        </Container>
+        <LeftTitleContainer type={'leftTitle'}>
+          <RoomTitle>{gameRoom?.title}</RoomTitle>
+          <PlaylistName>{gameRoom?.playlistName}</PlaylistName>
+          {confirmKing() && <SettingButton onClick={() => setModalOnOff(true)} />}
+        </LeftTitleContainer>
         <CharacterContainer type={'leftCharacter'}>
           <CharacterList players={players} />
         </CharacterContainer>
         <Container type={'rightTitle'}>
-          <GridDiv>
-            <GameTitle>{gameRoom?.title}</GameTitle>
-            {confirmKing() && <SettingButton onClick={() => setModalOnOff(true)} />}
-          </GridDiv>
+          <RightTitle></RightTitle>
         </Container>
-        <Container type={'rightChat'}>
+        <ChatListContainer type={'rightChat'}>
           <ChatList />
-        </Container>
-        <InputBox
-          placeholder={'메세지를 입력해주세요.'}
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onClick={send}
-        />
+        </ChatListContainer>
+        <InputContainer>
+          {/* <InputBox
+            placeholder={'메세지를 입력해주세요.'}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            onClick={send}
+          /> */}
+
+          <Input
+            value={text}
+            placeholder="메시지를 입력하세요"
+            onChange={(e) => setText(e.target.value)}
+            onKeyDown={handlePressEnter}
+          />
+        </InputContainer>
       </Wrapper>
       {modalOnOff && gameRoom && (
         <OptionModal setModalOnOff={setModalOnOff} leftButtonText={'수정하기'} gameRoom={gameRoom} />
