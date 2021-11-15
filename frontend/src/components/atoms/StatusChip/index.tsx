@@ -24,9 +24,10 @@ const Chip = styled.div<Props>`
   display: inline-block;
   border: 1px solid ${({ status }) => chipColor[status]};
   border-radius: 4px;
-  font-size: 12px;
+  font-size: inherit;
   color: ${({ status }) => chipColor[status]};
   padding: 2px 6px;
+  white-space: nowrap;
 `;
 
 const StatusChip = ({ status }: Props) => {

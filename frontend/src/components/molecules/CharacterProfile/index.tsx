@@ -13,21 +13,33 @@ interface Props {
   skip: boolean;
 }
 
-const Container = styled.div<any>`
-  margin: 2%;
+const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+  column-gap: 8px;
+
+  @media (max-width: ${theme.breakpoints.md}) {
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
-  opacity: ${({ status }) => (status === 'prepare' ? `50%` : `100%`)};
+`;
+
+const Name = styled.p`
+  white-space: nowrap;
+  overflow: hidden;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 12px;
+  }
 `;
 
 const ChipContainer = styled.div`
-  width: 20%;
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 20px;
+  flex-shrink: 0;
+  font-size: 12px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 8px;
   }
 `;
@@ -37,24 +49,26 @@ const ProfileContainer = styled.div`
   border: 1px solid ${theme.colors.gray};
   width: 40px;
   height: 40px;
+  flex-shrink: 0;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  /* @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     width: 10px;
     height: 10px;
-  }
+  } */
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    display: none;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    width: 24px;
+    height: 24px;
   }
 `;
 
 const CharacterProfile = ({ color, name, status, skip }: PropsWithChildren<Props>) => {
   return (
-    <Container status={status}>
+    <Container>
       <ProfileContainer>
         <Character color={color} width={'100%'} />
       </ProfileContainer>
-      {name}
+      <Name>{name}</Name>
       <ChipContainer>
         <StatusChip status={status} />
       </ChipContainer>
