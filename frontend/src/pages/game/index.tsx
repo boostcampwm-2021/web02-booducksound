@@ -13,16 +13,22 @@ import useSocketOn from '~/hooks/useSocketOn';
 import GameRoomContainer from '~/organisms/GameRoomContainer';
 import GameRoomNav from '~/organisms/GameRoomNav';
 import { RootState } from '~/reducers/index';
+import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
 import { Player } from '~/types/Player';
 import { SocketEvents } from '~/types/SocketEvents';
+
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
-  padding-bottom: 32px;
+  width: 100%;
+  max-width: 1360px;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 4px 32px;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    padding: 4px 8px;
+  }
 `;
 
 const Game: NextPage = () => {
@@ -122,6 +128,7 @@ const Game: NextPage = () => {
       }
     });
   }, []);
+
   const handleAudioEnded: ReactEventHandler<HTMLAudioElement> = (e) => {
     const audio = e.target as HTMLAudioElement;
     audio.currentTime = 0;
@@ -132,9 +139,9 @@ const Game: NextPage = () => {
     <Container>
       <GameRoomNav player={player} />
       <GameRoomContainer players={players} gameRoom={gameRoom} />
-      <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/0`} controls loop />
-      <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/1`} controls loop />
-      <button
+      <audio ref={music1} src={`${BACKEND_URL}/game/${uuid}/0`} onEnded={handleAudioEnded} />
+      <audio ref={music2} src={`${BACKEND_URL}/game/${uuid}/1`} onEnded={handleAudioEnded} />
+      {/* <button
         onClick={() => {
           socket?.emit(SocketEvents.START_GAME);
         }}
@@ -147,7 +154,7 @@ const Game: NextPage = () => {
         }}
       >
         NEXT_ROUND
-      </button>
+      </button> */}
     </Container>
   );
 };
