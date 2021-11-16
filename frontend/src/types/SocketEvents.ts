@@ -17,4 +17,5 @@ export enum SocketEvents {
   SKIP = 'SKIP',
   COMPARE_PWD = 'COMPARE_PWD',
   ROUND_END = 'ROUND_END',
+  SHOW_HINT = 'SHOW_HINT',
 }

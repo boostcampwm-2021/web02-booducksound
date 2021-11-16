@@ -203,6 +203,7 @@ const GameRoomContainer = ({
   const userInfo = useSelector((state: RootState) => state.user);
   const [modalOnOff, setModalOnOff] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
+  const [hint, setHint] = useState('');
   const chatListContainer = useRef<HTMLDivElement>(null);
   const [chatList, setChatList] = useState<Chat[]>([]);
   const socket = useSocket();
@@ -236,8 +237,12 @@ const GameRoomContainer = ({
     scorllToBottom();
   });
 
+  useSocketOn(SocketEvents.SHOW_HINT, (hint: string) => {
+    setHint(hint);
+  });
+
   useEffect(() => {
-    console.log('바꼇어용!', gameRoom?.curRound);
+    setHint('');
   }, [gameRoom?.curRound]);
 
   return (
@@ -254,7 +259,7 @@ const GameRoomContainer = ({
         <Container type={'rightTitle'}>
           <RightTitle>
             {gameStatusSummary(gameRoom)}
-            {gameRoom?.status === 'playing' && <Hint>{'gameRoom'}</Hint>}
+            {gameRoom?.status === 'playing' && hint && <Hint>{hint}</Hint>}
           </RightTitle>
         </Container>
         <ChatListContainer type={'rightChat'} ref={chatListContainer}>

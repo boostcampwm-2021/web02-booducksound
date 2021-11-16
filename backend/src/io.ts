@@ -10,6 +10,8 @@ import { getLobbyRoom, getGameRoom } from './utils/rooms';
 import streamify from './utils/streamify';
 import serverRooms from './variables/serverRooms';
 
+const TIME_PER_HINT = 10000; // 몇 초 지나야 힌트를 표출한다는 걸 안받길래 일단 상수로 선언해 두었습니다. 내일 스크럼 때 여쭤보겠습니다!
+
 const replaceText = (str: string) => {
   return str.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>{}[\]\\/ ]/gim, '').toLowerCase();
 };
@@ -23,8 +25,15 @@ const clearTimer = (timer: NodeJS.Timeout | null) => {
   clearTimeout(timer);
 };
 
+const setHintTimer = (serverRoom: ServerRoom, uuid: string) => {
+  serverRoom.timer = setTimeout(() => {
+    io.to(uuid).emit(SocketEvents.SHOW_HINT, serverRoom.musics[serverRoom.curRound - 1].hint);
+  }, TIME_PER_HINT);
+};
+
 const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
   clearTimer(serverRoom.timer);
+  setHintTimer(serverRoom, uuid);
   serverRoom.timer = setTimeout(() => {
     serverRoom.status = 'resting';
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
