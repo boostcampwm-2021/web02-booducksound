@@ -57,8 +57,8 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
     serverRooms[uuid].skipCount = 0;
     resetSkip(uuid);
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
-    io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1], who });
-    setTimeout(() => io.to(uuid).emit(SocketEvents.NEXT_ROUND), 3000);
+    io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, who });
+    setTimeout(() => io.to(uuid).emit(SocketEvents.NEXT_ROUND), 4000);
   } catch (error) {
     console.error(error);
   }
