@@ -208,7 +208,7 @@ const GameRoomContainer = ({
             value={text}
             placeholder="메시지를 입력하세요"
             onChange={(e) => setText(e.target.value)}
-            onKeyDown={handlePressEnter}
+            onKeyUp={handlePressEnter}
           />
         </InputContainer>
       </Wrapper>
