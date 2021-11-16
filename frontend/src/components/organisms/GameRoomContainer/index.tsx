@@ -182,7 +182,7 @@ const GameRoomContainer = ({
 
   useSocketOn(SocketEvents.RECEIVE_ANSWER, ({ name, text, status }: Chat) => {
     setChatList((v) => [...v, { name, text, status }]);
-    // socket?.emit(SocketEvents.NEXT_ROUND);
+    socket?.emit(SocketEvents.NEXT_ROUND);
     scorllToBottom();
   });
 
