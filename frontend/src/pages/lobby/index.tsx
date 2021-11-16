@@ -1,4 +1,4 @@
-import { ChangeEventHandler, MouseEventHandler, useState } from 'react';
+import { ChangeEventHandler, MouseEventHandler, useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
@@ -12,6 +12,7 @@ import useSocketEmit from '~/hooks/useSocketEmit';
 import useSocketOn from '~/hooks/useSocketOn';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import CreateRoomModal from '~/organisms/CreateRoomModal';
+import EnterPwdModal from '~/organisms/EnterPwdModal';
 import InviteCodeModal from '~/organisms/InviteCodeModal';
 import theme from '~/styles/theme';
 import { RoomActions } from '~/types/Actions';
@@ -116,7 +117,7 @@ const SearchRoomInputText = styled(InputText)`
 
 const Lobby: NextPage = () => {
   const dispatch = useDispatch();
-
+  const [enterPwd, setEnterPwd] = useState('');
   const [search, setSearch] = useState('');
   const [codeModalOnOff, setCodeModalOnOff] = useState(false);
   const [createRoomModalOnOff, setCreateRoomModalOnOff] = useState(false);
@@ -158,11 +159,14 @@ const Lobby: NextPage = () => {
     const roomcard = (e.target as Element).closest('.roomcard') as HTMLDivElement;
     if (!roomcard) return;
 
-    const { uuid } = roomcard.dataset;
+    const { uuid, lock } = roomcard.dataset;
     if (!uuid) return;
-
-    dispatch({ type: RoomActions.SET_UUID, payload: { uuid } });
-    Router.push(`/game`);
+    if (lock === 'false') {
+      dispatch({ type: RoomActions.SET_UUID, payload: { uuid } });
+      Router.push(`/game`);
+    } else {
+      setEnterPwd(uuid);
+    }
   };
 
   return (
@@ -244,6 +248,7 @@ const Lobby: NextPage = () => {
           </GridWrapper>
         </GridContainer>
       </Wrapper>
+      {enterPwd && <EnterPwdModal uuid={enterPwd} setModalOnOff={setEnterPwd} leftButtonText="입장" />}
     </Container>
   );
 };

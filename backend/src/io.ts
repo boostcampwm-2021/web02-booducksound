@@ -244,6 +244,11 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on(SocketEvents.COMPARE_PWD, (uuid: string, code: string, done) => {
+    if (!code) return;
+    if (serverRooms[uuid].password === code) done(true);
+    else done(false);
+  });
   socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string, color: string) => {
     try {
       const currentMusicInfo = serverRooms[uuid]?.musics[serverRooms[uuid].curRound - 1];
