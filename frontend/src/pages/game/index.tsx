@@ -106,7 +106,7 @@ const Game: NextPage = () => {
     },
   );
 
-  useSocketOn(SocketEvents.NEXT_ROUND, () => {
+  useSocketOn(SocketEvents.NEXT_ROUND, (isExistNext: boolean) => {
     if (!curMusic.current || !nextMusic.current) throw Error('NEXT_ROUND에서 curMusic, nextMusic을 찾을 수 없습니다');
     setDialogMsg(null);
 
@@ -122,6 +122,7 @@ const Game: NextPage = () => {
       curMusic.current?.play();
     });
 
+    if (!isExistNext) return;
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
   });
 

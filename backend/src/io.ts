@@ -32,12 +32,12 @@ const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
   }, serverRoom.timePerProblem * 1000);
 };
 
-const setWaitTimer = (serverRoom: ServerRoom, uuid: string) => {
+const setWaitTimer = (serverRoom: ServerRoom, uuid: string, isExistNext: boolean) => {
   clearTimer(serverRoom.timer);
   serverRoom.timer = setTimeout(() => {
     serverRoom.status = 'playing';
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
-    io.to(uuid).emit(SocketEvents.NEXT_ROUND);
+    io.to(uuid).emit(SocketEvents.NEXT_ROUND, isExistNext);
     setRoundTimer(serverRoom, uuid);
   }, 5000);
 };
@@ -82,7 +82,7 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
     resetSkip(uuid);
     io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, who });
 
-    setWaitTimer(serverRooms[uuid], uuid);
+    setWaitTimer(serverRooms[uuid], uuid, curRound + 1 < musics.length);
   } catch (error) {
     console.error(error);
   }
