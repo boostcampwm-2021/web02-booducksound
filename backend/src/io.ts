@@ -175,6 +175,7 @@ io.on('connection', (socket) => {
             color,
             status: Object.keys(serverRooms[uuid].players).length ? 'prepare' : 'king',
             skip: false,
+            score: 0,
           },
         },
       };
@@ -258,7 +259,7 @@ io.on('connection', (socket) => {
       if (serverRooms[uuid].status === 'waiting' || !isAnswer) {
         return io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message', color });
       }
-
+      serverRooms[uuid].players[socket.id].score += 100;
       io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
       getNextRound(uuid);
     } catch (error) {
