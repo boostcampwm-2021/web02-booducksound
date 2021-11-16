@@ -26,7 +26,6 @@ const clearTimer = (timer: NodeJS.Timeout | null) => {
 const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
   clearTimer(serverRoom.timer);
   serverRoom.timer = setTimeout(() => {
-    console.log('roundEnd');
     getNextRound(uuid, { type: 'TIMEOUT' });
   }, serverRoom.timePerProblem * 1000);
 };
@@ -34,7 +33,6 @@ const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
 const setWaitTimer = (serverRoom: ServerRoom, uuid: string) => {
   clearTimer(serverRoom.timer);
   serverRoom.timer = setTimeout(() => {
-    console.log('waitEnd');
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     io.to(uuid).emit(SocketEvents.NEXT_ROUND);
     setRoundTimer(serverRoom, uuid);
