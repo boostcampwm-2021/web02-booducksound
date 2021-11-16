@@ -110,7 +110,7 @@ const RoomCard = ({
   uuid,
 }: { uuid: string } & LobbyRoom) => {
   return (
-    <Container className="roomcard" status={status} data-uuid={uuid} data-lock={!!hasPassword}>
+    <Container className="roomcard" status={status} data-uuid={uuid} data-lock={!!hasPassword} data-status={status}>
       <FirstLineContainer>
         <Title>{title}</Title>
         <FirstLineRightContainer>

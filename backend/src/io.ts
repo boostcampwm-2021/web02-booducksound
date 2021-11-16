@@ -206,6 +206,7 @@ io.on('connection', (socket) => {
         serverRooms[uuid].status = 'playing';
         serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
         io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid));
+        io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
       } catch (error) {
         console.error(error);
       }
