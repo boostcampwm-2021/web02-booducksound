@@ -179,6 +179,7 @@ io.on('connection', (socket) => {
             color,
             status: Object.keys(serverRooms[uuid].players).length ? 'prepare' : 'king',
             skip: false,
+            score: 0,
           },
         },
       };
@@ -210,6 +211,7 @@ io.on('connection', (socket) => {
         serverRooms[uuid].status = 'playing';
         serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
         io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid));
+        io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
       } catch (error) {
         console.error(error);
       }
@@ -249,6 +251,11 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on(SocketEvents.COMPARE_PWD, (uuid: string, code: string, done) => {
+    if (!code) return;
+    if (serverRooms[uuid].password === code) done(true);
+    else done(false);
+  });
   socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string, color: string) => {
     try {
       const currentMusicInfo = serverRooms[uuid]?.musics[serverRooms[uuid].curRound - 1];
@@ -257,7 +264,7 @@ io.on('connection', (socket) => {
       if (serverRooms[uuid].status === 'waiting' || !isAnswer) {
         return io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message', color });
       }
-
+      serverRooms[uuid].players[socket.id].score += 100;
       io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
       getNextRound(uuid, { type: 'ANSWER', who: name });
     } catch (error) {

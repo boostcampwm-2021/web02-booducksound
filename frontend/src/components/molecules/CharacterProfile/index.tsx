@@ -5,12 +5,15 @@ import styled from '@emotion/styled';
 import Character from '~/atoms/Character';
 import StatusChip from '~/atoms/StatusChip';
 import theme from '~/styles/theme';
+import { GameRoom } from '~/types/GameRoom';
 
 interface Props {
+  mode: GameRoom['status'] | undefined;
   color: string;
   name: string;
   status: 'king' | 'ready' | 'prepare';
   skip: boolean;
+  score: number;
 }
 
 const Container = styled.div`
@@ -56,6 +59,11 @@ const Name = styled.p`
   overflow: hidden;
   font-size: 1.2em;
 `;
+const MidContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+`;
 
 const ChipContainer = styled.div`
   flex: 0 0 60px;
@@ -69,7 +77,7 @@ const ChipContainer = styled.div`
   }
 `;
 
-const CharacterProfile = ({ color, name, status, skip }: PropsWithChildren<Props>) => {
+const CharacterProfile = ({ mode, color, name, status, skip, score }: PropsWithChildren<Props>) => {
   return (
     <Container>
       <ProfileContainer>
@@ -77,10 +85,16 @@ const CharacterProfile = ({ color, name, status, skip }: PropsWithChildren<Props
           <Character color={color} width={'100%'} />
         </ProfileCircle>
       </ProfileContainer>
-      <Name>{name}</Name>
-      <ChipContainer>
-        <StatusChip status={status} />
-      </ChipContainer>
+      <MidContainer>
+        <Name>{name}</Name>
+        {mode === 'playing' && <Name>{score}</Name>}
+      </MidContainer>
+      {mode === 'waiting' && (
+        <ChipContainer>
+          <StatusChip status={status} />
+        </ChipContainer>
+      )}
+
       {skip && (
         <ChipContainer>
           <StatusChip status={'skip'} />
