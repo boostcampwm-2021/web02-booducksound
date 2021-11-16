@@ -52,6 +52,7 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
       if (serverRooms[uuid].players[key].status !== 'king') serverRooms[uuid].players[key].status = 'prepare';
     });
     resetSkip(uuid);
+    clearTimer(serverRooms[uuid].timer);
 
     // TODO: stream destroy
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
@@ -229,7 +230,7 @@ io.on('connection', (socket) => {
     socket.on(SocketEvents.START_GAME, () => {
       try {
         // TODO: !serverRooms[uuid] 인 경우에는 실행이 안 되도록
-
+        console.log(serverRooms[uuid]);
         const { musics } = serverRooms[uuid];
         serverRooms[uuid].status = 'playing';
         serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
