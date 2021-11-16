@@ -15,9 +15,7 @@ const replaceText = (str: string) => {
 };
 
 const resetSkip = (uuid: string) => {
-  console.log('이전', serverRooms[uuid].players);
   Object.keys(serverRooms[uuid].players).map((element) => (serverRooms[uuid].players[element].skip = false));
-  console.log('이후', serverRooms[uuid].players);
 };
 
 const getNextRound = (uuid: string) => {
