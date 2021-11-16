@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
@@ -75,15 +77,19 @@ const statusEncoder = { king: 'START', prepare: 'PREPARE', ready: 'READY' };
 const GameRoomNav = ({
   players,
   status,
+  music1,
+  music2,
   isAllReady,
 }: {
-  players: Players;
+  players?: Players;
   status: 'playing' | 'waiting' | undefined;
-  isAllReady: boolean;
+  music1: HTMLAudioElement | null;
+  music2: HTMLAudioElement | null;
+  isAllReady?: boolean;
 }) => {
   const { uuid } = useSelector((state: RootState) => state.room);
   const socket = useSocket();
-  const player = socket && players[socket.id];
+  const player = socket && players?.[socket.id];
 
   const changeStatus = (player: Player) => () => {
     if (player.status !== 'king') player = { ...player, status: converter[player.status] };
@@ -102,10 +108,21 @@ const GameRoomNav = ({
     return changeStatus(player);
   };
 
+  const [volume, setVolume] = useState(70);
+
+  const handleMute = () => (volume === 0 ? setVolume(100) : setVolume(0));
+  const handleVolume = ({ target }: any) => setVolume(target.value);
+
+  useEffect(() => {
+    if (!music1 || !music2) return;
+    music1.volume = volume / 100;
+    music2.volume = volume / 100;
+  }, [volume, music1, music2]);
+
   return (
     <Container>
-      <MuteButton type="button" />
-      <VolumeBar name="volume" value="100" min="0" max="100" step="5" type="range" />
+      <MuteButton type="button" onClick={handleMute} />
+      <VolumeBar name="volume" value={volume} min="0" max="100" step="5" type="range" onChange={handleVolume} />
       <FlexItem>
         {player && (
           <ResponsiveButton
@@ -114,7 +131,7 @@ const GameRoomNav = ({
             background={theme.colors.whitesmoke}
             fontSize="1em"
             onClick={handleStartBtnClick(player)}
-            disabled={player.status === 'king' && !isAllReady}
+            disabled={player.skip || (player.status === 'king' && !isAllReady)}
           >
             {status === 'waiting' ? statusEncoder[player.status] : 'SKIP'}
           </ResponsiveButton>
