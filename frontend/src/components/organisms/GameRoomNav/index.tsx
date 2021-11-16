@@ -37,7 +37,7 @@ const MuteButton = styled.button`
   width: 48px;
   height: 48px;
   grid-area: speaker;
-  background: url('images/ic_speaker.png') no-repeat center/68%;
+  background: url('images/ic_speaker.png') no-repeat center/24px;
   cursor: pointer;
 
   @media (max-width: ${theme.breakpoints.md}) {
@@ -47,6 +47,27 @@ const MuteButton = styled.button`
 
   &:hover {
     opacity: 0.6;
+  }
+`;
+
+const VolumeBar = styled.input`
+  margin-right: auto;
+  -webkit-appearance: none;
+  overflow: hidden;
+  width: 100px;
+  height: 5px;
+  align-self: center;
+  cursor: pointer;
+  background-color: #7a7a7a;
+  border-radius: 10px;
+
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 0;
+    height: 5px;
+    background: #fff;
+    box-shadow: -100vw 0 0 100vw #fff;
+    cursor: pointer;
   }
 `;
 
@@ -83,6 +104,7 @@ const GameRoomNav = ({
   return (
     <Container>
       <MuteButton type="button" />
+      <VolumeBar name="volume" value="100" min="0" max="100" step="5" type="range" />
       <FlexItem>
         {player && (
           <ResponsiveButton
