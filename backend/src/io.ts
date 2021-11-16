@@ -18,7 +18,7 @@ const resetSkip = (uuid: string) => {
   Object.keys(serverRooms[uuid].players).forEach((key) => (serverRooms[uuid].players[key].skip = false));
 };
 
-const getNextRound = (uuid: string) => {
+const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; who?: string }) => {
   const gameEnd = (uuid: string) => {
     serverRooms[uuid].curRound = 1;
     serverRooms[uuid].status = 'waiting';
@@ -56,8 +56,12 @@ const getNextRound = (uuid: string) => {
 
     serverRooms[uuid].skipCount = 0;
     resetSkip(uuid);
-    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
-    io.to(uuid).emit(SocketEvents.NEXT_ROUND);
+    io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, who });
+
+    setTimeout(() => {
+      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+      io.to(uuid).emit(SocketEvents.NEXT_ROUND);
+    }, 4000);
   } catch (error) {
     console.error(error);
   }
@@ -215,14 +219,15 @@ io.on('connection', (socket) => {
 
     socket.on(SocketEvents.SKIP, (uuid: string, id: string) => {
       try {
-        if (!serverRooms[uuid].players[id].skip) {
-          serverRooms[uuid].players[id].skip = true;
-          serverRooms[uuid].skipCount += 1;
-        }
+        if (serverRooms[uuid].players[id].skip) return;
 
-        serverRooms[uuid].skipCount === Object.keys(serverRooms[uuid].players).length
-          ? getNextRound(uuid)
-          : io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+        serverRooms[uuid].players[id].skip = true;
+        serverRooms[uuid].skipCount += 1;
+        io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+
+        if (serverRooms[uuid].skipCount === Object.keys(serverRooms[uuid].players).length) {
+          getNextRound(uuid, { type: 'SKIP' });
+        }
       } catch (error) {
         console.error(error);
       }
@@ -261,7 +266,7 @@ io.on('connection', (socket) => {
       }
       serverRooms[uuid].players[socket.id].score += 100;
       io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
-      getNextRound(uuid);
+      getNextRound(uuid, { type: 'ANSWER', who: name });
     } catch (error) {
       console.error(error);
     }
