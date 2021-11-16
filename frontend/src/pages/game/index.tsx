@@ -32,9 +32,7 @@ const Container = styled.div`
 `;
 
 const Game: NextPage = () => {
-  const [players, setPlayers] = useState<{ [socketId: string]: Player }>({});
   const [gameRoom, setGameRoom] = useState<GameRoom>();
-  const [isAllReady, setIsAllReady] = useState<boolean>(false);
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
   const socket = useSocket();
@@ -65,7 +63,6 @@ const Game: NextPage = () => {
       }
 
       // TODO : 받아온 gameRoom 데이터에 따라 화면을 렌더링할 것
-      console.log('GameRoom Data :', gameRoom);
       setGameRoom(gameRoom);
     },
   );
@@ -106,24 +103,21 @@ const Game: NextPage = () => {
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
   });
 
-  useSocketOn(SocketEvents.GAME_END, () => window.alert('마지막 라운드에 다다랐습니다. GAME_END'));
-  useSocketOn(SocketEvents.SET_PLAYER, ({ players, isAllReady }) => {
-    setPlayers(players);
-    setIsAllReady(isAllReady);
+  useSocketOn(SocketEvents.GAME_END, (gameRoom) => {
+    music1.current?.pause();
+    music2.current?.pause();
+    alert('마지막 라운드');
+  });
+
+  useSocketOn(SocketEvents.SET_GAME_ROOM, (gameRoom: GameRoom) => {
+    if (!gameRoom) return;
+    setGameRoom(gameRoom);
   });
 
   useLeavePage(() => {
     if (!socket) return;
     socket.emit(SocketEvents.LEAVE_ROOM, uuid);
   });
-
-  useEffect(() => {
-    socket?.on(SocketEvents.SET_GAME_ROOM, (gameRoom: GameRoom) => {
-      if (gameRoom !== undefined) {
-        setGameRoom(gameRoom);
-      }
-    });
-  }, []);
 
   const handleAudioEnded: ReactEventHandler<HTMLAudioElement> = (e) => {
     const audio = e.target as HTMLAudioElement;
@@ -133,8 +127,14 @@ const Game: NextPage = () => {
 
   return (
     <Container>
-      <GameRoomNav players={players} status={gameRoom?.status} isAllReady={isAllReady} />
-      <GameRoomContainer players={players} gameRoom={gameRoom} />
+      <GameRoomNav
+        players={gameRoom?.players}
+        status={gameRoom?.status}
+        music1={music1.current}
+        music2={music2.current}
+        isAllReady={gameRoom?.isAllReady}
+      />
+      <GameRoomContainer players={gameRoom?.players} gameRoom={gameRoom} />
       <audio ref={music1} onEnded={handleAudioEnded} />
       <audio ref={music2} onEnded={handleAudioEnded} />
     </Container>

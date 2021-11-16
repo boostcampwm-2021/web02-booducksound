@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 import CharacterProfile from '~/molecules/CharacterProfile';
 import theme from '~/styles/theme';
-import { Player } from '~/types/Player';
+import { Players } from '~/types/Players';
 
 const Container = styled.div`
   width: 100%;
@@ -36,20 +36,21 @@ const CharacterContainer = styled.div`
   }
 `;
 
-const CharacterList = ({ players }: { players: { [socketId: string]: Player } }) => {
+const CharacterList = ({ players }: { players: Players }) => {
   return (
     <Container>
       <Title>사용자 목록</Title>
       <CharacterContainer>
-        {Object.values(players).map((element, index) => (
-          <CharacterProfile
-            key={index}
-            color={element.color}
-            name={element.nickname}
-            status={element.status}
-            skip={element.skip}
-          />
-        ))}
+        {players &&
+          Object.values(players).map((element, index) => (
+            <CharacterProfile
+              key={index}
+              color={element.color}
+              name={element.nickname}
+              status={element.status}
+              skip={element.skip}
+            />
+          ))}
       </CharacterContainer>
     </Container>
   );

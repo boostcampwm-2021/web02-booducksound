@@ -11,30 +11,52 @@ import streamify from './utils/streamify';
 import serverRooms from './variables/serverRooms';
 
 const replaceText = (str: string) => {
-  return str.split(' ').join('').toLowerCase();
+  return str.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>{}[\]\\/ ]/gim, '').toLowerCase();
 };
 
 const resetSkip = (uuid: string) => {
-  Object.keys(serverRooms[uuid].players).map((element) => (serverRooms[uuid].players[element].skip = false));
+  Object.keys(serverRooms[uuid].players).forEach((key) => (serverRooms[uuid].players[key].skip = false));
 };
 
 const getNextRound = (uuid: string) => {
+  const gameEnd = (uuid: string) => {
+    serverRooms[uuid].curRound = 1;
+    serverRooms[uuid].status = 'waiting';
+    serverRooms[uuid].skipCount = 0;
+    serverRooms[uuid].streams = [];
+    Object.keys(serverRooms[uuid].players).forEach((key) => {
+      if (serverRooms[uuid].players[key].status !== 'king') serverRooms[uuid].players[key].status = 'prepare';
+    });
+    resetSkip(uuid);
+
+    // TODO: stream destroy
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+    io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
+    io.to(uuid).emit(SocketEvents.GAME_END);
+  };
+
   try {
     const { curRound, maxRound, musics } = serverRooms[uuid];
 
     if (curRound === maxRound) {
-      io.to(uuid).emit(SocketEvents.GAME_END);
+      gameEnd(uuid);
       return;
     }
 
     serverRooms[uuid].curRound += 1;
     serverRooms[uuid].streams.shift(); // TODO: Queue 자료형으로 구현할 것
+    // TODO: stream ffmpeg destroy
 
     if (curRound + 1 < musics.length) {
       serverRooms[uuid].streams.push(streamify(musics[curRound + 1].url));
     }
+
+    // TODO: 플레이어들의 상태 answer 같은 것들 초기화
+    // TODO: 힌트 같은 것들도 초기화
+
     serverRooms[uuid].skipCount = 0;
     resetSkip(uuid);
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     io.to(uuid).emit(SocketEvents.NEXT_ROUND);
   } catch (error) {
     console.error(error);
@@ -62,10 +84,8 @@ io.on('connection', (socket) => {
     }
 
     delete serverRooms[uuid].players[socket.id];
-    io.to(uuid).emit(SocketEvents.SET_PLAYER, {
-      players: serverRooms[uuid].players,
-      isAllReady: !(Object.keys(serverRooms[uuid].players).length > 1),
-    });
+
+    io.emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
 
     const lobbyRoom = getLobbyRoom(uuid);
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
@@ -161,12 +181,7 @@ io.on('connection', (socket) => {
       const gameRoom = getGameRoom(uuid);
       const lobbyRoom = getLobbyRoom(uuid);
 
-      const serverRoom = serverRooms[uuid];
-
-      io.to(uuid).emit(SocketEvents.SET_PLAYER, {
-        players: serverRoom.players,
-        isAllReady: !(Object.keys(serverRooms[uuid].players).length > 1),
-      });
+      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
       io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name: nickname, text: '', status: 'alert' });
 
       done({ type: 'success', gameRoom });
@@ -202,6 +217,7 @@ io.on('connection', (socket) => {
           serverRooms[uuid].players[id].skip = true;
           serverRooms[uuid].skipCount += 1;
         }
+
         serverRooms[uuid].skipCount === Object.keys(serverRooms[uuid].players).length
           ? getNextRound(uuid)
           : io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
@@ -209,21 +225,12 @@ io.on('connection', (socket) => {
         console.error(error);
       }
     });
-
-    socket.on(SocketEvents.NEXT_ROUND, () => {
-      getNextRound(uuid);
-    });
   });
 
   socket.on(SocketEvents.SET_PLAYER, (uuid: string, player: Player) => {
     try {
-      const checkAllReady = (players: { [key: string]: Player }) =>
-        Object.keys(players).every((socketId) => players[socketId].status !== 'prepare');
       serverRooms[uuid].players[socket.id] = player;
-      io.to(uuid).emit(SocketEvents.SET_PLAYER, {
-        players: serverRooms[uuid].players,
-        isAllReady: checkAllReady(serverRooms[uuid].players),
-      });
+      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     } catch (error) {
       console.error(error);
     }
@@ -239,13 +246,15 @@ io.on('connection', (socket) => {
 
   socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string, color: string) => {
     try {
-      const chatCont = replaceText(text);
       const currentMusicInfo = serverRooms[uuid]?.musics[serverRooms[uuid].curRound - 1];
-      const isAnswer = currentMusicInfo.answers.filter((e) => replaceText(e) === chatCont).length;
+      const isAnswer = currentMusicInfo.answers.some((answer) => replaceText(answer) === replaceText(text));
+
       if (serverRooms[uuid].status === 'waiting' || !isAnswer) {
         return io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message', color });
       }
+
       io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
+      getNextRound(uuid);
     } catch (error) {
       console.error(error);
     }

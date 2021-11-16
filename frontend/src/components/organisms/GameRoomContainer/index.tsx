@@ -14,6 +14,7 @@ import theme from '~/styles/theme';
 import { Chat } from '~/types/Chat';
 import { GameRoom } from '~/types/GameRoom';
 import { Player } from '~/types/Player';
+import { Players } from '~/types/Players';
 import { SocketEvents } from '~/types/SocketEvents';
 
 interface Props {
@@ -145,7 +146,7 @@ const GameRoomContainer = ({
   players,
   gameRoom,
 }: {
-  players: { [socketId: string]: Player };
+  players?: { [socketId: string]: Player };
   gameRoom: GameRoom | undefined;
 }) => {
   const { uuid } = useSelector((state: RootState) => state.room);
@@ -170,7 +171,7 @@ const GameRoomContainer = ({
   };
 
   const confirmKing = () => {
-    if (!socket || !players[socket.id]) return false;
+    if (!socket || !players?.[socket.id]) return false;
     if (players[socket.id].status !== 'king') return false;
     return true;
   };
@@ -182,7 +183,6 @@ const GameRoomContainer = ({
 
   useSocketOn(SocketEvents.RECEIVE_ANSWER, ({ name, text, status }: Chat) => {
     setChatList((v) => [...v, { name, text, status }]);
-    socket?.emit(SocketEvents.NEXT_ROUND);
     scorllToBottom();
   });
 
@@ -195,7 +195,7 @@ const GameRoomContainer = ({
           {confirmKing() && <SettingButton onClick={() => setModalOnOff(true)} />}
         </LeftTitleContainer>
         <CharacterContainer type={'leftCharacter'}>
-          <CharacterList players={players} />
+          <CharacterList players={players as Players} />
         </CharacterContainer>
         <Container type={'rightTitle'}>
           <RightTitle></RightTitle>
