@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 
 import CharacterProfile from '~/molecules/CharacterProfile';
 import theme from '~/styles/theme';
+import { GameRoom } from '~/types/GameRoom';
 import { Players } from '~/types/Players';
 
 const Container = styled.div`
@@ -36,7 +37,7 @@ const CharacterContainer = styled.div`
   }
 `;
 
-const CharacterList = ({ players }: { players: Players }) => {
+const CharacterList = ({ players, status }: { players: Players; status: GameRoom['status'] | undefined }) => {
   return (
     <Container>
       <Title>사용자 목록</Title>
@@ -44,11 +45,13 @@ const CharacterList = ({ players }: { players: Players }) => {
         {players &&
           Object.values(players).map((element, index) => (
             <CharacterProfile
+              mode={status}
               key={index}
               color={element.color}
               name={element.nickname}
               status={element.status}
               skip={element.skip}
+              score={element.score}
             />
           ))}
       </CharacterContainer>
