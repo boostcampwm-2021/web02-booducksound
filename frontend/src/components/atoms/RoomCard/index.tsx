@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { LobbyRoom } from '~/types/LobbyRoom';
 
 interface ContainerProps {
-  status: 'playing' | 'waiting';
+  status: 'playing' | 'waiting' | 'resting';
 }
 
 const Container = styled.div<ContainerProps>`

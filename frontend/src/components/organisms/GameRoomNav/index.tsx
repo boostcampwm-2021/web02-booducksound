@@ -37,7 +37,7 @@ const MuteButton = styled.button`
   width: 48px;
   height: 48px;
   grid-area: speaker;
-  background: url('images/ic_speaker.png') no-repeat center/24px;
+  background: url('images/ic_speaker${({ volume }: { volume: number }) => !volume && '_off'}.png') no-repeat center/24px;
   cursor: pointer;
 
   @media (max-width: ${theme.breakpoints.md}) {
@@ -58,15 +58,15 @@ const VolumeBar = styled.input`
   height: 5px;
   align-self: center;
   cursor: pointer;
-  background-color: #7a7a7a;
+  background: ${theme.colors.whitesmoke};
   border-radius: 10px;
 
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 0;
     height: 5px;
-    background: #fff;
-    box-shadow: -100vw 0 0 100vw #fff;
+    background-color: ${theme.colors.deepgray};
+    box-shadow: -100vw 0 0 100vw ${theme.colors.deepgray};
     cursor: pointer;
   }
 `;
@@ -82,7 +82,7 @@ const GameRoomNav = ({
   isAllReady,
 }: {
   players?: Players;
-  status: 'playing' | 'waiting' | undefined;
+  status: 'playing' | 'waiting' | 'resting' | undefined;
   music1: HTMLAudioElement | null;
   music2: HTMLAudioElement | null;
   isAllReady?: boolean;
@@ -121,7 +121,7 @@ const GameRoomNav = ({
 
   return (
     <Container>
-      <MuteButton type="button" onClick={handleMute} />
+      <MuteButton type="button" volume={volume} onClick={handleMute} />
       <VolumeBar name="volume" value={volume} min="0" max="100" step="5" type="range" onChange={handleVolume} />
       <FlexItem>
         {player && (
@@ -131,7 +131,7 @@ const GameRoomNav = ({
             background={theme.colors.whitesmoke}
             fontSize="1em"
             onClick={handleStartBtnClick(player)}
-            disabled={player.skip || (player.status === 'king' && !isAllReady)}
+            disabled={status === 'resting' || player.skip || (player.status === 'king' && !isAllReady)}
           >
             {status === 'waiting' ? statusEncoder[player.status] : 'SKIP'}
           </ResponsiveButton>

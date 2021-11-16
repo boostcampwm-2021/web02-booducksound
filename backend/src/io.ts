@@ -11,6 +11,8 @@ import { getLobbyRoom, getGameRoom } from './utils/rooms';
 import streamify from './utils/streamify';
 import serverRooms from './variables/serverRooms';
 
+const TIME_PER_HINT = 10000; // 몇 초 지나야 힌트를 표출한다는 걸 안받길래 일단 상수로 선언해 두었습니다. 내일 스크럼 때 여쭤보겠습니다!
+
 const replaceText = (str: string) => {
   return str.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>{}[\]\\/ ]/gim, '').toLowerCase();
 };
@@ -19,7 +21,38 @@ const resetSkip = (uuid: string) => {
   Object.keys(serverRooms[uuid].players).forEach((key) => (serverRooms[uuid].players[key].skip = false));
 };
 
-const getNextRound = (uuid: string) => {
+const clearTimer = (timer: NodeJS.Timeout | null) => {
+  if (!timer) return;
+  clearTimeout(timer);
+};
+
+const setHintTimer = (serverRoom: ServerRoom, uuid: string) => {
+  serverRoom.timer = setTimeout(() => {
+    io.to(uuid).emit(SocketEvents.SHOW_HINT, serverRoom.musics[serverRoom.curRound - 1].hint);
+  }, TIME_PER_HINT);
+};
+
+const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
+  clearTimer(serverRoom.timer);
+  setHintTimer(serverRoom, uuid);
+  serverRoom.timer = setTimeout(() => {
+    serverRoom.status = 'resting';
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+    getNextRound(uuid, { type: 'TIMEOUT' });
+  }, serverRoom.timePerProblem * 1000);
+};
+
+const setWaitTimer = (serverRoom: ServerRoom, uuid: string, isExistNext: boolean) => {
+  clearTimer(serverRoom.timer);
+  serverRoom.timer = setTimeout(() => {
+    serverRoom.status = 'playing';
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+    io.to(uuid).emit(SocketEvents.NEXT_ROUND, isExistNext);
+    setRoundTimer(serverRoom, uuid);
+  }, 5000);
+};
+
+const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; who?: string }) => {
   const gameEnd = (uuid: string) => {
     serverRooms[uuid].curRound = 1;
     serverRooms[uuid].status = 'waiting';
@@ -29,6 +62,7 @@ const getNextRound = (uuid: string) => {
       if (serverRooms[uuid].players[key].status !== 'king') serverRooms[uuid].players[key].status = 'prepare';
     });
     resetSkip(uuid);
+    clearTimer(serverRooms[uuid].timer);
 
     // TODO: stream destroy
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
@@ -40,7 +74,8 @@ const getNextRound = (uuid: string) => {
     const { curRound, maxRound, musics } = serverRooms[uuid];
 
     if (curRound === maxRound) {
-      gameEnd(uuid);
+      io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, who });
+      setTimeout(() => gameEnd(uuid), 5000);
       return;
     }
 
@@ -54,11 +89,11 @@ const getNextRound = (uuid: string) => {
 
     // TODO: 플레이어들의 상태 answer 같은 것들 초기화
     // TODO: 힌트 같은 것들도 초기화
-
     serverRooms[uuid].skipCount = 0;
     resetSkip(uuid);
-    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
-    io.to(uuid).emit(SocketEvents.NEXT_ROUND);
+    io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, who });
+
+    setWaitTimer(serverRooms[uuid], uuid, curRound + 1 < musics.length);
   } catch (error) {
     console.error(error);
   }
@@ -75,6 +110,7 @@ io.on('connection', (socket) => {
     delete serverRooms[uuid].players[socket.id];
 
     if (!Object.keys(serverRooms[uuid].players).length) {
+      if (serverRooms[uuid].timer) clearTimer(serverRooms[uuid].timer);
       delete serverRooms[uuid];
       io.emit(SocketEvents.DELETE_LOBBY_ROOM, uuid);
       return;
@@ -117,6 +153,7 @@ io.on('connection', (socket) => {
           players: {},
           playlistId,
           playlistName,
+          hashtags: playlist.hashtags,
           skip,
           timePerProblem,
           status: 'waiting',
@@ -125,6 +162,7 @@ io.on('connection', (socket) => {
           maxRound: playlist.musics.length,
           skipCount: 0,
           streams: [],
+          timer: null,
         };
         serverRooms[uuid] = serverRoom;
         done(uuid);
@@ -192,7 +230,7 @@ io.on('connection', (socket) => {
       console.error(error);
     }
 
-    socket.on('disconnecting', () => {
+    socket.on('disconnect', () => {
       try {
         leaveRoom(uuid);
       } catch (error) {
@@ -203,12 +241,13 @@ io.on('connection', (socket) => {
     socket.on(SocketEvents.START_GAME, () => {
       try {
         // TODO: !serverRooms[uuid] 인 경우에는 실행이 안 되도록
-
+        console.log(serverRooms[uuid]);
         const { musics } = serverRooms[uuid];
         serverRooms[uuid].status = 'playing';
         serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
         io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid));
         io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
+        setRoundTimer(serverRooms[uuid], uuid);
       } catch (error) {
         console.error(error);
       }
@@ -216,14 +255,15 @@ io.on('connection', (socket) => {
 
     socket.on(SocketEvents.SKIP, (uuid: string, id: string) => {
       try {
-        if (!serverRooms[uuid].players[id].skip) {
-          serverRooms[uuid].players[id].skip = true;
-          serverRooms[uuid].skipCount += 1;
-        }
+        if (serverRooms[uuid].players[id].skip) return;
 
-        serverRooms[uuid].skipCount === Object.keys(serverRooms[uuid].players).length
-          ? getNextRound(uuid)
-          : io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+        serverRooms[uuid].players[id].skip = true;
+        serverRooms[uuid].skipCount += 1;
+        io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+
+        if (serverRooms[uuid].skipCount === Object.keys(serverRooms[uuid].players).length) {
+          getNextRound(uuid, { type: 'SKIP' });
+        }
       } catch (error) {
         console.error(error);
       }
@@ -261,8 +301,10 @@ io.on('connection', (socket) => {
         return io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message', color });
       }
       serverRooms[uuid].players[socket.id].score += 100;
+      serverRooms[uuid].status = 'resting';
+      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
       io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
-      getNextRound(uuid);
+      getNextRound(uuid, { type: 'ANSWER', who: name });
     } catch (error) {
       console.error(error);
     }
