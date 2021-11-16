@@ -26,6 +26,8 @@ const clearTimer = (timer: NodeJS.Timeout | null) => {
 const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
   clearTimer(serverRoom.timer);
   serverRoom.timer = setTimeout(() => {
+    serverRoom.status = 'resting';
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     getNextRound(uuid, { type: 'TIMEOUT' });
   }, serverRoom.timePerProblem * 1000);
 };
@@ -33,6 +35,7 @@ const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
 const setWaitTimer = (serverRoom: ServerRoom, uuid: string) => {
   clearTimer(serverRoom.timer);
   serverRoom.timer = setTimeout(() => {
+    serverRoom.status = 'playing';
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     io.to(uuid).emit(SocketEvents.NEXT_ROUND);
     setRoundTimer(serverRoom, uuid);
@@ -285,6 +288,8 @@ io.on('connection', (socket) => {
         return io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message', color });
       }
       serverRooms[uuid].players[socket.id].score += 100;
+      serverRooms[uuid].status = 'resting';
+      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
       io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
       getNextRound(uuid, { type: 'ANSWER', who: name });
     } catch (error) {

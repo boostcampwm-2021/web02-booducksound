@@ -3,7 +3,7 @@ import { PassThrough } from 'stream';
 import { Player } from './Player';
 
 export type ServerRoom = {
-  status: 'playing' | 'waiting';
+  status: 'playing' | 'waiting' | 'resting';
   players: { [socketId: string]: Player };
   title: string;
   playlistName: string;
