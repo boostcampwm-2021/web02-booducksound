@@ -85,6 +85,13 @@ const Game: NextPage = () => {
     });
   });
 
+  useSocketOn(
+    SocketEvents.ROUND_END,
+    ({ type, info, who }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; info: string; who?: string }) => {
+      console.log(type, info, who);
+    },
+  );
+
   useSocketOn(SocketEvents.NEXT_ROUND, () => {
     if (!curMusic.current || !nextMusic.current) throw Error('NEXT_ROUND에서 curMusic, nextMusic을 찾을 수 없습니다');
 
@@ -103,7 +110,7 @@ const Game: NextPage = () => {
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
   });
 
-  useSocketOn(SocketEvents.GAME_END, (gameRoom) => {
+  useSocketOn(SocketEvents.GAME_END, () => {
     music1.current?.pause();
     music2.current?.pause();
     alert('마지막 라운드');

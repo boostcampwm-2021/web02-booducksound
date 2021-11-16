@@ -15,4 +15,5 @@ export enum SocketEvents {
   SEND_ANSWER = 'SEND_ANSWER',
   RECEIVE_ANSWER = 'RECEIVE_ANSWER',
   SKIP = 'SKIP',
+  ROUND_END = 'ROUND_END',
 }

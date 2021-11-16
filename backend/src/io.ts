@@ -18,7 +18,7 @@ const resetSkip = (uuid: string) => {
   Object.keys(serverRooms[uuid].players).forEach((key) => (serverRooms[uuid].players[key].skip = false));
 };
 
-const getNextRound = (uuid: string) => {
+const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; who?: string }) => {
   const gameEnd = (uuid: string) => {
     serverRooms[uuid].curRound = 1;
     serverRooms[uuid].status = 'waiting';
@@ -57,7 +57,8 @@ const getNextRound = (uuid: string) => {
     serverRooms[uuid].skipCount = 0;
     resetSkip(uuid);
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
-    io.to(uuid).emit(SocketEvents.NEXT_ROUND);
+    io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1], who });
+    setTimeout(() => io.to(uuid).emit(SocketEvents.NEXT_ROUND), 3000);
   } catch (error) {
     console.error(error);
   }
@@ -219,7 +220,7 @@ io.on('connection', (socket) => {
         }
 
         serverRooms[uuid].skipCount === Object.keys(serverRooms[uuid].players).length
-          ? getNextRound(uuid)
+          ? getNextRound(uuid, { type: 'SKIP' })
           : io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
       } catch (error) {
         console.error(error);
@@ -254,7 +255,7 @@ io.on('connection', (socket) => {
       }
 
       io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
-      getNextRound(uuid);
+      getNextRound(uuid, { type: 'ANSWER', who: name });
     } catch (error) {
       console.error(error);
     }
