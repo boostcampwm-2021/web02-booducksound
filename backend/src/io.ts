@@ -1,6 +1,7 @@
 import short from 'short-uuid';
 import socketio from 'socket.io';
 
+import { search as search_Y } from './utils/crawler';
 import * as UserService from './resources/playList/service';
 import { LobbyRoom } from './types/LobbyRoom';
 import { Player } from './types/Player';
@@ -307,6 +308,19 @@ io.on('connection', (socket) => {
     } catch (error) {
       console.error(error);
     }
+  });
+
+  socket.on(SocketEvents.SEARCH_URL, async (search: string, done) => {
+    const result = await search_Y(search);
+    done(
+      result.map((element) => {
+        return {
+          title: element.snippet.title,
+          url: element.snippet.url,
+          thumbnails: element.snippet.thumbnails.url,
+        };
+      }),
+    );
   });
 });
 
