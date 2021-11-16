@@ -82,7 +82,7 @@ const GameRoomNav = ({
   isAllReady,
 }: {
   players?: Players;
-  status: 'playing' | 'waiting' | undefined;
+  status: 'playing' | 'waiting' | 'resting' | undefined;
   music1: HTMLAudioElement | null;
   music2: HTMLAudioElement | null;
   isAllReady?: boolean;
@@ -131,7 +131,7 @@ const GameRoomNav = ({
             background={theme.colors.whitesmoke}
             fontSize="1em"
             onClick={handleStartBtnClick(player)}
-            disabled={player.skip || (player.status === 'king' && !isAllReady)}
+            disabled={status === 'resting' || player.skip || (player.status === 'king' && !isAllReady)}
           >
             {status === 'waiting' ? statusEncoder[player.status] : 'SKIP'}
           </ResponsiveButton>

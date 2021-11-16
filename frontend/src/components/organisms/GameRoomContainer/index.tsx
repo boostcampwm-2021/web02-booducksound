@@ -195,7 +195,7 @@ const GameRoomContainer = ({
           {confirmKing() && <SettingButton onClick={() => setModalOnOff(true)} />}
         </LeftTitleContainer>
         <CharacterContainer type={'leftCharacter'}>
-          <CharacterList players={players as Players} />
+          <CharacterList players={players as Players} status={gameRoom?.status} />
         </CharacterContainer>
         <Container type={'rightTitle'}>
           <RightTitle></RightTitle>

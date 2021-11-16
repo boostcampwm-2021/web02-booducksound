@@ -1,5 +1,5 @@
 export type LobbyRoom = {
-  status: 'playing' | 'waiting';
+  status: 'playing' | 'waiting' | 'resting';
   hasPassword: boolean;
   title: string;
   playlistName: string;

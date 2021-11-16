@@ -4,6 +4,9 @@
     "es2021": true
   },
   "extends": ["standard", "plugin:prettier/recommended"],
+  "globals": {
+    "NodeJS": true
+  },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",

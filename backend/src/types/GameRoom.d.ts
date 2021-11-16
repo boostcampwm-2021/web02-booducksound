@@ -1,7 +1,7 @@
 import { Player } from './Player';
 
 export type GameRoom = {
-  status: 'playing' | 'waiting';
+  status: 'playing' | 'waiting' | 'resting';
   players: { [socketId: string]: Player };
   playlistName: string;
   title: string;

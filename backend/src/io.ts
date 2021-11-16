@@ -18,6 +18,30 @@ const resetSkip = (uuid: string) => {
   Object.keys(serverRooms[uuid].players).forEach((key) => (serverRooms[uuid].players[key].skip = false));
 };
 
+const clearTimer = (timer: NodeJS.Timeout | null) => {
+  if (!timer) return;
+  clearTimeout(timer);
+};
+
+const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
+  clearTimer(serverRoom.timer);
+  serverRoom.timer = setTimeout(() => {
+    serverRoom.status = 'resting';
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+    getNextRound(uuid, { type: 'TIMEOUT' });
+  }, serverRoom.timePerProblem * 1000);
+};
+
+const setWaitTimer = (serverRoom: ServerRoom, uuid: string, isExistNext: boolean) => {
+  clearTimer(serverRoom.timer);
+  serverRoom.timer = setTimeout(() => {
+    serverRoom.status = 'playing';
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+    io.to(uuid).emit(SocketEvents.NEXT_ROUND, isExistNext);
+    setRoundTimer(serverRoom, uuid);
+  }, 5000);
+};
+
 const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; who?: string }) => {
   const gameEnd = (uuid: string) => {
     serverRooms[uuid].curRound = 1;
@@ -39,7 +63,8 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
     const { curRound, maxRound, musics } = serverRooms[uuid];
 
     if (curRound === maxRound) {
-      gameEnd(uuid);
+      io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, who });
+      setTimeout(() => gameEnd(uuid), 5000);
       return;
     }
 
@@ -53,12 +78,11 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
 
     // TODO: 플레이어들의 상태 answer 같은 것들 초기화
     // TODO: 힌트 같은 것들도 초기화
-
     serverRooms[uuid].skipCount = 0;
     resetSkip(uuid);
-    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
-    io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1], who });
-    setTimeout(() => io.to(uuid).emit(SocketEvents.NEXT_ROUND), 3000);
+    io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, who });
+
+    setWaitTimer(serverRooms[uuid], uuid, curRound + 1 < musics.length);
   } catch (error) {
     console.error(error);
   }
@@ -125,6 +149,7 @@ io.on('connection', (socket) => {
           maxRound: playlist.musics.length,
           skipCount: 0,
           streams: [],
+          timer: null,
         };
         serverRooms[uuid] = serverRoom;
         done(uuid);
@@ -176,6 +201,7 @@ io.on('connection', (socket) => {
             color,
             status: Object.keys(serverRooms[uuid].players).length ? 'prepare' : 'king',
             skip: false,
+            score: 0,
           },
         },
       };
@@ -207,6 +233,8 @@ io.on('connection', (socket) => {
         serverRooms[uuid].status = 'playing';
         serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
         io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid));
+        io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
+        setRoundTimer(serverRooms[uuid], uuid);
       } catch (error) {
         console.error(error);
       }
@@ -214,14 +242,15 @@ io.on('connection', (socket) => {
 
     socket.on(SocketEvents.SKIP, (uuid: string, id: string) => {
       try {
-        if (!serverRooms[uuid].players[id].skip) {
-          serverRooms[uuid].players[id].skip = true;
-          serverRooms[uuid].skipCount += 1;
-        }
+        if (serverRooms[uuid].players[id].skip) return;
 
-        serverRooms[uuid].skipCount === Object.keys(serverRooms[uuid].players).length
-          ? getNextRound(uuid, { type: 'SKIP' })
-          : io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+        serverRooms[uuid].players[id].skip = true;
+        serverRooms[uuid].skipCount += 1;
+        io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+
+        if (serverRooms[uuid].skipCount === Object.keys(serverRooms[uuid].players).length) {
+          getNextRound(uuid, { type: 'SKIP' });
+        }
       } catch (error) {
         console.error(error);
       }
@@ -245,6 +274,11 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on(SocketEvents.COMPARE_PWD, (uuid: string, code: string, done) => {
+    if (!code) return;
+    if (serverRooms[uuid].password === code) done(true);
+    else done(false);
+  });
   socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string, color: string) => {
     try {
       const currentMusicInfo = serverRooms[uuid]?.musics[serverRooms[uuid].curRound - 1];
@@ -253,7 +287,9 @@ io.on('connection', (socket) => {
       if (serverRooms[uuid].status === 'waiting' || !isAnswer) {
         return io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message', color });
       }
-
+      serverRooms[uuid].players[socket.id].score += 100;
+      serverRooms[uuid].status = 'resting';
+      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
       io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
       getNextRound(uuid, { type: 'ANSWER', who: name });
     } catch (error) {
