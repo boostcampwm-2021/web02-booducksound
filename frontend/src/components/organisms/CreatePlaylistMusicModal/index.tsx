@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEventHandler, PropsWithChildren, useState } from 'react';
+import { ChangeEvent, KeyboardEventHandler, PropsWithChildren, useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -6,6 +6,7 @@ import Button from '~/atoms/Button';
 import InputText from '~/atoms/InputText';
 import Chip from '~/molecules/Chip';
 import Modal from '~/molecules/Modal';
+import SearchUrlModal from '~/organisms/SearchUrlModal';
 import theme from '~/styles/theme';
 import { Music } from '~/types/Music';
 import { showAlert } from '~/utils/showAlert';
@@ -59,8 +60,9 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
     url: musicInfo?.url || '',
     answers: musicInfo?.answers || [],
   });
-  const [answer, setAnswer] = useState<string>('');
 
+  const [searchModalOnOff, setSearchModalOnOff] = useState<boolean>(false);
+  const [answer, setAnswer] = useState<string>('');
   const handleRegistButton = () => {
     const { info, hint, url, answers } = music;
 
@@ -122,6 +124,15 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
         >
           초기화
         </Button>
+        <Button
+          background={theme.colors.sky}
+          height="40px"
+          width="150px"
+          paddingH="10px"
+          onClick={() => setSearchModalOnOff(true)}
+        >
+          노래검색
+        </Button>
       </MusicModalTop>
       <MusicModalInputBox>
         <MusicModalInputText
@@ -168,6 +179,7 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
           </Chip>
         ))}
       </MusicModalChipContainer>
+      {searchModalOnOff && <SearchUrlModal setModalOnOff={setSearchModalOnOff} setMusic={setMusic} />}
     </Modal>
   );
 };
