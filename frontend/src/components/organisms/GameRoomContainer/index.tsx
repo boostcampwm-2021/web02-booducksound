@@ -1,4 +1,4 @@
-import { KeyboardEventHandler, useState, useRef } from 'react';
+import { KeyboardEventHandler, useState, useRef, useEffect } from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
@@ -82,7 +82,30 @@ const ChatListContainer = styled(Container)`
 `;
 
 const RightTitle = styled.div`
+  text-align: center;
   width: 100%;
+`;
+
+const GameSummary = styled.p`
+  line-height: 2.4rem;
+
+  > b {
+    color: ${theme.colors.ocean};
+  }
+`;
+
+const Round = styled(GameSummary)`
+  &::after {
+    content: 'Round';
+    margin-left: 8px;
+  }
+`;
+
+const Hint = styled(GameSummary)`
+  &::before {
+    content: '힌트 : ';
+    margin-right: 8px;
+  }
 `;
 
 const LeftTitleContainer = styled(Container)`
@@ -142,6 +165,33 @@ const Input = styled.input`
   outline: none;
 `;
 
+const gameStatusSummary = (gameRoom: GameRoom | undefined) => {
+  if (!gameRoom) return;
+
+  const { status, curRound, maxRound } = gameRoom;
+
+  switch (status) {
+    case 'playing':
+    case 'resting':
+      return (
+        <>
+          <Round>
+            {curRound} / {maxRound}
+          </Round>
+          <GameSummary>
+            <b>음악</b>을 듣고 <b>답</b>을 입력하세요.
+          </GameSummary>
+        </>
+      );
+    default:
+      return (
+        <GameSummary>
+          <b>대기중</b>입니다.
+        </GameSummary>
+      );
+  }
+};
+
 const GameRoomContainer = ({
   players,
   gameRoom,
@@ -186,6 +236,10 @@ const GameRoomContainer = ({
     scorllToBottom();
   });
 
+  useEffect(() => {
+    console.log('바꼇어용!', gameRoom?.curRound);
+  }, [gameRoom?.curRound]);
+
   return (
     <>
       <Wrapper>
@@ -198,7 +252,10 @@ const GameRoomContainer = ({
           <CharacterList players={players as Players} status={gameRoom?.status} />
         </CharacterContainer>
         <Container type={'rightTitle'}>
-          <RightTitle></RightTitle>
+          <RightTitle>
+            {gameStatusSummary(gameRoom)}
+            {gameRoom?.status === 'playing' && <Hint>{'gameRoom'}</Hint>}
+          </RightTitle>
         </Container>
         <ChatListContainer type={'rightChat'} ref={chatListContainer}>
           <ChatList chatList={chatList} />

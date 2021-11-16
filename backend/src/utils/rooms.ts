@@ -31,6 +31,8 @@ export const getGameRoom = (uuid: string) => {
     players: serverRoom.players,
     skip: serverRoom.skip,
     status: serverRoom.status,
+    curRound: serverRoom.curRound,
+    maxRound: serverRoom.maxRound,
     timePerProblem: serverRoom.timePerProblem,
     title: serverRoom.title,
     isAllReady: Object.keys(serverRoom.players).every((socketId) => serverRoom.players[socketId].status !== 'prepare'),
