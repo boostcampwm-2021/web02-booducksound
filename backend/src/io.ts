@@ -99,6 +99,7 @@ io.on('connection', (socket) => {
     delete serverRooms[uuid].players[socket.id];
 
     if (!Object.keys(serverRooms[uuid].players).length) {
+      if (serverRooms[uuid].timer) clearTimer(serverRooms[uuid].timer);
       delete serverRooms[uuid];
       io.emit(SocketEvents.DELETE_LOBBY_ROOM, uuid);
       return;
@@ -217,7 +218,7 @@ io.on('connection', (socket) => {
       console.error(error);
     }
 
-    socket.on('disconnecting', () => {
+    socket.on('disconnect', () => {
       try {
         leaveRoom(uuid);
       } catch (error) {
