@@ -141,6 +141,7 @@ io.on('connection', (socket) => {
           players: {},
           playlistId,
           playlistName,
+          hashtags: playlist.hashtags,
           skip,
           timePerProblem,
           status: 'waiting',
