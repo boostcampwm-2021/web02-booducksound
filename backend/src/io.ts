@@ -14,6 +14,33 @@ const replaceText = (str: string) => {
   return str.split(' ').join('').toLowerCase();
 };
 
+const resetSkip = (uuid: string) => {
+  Object.keys(serverRooms[uuid].players).map((element) => (serverRooms[uuid].players[element].skip = false));
+};
+
+const getNextRound = (uuid: string) => {
+  try {
+    const { curRound, maxRound, musics } = serverRooms[uuid];
+
+    if (curRound === maxRound) {
+      io.to(uuid).emit(SocketEvents.GAME_END);
+      return;
+    }
+
+    serverRooms[uuid].curRound += 1;
+    serverRooms[uuid].streams.shift(); // TODO: Queue 자료형으로 구현할 것
+
+    if (curRound + 1 < musics.length) {
+      serverRooms[uuid].streams.push(streamify(musics[curRound + 1].url));
+    }
+    serverRooms[uuid].skipCount = 0;
+    resetSkip(uuid);
+    io.to(uuid).emit(SocketEvents.NEXT_ROUND);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const io = new socketio.Server();
 
 io.on('connection', (socket) => {
@@ -171,10 +198,12 @@ io.on('connection', (socket) => {
 
     socket.on(SocketEvents.SKIP, (uuid: string, id: string) => {
       try {
-        serverRooms[uuid].players[id].skip = true;
-        serverRooms[uuid].skipCount += 1;
-        serverRooms[uuid].skipCount === getGameRoom(uuid)?.skip
-          ? socket.emit(SocketEvents.NEXT_ROUND)
+        if (!serverRooms[uuid].players[id].skip) {
+          serverRooms[uuid].players[id].skip = true;
+          serverRooms[uuid].skipCount += 1;
+        }
+        serverRooms[uuid].skipCount === Object.keys(serverRooms[uuid].players).length
+          ? getNextRound(uuid)
           : io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
       } catch (error) {
         console.error(error);
@@ -182,25 +211,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on(SocketEvents.NEXT_ROUND, () => {
-      try {
-        const { curRound, maxRound, musics } = serverRooms[uuid];
-
-        if (curRound === maxRound) {
-          io.to(uuid).emit(SocketEvents.GAME_END);
-          return;
-        }
-
-        serverRooms[uuid].curRound += 1;
-        serverRooms[uuid].streams.shift(); // TODO: Queue 자료형으로 구현할 것
-
-        if (curRound + 1 < musics.length) {
-          serverRooms[uuid].streams.push(streamify(musics[curRound + 1].url));
-        }
-
-        io.to(uuid).emit(SocketEvents.NEXT_ROUND);
-      } catch (error) {
-        console.error(error);
-      }
+      getNextRound(uuid);
     });
   });
 

@@ -88,7 +88,6 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
 
   const handleTitleChange: ChangeEventHandler = (e) => {
     const title = (e.target as HTMLInputElement).value;
-    console.log(title);
     setForm((prev) => {
       const form = { ...prev, title };
       validateForm(form, password);
