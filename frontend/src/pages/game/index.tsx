@@ -10,12 +10,12 @@ import { useLeavePage } from '~/hooks/useLeavePage';
 import useSocket from '~/hooks/useSocket';
 import useSocketEmit from '~/hooks/useSocketEmit';
 import useSocketOn from '~/hooks/useSocketOn';
+import BlurDialog from '~/molecules/BlurDialog';
 import GameRoomContainer from '~/organisms/GameRoomContainer';
 import GameRoomNav from '~/organisms/GameRoomNav';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
-import { Player } from '~/types/Player';
 import { SocketEvents } from '~/types/SocketEvents';
 
 const Container = styled.div`
@@ -33,6 +33,8 @@ const Container = styled.div`
 
 const Game: NextPage = () => {
   const [gameRoom, setGameRoom] = useState<GameRoom>();
+  const [dialogMsg, setDialogMsg] = useState<{ title: string; content: string } | null>(null);
+
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
   const socket = useSocket();
@@ -88,12 +90,25 @@ const Game: NextPage = () => {
   useSocketOn(
     SocketEvents.ROUND_END,
     ({ type, info, who }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; info: string; who?: string }) => {
-      console.log(type, info, who);
+      if (type === 'SKIP') {
+        setDialogMsg({ title: `${info}`, content: `모두가 SKIP 하였습니다.` });
+        return;
+      }
+
+      if (type === 'ANSWER') {
+        setDialogMsg({ title: `${info}`, content: `${who}님이 노래를 맞추셨습니다!` });
+        return;
+      }
+
+      if (type === 'TIMEOUT') {
+        setDialogMsg({ title: `${info}`, content: `시간이 초과했습니다.` });
+      }
     },
   );
 
   useSocketOn(SocketEvents.NEXT_ROUND, () => {
     if (!curMusic.current || !nextMusic.current) throw Error('NEXT_ROUND에서 curMusic, nextMusic을 찾을 수 없습니다');
+    setDialogMsg(null);
 
     const temp = curMusic.current;
 
@@ -144,6 +159,7 @@ const Game: NextPage = () => {
       <GameRoomContainer players={gameRoom?.players} gameRoom={gameRoom} />
       <audio ref={music1} onEnded={handleAudioEnded} />
       <audio ref={music2} onEnded={handleAudioEnded} />
+      {dialogMsg && <BlurDialog title={dialogMsg.title} content={dialogMsg.content} />}
     </Container>
   );
 };
