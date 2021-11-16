@@ -49,12 +49,14 @@ const InputContainer = styled.div`
     display: block;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${theme.breakpoints.md}) {
     > * {
       width: 100% !important;
     }
     button {
       width: 90%;
+      font-size: 20px;
+      padding: 20px 0;
     }
   }
 `;
@@ -64,6 +66,11 @@ const LoginInputText = styled(InputText)`
   font-size: 20px;
   padding: 24px 20px 24px 80px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+
+  @media (max-width: ${theme.breakpoints.sm}) {
+    font-size: 18px;
+    padding: 24px 40px 24px 40px;
+  }
 `;
 
 const Login: NextPage = () => {
@@ -90,7 +97,7 @@ const Login: NextPage = () => {
               isSearch={false}
               placeholder="아이디를 입력하세요."
               value={id}
-              handleChange={({ target }) => setID((target as HTMLInputElement).value)}
+              handleChange={({ target }) => setID((target as HTMLInputElement).value.trim())}
             ></LoginInputText>
             <LoginInputText
               className="loginPassword"
@@ -98,7 +105,7 @@ const Login: NextPage = () => {
               isSearch={false}
               placeholder="비밀번호를 입력하세요."
               value={password}
-              handleChange={({ target }) => setPassword((target as HTMLInputElement).value)}
+              handleChange={({ target }) => setPassword((target as HTMLInputElement).value.trim())}
             ></LoginInputText>
             <Button
               width={'560px'}

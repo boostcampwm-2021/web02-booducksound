@@ -30,33 +30,30 @@ const Warper = styled.div`
 const ProfileBtnBox = styled.div`
   text-align: right;
 
-  > *:first-of-type {
+  > a {
     text-decoration: auto;
     margin-right: 1rem;
   }
 
-  @media (min-width: ${theme.breakpoints.md}) {
-    margin: 0 1rem 0;
-
-    > * {
-      margin: 0 1rem 0;
-    }
-  }
-
   @media (max-width: ${theme.breakpoints.md}) {
-    button {
-      margin-bottom: 0.4rem;
+    font-size: 16px;
+    padding: 12px 0;
+
+    > a {
+      margin: 0;
+    }
+
+    > a > button {
+      margin: 0 0 1rem 0;
     }
   }
   @media (max-width: ${theme.breakpoints.sm}) {
-    margin-bottom: 1rem;
-
     button {
       padding: 8px 0;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       width: 90%;
       display: block;
-      margin: 0 auto 0.4rem auto;
+      margin: 0 auto 1rem auto !important;
     }
   }
 `;

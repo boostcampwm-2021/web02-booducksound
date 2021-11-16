@@ -26,12 +26,12 @@ const EnterContainer = styled.div`
   left: 0;
   right: 0;
 
-  @media (max-width: 768px) {
+  @media (max-width: ${theme.breakpoints.md}) {
     button {
       width: calc(100% - 2rem);
     }
   }
-  @media (max-width: 480px) {
+  @media (max-width: ${theme.breakpoints.sm}) {
     button {
       width: 90%;
     }
@@ -47,12 +47,13 @@ const InputContainer = styled.div`
     display: block;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${theme.breakpoints.md}) {
     > * {
       width: 100% !important;
     }
     button {
       width: 90%;
+      font-size: 18px;
     }
   }
 `;
@@ -62,6 +63,11 @@ const EnterInputText = styled(InputText)`
   font-size: 20px;
   padding: 20px 20px 20px 80px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+
+  @media (max-width: ${theme.breakpoints.sm}) {
+    font-size: 18px;
+    padding: 24px 40px 24px 40px;
+  }
 `;
 
 const Enter: NextPage = () => {
@@ -88,7 +94,7 @@ const Enter: NextPage = () => {
               isSearch={false}
               placeholder="닉네임을 입력하세요."
               value={nickname}
-              handleChange={({ target }) => setNickname((target as HTMLInputElement).value)}
+              handleChange={({ target }) => setNickname((target as HTMLInputElement).value.trim())}
             ></EnterInputText>
             <a>
               <Button
