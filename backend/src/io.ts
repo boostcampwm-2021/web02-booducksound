@@ -18,6 +18,29 @@ const resetSkip = (uuid: string) => {
   Object.keys(serverRooms[uuid].players).forEach((key) => (serverRooms[uuid].players[key].skip = false));
 };
 
+const clearTimer = (timer: NodeJS.Timeout | null) => {
+  if (!timer) return;
+  clearTimeout(timer);
+};
+
+const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
+  clearTimer(serverRoom.timer);
+  serverRoom.timer = setTimeout(() => {
+    console.log('roundEnd');
+    getNextRound(uuid, { type: 'TIMEOUT' });
+  }, serverRoom.timePerProblem * 1000);
+};
+
+const setWaitTimer = (serverRoom: ServerRoom, uuid: string) => {
+  clearTimer(serverRoom.timer);
+  serverRoom.timer = setTimeout(() => {
+    console.log('waitEnd');
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+    io.to(uuid).emit(SocketEvents.NEXT_ROUND);
+    setRoundTimer(serverRoom, uuid);
+  }, 5000);
+};
+
 const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; who?: string }) => {
   const gameEnd = (uuid: string) => {
     serverRooms[uuid].curRound = 1;
@@ -39,7 +62,8 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
     const { curRound, maxRound, musics } = serverRooms[uuid];
 
     if (curRound === maxRound) {
-      gameEnd(uuid);
+      io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, who });
+      setTimeout(() => gameEnd(uuid), 5000);
       return;
     }
 
@@ -53,15 +77,11 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
 
     // TODO: 플레이어들의 상태 answer 같은 것들 초기화
     // TODO: 힌트 같은 것들도 초기화
-
     serverRooms[uuid].skipCount = 0;
     resetSkip(uuid);
     io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, who });
 
-    setTimeout(() => {
-      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
-      io.to(uuid).emit(SocketEvents.NEXT_ROUND);
-    }, 4000);
+    setWaitTimer(serverRooms[uuid], uuid);
   } catch (error) {
     console.error(error);
   }
@@ -128,6 +148,7 @@ io.on('connection', (socket) => {
           maxRound: playlist.musics.length,
           skipCount: 0,
           streams: [],
+          timer: null,
         };
         serverRooms[uuid] = serverRoom;
         done(uuid);
@@ -212,6 +233,7 @@ io.on('connection', (socket) => {
         serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
         io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid));
         io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
+        setRoundTimer(serverRooms[uuid], uuid);
       } catch (error) {
         console.error(error);
       }

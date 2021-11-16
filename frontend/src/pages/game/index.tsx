@@ -128,6 +128,7 @@ const Game: NextPage = () => {
   useSocketOn(SocketEvents.GAME_END, () => {
     music1.current?.pause();
     music2.current?.pause();
+    setDialogMsg(null);
     alert('마지막 라운드');
   });
 
