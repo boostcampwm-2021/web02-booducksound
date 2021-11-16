@@ -7,6 +7,7 @@ import ytdl from 'ytdl-core';
 FFmpeg.setFfmpegPath(path);
 
 const streamify = (url: string) => {
+  const MAX_LENGTH = 90;
   const regex = /(.*?)(^|\/|v=)([a-z0-9_-]{11})(.*)?/i;
   const videoId = (url.match(regex) as RegExpExecArray)[3];
 
@@ -15,7 +16,7 @@ const streamify = (url: string) => {
   const ffmpeg = FFmpeg(video);
 
   process.nextTick(() => {
-    const output = ffmpeg.noVideo().format('mp3').pipe(stream);
+    const output = ffmpeg.noVideo().inputOptions(`-t ${MAX_LENGTH}`).format('mp3').pipe(stream);
 
     ffmpeg.once('error', (error: Error) => stream.emit('error', error));
     output.once('error', (error: Error) => {
