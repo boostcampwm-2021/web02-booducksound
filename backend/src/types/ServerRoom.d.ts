@@ -19,4 +19,5 @@ export type ServerRoom = {
   maxRound: number;
   skipCount: number;
   timer: NodeJS.Timeout | null;
+  hintTimer: NodeJS.Timeout | null;
 };

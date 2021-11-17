@@ -25,14 +25,14 @@ const clearTimer = (timer: NodeJS.Timeout | null) => {
 };
 
 const setHintTimer = (serverRoom: ServerRoom, uuid: string) => {
-  serverRoom.timer = setTimeout(() => {
+  clearTimer(serverRoom.hintTimer);
+  serverRoom.hintTimer = setTimeout(() => {
     io.to(uuid).emit(SocketEvents.SHOW_HINT, serverRoom.musics[serverRoom.curRound - 1].hint);
   }, serverRoom.timePerProblem * 500);
 };
 
 const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
   clearTimer(serverRoom.timer);
-  setHintTimer(serverRoom, uuid);
   serverRoom.timer = setTimeout(() => {
     serverRoom.status = 'resting';
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
@@ -46,6 +46,7 @@ const setWaitTimer = (serverRoom: ServerRoom, uuid: string, isExistNext: boolean
     serverRoom.status = 'playing';
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     io.to(uuid).emit(SocketEvents.NEXT_ROUND, isExistNext);
+    setHintTimer(serverRoom, uuid);
     setRoundTimer(serverRoom, uuid);
   }, 5000);
 };
@@ -77,7 +78,7 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
       return;
     }
 
-    serverRooms[uuid].curRound += 1;
+    serverRooms[uuid].curRound = curRound + 1;
     serverRooms[uuid].streams.shift(); // TODO: Queue 자료형으로 구현할 것
     // TODO: stream ffmpeg destroy
 
@@ -161,6 +162,7 @@ io.on('connection', (socket) => {
           skipCount: 0,
           streams: [],
           timer: null,
+          hintTimer: null,
         };
         serverRooms[uuid] = serverRoom;
         done(uuid);
