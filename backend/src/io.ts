@@ -1,12 +1,12 @@
 import short from 'short-uuid';
 import socketio from 'socket.io';
 
-import { search as search_Y } from './utils/crawler';
 import * as UserService from './resources/playList/service';
 import { LobbyRoom } from './types/LobbyRoom';
 import { Player } from './types/Player';
 import { ServerRoom } from './types/ServerRoom';
 import { SocketEvents } from './types/SocketEvents';
+import { search as searchY } from './utils/crawler';
 import { getLobbyRoom, getGameRoom } from './utils/rooms';
 import streamify from './utils/streamify';
 import serverRooms from './variables/serverRooms';
@@ -311,7 +311,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on(SocketEvents.SEARCH_URL, async (search: string, done) => {
-    const result = await search_Y(search);
+    const result = await searchY(search);
     done(
       result.map((element) => {
         return {
