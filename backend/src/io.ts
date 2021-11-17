@@ -239,10 +239,12 @@ io.on('connection', (socket) => {
     socket.on(SocketEvents.START_GAME, () => {
       try {
         // TODO: !serverRooms[uuid] 인 경우에는 실행이 안 되도록
-        console.log(serverRooms[uuid]);
         const { musics } = serverRooms[uuid];
         serverRooms[uuid].status = 'playing';
         serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
+        Object.keys(serverRooms[uuid].players).forEach((e) => {
+          serverRooms[uuid].players[e].score = 0;
+        });
         io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid));
         io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
         setRoundTimer(serverRooms[uuid], uuid);
