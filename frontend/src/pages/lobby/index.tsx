@@ -160,7 +160,7 @@ const Lobby: NextPage = () => {
     if (!roomcard) return;
 
     const { uuid, lock, status } = roomcard.dataset;
-    if (!uuid || status === 'playing') return;
+    if (!uuid || status !== 'waiting') return;
     if (lock === 'false') {
       dispatch({ type: RoomActions.SET_UUID, payload: { uuid } });
       Router.push(`/game`);
