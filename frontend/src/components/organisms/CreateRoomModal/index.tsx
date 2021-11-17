@@ -126,7 +126,6 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
     if (!validateForm) return;
 
     (socket as Socket).emit(SocketEvents.CREATE_ROOM, form, (uuid: string) => {
-      setModalOnOff(false);
       dispatch({ type: RoomActions.SET_UUID, payload: { uuid } });
       Router.push(`/game`);
     });

@@ -1,4 +1,4 @@
-import { PassThrough } from 'stream';
+import Youtubestream from '../variables/YoutubeStream';
 
 import { Player } from './Player';
 
@@ -14,7 +14,7 @@ export type ServerRoom = {
   timePerProblem: 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90;
 
   musics: { url: string; info: string; answers: string[]; hint: string }[];
-  streams: PassThrough[];
+  streams: Youtubestream[];
   curRound: number;
   maxRound: number;
   skipCount: number;

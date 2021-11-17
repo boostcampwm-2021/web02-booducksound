@@ -3,7 +3,7 @@ import { MutableRefObject, ReactEventHandler, useEffect, useRef, useState } from
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { BACKEND_URL } from '~/constants/index';
 import { useLeavePage } from '~/hooks/useLeavePage';
@@ -15,6 +15,7 @@ import GameRoomContainer from '~/organisms/GameRoomContainer';
 import GameRoomNav from '~/organisms/GameRoomNav';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
+import { RoomActions } from '~/types/Actions';
 import { GameRoom } from '~/types/GameRoom';
 import { SocketEvents } from '~/types/SocketEvents';
 
@@ -39,6 +40,7 @@ const Game: NextPage = () => {
   const userInfo = useSelector((state: RootState) => state.user);
   const socket = useSocket();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const music1 = useRef<HTMLAudioElement>(null);
   const music2 = useRef<HTMLAudioElement>(null);
@@ -140,6 +142,7 @@ const Game: NextPage = () => {
 
   useLeavePage(() => {
     if (!socket) return;
+    dispatch({ type: RoomActions.SET_UUID, payload: { uuid: null } });
     socket.emit(SocketEvents.LEAVE_ROOM, uuid);
   });
 
