@@ -25,14 +25,14 @@ const clearTimer = (timer: NodeJS.Timeout | null) => {
 };
 
 const setHintTimer = (serverRoom: ServerRoom, uuid: string) => {
-  serverRoom.timer = setTimeout(() => {
+  clearTimer(serverRoom.hintTimer);
+  serverRoom.hintTimer = setTimeout(() => {
     io.to(uuid).emit(SocketEvents.SHOW_HINT, serverRoom.musics[serverRoom.curRound - 1].hint);
   }, serverRoom.timePerProblem * 500);
 };
 
 const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
   clearTimer(serverRoom.timer);
-  setHintTimer(serverRoom, uuid);
   serverRoom.timer = setTimeout(() => {
     serverRoom.status = 'resting';
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
@@ -46,6 +46,7 @@ const setWaitTimer = (serverRoom: ServerRoom, uuid: string, isExistNext: boolean
     serverRoom.status = 'playing';
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     io.to(uuid).emit(SocketEvents.NEXT_ROUND, isExistNext);
+    setHintTimer(serverRoom, uuid);
     setRoundTimer(serverRoom, uuid);
   }, 5000);
 };
@@ -156,6 +157,7 @@ io.on('connection', (socket) => {
           skipCount: 0,
           streams: [],
           timer: null,
+          hintTimer: null,
         };
         serverRooms[uuid] = serverRoom;
         done(uuid);
@@ -237,6 +239,9 @@ io.on('connection', (socket) => {
         const { musics } = serverRooms[uuid];
         serverRooms[uuid].status = 'playing';
         serverRooms[uuid].streams = [new Youtubestream(musics[0].url), new Youtubestream(musics[1].url)];
+        Object.keys(serverRooms[uuid].players).forEach((e) => {
+          serverRooms[uuid].players[e].score = 0;
+        });
         io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid));
         io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
         setRoundTimer(serverRooms[uuid], uuid);
