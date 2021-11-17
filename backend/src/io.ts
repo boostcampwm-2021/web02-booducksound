@@ -36,6 +36,7 @@ const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
   serverRoom.timer = setTimeout(() => {
     serverRoom.status = 'resting';
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+    console.log('RoundTimer !!');
     getNextRound(uuid, { type: 'TIMEOUT' });
   }, serverRoom.timePerProblem * 1000);
 };
@@ -222,7 +223,6 @@ io.on('connection', (socket) => {
     } catch (error) {
       console.error(error);
     }
-
     socket.on('disconnect', () => {
       try {
         leaveRoom(uuid);
@@ -230,43 +230,44 @@ io.on('connection', (socket) => {
         console.error(error);
       }
     });
+  });
 
-    socket.on(SocketEvents.START_GAME, () => {
-      try {
-        if (!serverRooms[uuid]) return;
-        if (serverRooms[uuid].status !== 'waiting') return;
+  socket.on(SocketEvents.START_GAME, (uuid: string) => {
+    try {
+      if (!serverRooms[uuid]) return;
+      if (serverRooms[uuid].status !== 'waiting') return;
 
-        const { musics } = serverRooms[uuid];
-        serverRooms[uuid].status = 'playing';
-        serverRooms[uuid].streams = [new Youtubestream(musics[0].url), new Youtubestream(musics[1].url)];
-        Object.keys(serverRooms[uuid].players).forEach((e) => {
-          serverRooms[uuid].players[e].score = 0;
-        });
-        io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid));
-        io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
-        setRoundTimer(serverRooms[uuid], uuid);
-      } catch (error) {
-        console.error(error);
+      const { musics } = serverRooms[uuid];
+      serverRooms[uuid].status = 'playing';
+      serverRooms[uuid].streams = [new Youtubestream(musics[0].url), new Youtubestream(musics[1].url)];
+      Object.keys(serverRooms[uuid].players).forEach((e) => {
+        serverRooms[uuid].players[e].score = 0;
+      });
+      io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid));
+      io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
+      setRoundTimer(serverRooms[uuid], uuid);
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  socket.on(SocketEvents.SKIP, (uuid: string, id: string) => {
+    try {
+      if (!serverRooms[uuid]) return;
+      if (serverRooms[uuid].status !== 'playing') return;
+      if (serverRooms[uuid].players[id].skip) return;
+
+      serverRooms[uuid].players[id].skip = true;
+      serverRooms[uuid].skipCount += 1;
+      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+
+      if (serverRooms[uuid].skipCount === Object.keys(serverRooms[uuid].players).length) {
+        console.log('skip !!!!');
+        getNextRound(uuid, { type: 'SKIP' });
       }
-    });
-
-    socket.on(SocketEvents.SKIP, (uuid: string, id: string) => {
-      try {
-        if (!serverRooms[uuid]) return;
-        if (serverRooms[uuid].status !== 'playing') return;
-        if (serverRooms[uuid].players[id].skip) return;
-
-        serverRooms[uuid].players[id].skip = true;
-        serverRooms[uuid].skipCount += 1;
-        io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
-
-        if (serverRooms[uuid].skipCount === Object.keys(serverRooms[uuid].players).length) {
-          getNextRound(uuid, { type: 'SKIP' });
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    });
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   socket.on(SocketEvents.SET_PLAYER, (uuid: string, player: Player) => {
