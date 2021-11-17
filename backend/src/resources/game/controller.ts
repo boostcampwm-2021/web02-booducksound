@@ -7,9 +7,9 @@ export const getInitialMusic = async (req: Request, res: Response) => {
   try {
     const { uuid } = req.params;
 
-    if (!serverRooms[uuid]?.streams?.[0]) throw Error('stream을 찾을 수 없습니다');
+    if (!serverRooms[uuid]?.streams?.[0]?.stream) throw Error('stream을 찾을 수 없습니다');
 
-    const stream = cloneable(serverRooms[uuid].streams[0]);
+    const stream = cloneable(serverRooms[uuid].streams[0].stream);
 
     for await (const chunk of stream) {
       res.write(chunk);
@@ -26,9 +26,9 @@ export const getNextMusic = async (req: Request, res: Response) => {
   try {
     const { uuid } = req.params;
 
-    if (!serverRooms[uuid]?.streams?.[1]) throw Error('stream을 찾을 수 없습니다');
+    if (!serverRooms[uuid]?.streams?.[1]?.stream) throw Error('stream을 찾을 수 없습니다');
 
-    const stream = cloneable(serverRooms[uuid].streams[1]);
+    const stream = cloneable(serverRooms[uuid].streams[1].stream);
 
     for await (const chunk of stream) {
       res.write(chunk);
