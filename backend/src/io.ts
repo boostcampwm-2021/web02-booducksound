@@ -8,8 +8,8 @@ import { ServerRoom } from './types/ServerRoom';
 import { SocketEvents } from './types/SocketEvents';
 import { search as searchY } from './utils/crawler';
 import { getLobbyRoom, getGameRoom } from './utils/rooms';
-import streamify from './utils/streamify';
 import serverRooms from './variables/serverRooms';
+import Youtubestream from './variables/YoutubeStream';
 
 const replaceText = (str: string) => {
   return str.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>{}[\]\\/ ]/gim, '').toLowerCase();
@@ -55,6 +55,7 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
     serverRooms[uuid].curRound = 1;
     serverRooms[uuid].status = 'waiting';
     serverRooms[uuid].skipCount = 0;
+    serverRooms[uuid].streams.forEach((stream) => stream.destroy());
     serverRooms[uuid].streams = [];
     Object.keys(serverRooms[uuid].players).forEach((key) => {
       if (serverRooms[uuid].players[key].status !== 'king') serverRooms[uuid].players[key].status = 'prepare';
@@ -62,7 +63,6 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
     resetSkip(uuid);
     clearTimer(serverRooms[uuid].timer);
 
-    // TODO: stream destroy
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
     io.to(uuid).emit(SocketEvents.GAME_END);
@@ -78,15 +78,13 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
     }
 
     serverRooms[uuid].curRound += 1;
-    serverRooms[uuid].streams.shift(); // TODO: Queue 자료형으로 구현할 것
-    // TODO: stream ffmpeg destroy
+    serverRooms[uuid].streams[0].destroy();
+    serverRooms[uuid].streams.shift();
 
     if (curRound + 1 < musics.length) {
-      serverRooms[uuid].streams.push(streamify(musics[curRound + 1].url));
+      serverRooms[uuid].streams.push(new Youtubestream(musics[curRound + 1].url));
     }
 
-    // TODO: 플레이어들의 상태 answer 같은 것들 초기화
-    // TODO: 힌트 같은 것들도 초기화
     serverRooms[uuid].skipCount = 0;
     resetSkip(uuid);
     io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, who });
@@ -109,6 +107,7 @@ io.on('connection', (socket) => {
 
     if (!Object.keys(serverRooms[uuid].players).length) {
       if (serverRooms[uuid].timer) clearTimer(serverRooms[uuid].timer);
+      serverRooms[uuid].streams.forEach((stream) => stream.destroy());
       delete serverRooms[uuid];
       io.emit(SocketEvents.DELETE_LOBBY_ROOM, uuid);
       return;
@@ -118,12 +117,8 @@ io.on('connection', (socket) => {
       serverRooms[uuid].players[Object.keys(serverRooms[uuid].players)[0]].status = 'king';
     }
 
-    delete serverRooms[uuid].players[socket.id];
-
     io.emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
-
-    const lobbyRoom = getLobbyRoom(uuid);
-    io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+    io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
   };
 
   socket.on(SocketEvents.SET_LOBBY_ROOMS, (done) => {
@@ -164,8 +159,6 @@ io.on('connection', (socket) => {
         };
         serverRooms[uuid] = serverRoom;
         done(uuid);
-        // TODO: 방장은 원래 GAME_START가 비활성화 되어있다가, done()을 받고서야 누를 수 있도록 할 것
-        // 데이터베이스와 통신하는데 시간이 걸리므로 serverRooms[uuid]가 세팅되고 나서야 플레이를 누를 수 있게 해야한다
       };
       await setRoomInfo(playlistId);
       const lobbyRoom = getLobbyRoom(uuid);
@@ -238,13 +231,12 @@ io.on('connection', (socket) => {
 
     socket.on(SocketEvents.START_GAME, () => {
       try {
+        if (!serverRooms[uuid]) return;
         if (serverRooms[uuid].status !== 'waiting') return;
 
-        // TODO: !serverRooms[uuid] 인 경우에는 실행이 안 되도록
-        console.log(serverRooms[uuid]);
         const { musics } = serverRooms[uuid];
         serverRooms[uuid].status = 'playing';
-        serverRooms[uuid].streams = [streamify(musics[0].url), streamify(musics[1].url)];
+        serverRooms[uuid].streams = [new Youtubestream(musics[0].url), new Youtubestream(musics[1].url)];
         io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid));
         io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
         setRoundTimer(serverRooms[uuid], uuid);
@@ -255,6 +247,8 @@ io.on('connection', (socket) => {
 
     socket.on(SocketEvents.SKIP, (uuid: string, id: string) => {
       try {
+        if (!serverRooms[uuid]) return;
+        if (serverRooms[uuid].status !== 'playing') return;
         if (serverRooms[uuid].players[id].skip) return;
 
         serverRooms[uuid].players[id].skip = true;
