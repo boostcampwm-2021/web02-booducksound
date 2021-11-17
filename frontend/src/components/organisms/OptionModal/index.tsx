@@ -1,4 +1,4 @@
-import { useState, MouseEventHandler, ChangeEventHandler, SetStateAction, Dispatch, useEffect } from 'react';
+import { useState, MouseEventHandler, ChangeEventHandler, SetStateAction, Dispatch } from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
@@ -39,7 +39,7 @@ const Container = styled.div`
   }
 `;
 
-const SelectPlaylistContainer = styled.div`
+const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 8px;
@@ -159,15 +159,17 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
       leftButtonDisabled={leftButtonDisabled}
     >
       <Container>
-        <TextLabel>방 제목</TextLabel>
-        <ModalInputText
-          className="roomTitle"
-          placeholder="방 제목을 입력하세요"
-          isSearch={false}
-          value={form.title}
-          handleChange={handleTitleChange}
-        />
-        <SelectPlaylistContainer>
+        <InputContainer>
+          <TextLabel>방 제목</TextLabel>
+          <ModalInputText
+            className="roomTitle"
+            placeholder="방 제목을 입력하세요"
+            isSearch={false}
+            value={form.title}
+            handleChange={handleTitleChange}
+          />
+        </InputContainer>
+        <InputContainer>
           <SelectPlaylistLabel>플레이리스트</SelectPlaylistLabel>
           <InputWithButton
             inputClassName="selectPlaylist"
@@ -186,15 +188,17 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
           {playlistModalOnOff && (
             <SelectPlaylistModal setModalOnOff={setPlaylistModalOnOff} setForm={setForm} validateForm={validateForm} />
           )}
-        </SelectPlaylistContainer>
-        <TextLabel>비밀번호</TextLabel>
-        <ModalInputText
-          className="roomPassword"
-          placeholder={gameRoom.hasPassword ? '********' : ''}
-          isSearch={false}
-          value={password}
-          handleChange={handlePasswordChange}
-        />
+        </InputContainer>
+        <InputContainer>
+          <TextLabel>비밀번호</TextLabel>
+          <ModalInputText
+            className="roomPassword"
+            placeholder={gameRoom.hasPassword ? '********' : ''}
+            isSearch={false}
+            value={password}
+            handleChange={handlePasswordChange}
+          />
+        </InputContainer>
         <HalfContainer>
           <SelectSection
             title="스킵 인원 수"
