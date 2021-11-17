@@ -238,6 +238,8 @@ io.on('connection', (socket) => {
 
     socket.on(SocketEvents.START_GAME, () => {
       try {
+        if (serverRooms[uuid].status !== 'waiting') return;
+
         // TODO: !serverRooms[uuid] 인 경우에는 실행이 안 되도록
         console.log(serverRooms[uuid]);
         const { musics } = serverRooms[uuid];
