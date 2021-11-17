@@ -5,7 +5,7 @@ import theme from '~/styles/theme';
 
 const Container = styled.div`
   position: fixed;
-  /* top: 50%; */
+  top: -9999px;
   left: 50%;
   transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.68);
