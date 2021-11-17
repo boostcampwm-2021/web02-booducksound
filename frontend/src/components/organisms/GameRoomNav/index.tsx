@@ -96,9 +96,10 @@ const GameRoomNav = ({
     socket?.emit(SocketEvents.SET_PLAYER, uuid, player);
   };
 
-  const startGame = () => socket?.emit(SocketEvents.START_GAME);
+  const startGame = () => socket?.emit(SocketEvents.START_GAME, uuid);
 
   const makeSkip = () => {
+    console.log('skip');
     socket?.emit(SocketEvents.SKIP, uuid, socket.id);
   };
 

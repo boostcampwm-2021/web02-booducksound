@@ -1,7 +1,6 @@
-import { useState, useEffect, SetStateAction, Dispatch, ChangeEventHandler, KeyboardEventHandler } from 'react';
+import { useState, SetStateAction, Dispatch, ChangeEventHandler, KeyboardEventHandler } from 'react';
 
 import styled from '@emotion/styled';
-import Image from 'next/image';
 
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
@@ -10,9 +9,6 @@ import Modal from '~/molecules/Modal';
 import { Music } from '~/types/Music';
 import { SocketEvents } from '~/types/SocketEvents';
 
-interface UrlProps {
-  url: string;
-}
 const MusicBox = styled.div`
   padding: 10px;
   display: flex;
@@ -37,6 +33,11 @@ const Container = styled.div`
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 16px;
   }
+`;
+
+const SearchInputText = styled(InputText)`
+  background-position-x: 20px;
+  padding: 12px 10px 12px 70px;
 `;
 
 const SearchList = styled.ul`
@@ -84,7 +85,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setMusic }: Props) => {
     >
       <Container>
         <TextLabel>노래 검색</TextLabel>
-        <InputText
+        <SearchInputText
           className="SearchListearch"
           isSearch={true}
           placeholder="검색어를 입력해주세요"
