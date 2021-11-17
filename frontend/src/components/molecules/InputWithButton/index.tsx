@@ -39,6 +39,7 @@ const ButtonContainer = styled.div`
 
 const ButtonWithInputText = styled(InputText)`
   padding: 10px 10px 10px 30px;
+  width: 100%;
 `;
 
 const InputWithButton = (props: Props) => {
