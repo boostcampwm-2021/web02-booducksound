@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 
 import Character from '~/atoms/Character';
 import StatusChip from '~/atoms/StatusChip';
+import Chip from '~/molecules/Chip';
 import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
 
@@ -22,12 +23,18 @@ const Container = styled.div`
   justify-content: space-between;
   column-gap: 8px;
   font-size: 16px;
+  position: relative;
 
   @media (max-width: ${theme.breakpoints.md}) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-size: 14px;
+    min-width: 60px;
+  }
+
+  &:hover > .btn_list {
+    display: block;
   }
 `;
 
@@ -59,6 +66,7 @@ const Name = styled.p`
   overflow: hidden;
   text-align: right;
 `;
+
 const Point = styled(Name)`
   color: ${theme.colors.deepgray};
   line-height: 1.8;
@@ -67,6 +75,7 @@ const Point = styled(Name)`
     content: '포인트 : ';
   }
 `;
+
 const MidContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -84,6 +93,39 @@ const ChipContainer = styled.div`
     width: auto;
   }
 `;
+
+const BtnList = styled.div`
+  display: none;
+  position: absolute;
+  right: 0;
+  text-align: center;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    right: auto;
+    bottom: 0;
+  }
+`;
+
+const KingBtn = styled.button`
+  font-size: 0.64rem;
+  cursor: pointer;
+  background: ${theme.colors.white};
+  border: 1px solid ${theme.colors.deepgray};
+  border-radius: 4px;
+
+  &:first-child {
+    margin: 0 0.2rem 0 0;
+  }
+
+  @media (max-width: ${theme.breakpoints.md}) {
+      &:first-child {
+        margin: 0 0 0.1rem 0;
+      }
+`;
+
+const handleDelegate = () => {
+  console.log('delegate');
+};
 
 const CharacterProfile = ({ mode, color, name, status, skip, score }: PropsWithChildren<Props>) => {
   return (
@@ -108,6 +150,10 @@ const CharacterProfile = ({ mode, color, name, status, skip, score }: PropsWithC
           <StatusChip status={'skip'} />
         </ChipContainer>
       )}
+      <BtnList className="btn_list">
+        <KingBtn onClick={handleDelegate}>방장위임</KingBtn>
+        <KingBtn onClick={handleDelegate}>강퇴</KingBtn>
+      </BtnList>
     </Container>
   );
 };

@@ -76,6 +76,7 @@ const PlaylistName = styled.h4`
   white-space: nowrap;
   overflow: hidden;
   margin-top: 16px;
+  line-height: 1.5;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 16px;
