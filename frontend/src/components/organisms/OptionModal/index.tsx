@@ -79,7 +79,7 @@ interface Form {
 const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
   const socket = useSocket();
   const { uuid } = useSelector((state: RootState) => state.room);
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState(gameRoom.hasPassword ? '********' : '');
   const { title, playlistName, playlistId, skip, timePerProblem } = gameRoom;
   const defaultValue = { title, playlistName, playlistId, skip, timePerProblem, password };
   const [form, setForm] = useState<Form>({ title, playlistName, playlistId, skip, timePerProblem, password });
@@ -111,7 +111,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
     setForm((form) => ({ ...form, skip }));
   };
 
-  const hanldeTimePerProlbemChange: ChangeEventHandler = (e) => {
+  const handleTimePerProblemChange: ChangeEventHandler = (e) => {
     const timePerProblemStr = (e.target as HTMLSelectElement).value;
     const timePerProblem = Number(timePerProblemStr.replace(/[^0-9]/g, ''));
     setForm((form) => ({ ...form, timePerProblem }));
@@ -140,7 +140,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
   };
 
   const validateForm = (form: Form, password: string) => {
-    if (!compareForm(defaultValue, form) || password) {
+    if (!compareForm(defaultValue, form) || password !== '********') {
       setLeftButtonDisabled(false);
       return true;
     }
@@ -214,7 +214,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             titleSize="1em"
             options={['10초', '20초', '30초', '40초', '50초', '60초', '70초', '80초', '90초']}
             defaultValue="60초"
-            onChange={hanldeTimePerProlbemChange}
+            onChange={handleTimePerProblemChange}
           />
         </HalfContainer>
       </Container>
