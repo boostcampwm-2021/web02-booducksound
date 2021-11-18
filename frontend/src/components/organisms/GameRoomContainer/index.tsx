@@ -135,6 +135,7 @@ const RoomTitle = styled.h3`
 const PlaylistName = styled.h4`
   width: 100%;
   font-size: 1em;
+  line-height: 1.5;
   font-weight: 400;
   white-space: nowrap;
   overflow: hidden;
