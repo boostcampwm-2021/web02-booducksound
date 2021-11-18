@@ -69,15 +69,15 @@ const Description = styled.span`
   color: #999;
   margin-right: 20px;
   animation-name: slideFont;
-  animation-duration: 9s;
+  animation-duration: 7s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
   @keyframes slideFont {
     from {
-      margin-left: -150px;
+      margin-left: 160px;
     }
     to {
-      margin-left: 180px;
+      margin-left: -250px;
     }
   }
 `;
@@ -97,7 +97,7 @@ const Contents = styled.div`
   align-items: center;
   column-gap: 5px;
   font-size: 0.85em;
-  color: #ccc;
+  color: #aaa;
   height: 100%;
 `;
 
