@@ -46,6 +46,7 @@ export const getLength = () => {
 export const search = (q: string, offset: number, limit: number) => {
   const regex = new RegExp(q, 'i');
   return Playlist.find({ $or: [{ playlistName: regex }, { hashtags: { $in: regex } }] })
+    .sort({ playCount: -1, likeCount: -1 })
     .skip(offset)
     .limit(limit);
 };
