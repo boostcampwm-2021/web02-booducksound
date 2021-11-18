@@ -58,6 +58,8 @@ const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting' }>`
   justify-content: space-between;
   column-gap: 8px;
   font-size: 16px;
+  min-width: 60px;
+  position: relative;
 
   &:hover > .btn_list {
     display: block;
@@ -127,7 +129,6 @@ const Name = styled.p`
   font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
-  color: ${theme.colors.gray};
   font-size: 1.1em;
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 0.8em;
@@ -203,6 +204,7 @@ const CharacterProfile = ({ id, mode, color, name, status, skip, score, type }: 
       console.log('강퇴');
     }
   };
+  
   return (
     <Container mode={mode}>
       <ProfileContainer>
@@ -215,7 +217,7 @@ const CharacterProfile = ({ id, mode, color, name, status, skip, score, type }: 
         {mode === 'playing' && <Point>{score}</Point>}
       </MidContainer>
       {mode === 'waiting' && <ChipContainer>{<StatusChip status={skip ? 'skip' : status} />}</ChipContainer>}
-      {status !== 'king' && type && (
+      {status === 'king' && type && (
         <BtnList className="btn_list">
           <KingBtn onClick={() => handleDelegate(true)(id)}>방장위임</KingBtn>
           <KingBtn onClick={() => handleDelegate(false)(id)}>강퇴</KingBtn>
