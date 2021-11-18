@@ -183,7 +183,7 @@ io.on('connection', (socket) => {
       serverRooms[uuid] = { ...serverRooms[uuid], title, playlistId, playlistName, skip, timePerProblem };
 
       if (password !== '********') serverRooms[uuid] = { ...serverRooms[uuid], password };
-      const playlist = await UserService.getById(playlistId);
+      const playlist = await PlaylistService.getById(playlistId);
       serverRooms[uuid] = {
         ...serverRooms[uuid],
         hashtags: playlist.hashtags,

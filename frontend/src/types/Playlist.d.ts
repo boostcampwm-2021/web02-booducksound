@@ -7,6 +7,6 @@ export type Playlist = {
   musics: Music[];
   hashtags: string[];
   userId: string;
-  likeCount: Number;
-  playCount: Number;
+  likeCount?: Number;
+  playCount?: Number;
 };

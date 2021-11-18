@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEventHandler, PropsWithChildren, useEffect, useState } from 'react';
+import { ChangeEvent, KeyboardEventHandler, PropsWithChildren, useState } from 'react';
 
 import styled from '@emotion/styled';
 

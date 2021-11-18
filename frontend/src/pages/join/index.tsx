@@ -105,7 +105,7 @@ const Join: NextPage = () => {
   const handleIdCheck = async () => {
     if (!id) return alert(ID_EMPTY_MSG);
 
-    const { result, message } = await idCheck();
+    const { message } = await idCheck();
     alert(message);
   };
 
