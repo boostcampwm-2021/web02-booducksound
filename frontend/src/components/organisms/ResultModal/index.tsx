@@ -119,8 +119,13 @@ const Name = styled.p`
   font-size: 1.2em;
 `;
 
-const ResultModal = ({ gameRoom }: { gameRoom: GameRoom | undefined }) => {
-  const addLikeCount = () => {};
+const ResultModal = ({
+  gameRoom,
+  handleClickLikeBtn,
+}: {
+  gameRoom: GameRoom | undefined;
+  handleClickLikeBtn: MouseEventHandler;
+}) => {
   return (
     <Portal>
       <ModalBackground />
@@ -141,7 +146,7 @@ const ResultModal = ({ gameRoom }: { gameRoom: GameRoom | undefined }) => {
               </Container>
             ))}
         </ModalWrapper>
-        <Like onClick={addLikeCount}>👍🏻</Like>
+        <Like onClick={handleClickLikeBtn}>👍🏻</Like>
       </ModalContainer>
     </Portal>
   );

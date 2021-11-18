@@ -161,6 +161,7 @@ const Game: NextPage = () => {
     audio.play();
   };
 
+  const handleClickLikeBtn = () => {};
   return (
     <Container>
       <GameRoomNav
@@ -174,7 +175,7 @@ const Game: NextPage = () => {
       <audio ref={music1} onEnded={handleAudioEnded} />
       <audio ref={music2} onEnded={handleAudioEnded} />
       {dialogMsg && <BlurDialog title={dialogMsg.title} content={dialogMsg.content} />}
-      {gameResultModalOnOff && <ResultModal gameRoom={gameRoom} />}
+      {gameResultModalOnOff && <ResultModal gameRoom={gameRoom} handleClickLikeBtn={handleClickLikeBtn} />}
     </Container>
   );
 };
