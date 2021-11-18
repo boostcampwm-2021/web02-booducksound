@@ -67,7 +67,7 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
 
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
-    io.to(uuid).emit(SocketEvents.GAME_END);
+    io.to(uuid).emit(SocketEvents.GAME_END, getGameRoom(uuid));
   };
 
   try {
@@ -171,15 +171,21 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on(SocketEvents.SET_GAME_ROOM, (uuid, password, room, done) => {
+  socket.on(SocketEvents.SET_GAME_ROOM, async (uuid, password, room, done) => {
     try {
       if (room === undefined) return;
       const { title, playlistId, playlistName, skip, timePerProblem } = room;
-
+      console.log(password, room);
       serverRooms[uuid] = { ...serverRooms[uuid], title, playlistId, playlistName, skip, timePerProblem };
 
-      if (password) serverRooms[uuid] = { ...serverRooms[uuid], password };
-
+      if (password !== '********') serverRooms[uuid] = { ...serverRooms[uuid], password };
+      const playlist = await UserService.getById(playlistId);
+      serverRooms[uuid] = {
+        ...serverRooms[uuid],
+        hashtags: playlist.hashtags,
+        musics: playlist.musics,
+        maxRound: playlist.musics.length,
+      };
       io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
       const lobbyRoom = getLobbyRoom(uuid);
       io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
