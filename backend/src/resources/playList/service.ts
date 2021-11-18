@@ -32,14 +32,14 @@ export const add = (playlistInfo: PlaylistProps) => {
 };
 
 export const updateById = (_id: string, data: PlaylistProps) => {
-  return Playlist.findByIdAndUpdate(_id, data);
+  return Playlist.updateOne({ _id }, data);
 };
 
 export const deleteById = (_id: string) => {
-  return Playlist.findByIdAndDelete(_id);
+  return Playlist.deleteOne({ _id });
 };
 
-export const getLegnth = () => {
+export const getLength = () => {
   return Playlist.count();
 };
 
@@ -48,4 +48,8 @@ export const search = (q: string, offset: number, limit: number) => {
   return Playlist.find({ $or: [{ playlistName: regex }, { hashtags: { $in: regex } }] })
     .skip(offset)
     .limit(limit);
+};
+
+export const incrementPlayCount = async (_id: string) => {
+  await Playlist.updateOne({ _id }, { $inc: { playCount: 1 } });
 };
