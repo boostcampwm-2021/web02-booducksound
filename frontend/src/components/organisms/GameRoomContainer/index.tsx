@@ -189,19 +189,19 @@ const TimerWrapper = styled.div`
   }
 
   @media (max-width: ${theme.breakpoints.md}) {
+    position: fixed;
     font-size: 24px;
-    width: 72px;
-    height: 72px;
-    top: auto;
-    bottom: -4px;
-    left: -4px;
+    width: 64px;
+    height: 64px;
+    top: 52px;
+    left: 12px;
     transform: translate(0, 0);
   }
 
   @media (max-width: ${theme.breakpoints.sm}) {
     font-size: 18px;
-    width: 62px;
-    height: 62px;
+    width: 58px;
+    height: 58px;
   }
 `;
 
