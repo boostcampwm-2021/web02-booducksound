@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 
 import GlassContainer from '~/atoms/GlassContainer';
+import Timer from '~/atoms/Timer';
 import useSocket from '~/hooks/useSocket';
 import useSocketOn from '~/hooks/useSocketOn';
 import CharacterList from '~/molecules/CharacterList';
@@ -82,8 +83,13 @@ const ChatListContainer = styled(Container)`
 `;
 
 const RightTitle = styled.div`
-  text-align: center;
+  position: relative;
   width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const GameSummary = styled.p`
@@ -165,16 +171,55 @@ const Input = styled.input`
   outline: none;
 `;
 
-const gameStatusSummary = (gameRoom: GameRoom | undefined) => {
+const TimerWrapper = styled.div`
+  position: absolute;
+  top: -24px;
+  left: -28px;
+  width: 100px;
+  height: 100px;
+  font-size: 28px;
+  font-weight: 700;
+
+  @media (max-width: ${theme.breakpoints.lg}) {
+    font-size: 24px;
+    top: -20px;
+    left: -20px;
+    width: 84px;
+    height: 84px;
+  }
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    font-size: 24px;
+    width: 72px;
+    height: 72px;
+    top: auto;
+    bottom: -4px;
+    left: -4px;
+    transform: translate(0, 0);
+  }
+
+  @media (max-width: ${theme.breakpoints.sm}) {
+    font-size: 18px;
+    width: 62px;
+    height: 62px;
+  }
+`;
+
+const gameStatusSummary = (gameRoom?: GameRoom) => {
   if (!gameRoom) return;
 
   const { status, curRound, maxRound } = gameRoom;
 
+  console.log('gameStatusSummary 실행', status);
+
   switch (status) {
     case 'playing':
-    case 'resting':
+    case 'resting': {
       return (
         <>
+          <TimerWrapper>
+            <Timer initSec={gameRoom.timePerProblem} resetTrigger={gameRoom.curRound} />
+          </TimerWrapper>
           <Round>
             {curRound} / {maxRound}
           </Round>
@@ -183,12 +228,14 @@ const gameStatusSummary = (gameRoom: GameRoom | undefined) => {
           </GameSummary>
         </>
       );
-    default:
+    }
+    default: {
       return (
         <GameSummary>
           <b>대기중</b>입니다.
         </GameSummary>
       );
+    }
   }
 };
 
