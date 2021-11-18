@@ -57,7 +57,15 @@ const ProfileCircle = styled.div`
 const Name = styled.p`
   white-space: nowrap;
   overflow: hidden;
-  font-size: 1.2em;
+  text-align: right;
+`;
+const Point = styled(Name)`
+  color: ${theme.colors.deepgray};
+  line-height: 1.8;
+
+  &::before {
+    content: '포인트 : ';
+  }
 `;
 const MidContainer = styled.div`
   display: flex;
@@ -87,7 +95,7 @@ const CharacterProfile = ({ mode, color, name, status, skip, score }: PropsWithC
       </ProfileContainer>
       <MidContainer>
         <Name>{name}</Name>
-        {mode === 'playing' && <Name>{score}</Name>}
+        {mode === 'playing' && <Point>{score}</Point>}
       </MidContainer>
       {mode === 'waiting' && (
         <ChipContainer>
