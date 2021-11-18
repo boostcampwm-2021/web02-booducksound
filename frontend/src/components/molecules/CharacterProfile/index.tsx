@@ -9,12 +9,14 @@ import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
 
 interface Props {
+  id: string;
   mode: GameRoom['status'] | undefined;
   color: string;
   name: string;
   status: 'king' | 'ready' | 'prepare';
   skip: boolean;
   score: number;
+  type: boolean;
 }
 
 const ProfileContainer = styled.div`
@@ -122,8 +124,14 @@ const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting' }>`
 `;
 
 const Name = styled.p`
+  font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
+  color: ${theme.colors.gray};
+  font-size: 1.1em;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 0.8em;
+  }
   text-align: right;
 `;
 
@@ -138,8 +146,11 @@ const Point = styled(Name)`
 
 const MidContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   text-align: center;
+  /* @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    flex-direction: row;
+  } */
 `;
 
 const ChipContainer = styled.div`
@@ -184,11 +195,14 @@ const KingBtn = styled.button`
   }
 `;
 
-const handleDelegate = () => {
-  console.log('delegate');
-};
-
-const CharacterProfile = ({ mode, color, name, status, skip, score }: PropsWithChildren<Props>) => {
+const CharacterProfile = ({ id, mode, color, name, status, skip, score, type }: PropsWithChildren<Props>) => {
+  const handleDelegate = (option: boolean) => (id: string) => {
+    if (option) {
+      console.log('방장위임');
+    } else {
+      console.log('강퇴');
+    }
+  };
   return (
     <Container mode={mode}>
       <ProfileContainer>
@@ -200,21 +214,13 @@ const CharacterProfile = ({ mode, color, name, status, skip, score }: PropsWithC
         <Name>{name}</Name>
         {mode === 'playing' && <Point>{score}</Point>}
       </MidContainer>
-      {mode === 'waiting' && (
-        <ChipContainer>
-          <StatusChip status={status} />
-        </ChipContainer>
+      {mode === 'waiting' && <ChipContainer>{<StatusChip status={skip ? 'skip' : status} />}</ChipContainer>}
+      {status !== 'king' && type && (
+        <BtnList className="btn_list">
+          <KingBtn onClick={() => handleDelegate(true)(id)}>방장위임</KingBtn>
+          <KingBtn onClick={() => handleDelegate(false)(id)}>강퇴</KingBtn>
+        </BtnList>
       )}
-
-      {skip && (
-        <ChipContainer>
-          <StatusChip status={'skip'} />
-        </ChipContainer>
-      )}
-      <BtnList className="btn_list">
-        <KingBtn onClick={handleDelegate}>방장위임</KingBtn>
-        <KingBtn onClick={handleDelegate}>강퇴</KingBtn>
-      </BtnList>
     </Container>
   );
 };
