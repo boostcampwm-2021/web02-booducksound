@@ -22,8 +22,11 @@ const Timer = ({ initSec, resetTrigger }: { initSec: number; resetTrigger: any }
 
   useEffect(() => {
     interval.current = setInterval(() => {
-      if (seconds <= 0) return;
-      if (seconds === 0 && interval.current) clearInterval(interval.current);
+      if (seconds <= 0 && interval.current) {
+        clearInterval(interval.current);
+        return;
+      }
+
       setSeconds(seconds - 1);
     }, 1000);
 
