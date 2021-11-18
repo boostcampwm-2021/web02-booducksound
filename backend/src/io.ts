@@ -1,5 +1,5 @@
 import short from 'short-uuid';
-import socketio from 'socket.io';
+import socketio, { Socket } from 'socket.io';
 
 import * as UserService from './resources/playList/service';
 import { LobbyRoom } from './types/LobbyRoom';
@@ -10,6 +10,10 @@ import { search as searchY } from './utils/crawler';
 import { getLobbyRoom, getGameRoom } from './utils/rooms';
 import serverRooms from './variables/serverRooms';
 import Youtubestream from './variables/YoutubeStream';
+
+interface ExSocket extends Socket {
+  uuid?: string;
+}
 
 const replaceText = (str: string) => {
   return str.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>{}[\]\\/ ]/gim, '').toLowerCase();
@@ -99,8 +103,12 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
 
 const io = new socketio.Server();
 
-io.on('connection', (socket) => {
-  const leaveRoom = (uuid: string) => {
+io.on('connection', (socket: ExSocket) => {
+  const leaveRoom = () => {
+    if (!socket.uuid) return;
+    const { uuid } = socket;
+    socket.uuid = undefined;
+
     if (!serverRooms[uuid]?.players[socket.id]) return;
 
     const isKing = serverRooms[uuid].players[socket.id].status === 'king';
@@ -192,6 +200,8 @@ io.on('connection', (socket) => {
 
   socket.on(SocketEvents.JOIN_ROOM, (uuid: string, player: Player, done) => {
     try {
+      socket.uuid = uuid;
+
       if (!serverRooms[uuid]) {
         done({ type: 'fail', message: '존재 하지 않는 방입니다' });
         return;
@@ -223,13 +233,14 @@ io.on('connection', (socket) => {
     } catch (error) {
       console.error(error);
     }
-    socket.on('disconnect', () => {
-      try {
-        leaveRoom(uuid);
-      } catch (error) {
-        console.error(error);
-      }
-    });
+  });
+
+  socket.on('disconnect', () => {
+    try {
+      leaveRoom();
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   socket.on(SocketEvents.START_GAME, (uuid: string) => {
@@ -281,7 +292,7 @@ io.on('connection', (socket) => {
 
   socket.on(SocketEvents.LEAVE_ROOM, (uuid: string) => {
     try {
-      leaveRoom(uuid);
+      leaveRoom();
     } catch (error) {
       console.error(error);
     }
