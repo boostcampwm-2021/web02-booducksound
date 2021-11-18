@@ -20,14 +20,13 @@ const Title = styled.p`
   }
 `;
 
-const CharacterContainer = styled.div`
+const CharactersContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   padding: 0 10px;
   row-gap: 10px;
-  overflow-x: auto;
 
   @media (max-width: ${theme.breakpoints.md}) {
     flex-direction: row;
@@ -37,24 +36,26 @@ const CharacterContainer = styled.div`
   }
 `;
 
-const CharacterList = ({ players, status }: { players: Players; status: GameRoom['status'] | undefined }) => {
+const CharacterList = ({ players, status }: { players: Players; status?: GameRoom['status'] }) => {
   return (
     <Container>
       <Title>사용자 목록</Title>
-      <CharacterContainer>
+      <CharactersContainer>
         {players &&
-          Object.values(players).map((element, index) => (
-            <CharacterProfile
-              mode={status}
-              key={index}
-              color={element.color}
-              name={element.nickname}
-              status={element.status}
-              skip={element.skip}
-              score={element.score}
-            />
-          ))}
-      </CharacterContainer>
+          Object.values(players)
+            .sort((player) => player.score)
+            .map((player, index) => (
+              <CharacterProfile
+                mode={status}
+                key={index}
+                color={player.color}
+                name={player.nickname}
+                status={player.status}
+                skip={player.skip}
+                score={player.score}
+              />
+            ))}
+      </CharactersContainer>
     </Container>
   );
 };
