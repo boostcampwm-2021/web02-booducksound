@@ -92,6 +92,11 @@ const Game: NextPage = () => {
   useSocketOn(
     SocketEvents.ROUND_END,
     ({ type, info, who }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; info: string; who?: string }) => {
+      // setGameRoom((prevState) => {
+      //   if (!prevState) return prevState;
+      //   return { ...prevState, status: 'resting' };
+      // });
+
       if (type === 'SKIP') {
         setDialogMsg({ title: `${info}`, content: `모두가 SKIP 하였습니다.` });
         return;
