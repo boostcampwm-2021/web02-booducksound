@@ -1,10 +1,10 @@
 import { PropsWithChildren } from 'react';
 
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import Character from '~/atoms/Character';
 import StatusChip from '~/atoms/StatusChip';
-import Chip from '~/molecules/Chip';
 import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
 
@@ -28,6 +28,7 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfileCircle = styled.div`
+  position: relative;
   background: ${theme.colors.white};
   border-radius: 50%;
   border: 2px solid ${theme.colors.mint};
@@ -39,13 +40,17 @@ const ProfileCircle = styled.div`
   align-items: flex-end;
 
   @media (max-width: ${theme.breakpoints.md}) {
-    width: 28px;
-    height: 28px;
+    width: 40px;
+    height: 40px;
+  }
+
+  @media (max-width: ${theme.breakpoints.sm}) {
+    width: 34px;
+    height: 34px;
   }
 `;
 
-const Container = styled.div`
-  position: relative;
+const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting' }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -56,54 +61,64 @@ const Container = styled.div`
     display: block;
   }
 
-  &:nth-child(-n + 3)::after {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: -14px;
-    width: 30px;
-    height: 30px;
-    background-repeat: no-repeat;
-    background-size: cover;
-    z-index: 99;
-  }
-
-  &:nth-child(1) {
-    &::after {
-      background-image: url('/images/gold-medal.svg');
-    }
-
-    ${ProfileCircle} {
-      border-color: ${theme.colors.yellow};
-    }
-  }
-
-  &:nth-child(2) {
-    &::after {
-      background-image: url('/images/silver-medal.svg');
-    }
-
-    ${ProfileCircle} {
-      border-color: ${theme.colors.gray};
-    }
-  }
-
-  &:nth-child(3) {
-    &::after {
-      background-image: url('/images/bronze-medal.svg');
-    }
-
-    ${ProfileCircle} {
-      border-color: ${theme.colors.peach};
-    }
-  }
-
   @media (max-width: ${theme.breakpoints.md}) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-size: 14px;
   }
+
+  ${({ mode }) =>
+    mode &&
+    mode !== 'waiting' &&
+    css`
+      &:nth-child(-n + 3) ${ProfileCircle}::after {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: -14px;
+        width: 30px;
+        height: 30px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        z-index: 99;
+
+        @media (max-width: ${theme.breakpoints.md}) {
+          width: 26px;
+          height: 26px;
+        }
+      }
+
+      &:nth-child(1) ${ProfileCircle} {
+        & {
+          border-color: ${theme.colors.yellow};
+        }
+
+        &::after {
+          background-image: url('/images/gold-medal.svg');
+        }
+      }
+
+      &:nth-child(2) ${ProfileCircle} {
+        & {
+          border-color: ${theme.colors.gray};
+        }
+
+        &::after {
+          background-image: url('/images/silver-medal.svg');
+        }
+      }
+
+      &:nth-child(3) ${ProfileCircle} {
+        & {
+          border-color: ${theme.colors.peach};
+        }
+
+        &::after {
+          background-image: url('/images/bronze-medal.svg');
+        }
+      }
+    `}
 `;
 
 const Name = styled.p`
@@ -175,7 +190,7 @@ const handleDelegate = () => {
 
 const CharacterProfile = ({ mode, color, name, status, skip, score }: PropsWithChildren<Props>) => {
   return (
-    <Container>
+    <Container mode={mode}>
       <ProfileContainer>
         <ProfileCircle>
           <Character color={color} width={'90%'} />
