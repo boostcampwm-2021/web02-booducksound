@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
 import useSocket from '~/hooks/useSocket';
+import InputWithButton from '~/molecules/InputWithButton';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
@@ -54,7 +55,7 @@ const VolumeBar = styled.input`
   margin-right: auto;
   -webkit-appearance: none;
   overflow: hidden;
-  width: 100px;
+  width: 80px;
   height: 5px;
   align-self: center;
   cursor: pointer;
@@ -114,6 +115,16 @@ const GameRoomNav = ({
   const handleMute = () => (volume === 0 ? setVolume(100) : setVolume(0));
   const handleVolume = ({ target }: any) => setVolume(target.value);
 
+  const handleCopy = () => {
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+    textarea.value = uuid as string;
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    alert('URL이 복사되었습니다.');
+  };
+
   useEffect(() => {
     if (!music1 || !music2) return;
     music1.volume = volume / 100;
@@ -125,6 +136,15 @@ const GameRoomNav = ({
       <MuteButton type="button" volume={volume} onClick={handleMute} />
       <VolumeBar name="volume" value={volume} min="0" max="100" step="5" type="range" onChange={handleVolume} />
       <FlexItem>
+        <ResponsiveButton
+          width="160px"
+          fontSize="1em"
+          onClick={handleCopy}
+          background={theme.colors.lime}
+          mdWidth="100px"
+        >
+          초대코드 복사
+        </ResponsiveButton>
         {player && (
           <ResponsiveButton
             width="160px"
