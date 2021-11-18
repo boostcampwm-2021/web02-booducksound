@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 
 import useSocket from '~/hooks/useSocket';
-import InputWithButton from '~/molecules/InputWithButton';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';

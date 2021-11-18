@@ -1,12 +1,15 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useState } from 'react';
 
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import Character from '~/atoms/Character';
 import StatusChip from '~/atoms/StatusChip';
+import useSocket from '~/hooks/useSocket';
+import DelegateModal from '~/organisms/DelegateModal';
 import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
+import { SocketEvents } from '~/types/SocketEvents';
 
 interface Props {
   id: string;
@@ -17,6 +20,7 @@ interface Props {
   skip: boolean;
   score: number;
   type: boolean;
+  roomNo: string | null;
 }
 
 const ProfileContainer = styled.div`
@@ -185,26 +189,36 @@ const KingBtn = styled.button`
   border: 1px solid ${theme.colors.deepgray};
   border-radius: 4px;
 
-  &:first-child {
+  &:first-of-type {
     margin: 0 0.2rem 0 0;
   }
 
   @media (max-width: ${theme.breakpoints.md}) {
-    &:first-child {
+    &:first-of-type {
       margin: 0 0 0.1rem 0;
     }
   }
 `;
 
-const CharacterProfile = ({ id, mode, color, name, status, skip, score, type }: PropsWithChildren<Props>) => {
+const CharacterProfile = ({ id, mode, color, name, status, skip, score, type, roomNo }: PropsWithChildren<Props>) => {
+  const [delegateModalOnOff, setDelegateModalOnOff] = useState<boolean>(false);
+  const [delegatedUserName, setDelegatedUserName] = useState<string>('');
+  const socket = useSocket();
+
+  const handleOpenModal = (name: string) => {
+    setDelegateModalOnOff(true);
+    setDelegatedUserName(name);
+  };
+
   const handleDelegate = (option: boolean) => (id: string) => {
     if (option) {
-      console.log('방장위임');
+      socket?.emit(SocketEvents.SET_DELEGATE, roomNo, id);
     } else {
       console.log('강퇴');
     }
+    setDelegateModalOnOff(false);
   };
-  
+
   return (
     <Container mode={mode}>
       <ProfileContainer>
@@ -217,11 +231,18 @@ const CharacterProfile = ({ id, mode, color, name, status, skip, score, type }: 
         {mode === 'playing' && <Point>{score}</Point>}
       </MidContainer>
       {mode === 'waiting' && <ChipContainer>{<StatusChip status={skip ? 'skip' : status} />}</ChipContainer>}
-      {status === 'king' && type && (
+      {status !== 'king' && type && (
         <BtnList className="btn_list">
-          <KingBtn onClick={() => handleDelegate(true)(id)}>방장위임</KingBtn>
+          <KingBtn onClick={() => handleOpenModal(name)}>방장위임</KingBtn>
           <KingBtn onClick={() => handleDelegate(false)(id)}>강퇴</KingBtn>
         </BtnList>
+      )}
+      {delegateModalOnOff && (
+        <DelegateModal
+          nickname={delegatedUserName}
+          leftButtonHandler={() => handleDelegate(true)(id)}
+          rightButtonHandler={() => setDelegateModalOnOff(false)}
+        ></DelegateModal>
       )}
     </Container>
   );
