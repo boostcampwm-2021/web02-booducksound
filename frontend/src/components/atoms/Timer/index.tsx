@@ -18,12 +18,12 @@ const Time = styled.span`
 
 const Timer = ({ initSec, resetTrigger }: { initSec: number; resetTrigger: any }) => {
   const [seconds, setSeconds] = useState(~~initSec);
-  const interval = useRef<NodeJS.Timer>();
+  const timer = useRef<NodeJS.Timer>();
 
   useEffect(() => {
-    interval.current = setInterval(() => {
-      if (seconds <= 0 && interval.current) {
-        clearInterval(interval.current);
+    timer.current = setTimeout(() => {
+      if (seconds <= 0 && timer.current) {
+        clearTimeout(timer.current);
         return;
       }
 
@@ -31,7 +31,7 @@ const Timer = ({ initSec, resetTrigger }: { initSec: number; resetTrigger: any }
     }, 1000);
 
     return () => {
-      if (interval.current) clearInterval(interval.current);
+      if (timer.current) clearTimeout(timer.current);
     };
   }, [seconds]);
 
