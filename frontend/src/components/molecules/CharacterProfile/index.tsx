@@ -55,14 +55,22 @@ const ProfileCircle = styled.div`
 `;
 
 const Name = styled.p`
+  font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
-  font-size: 1.2em;
+  color: ${theme.colors.gray};
+  font-size: 1.1em;
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 0.8em;
+  }
 `;
 const MidContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   text-align: center;
+  /* @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    flex-direction: row;
+  } */
 `;
 
 const ChipContainer = styled.div`
@@ -87,19 +95,9 @@ const CharacterProfile = ({ mode, color, name, status, skip, score }: PropsWithC
       </ProfileContainer>
       <MidContainer>
         <Name>{name}</Name>
-        {mode === 'playing' && <Name>{score}</Name>}
+        {mode === 'playing' && <Name> / {score}</Name>}
       </MidContainer>
-      {mode === 'waiting' && (
-        <ChipContainer>
-          <StatusChip status={status} />
-        </ChipContainer>
-      )}
-
-      {skip && (
-        <ChipContainer>
-          <StatusChip status={'skip'} />
-        </ChipContainer>
-      )}
+      {mode === 'waiting' && <ChipContainer>{<StatusChip status={skip ? 'skip' : status} />}</ChipContainer>}
     </Container>
   );
 };

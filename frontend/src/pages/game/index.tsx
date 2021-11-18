@@ -13,6 +13,7 @@ import useSocketOn from '~/hooks/useSocketOn';
 import BlurDialog from '~/molecules/BlurDialog';
 import GameRoomContainer from '~/organisms/GameRoomContainer';
 import GameRoomNav from '~/organisms/GameRoomNav';
+import ResultModal from '~/organisms/ResultModal';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
 import { RoomActions } from '~/types/Actions';
@@ -35,7 +36,7 @@ const Container = styled.div`
 const Game: NextPage = () => {
   const [gameRoom, setGameRoom] = useState<GameRoom>();
   const [dialogMsg, setDialogMsg] = useState<{ title: string; content: string } | null>(null);
-
+  const [gameResultModalOnOff, setGameResultModalOnOff] = useState(false);
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
   const socket = useSocket();
@@ -128,15 +129,23 @@ const Game: NextPage = () => {
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
   });
 
-  useSocketOn(SocketEvents.GAME_END, () => {
+  useSocketOn(SocketEvents.GAME_END, (gameRoom: GameRoom) => {
     music1.current?.pause();
     music2.current?.pause();
     setDialogMsg(null);
-    alert('마지막 라운드');
+    setGameResultModalOnOff(true);
   });
+
+  useEffect(() => {
+    if (!gameResultModalOnOff) return;
+    setTimeout(() => {
+      setGameResultModalOnOff(false);
+    }, 4000);
+  }, [gameResultModalOnOff]);
 
   useSocketOn(SocketEvents.SET_GAME_ROOM, (gameRoom: GameRoom) => {
     if (!gameRoom) return;
+    console.log('프론트', gameRoom);
     setGameRoom(gameRoom);
   });
 
@@ -165,6 +174,7 @@ const Game: NextPage = () => {
       <audio ref={music1} onEnded={handleAudioEnded} />
       <audio ref={music2} onEnded={handleAudioEnded} />
       {dialogMsg && <BlurDialog title={dialogMsg.title} content={dialogMsg.content} />}
+      {gameResultModalOnOff && <ResultModal gameRoom={gameRoom} />}
     </Container>
   );
 };

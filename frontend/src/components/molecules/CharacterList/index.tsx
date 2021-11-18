@@ -38,12 +38,16 @@ const CharacterContainer = styled.div`
 `;
 
 const CharacterList = ({ players, status }: { players: Players; status: GameRoom['status'] | undefined }) => {
+  const handleExpulsion = () => {};
   return (
     <Container>
       <Title>사용자 목록</Title>
       <CharacterContainer>
         {players &&
-          Object.values(players).map((element, index) => (
+          (status === 'playing'
+            ? Object.values(players).sort((a, b) => (a.score < b.score ? 1 : -1))
+            : Object.values(players)
+          ).map((element, index) => (
             <CharacterProfile
               mode={status}
               key={index}
