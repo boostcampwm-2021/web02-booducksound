@@ -13,12 +13,11 @@ class Youtubestream {
     const MAX_LENGTH = 90;
     const regex = /(.*?)(^|\/|v=)([a-z0-9_-]{11})(.*)?/i;
     const videoId = (url.match(regex) as RegExpExecArray)[3];
-
-    const video = ytdl(`https://youtube.com/watch?v=${videoId}`, { quality: 'lowestaudio' });
     const stream = new PassThrough();
-    const ffmpeg = FFmpeg(video);
 
     process.nextTick(() => {
+      const video = ytdl(`https://youtube.com/watch?v=${videoId}`, { quality: 'lowestaudio' });
+      const ffmpeg = FFmpeg(video);
       const output = ffmpeg.noVideo().inputOptions(`-t ${MAX_LENGTH}`).format('mp3').pipe(stream);
 
       ffmpeg.once('error', (error: Error) => stream.emit('error', error));
