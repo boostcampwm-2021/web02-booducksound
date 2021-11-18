@@ -19,4 +19,5 @@ export enum SocketEvents {
   SEARCH_URL = 'SEARCH_URL',
   ROUND_END = 'ROUND_END',
   SHOW_HINT = 'SHOW_HINT',
+  SET_DELEGATE = 'SET_DELEGATE',
 }

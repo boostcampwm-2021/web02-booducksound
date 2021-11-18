@@ -285,6 +285,16 @@ io.on('connection', (socket) => {
     }
   });
 
+  socket.on(SocketEvents.SET_DELEGATE, (uuid: string, delegatedId: string) => {
+    try {
+      serverRooms[uuid].players[socket.id].status = 'prepare';
+      serverRooms[uuid].players[delegatedId].status = 'king';
+      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
   socket.on(SocketEvents.LEAVE_ROOM, (uuid: string) => {
     try {
       leaveRoom(uuid);
