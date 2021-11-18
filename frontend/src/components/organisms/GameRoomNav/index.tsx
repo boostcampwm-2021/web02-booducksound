@@ -90,7 +90,7 @@ const GameRoomNav = ({
   const { uuid } = useSelector((state: RootState) => state.room);
   const socket = useSocket();
   const player = socket && players?.[socket.id];
-
+  const [preventMulti, setPreventMulti] = useState(false);
   const changeStatus = (player: Player) => () => {
     if (player.status !== 'king') player = { ...player, status: converter[player.status] };
     socket?.emit(SocketEvents.SET_PLAYER, uuid, player);
@@ -99,9 +99,19 @@ const GameRoomNav = ({
   const startGame = () => socket?.emit(SocketEvents.START_GAME, uuid);
 
   const makeSkip = () => {
-    console.log('skip');
+    console.log('클릭');
+    if (preventMulti) return;
+    setPreventMulti(true);
+    console.log('이건가');
     socket?.emit(SocketEvents.SKIP, uuid, socket.id);
   };
+
+  useEffect(() => {
+    if (!preventMulti) return;
+    setTimeout(() => {
+      setPreventMulti(false);
+    }, 1000);
+  }, [preventMulti]);
 
   const handleStartBtnClick = (player: Player) => {
     if (status === 'playing') return makeSkip;
