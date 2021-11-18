@@ -1,7 +1,8 @@
+import { ObjectId } from 'mongoose';
 import short from 'short-uuid';
 import socketio from 'socket.io';
 
-import * as UserService from './resources/playList/service';
+import * as PlaylistService from './resources/playList/service';
 import { LobbyRoom } from './types/LobbyRoom';
 import { Player } from './types/Player';
 import { ServerRoom } from './types/ServerRoom';
@@ -36,7 +37,6 @@ const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
   serverRoom.timer = setTimeout(() => {
     serverRoom.status = 'resting';
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
-    console.log('RoundTimer !!');
     getNextRound(uuid, { type: 'TIMEOUT' });
   }, serverRoom.timePerProblem * 1000);
 };
@@ -60,7 +60,11 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
     serverRooms[uuid].streams.forEach((stream) => stream.destroy());
     serverRooms[uuid].streams = [];
     Object.keys(serverRooms[uuid].players).forEach((key) => {
-      if (serverRooms[uuid].players[key].status !== 'king') serverRooms[uuid].players[key].status = 'prepare';
+      if (serverRooms[uuid].players[key].status !== 'king') {
+        serverRooms[uuid].players[key].status = 'prepare';
+      } else {
+        PlaylistService.incrementPlayCount(serverRooms[uuid].playlistId);
+      }
     });
     resetSkip(uuid);
     clearTimer(serverRooms[uuid].timer);
@@ -141,7 +145,7 @@ io.on('connection', (socket) => {
       const uuid = short.generate();
 
       const setRoomInfo = async (playlistId: string) => {
-        const playlist = await UserService.getById(playlistId);
+        const playlist = await PlaylistService.getById(playlistId);
         const serverRoom: ServerRoom = {
           title,
           password,
@@ -268,7 +272,6 @@ io.on('connection', (socket) => {
       io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
 
       if (serverRooms[uuid].skipCount === Object.keys(serverRooms[uuid].players).length) {
-        console.log('skip !!!!');
         getNextRound(uuid, { type: 'SKIP' });
       }
     } catch (error) {

@@ -299,7 +299,7 @@ const GameRoomContainer = ({
         <LeftTitleContainer type={'leftTitle'}>
           <RoomTitle>{gameRoom?.title}</RoomTitle>
           <PlaylistName>{gameRoom?.playlistName}</PlaylistName>
-          {confirmKing() && <SettingButton onClick={() => setModalOnOff(true)} />}
+          {gameRoom?.status === 'waiting' && confirmKing() && <SettingButton onClick={() => setModalOnOff(true)} />}
         </LeftTitleContainer>
         <CharacterContainer type={'leftCharacter'}>
           <CharacterList players={players as Players} status={gameRoom?.status} roomNo={uuid} />

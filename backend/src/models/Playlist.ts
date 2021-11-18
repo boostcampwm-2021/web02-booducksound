@@ -21,5 +21,6 @@ const PlaylistSchema = new Schema({
 });
 
 const Playlist = mongoose.models.Playlist || mongoose.model('Playlist', PlaylistSchema);
+Playlist.createIndexes({ playCount: -1, likeCount: -1 });
 
 export default Playlist;

@@ -11,9 +11,8 @@ export const get = async (req: Request, res: Response) => {
     const { page, q } = req.query as { page?: string; q?: string };
     const currentPage = isNaN(Number(page)) ? 1 : Number(page);
     const offset = isNaN(Number(page)) ? 0 : LIMIT * (currentPage - 1);
-    const total = await PlaylistService.getLegnth();
+    const total = await PlaylistService.getLength();
     const maxPage = Math.ceil(total / LIMIT);
-
     const playlists = await PlaylistService.search(q || '', offset, LIMIT);
 
     res.json({ status: 'SUCCESS', playlists, currentPage, maxPage });

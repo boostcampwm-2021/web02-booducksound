@@ -52,6 +52,55 @@ const PlayList = styled.li`
   }
 `;
 
+const SelectButton = styled(ResponsiveButton)`
+  margin-left: 20px;
+`;
+
+const PlaylistInfo = styled.div`
+  display: flex;
+  justify-content: left;
+  width: 150px;
+  margin-right: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
+const Description = styled.span`
+  color: #999;
+  margin-right: 20px;
+  animation-name: slideFont;
+  animation-duration: 7s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  @keyframes slideFont {
+    from {
+      margin-left: 160px;
+    }
+    to {
+      margin-left: -250px;
+    }
+  }
+`;
+
+const SearchInputText = styled(InputText)`
+  padding: 12px 10px 12px 70px;
+  background-position-x: 25px;
+`;
+
+const Hashtags = styled.span`
+  color: ${theme.colors.ocean};
+`;
+
+const Contents = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 5px;
+  font-size: 0.85em;
+  color: #aaa;
+  height: 100%;
+`;
+
 const Title = styled.h4`
   font-size: 1em;
 `;
@@ -89,7 +138,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
 
     if (option?.init) {
       setPage(1);
-      setPlaylists(playlists);
+      setPlaylists(playlists || []);
     } else setPlaylists((prevState) => [...prevState, ...playlists]);
 
     setIsLoading(false);
@@ -141,7 +190,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
     >
       <Container>
         <TextLabel>플레이리스트 선택</TextLabel>
-        <InputText
+        <SearchInputText
           className="playlistSearch"
           isSearch={true}
           placeholder="검색어를 입력해주세요"
@@ -149,22 +198,29 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
           handleChange={handleSearchChange}
         />
         <PlayLists>
-          {!!playlists?.length &&
-            playlists.map(({ playlistName, _id, hashtags, description }, i) => {
-              return (
-                <PlayList key={_id} ref={playlists.length - 1 === i ? lastRef : null}>
-                  <Title>{playlistName}</Title>
-                  <ResponsiveButton
+          {playlists.map(({ playlistName, _id, hashtags, description, likeCount, playCount }, i) => {
+            return (
+              <PlayList key={_id} ref={playlists.length - 1 === i ? lastRef : null}>
+                <Title>{playlistName}</Title>
+                <Contents>
+                  <PlaylistInfo>
+                    <Description>{description}</Description>
+                    <Hashtags>{hashtags.map((hashtag) => `#${hashtag} `)}</Hashtags>
+                  </PlaylistInfo>
+                  <span>💙 {likeCount}</span>
+                  <span>🎧 {playCount}</span>
+                  <SelectButton
                     background={theme.colors.lilac}
                     fontSize="16px"
                     width="80px"
                     onClick={(e) => handleSelectPlaylistBtnClick(e, _id as string, playlistName)}
                   >
                     선택
-                  </ResponsiveButton>
-                </PlayList>
-              );
-            })}
+                  </SelectButton>
+                </Contents>
+              </PlayList>
+            );
+          })}
         </PlayLists>
       </Container>
     </Modal>
