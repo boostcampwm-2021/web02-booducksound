@@ -37,8 +37,8 @@ const CharactersContainer = styled.div`
   }
 `;
 
-
 const CharacterList = ({ players, status }: { players: Players; status?: GameRoom['status'] }) => {
+  const socket = useSocket();
   return (
     <Container>
       <Title>사용자 목록</Title>
@@ -60,7 +60,7 @@ const CharacterList = ({ players, status }: { players: Players; status?: GameRoo
               score={element[1].score}
             />
           ))}
-      </CharacterContainer>
+      </CharactersContainer>
     </Container>
   );
 };
