@@ -1,5 +1,6 @@
 import { PropsWithChildren } from 'react';
 
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import Character from '~/atoms/Character';
@@ -18,27 +19,6 @@ interface Props {
   type: boolean;
 }
 
-const Container = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  column-gap: 8px;
-  font-size: 16px;
-  position: relative;
-
-  @media (max-width: ${theme.breakpoints.md}) {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 14px;
-    min-width: 60px;
-  }
-
-  &:hover > .btn_list {
-    display: block;
-  }
-`;
-
 const ProfileContainer = styled.div`
   flex: 0 0 60px;
   width: 0;
@@ -50,16 +30,97 @@ const ProfileContainer = styled.div`
 `;
 
 const ProfileCircle = styled.div`
+  position: relative;
+  background: ${theme.colors.white};
   border-radius: 50%;
-  border: 1px solid ${theme.colors.gray};
-  width: 40px;
-  height: 40px;
+  border: 2px solid ${theme.colors.mint};
+  width: 50px;
+  height: 50px;
   flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    width: 28px;
-    height: 28px;
+  @media (max-width: ${theme.breakpoints.md}) {
+    width: 40px;
+    height: 40px;
   }
+
+  @media (max-width: ${theme.breakpoints.sm}) {
+    width: 34px;
+    height: 34px;
+  }
+`;
+
+const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting' }>`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 8px;
+  font-size: 16px;
+
+  &:hover > .btn_list {
+    display: block;
+  }
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+  }
+
+  ${({ mode }) =>
+    mode &&
+    mode !== 'waiting' &&
+    css`
+      &:nth-child(-n + 3) ${ProfileCircle}::after {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: -14px;
+        width: 30px;
+        height: 30px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        z-index: 99;
+
+        @media (max-width: ${theme.breakpoints.md}) {
+          width: 26px;
+          height: 26px;
+        }
+      }
+
+      &:nth-child(1) ${ProfileCircle} {
+        & {
+          border-color: ${theme.colors.yellow};
+        }
+
+        &::after {
+          background-image: url('/images/gold-medal.svg');
+        }
+      }
+
+      &:nth-child(2) ${ProfileCircle} {
+        & {
+          border-color: ${theme.colors.gray};
+        }
+
+        &::after {
+          background-image: url('/images/silver-medal.svg');
+        }
+      }
+
+      &:nth-child(3) ${ProfileCircle} {
+        & {
+          border-color: ${theme.colors.peach};
+        }
+
+        &::after {
+          background-image: url('/images/bronze-medal.svg');
+        }
+      }
+    `}
 `;
 
 const Name = styled.p`
@@ -143,10 +204,10 @@ const CharacterProfile = ({ id, mode, color, name, status, skip, score, type }: 
     }
   };
   return (
-    <Container>
+    <Container mode={mode}>
       <ProfileContainer>
         <ProfileCircle>
-          <Character color={color} width={'100%'} />
+          <Character color={color} width={'90%'} />
         </ProfileCircle>
       </ProfileContainer>
       <MidContainer>

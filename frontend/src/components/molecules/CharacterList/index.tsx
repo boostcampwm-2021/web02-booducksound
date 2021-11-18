@@ -21,14 +21,13 @@ const Title = styled.p`
   }
 `;
 
-const CharacterContainer = styled.div`
+const CharactersContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
   padding: 0 10px;
   row-gap: 10px;
-  overflow-x: auto;
 
   @media (max-width: ${theme.breakpoints.md}) {
     flex-direction: row;
@@ -38,13 +37,12 @@ const CharacterContainer = styled.div`
   }
 `;
 
-const CharacterList = ({ players, status }: { players: Players; status: GameRoom['status'] | undefined }) => {
-  const socket = useSocket();
 
+const CharacterList = ({ players, status }: { players: Players; status?: GameRoom['status'] }) => {
   return (
     <Container>
       <Title>사용자 목록</Title>
-      <CharacterContainer>
+      <CharactersContainer>
         {players &&
           (status === 'playing'
             ? Object.entries(players).sort((a, b) => (a[1].score < b[1].score ? 1 : -1))
