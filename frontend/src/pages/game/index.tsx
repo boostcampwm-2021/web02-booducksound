@@ -141,6 +141,13 @@ const Game: NextPage = () => {
     setGameResultModalOnOff(true);
   });
 
+  useSocketOn(SocketEvents.SET_EXPULSION, (id: string) => {
+    if (socket && id === socket.id) {
+      router.push('/lobby');
+      // alert('방장이 회원님을 강퇴했습니다.');
+    }
+  });
+
   useEffect(() => {
     if (!gameResultModalOnOff) return;
     setTimeout(() => {

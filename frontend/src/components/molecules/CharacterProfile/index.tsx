@@ -214,7 +214,7 @@ const CharacterProfile = ({ id, mode, color, name, status, skip, score, type, ro
     if (option) {
       socket?.emit(SocketEvents.SET_DELEGATE, roomNo, id);
     } else {
-      console.log('강퇴');
+      socket?.emit(SocketEvents.SET_EXPULSION, roomNo, id);
     }
     setDelegateModalOnOff(false);
   };
