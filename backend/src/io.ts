@@ -222,7 +222,7 @@ io.on('connection', (socket) => {
       const lobbyRoom = getLobbyRoom(uuid);
 
       io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
-      io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name: nickname, text: '', status: 'alert' });
+      io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name: nickname, text: '님께서 입장하셨습니다.', status: 'alert' });
 
       done({ type: 'success', gameRoom });
       io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
@@ -290,6 +290,19 @@ io.on('connection', (socket) => {
       serverRooms[uuid].players[socket.id].status = 'prepare';
       serverRooms[uuid].players[delegatedId].status = 'king';
       io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  socket.on(SocketEvents.SET_EXPULSION, (uuid: string, Id: string) => {
+    try {
+      io.to(uuid).emit(SocketEvents.SET_EXPULSION, Id);
+      io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, {
+        name: getGameRoom(uuid)?.players[Id].nickname,
+        text: '님이 강퇴당하셨습니다.',
+        status: 'alert',
+      });
     } catch (error) {
       console.error(error);
     }
