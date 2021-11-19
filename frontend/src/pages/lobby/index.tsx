@@ -14,7 +14,7 @@ import ResponsiveButton from '~/molecules/ResponsiveButton';
 import CreateRoomModal from '~/organisms/CreateRoomModal';
 import EnterPwdModal from '~/organisms/EnterPwdModal';
 import InviteCodeModal from '~/organisms/InviteCodeModal';
-import { RootState } from '~/reducers/';
+import { RootState } from '~/reducers/index';
 import { UserState } from '~/reducers/user';
 import theme from '~/styles/theme';
 import { RoomActions } from '~/types/Actions';
