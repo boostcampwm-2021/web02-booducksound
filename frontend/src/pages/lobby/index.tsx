@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import Router from 'next/router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import InputText from '~/atoms/InputText';
 import RoomCard from '~/atoms/RoomCard';
@@ -14,6 +14,8 @@ import ResponsiveButton from '~/molecules/ResponsiveButton';
 import CreateRoomModal from '~/organisms/CreateRoomModal';
 import EnterPwdModal from '~/organisms/EnterPwdModal';
 import InviteCodeModal from '~/organisms/InviteCodeModal';
+import { RootState } from '~/reducers/';
+import { UserState } from '~/reducers/user';
 import theme from '~/styles/theme';
 import { RoomActions } from '~/types/Actions';
 import { LobbyRoom } from '~/types/LobbyRoom';
@@ -117,11 +119,13 @@ const SearchRoomInputText = styled(InputText)`
 
 const Lobby: NextPage = () => {
   const dispatch = useDispatch();
+  const userInfo: UserState = useSelector((state: RootState) => state.user);
   const [enterPwd, setEnterPwd] = useState('');
   const [search, setSearch] = useState('');
   const [codeModalOnOff, setCodeModalOnOff] = useState(false);
   const [createRoomModalOnOff, setCreateRoomModalOnOff] = useState(false);
   const [rooms, setRooms] = useState<{ [uuid: string]: LobbyRoom }>({});
+  const { id } = userInfo || {};
 
   useSocketEmit(SocketEvents.SET_LOBBY_ROOMS, (lobbyRooms: { [uuid: string]: LobbyRoom }) => {
     setRooms(lobbyRooms);
@@ -199,19 +203,21 @@ const Lobby: NextPage = () => {
             >
               초대코드 입력
             </ResponsiveButton>
-            <Link href="/playlist/create">
-              <a>
-                <ResponsiveButton
-                  background={theme.colors.peach}
-                  width="180px"
-                  fontSize="20px"
-                  smWidth="110px"
-                  smFontSize="12px"
-                >
-                  플레이리스트 추가
-                </ResponsiveButton>
-              </a>
-            </Link>
+            {id && (
+              <Link href="/playlist/create">
+                <a>
+                  <ResponsiveButton
+                    background={theme.colors.peach}
+                    width="180px"
+                    fontSize="20px"
+                    smWidth="110px"
+                    smFontSize="12px"
+                  >
+                    플레이리스트 추가
+                  </ResponsiveButton>
+                </a>
+              </Link>
+            )}
             <ResponsiveButton
               background={theme.colors.sand}
               width="180px"
