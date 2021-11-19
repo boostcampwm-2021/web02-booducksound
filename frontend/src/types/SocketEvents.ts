@@ -20,4 +20,5 @@ export enum SocketEvents {
   ROUND_END = 'ROUND_END',
   SHOW_HINT = 'SHOW_HINT',
   SET_DELEGATE = 'SET_DELEGATE',
+  SET_EXPULSION = 'SET_EXPULSION',
 }
