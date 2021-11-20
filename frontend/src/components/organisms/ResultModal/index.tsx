@@ -1,7 +1,8 @@
-import { MouseEventHandler } from 'react';
+import { useState } from 'react';
 
 import styled from '@emotion/styled';
 
+import { incrementLikeCount } from '~/api/playlist';
 import Character from '~/atoms/Character';
 import Portal from '~/atoms/Portal';
 import theme from '~/styles/theme';
@@ -33,7 +34,9 @@ const Title = styled.div`
   font-weight: bolder;
   margin: 10px 10px 20px 10px;
 `;
-const Like = styled.div`
+const Like = styled.button`
+  border: none;
+  background-color: inherit;
   font-size: 30px;
   text-align: center;
   font-weight: bolder;
@@ -119,13 +122,15 @@ const Name = styled.p`
   font-size: 1.2em;
 `;
 
-const ResultModal = ({
-  gameRoom,
-  handleClickLikeBtn,
-}: {
-  gameRoom: GameRoom | undefined;
-  handleClickLikeBtn: MouseEventHandler;
-}) => {
+const ResultModal = ({ gameRoom, playlistId }: { gameRoom: GameRoom | undefined; playlistId: string | undefined }) => {
+  const [isClickedLikeBtn, setIsClickedLikeBtn] = useState<boolean>(false);
+
+  const handleClickLikeBtn = () => {
+    if (!playlistId) return;
+    incrementLikeCount(playlistId);
+    setIsClickedLikeBtn(true);
+  };
+
   return (
     <Portal>
       <ModalBackground />
@@ -146,7 +151,9 @@ const ResultModal = ({
               </Container>
             ))}
         </ModalWrapper>
-        <Like onClick={handleClickLikeBtn}>👍🏻</Like>
+        <Like onClick={handleClickLikeBtn} disabled={isClickedLikeBtn}>
+          👍🏻
+        </Like>
       </ModalContainer>
     </Portal>
   );

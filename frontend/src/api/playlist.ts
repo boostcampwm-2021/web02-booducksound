@@ -31,3 +31,9 @@ export const getPlaylists = async (option?: { q?: string; page?: number }) => {
   const res = await API('GET')(`${BACKEND_URL}/playlist?${params.toString()}`)();
   return res.json();
 };
+
+export const updateLikeCount = (option: string) => async (_id: string) =>
+  await API('PUT')(`${BACKEND_URL}/playlist/like`)({ body: JSON.stringify({ _id, mode: option }) });
+
+export const incrementLikeCount = updateLikeCount('INCREMENT');
+export const decrementLikeCount = updateLikeCount('DECREMENT');

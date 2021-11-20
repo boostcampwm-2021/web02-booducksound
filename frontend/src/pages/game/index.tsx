@@ -62,8 +62,7 @@ const Game: NextPage = () => {
     userInfo,
     ({ type, message, gameRoom }: { type: string; message: string; gameRoom: GameRoom }) => {
       if (type === 'fail') {
-        // // TODO : window.alert이 아니라 모달으로 에러 message를 띄우도록 할 것
-        // window.alert(message);
+        // TODO : window.alert이 아니라 모달으로 에러 message를 띄우도록 할 것
         router.push('/lobby');
       }
 
@@ -93,11 +92,6 @@ const Game: NextPage = () => {
   useSocketOn(
     SocketEvents.ROUND_END,
     ({ type, info, who }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; info: string; who?: string }) => {
-      // setGameRoom((prevState) => {
-      //   if (!prevState) return prevState;
-      //   return { ...prevState, status: 'resting' };
-      // });
-
       if (type === 'SKIP') {
         setDialogMsg({ title: `${info}`, content: `모두가 SKIP 하였습니다.` });
         return;
@@ -144,7 +138,6 @@ const Game: NextPage = () => {
   useSocketOn(SocketEvents.SET_EXPULSION, (id: string) => {
     if (socket && id === socket.id) {
       router.push('/lobby');
-      // alert('방장이 회원님을 강퇴했습니다.');
     }
   });
 
@@ -172,7 +165,6 @@ const Game: NextPage = () => {
     audio.play();
   };
 
-  const handleClickLikeBtn = () => {};
   return (
     <Container>
       <GameRoomNav
@@ -186,7 +178,7 @@ const Game: NextPage = () => {
       <audio ref={music1} onEnded={handleAudioEnded} />
       <audio ref={music2} onEnded={handleAudioEnded} />
       {dialogMsg && <BlurDialog title={dialogMsg.title} content={dialogMsg.content} />}
-      {gameResultModalOnOff && <ResultModal gameRoom={gameRoom} handleClickLikeBtn={handleClickLikeBtn} />}
+      {gameResultModalOnOff && <ResultModal gameRoom={gameRoom} playlistId={gameRoom?.playlistId} />}
     </Container>
   );
 };
