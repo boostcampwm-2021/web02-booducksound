@@ -54,3 +54,11 @@ export const search = (q: string, offset: number, limit: number) => {
 export const incrementPlayCount = async (_id: string) => {
   await Playlist.updateOne({ _id }, { $inc: { playCount: 1 } });
 };
+
+export const incrementLikeCount = async (_id: string) => {
+  await Playlist.updateOne({ _id }, { $inc: { likeCount: 1 } });
+};
+
+export const decrementLikeCount = async (_id: string) => {
+  await Playlist.updateOne({ _id }, { $inc: { likeCount: -1 } });
+};

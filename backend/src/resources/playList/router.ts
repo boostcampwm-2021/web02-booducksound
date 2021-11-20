@@ -8,6 +8,7 @@ router.get('/', Playlist.get);
 router.get('/:_id', Playlist.getById);
 router.post('/', Playlist.register);
 router.put('/', Playlist.update);
+router.put('/like', Playlist.updateLikeCount);
 router.delete('/:_id', Playlist.del);
 
 export default router;

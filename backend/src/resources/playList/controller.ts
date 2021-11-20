@@ -60,3 +60,24 @@ export const del = async (req: Request, res: Response) => {
     res.json({ status: 'FAILED', error });
   }
 };
+
+export const updateLikeCount = async (req: Request, res: Response) => {
+  const INCREMENT = 'INCREMENT';
+  const DECREMENT = 'DECREMENT';
+  const { _id, mode } = req.body;
+  try {
+    switch (mode) {
+      case INCREMENT:
+        await PlaylistService.incrementLikeCount(_id);
+        break;
+      case DECREMENT:
+        await PlaylistService.decrementLikeCount(_id);
+        break;
+      default:
+        throw Error('Invalid Mode');
+    }
+    res.json({ status: 'SUCCESS' });
+  } catch (error) {
+    res.json({ status: 'FAILED', error });
+  }
+};
