@@ -9,11 +9,28 @@ import Modal from '~/molecules/Modal';
 import { Music } from '~/types/Music';
 import { SocketEvents } from '~/types/SocketEvents';
 
-const MusicBox = styled.div`
+const MusicBox = styled.li`
   padding: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  column-gap: 12px;
+  border-bottom: 1px solid gray;
+  background-color: white;
+
+  :hover {
+    cursor: pointer;
+    filter: brightness(0.9);
+  }
+`;
+
+const Thumbnail = styled.div<{ thumbnail: string }>`
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
+  background-position: center;
+  background: url(${({ thumbnail }) => thumbnail});
+  background-size: cover;
 `;
 
 const Container = styled.div`
@@ -40,9 +57,18 @@ const SearchInputText = styled(InputText)`
   padding: 12px 10px 12px 70px;
 `;
 
+const Title = styled.p`
+  width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 const SearchList = styled.ul`
+  width: 100%;
+  align-self: center;
   display: flex;
   flex-direction: column;
+  white-space: nowrap;
+  overflow: hidden;
   overflow-y: scroll;
   height: 100%;
 `;
@@ -98,16 +124,15 @@ const SelectPlaylistModal = ({ setModalOnOff, setMusic }: Props) => {
             <MusicBox
               key={index}
               onClick={() => {
+                console.log(element.thumbnails);
                 setMusic((preState) => {
                   return { ...preState, url: element.url };
                 });
                 setModalOnOff(false);
               }}
             >
-              {/* <Image width={200} height={200} src={element.url} alt="" /> */}
-              <div key={index} onClick={() => console.log(element.url)}>
-                {element.title}
-              </div>
+              <Thumbnail thumbnail={element.thumbnails} />
+              <Title key={index}>{element.title}</Title>
             </MusicBox>
           ))}
         </SearchList>
