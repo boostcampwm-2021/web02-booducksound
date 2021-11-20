@@ -211,7 +211,7 @@ const gameStatusSummary = (gameRoom?: GameRoom) => {
 
   const { status, curRound, maxRound } = gameRoom;
 
-  console.log('gameStatusSummary 실행', status);
+  // console.log('gameStatusSummary 실행', status);
 
   switch (status) {
     case 'playing':

@@ -157,7 +157,6 @@ const Game: NextPage = () => {
 
   useSocketOn(SocketEvents.SET_GAME_ROOM, (gameRoom: GameRoom) => {
     if (!gameRoom) return;
-    console.log('프론트', gameRoom);
     setGameRoom(gameRoom);
   });
 

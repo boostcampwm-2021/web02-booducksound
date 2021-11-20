@@ -99,10 +99,8 @@ const GameRoomNav = ({
   const startGame = () => socket?.emit(SocketEvents.START_GAME, uuid);
 
   const makeSkip = () => {
-    console.log('클릭');
     if (preventMulti) return;
     setPreventMulti(true);
-    console.log('이건가');
     socket?.emit(SocketEvents.SKIP, uuid, socket.id);
   };
 

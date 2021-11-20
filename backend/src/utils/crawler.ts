@@ -1,6 +1,4 @@
-import { searchVideo } from "./search";
-
-export const Name = (name: string) => `Hello ${name}`;
+import { searchVideo } from './search';
 
 export function search(searchQuery: string) {
   return searchVideo(searchQuery);

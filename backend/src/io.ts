@@ -179,7 +179,6 @@ io.on('connection', (socket) => {
     try {
       if (room === undefined) return;
       const { title, playlistId, playlistName, skip, timePerProblem } = room;
-      console.log(password, room);
       serverRooms[uuid] = { ...serverRooms[uuid], title, playlistId, playlistName, skip, timePerProblem };
 
       if (password !== '********') serverRooms[uuid] = { ...serverRooms[uuid], password };
@@ -348,9 +347,9 @@ io.on('connection', (socket) => {
     done(
       result.map((element) => {
         return {
-          title: element.snippet.title,
-          url: element.snippet.url,
-          thumbnails: element.snippet.thumbnails.url,
+          title: element.title,
+          url: element.url,
+          thumbnails: element.thumbnails.url.split('?')[0],
         };
       }),
     );
