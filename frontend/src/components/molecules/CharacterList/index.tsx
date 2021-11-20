@@ -23,7 +23,8 @@ const Title = styled.p`
 
 const CharactersContainer = styled.div`
   width: 100%;
-  height: 100%;
+  overflow: auto;
+  height: calc(100% - 3rem);
   display: flex;
   flex-direction: column;
   padding: 0 10px;
@@ -31,6 +32,7 @@ const CharactersContainer = styled.div`
 
   @media (max-width: ${theme.breakpoints.md}) {
     flex-direction: row;
+    height: 100%;
     align-items: center;
     column-gap: 8px;
     padding: 0 4px;

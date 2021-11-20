@@ -81,9 +81,11 @@ const Login: NextPage = () => {
   const handleLogin = async () => {
     if (!id) return alert(ID_EMPTY_MSG);
     if (!password) return alert(PASSWORD_EMPTY_MSG);
-    await requestLogin(id, password);
-    dispatch(getUser());
-    Router.push('/lobby');
+    const res = await requestLogin(id, password);
+    if (res) {
+      dispatch(getUser());
+      Router.push('/lobby');
+    }
   };
 
   return (

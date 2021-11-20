@@ -136,6 +136,8 @@ const Name = styled.p`
   font-size: 1.1em;
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 0.8em;
+    text-align: center;
+    margin-top: 4px;
   }
   text-align: right;
 `;
@@ -151,7 +153,7 @@ const Point = styled(Name)`
 
 const MidContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   text-align: center;
   /* @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     flex-direction: row;

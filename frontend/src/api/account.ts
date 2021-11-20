@@ -28,8 +28,9 @@ export const updateStoreData = (getUser: Function) => {
 export const requestLogin = async (id: string, password: string) => {
   const res = await API('POST')(`${BACKEND_URL}/sign-in`)({ body: JSON.stringify({ id, password }) });
   const { isLogin, message } = await res.json();
-
-  if (!isLogin) return alert(message);
+  console.log(isLogin, message);
+  if (!isLogin) alert(message);
+  return isLogin;
 };
 
 export const requestLogout = async () => {

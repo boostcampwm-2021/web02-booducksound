@@ -88,6 +88,10 @@ const HashtagContainer = styled.div`
   overflow: hidden;
   margin-top: 24px;
   column-gap: 4px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    margin-top: 20px;
+  }
 `;
 
 const Hashtag = styled.span`
