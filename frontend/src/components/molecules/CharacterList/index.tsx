@@ -54,8 +54,8 @@ const CharacterList = ({
       <Title>사용자 목록</Title>
       <CharactersContainer>
         {players &&
-          (status === 'playing'
-            ? Object.entries(players).sort((a, b) => (a[1].score < b[1].score ? 1 : -1))
+          (status !== 'waiting'
+            ? Object.entries(players).sort((a, b) => b[1].score - a[1].score)
             : Object.entries(players)
           ).map((element, index) => (
             <CharacterProfile

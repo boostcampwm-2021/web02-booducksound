@@ -139,17 +139,19 @@ const ResultModal = ({ gameRoom, playlistId }: { gameRoom: GameRoom | undefined;
         <Title>결과 공지</Title>
         <ModalWrapper>
           {gameRoom !== undefined &&
-            Object.keys(gameRoom?.players).map((element, index) => (
-              <Container key={index}>
-                <ProfileContainer>
-                  <ProfileCircle>
-                    <Character color={gameRoom.players[element].color} width={'100%'} />
-                  </ProfileCircle>
-                </ProfileContainer>
-                <Name>{gameRoom.players[element].nickname}</Name>
-                <Name>{gameRoom.players[element].score}</Name>
-              </Container>
-            ))}
+            Object.values(gameRoom?.players)
+              .sort((a, b) => b.score - a.score)
+              .map((element, index) => (
+                <Container key={index}>
+                  <ProfileContainer>
+                    <ProfileCircle>
+                      <Character color={element.color} width={'100%'} />
+                    </ProfileCircle>
+                  </ProfileContainer>
+                  <Name>{element.nickname}</Name>
+                  <Name>{element.score}</Name>
+                </Container>
+              ))}
         </ModalWrapper>
         <Like onClick={handleClickLikeBtn} disabled={isClickedLikeBtn}>
           👍🏻

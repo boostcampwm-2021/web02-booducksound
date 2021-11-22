@@ -230,7 +230,7 @@ const CharacterProfile = ({ id, mode, color, name, status, skip, score, type, ro
       </ProfileContainer>
       <MidContainer>
         <Name>{name}</Name>
-        {mode === 'playing' && <Point>{score}</Point>}
+        {mode !== 'waiting' && <Point>{score}</Point>}
       </MidContainer>
       {mode === 'waiting' && <ChipContainer>{<StatusChip status={skip ? 'skip' : status} />}</ChipContainer>}
       {status !== 'king' && type && (
