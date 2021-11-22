@@ -188,6 +188,8 @@ const Lobby: NextPage = () => {
                   background={theme.colors.lime}
                   width="180px"
                   fontSize="20px"
+                  mdWidth="140px"
+                  mdFontSize="16px"
                   smWidth="110px"
                   smFontSize="12px"
                 >
@@ -201,6 +203,8 @@ const Lobby: NextPage = () => {
               background={theme.colors.lightsky}
               width="180px"
               fontSize="20px"
+              mdFontSize="16px"
+              mdWidth="140px"
               smWidth="110px"
               smFontSize="12px"
               onClick={handleCodeModalBtn}
@@ -214,6 +218,8 @@ const Lobby: NextPage = () => {
                     background={theme.colors.peach}
                     width="180px"
                     fontSize="20px"
+                    mdFontSize="16px"
+                    mdWidth="140px"
                     smWidth="110px"
                     smFontSize="12px"
                   >
@@ -226,6 +232,8 @@ const Lobby: NextPage = () => {
               background={theme.colors.sand}
               width="180px"
               fontSize="20px"
+              mdFontSize="16px"
+              mdWidth="140px"
               smWidth="110px"
               smFontSize="12px"
               onClick={handleCreateRoomModalBtn}
