@@ -12,7 +12,7 @@ type Info = {
 type Props = {
   info: Info;
   handleUserMenu: Function;
-  openRemoveModal: ({ target }: any) => void;
+  openRemoveModal: (id: string) => () => void;
 };
 
 const MyPlayListBox = ({ info, handleUserMenu, openRemoveModal }: Props) => {
