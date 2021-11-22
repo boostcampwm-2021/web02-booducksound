@@ -41,17 +41,17 @@ const InputContainer = styled.div`
   margin: 0 auto;
 
   > * {
-    margin: 0 auto 0.8rem auto !important;
+    margin: 0 auto 0.8rem auto;
   }
 
   a {
-    margin-top: 2rem !important;
+    margin-top: 2rem;
     display: block;
   }
 
   @media (max-width: ${theme.breakpoints.md}) {
     > * {
-      width: 100% !important;
+      width: 100%;
     }
     button {
       width: 90%;

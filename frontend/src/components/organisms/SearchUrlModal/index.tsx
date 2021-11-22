@@ -124,7 +124,6 @@ const SelectPlaylistModal = ({ setModalOnOff, setMusic }: Props) => {
             <MusicBox
               key={index}
               onClick={() => {
-                console.log(element.thumbnails);
                 setMusic((preState) => {
                   return { ...preState, url: element.url };
                 });

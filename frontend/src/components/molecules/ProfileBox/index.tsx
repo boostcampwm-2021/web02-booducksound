@@ -32,7 +32,7 @@ const ProfileBtnBox = styled.div`
 
   > a {
     text-decoration: auto;
-    margin-right: 1rem;
+    margin-right: 0.6rem;
   }
 
   @media (max-width: ${theme.breakpoints.md}) {
@@ -40,20 +40,21 @@ const ProfileBtnBox = styled.div`
     padding: 12px 0;
 
     > a {
-      margin: 0;
+      display: block;
+      margin-right: 0;
     }
 
     > a > button {
-      margin: 0 0 1rem 0;
+      font-size: 1rem;
+      margin: 0 0 0.4rem 0;
     }
   }
   @media (max-width: ${theme.breakpoints.sm}) {
     button {
       padding: 8px 0;
-      font-size: 0.85rem;
-      width: 90%;
+      width: 100%;
       display: block;
-      margin: 0 auto 1rem auto !important;
+      margin: 0 auto 1rem auto;
     }
   }
 `;

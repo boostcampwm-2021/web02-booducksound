@@ -48,11 +48,11 @@ const InputContainer = styled.div`
   position: relative;
 
   > * {
-    margin: 0 0 0.8rem 0 !important;
+    margin: 0 0 0.8rem 0;
   }
 
   a {
-    margin-top: 3rem !important;
+    margin-top: 3rem;
     display: block;
   }
 

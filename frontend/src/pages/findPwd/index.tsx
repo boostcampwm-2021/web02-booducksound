@@ -32,20 +32,23 @@ const InputContainer = styled.div`
   margin: 0 auto;
 
   > * {
-    margin: 0 auto 0.8rem auto !important;
+    margin: 0 auto 0.8rem auto;
   }
 
   a {
-    margin-top: 2rem !important;
+    margin-top: 2rem;
     display: block;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: ${theme.breakpoints.md}) {
+    width: 100%;
     > * {
-      width: 100% !important;
+      width: 100%;
     }
     button {
-      width: 90%;
+      width: 100%;
+      padding: 20px 0;
+      margin-top: 0.8rem;
     }
   }
 `;
@@ -55,6 +58,11 @@ const FindPwdInputText = styled(InputText)`
   font-size: 20px;
   padding: 24px 20px 24px 80px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+
+  @media (max-width: ${theme.breakpoints.sm}) {
+    font-size: 18px;
+    padding: 24px 40px 24px 40px;
+  }
 `;
 
 const FindPwd: NextPage = () => {

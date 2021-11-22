@@ -49,7 +49,7 @@ const InputContainer = styled.div`
 
   @media (max-width: ${theme.breakpoints.md}) {
     > * {
-      width: 100% !important;
+      width: 100%;
     }
     button {
       width: 90%;
