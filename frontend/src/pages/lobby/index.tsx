@@ -111,10 +111,14 @@ const GridWrapper = styled.div`
 const SearchRoomInputText = styled(InputText)`
   width: 100%;
   font-size: 18px;
-  padding: 10px 20px 10px 120px;
+  padding: 10px 20px 10px 80px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
-  background-position-x: 10%;
+  background-position-x: 20px;
   background-size: 25px;
+
+  @media (max-width: ${theme.breakpoints.sm}) {
+    font-size: 12px;
+  }
 `;
 
 const Lobby: NextPage = () => {

@@ -53,33 +53,50 @@ const PlayList = styled.li`
 `;
 
 const SelectButton = styled(ResponsiveButton)`
-  margin-left: 20px;
+  flex: 0 0 68px;
+  width: 60px;
+  margin-left: 4px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 0.96em;
+    flex: 0 0 58px;
+    width: 58px;
+  }
 `;
 
 const PlaylistInfo = styled.div`
   display: flex;
   justify-content: left;
-  width: 150px;
   margin-right: 10px;
   overflow: hidden;
   white-space: nowrap;
-`;
+  /* position: relative; */
 
-const Description = styled.span`
-  color: #999;
-  margin-right: 20px;
   animation-name: slideFont;
   animation-duration: 7s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
   @keyframes slideFont {
     from {
-      margin-left: 160px;
+      transform: translateX(-100%);
     }
     to {
-      margin-left: -250px;
+      transform: translateX(100%);
     }
   }
+`;
+
+const PlaylistInfoWrapper = styled.div`
+  overflow: hidden;
+  width: 200px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    display: none;
+  }
+`;
+
+const Description = styled.span`
+  color: #999;
 `;
 
 const SearchInputText = styled(InputText)`
@@ -94,6 +111,7 @@ const Hashtags = styled.span`
 const Contents = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: flex-end;
   align-items: center;
   column-gap: 5px;
   font-size: 0.85em;
@@ -103,6 +121,25 @@ const Contents = styled.div`
 
 const Title = styled.h4`
   font-size: 1em;
+  flex-grow: 10;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 0.96em;
+    width: 34px;
+  }
+`;
+
+const PlayCount = styled.span`
+  white-space: nowrap;
+  flex: 0 0 40px;
+  width: 40px;
+  text-align: right;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    font-size: 0.92em;
+    flex: 0 0 34px;
+    width: 34px;
+  }
 `;
 
 interface Props {
@@ -203,12 +240,14 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
               <PlayList key={_id} ref={playlists.length - 1 === i ? lastRef : null}>
                 <Title>{playlistName}</Title>
                 <Contents>
-                  <PlaylistInfo>
-                    <Description>{description}</Description>
-                    <Hashtags>{hashtags.map((hashtag) => `#${hashtag} `)}</Hashtags>
-                  </PlaylistInfo>
-                  <span>💙 {likeCount}</span>
-                  <span>🎧 {playCount}</span>
+                  <PlaylistInfoWrapper>
+                    <PlaylistInfo>
+                      <Description>{description}</Description>
+                      <Hashtags>{hashtags.map((hashtag) => ` #${hashtag}`)}</Hashtags>
+                    </PlaylistInfo>
+                  </PlaylistInfoWrapper>
+                  <PlayCount>💙 {likeCount}</PlayCount>
+                  <PlayCount>🎧 {playCount}</PlayCount>
                   <SelectButton
                     background={theme.colors.lilac}
                     fontSize="16px"
