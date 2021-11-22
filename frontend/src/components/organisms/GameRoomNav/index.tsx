@@ -158,7 +158,13 @@ const GameRoomNav = ({
           <ResponsiveButton
             width="160px"
             mdWidth="84px"
-            background={statusEncoder[player.status] !== 'READY' ? theme.colors.lilac : theme.colors.peach}
+            background={
+              status === 'waiting'
+                ? statusEncoder[player.status] !== 'READY'
+                  ? theme.colors.lilac
+                  : theme.colors.peach
+                : theme.colors.yellow
+            }
             fontSize="1em"
             onClick={handleStartBtnClick(player)}
             disabled={status === 'resting' || player.skip || (player.status === 'king' && !isAllReady)}
