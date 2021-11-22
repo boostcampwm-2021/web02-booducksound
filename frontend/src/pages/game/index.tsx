@@ -91,14 +91,14 @@ const Game: NextPage = () => {
 
   useSocketOn(
     SocketEvents.ROUND_END,
-    ({ type, info, who }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; info: string; who?: string }) => {
+    ({ type, info, answerCount }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; info: string; answerCount?: number }) => {
       if (type === 'SKIP') {
         setDialogMsg({ title: `${info}`, content: `모두가 SKIP 하였습니다.` });
         return;
       }
 
       if (type === 'ANSWER') {
-        setDialogMsg({ title: `${info}`, content: `${who}님이 노래를 맞추셨습니다!` });
+        setDialogMsg({ title: `${info}`, content: `${answerCount}명의 플레이어가 맞추었습니다!` });
         return;
       }
 

@@ -68,13 +68,13 @@ interface Props {
 }
 
 interface Form {
-  [index: string]: string | number;
+  [key: string]: string | number;
   title: string;
   playlistName: string;
   playlistId: string;
   password: string;
-  skip: GameRoom['skip'] | number;
-  timePerProblem: GameRoom['timePerProblem'] | number;
+  needAnswerRatio: number;
+  timePerProblem: number;
 }
 
 const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
@@ -82,46 +82,17 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
   const { uuid } = useSelector((state: RootState) => state.room);
   const [password, setPassword] = useState('');
   const [pastPassword, setPastPassword] = useState('');
-  const { title, playlistName, playlistId, skip, timePerProblem } = gameRoom;
-  const defaultValue = { title, playlistName, playlistId, skip, timePerProblem, password };
-  const [form, setForm] = useState<Form>({ title, playlistName, playlistId, skip, timePerProblem, password });
+
+  const { title, playlistName, playlistId, needAnswerRatio, timePerProblem } = gameRoom;
+  const defaultForm = { title, playlistName, playlistId, needAnswerRatio, timePerProblem, password };
+  const [form, setForm] = useState<Form>(defaultForm);
   const [leftButtonDisabled, setLeftButtonDisabled] = useState(true);
   const [playlistModalOnOff, setPlaylistModalOnOff] = useState(false);
 
-  const handleTitleChange: ChangeEventHandler = (e) => {
-    const title = (e.target as HTMLInputElement).value;
-    setForm((prev) => {
-      const form = { ...prev, title };
-      validateForm(form, password);
-      return form;
-    });
-  };
   useSocketEmit(SocketEvents.GET_ROOM_PASSWORD, uuid, (gamePassword: string) => {
     setPassword(gamePassword);
     setPastPassword(gamePassword);
   });
-
-  const handleSelectPlaylistBtn: MouseEventHandler = () => {
-    setPlaylistModalOnOff(true);
-  };
-
-  const handlePasswordChange: ChangeEventHandler = (e) => {
-    const password = (e.target as HTMLInputElement).value;
-    setPassword(password);
-    validateForm(form, password);
-  };
-
-  const handleSkipChange: ChangeEventHandler = (e) => {
-    const skipStr = (e.target as HTMLSelectElement).value;
-    const skip = Number(skipStr.replace(/[^0-9]/g, ''));
-    setForm((form) => ({ ...form, skip }));
-  };
-
-  const handleTimePerProblemChange: ChangeEventHandler = (e) => {
-    const timePerProblemStr = (e.target as HTMLSelectElement).value;
-    const timePerProblem = Number(timePerProblemStr.replace(/[^0-9]/g, ''));
-    setForm((form) => ({ ...form, timePerProblem }));
-  };
 
   const handleUpdateRoomBtn: MouseEventHandler = () => {
     if (socket === null) return;
@@ -132,27 +103,16 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
     });
   };
 
-  const handleNoBtn: MouseEventHandler = () => {
-    setModalOnOff(false);
+  const checkFormChanged = (prev: Form, next: Form) => {
+    console.log(prev, next);
+    return Object.keys(prev).some((key) => prev[key] !== next[key]);
   };
 
-  const compareForm = (prev: Form, next: Form) => {
-    for (const key of Object.keys(prev)) {
-      if (prev[key] !== next[key]) {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  const validateForm = (form: Form, password: string) => {
-    if (!compareForm(defaultValue, form) || password !== pastPassword) {
-      setLeftButtonDisabled(false);
-      return true;
-    }
-
-    setLeftButtonDisabled(true);
-    return false;
+  const validateForm = (form: Form) => {
+    const condition =
+      !checkFormChanged(defaultForm, form) || !form.title || !form.playlistId || password !== pastPassword;
+    setLeftButtonDisabled(condition);
+    return !condition;
   };
 
   return (
@@ -161,7 +121,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
       maxWidth="540px"
       leftButtonText={leftButtonText}
       leftButtonHandler={handleUpdateRoomBtn}
-      rightButtonHandler={handleNoBtn}
+      rightButtonHandler={() => setModalOnOff(false)}
       leftButtonDisabled={leftButtonDisabled}
     >
       <Container>
@@ -172,7 +132,13 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             placeholder="방 제목을 입력하세요"
             isSearch={false}
             value={form.title}
-            handleChange={handleTitleChange}
+            handleChange={(e) => {
+              setForm((prev) => {
+                const form = { ...prev, title: (e.target as HTMLInputElement).value };
+                validateForm(form);
+                return form;
+              });
+            }}
           />
         </InputContainer>
         <InputContainer>
@@ -189,7 +155,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             btnHeight="38px"
             disabled={true}
             value={form.playlistName}
-            onClick={handleSelectPlaylistBtn}
+            onClick={() => setPlaylistModalOnOff(true)}
           />
           {playlistModalOnOff && (
             <SelectPlaylistModal setModalOnOff={setPlaylistModalOnOff} setForm={setForm} validateForm={validateForm} />
@@ -202,25 +168,43 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             placeholder={gameRoom.hasPassword ? '********' : ''}
             isSearch={false}
             value={password}
-            handleChange={handlePasswordChange}
+            handleChange={(e) => {
+              const password = (e.target as HTMLInputElement).value;
+              setPassword(password);
+              validateForm(form);
+            }}
           />
         </InputContainer>
         <HalfContainer>
           <SelectSection
-            title="스킵 인원 수"
+            title="정답 인원 수"
             margin="8px"
             titleSize="1em"
-            options={['1명', '2명', '3명', '4명', '5명', '6명', '7명', '8명']}
-            defaultValue="5명"
-            onChange={handleSkipChange}
+            options={['1명만', '25% 이상', '50% 이상', '75% 이상', '모두']}
+            values={[0.01, 0.25, 0.5, 0.75, 1]}
+            defaultValue={0.5}
+            onChange={(e) => {
+              setForm((prev) => {
+                const form = { ...prev, needAnswerRatio: Number((e.target as HTMLSelectElement).value) };
+                validateForm(form);
+                return form;
+              });
+            }}
           />
           <SelectSection
             title="문항 당 시간"
             margin="8px"
             titleSize="1em"
             options={['10초', '20초', '30초', '40초', '50초', '60초', '70초', '80초', '90초']}
-            defaultValue="60초"
-            onChange={handleTimePerProblemChange}
+            values={[10, 20, 30, 40, 50, 60, 70, 80, 90]}
+            defaultValue={60}
+            onChange={(e) => {
+              setForm((prev) => {
+                const form = { ...prev, timePerProblem: Number((e.target as HTMLSelectElement).value) };
+                validateForm(form);
+                return form;
+              });
+            }}
           />
         </HalfContainer>
       </Container>

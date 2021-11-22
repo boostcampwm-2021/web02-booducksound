@@ -11,23 +11,13 @@ const Container = styled.div`
   height: 100%;
 `;
 
-const Title = styled.p`
-  font-size: 18px;
-  font-weight: 700;
-  padding: 16px;
-
-  @media (max-width: ${theme.breakpoints.md}) {
-    display: none;
-  }
-`;
-
 const CharactersContainer = styled.div`
   width: 100%;
+  height: 100%;
   overflow: auto;
-  height: calc(100% - 3rem);
   display: flex;
   flex-direction: column;
-  padding: 0 10px;
+  padding: 4px 10px;
   row-gap: 10px;
 
   @media (max-width: ${theme.breakpoints.md}) {
@@ -35,7 +25,7 @@ const CharactersContainer = styled.div`
     height: 100%;
     align-items: center;
     column-gap: 8px;
-    padding: 0 4px;
+    padding: 4px;
   }
 `;
 
@@ -51,23 +41,23 @@ const CharacterList = ({
   const socket = useSocket();
   return (
     <Container>
-      <Title>사용자 목록</Title>
       <CharactersContainer>
         {players &&
           (status !== 'waiting'
             ? Object.entries(players).sort((a, b) => b[1].score - a[1].score)
             : Object.entries(players)
-          ).map((element, index) => (
+          ).map((player, index) => (
             <CharacterProfile
-              id={element[0]}
+              id={player[0]}
               type={!!(socket && players[socket.id]?.status === 'king' && status === 'waiting')}
               mode={status}
               key={index}
-              color={element[1].color}
-              name={element[1].nickname}
-              status={element[1].status}
-              skip={element[1].skip}
-              score={element[1].score}
+              color={player[1].color}
+              name={player[1].nickname}
+              status={player[1].status}
+              skip={player[1].skip}
+              answer={player[1].answer}
+              score={player[1].score}
               roomNo={roomNo}
             />
           ))}
