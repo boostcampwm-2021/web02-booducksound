@@ -347,7 +347,7 @@ io.on('connection', (socket) => {
       }
 
       serverRooms[uuid].players[socket.id].answer = true;
-      serverRooms[uuid].players[socket.id].score += 100;
+      serverRooms[uuid].players[socket.id].score += Math.max(100 - serverRooms[uuid].answerCount * 20, 10);
       serverRooms[uuid].answerCount += 1;
       io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
       io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
