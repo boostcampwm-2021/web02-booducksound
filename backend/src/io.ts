@@ -318,7 +318,9 @@ io.on('connection', (socket) => {
       console.error(error);
     }
   });
-
+  socket.on(SocketEvents.GET_ROOM_PASSWORD, (uuid: string, done) => {
+    done(serverRooms[uuid].password);
+  });
   socket.on(SocketEvents.COMPARE_PWD, (uuid: string, code: string, done) => {
     if (!code) return;
     if (serverRooms[uuid].password === code) done(true);
