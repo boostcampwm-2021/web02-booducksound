@@ -80,7 +80,7 @@ const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting' }>`
     mode &&
     mode !== 'waiting' &&
     css`
-      &:nth-child(-n + 3) ${ProfileCircle}::after {
+      &:nth-of-type(-n + 3) ${ProfileCircle}::after {
         content: '';
         position: absolute;
         top: -10px;
@@ -97,7 +97,7 @@ const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting' }>`
         }
       }
 
-      &:nth-child(1) ${ProfileCircle} {
+      &:nth-of-type(1) ${ProfileCircle} {
         & {
           border-color: ${theme.colors.yellow};
         }
@@ -107,7 +107,7 @@ const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting' }>`
         }
       }
 
-      &:nth-child(2) ${ProfileCircle} {
+      &:nth-of-type(2) ${ProfileCircle} {
         & {
           border-color: ${theme.colors.gray};
         }
@@ -117,7 +117,7 @@ const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting' }>`
         }
       }
 
-      &:nth-child(3) ${ProfileCircle} {
+      &:nth-of-type(3) ${ProfileCircle} {
         & {
           border-color: ${theme.colors.peach};
         }
