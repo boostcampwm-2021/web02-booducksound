@@ -25,10 +25,9 @@ const MyPage: NextPage = () => {
   const dispatch = useDispatch();
 
   const userInfo: UserState = useSelector((state: RootState) => state.user);
-  const { id, likes, myPlaylist } = userInfo || {};
+  const { id } = userInfo || {};
 
-  const openRemoveModal = ({ target }: any) => {
-    const { id } = target?.parentElement?.closest('tr').dataset;
+  const openRemoveModal = (id: string) => () => {
     setRemoveModalOnOff(true);
     selectOid(id);
     dispatch(getUser());
@@ -39,9 +38,10 @@ const MyPage: NextPage = () => {
     dispatch(getUser());
   };
 
-  useEffect(() => {
+  const handleClickDeleteBtn = (id: string, oid: string) => () => {
+    deleteLikesList(id, oid);
     setRemoveModalOnOff(false);
-  }, [likes, myPlaylist]);
+  };
 
   useEffect(() => {
     dispatch(getUser());
@@ -55,7 +55,7 @@ const MyPage: NextPage = () => {
       </PageBox>
       {removeModalOnOff && (
         <Modal
-          leftButtonHandler={(e) => deleteLikesList(id, oid)}
+          leftButtonHandler={handleClickDeleteBtn(id, oid)}
           rightButtonHandler={() => setRemoveModalOnOff(false)}
           leftButtonText="YES"
           height="150px"

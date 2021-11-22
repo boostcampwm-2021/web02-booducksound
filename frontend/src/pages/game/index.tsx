@@ -178,7 +178,9 @@ const Game: NextPage = () => {
       <audio ref={music1} onEnded={handleAudioEnded} />
       <audio ref={music2} onEnded={handleAudioEnded} />
       {dialogMsg && <BlurDialog title={dialogMsg.title} content={dialogMsg.content} />}
-      {gameResultModalOnOff && <ResultModal gameRoom={gameRoom} playlistId={gameRoom?.playlistId} />}
+      {gameResultModalOnOff && (
+        <ResultModal gameRoom={gameRoom} playlistId={gameRoom?.playlistId} userId={userInfo.id} />
+      )}
     </Container>
   );
 };
