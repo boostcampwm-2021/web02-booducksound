@@ -12,6 +12,7 @@ interface InputLabelContainerProps {
 interface Props extends InputLabelContainerProps {
   title: string;
   options: string[] | number[];
+  values: string[] | number[];
   defaultValue: string | number;
   onChange: ChangeEventHandler;
 }
@@ -28,13 +29,13 @@ const InputLabelContainer = styled.label<InputLabelContainerProps>`
   font-weight: 700;
 `;
 
-const SelectSection = ({ titleSize, margin, title, options, defaultValue, onChange }: Props) => {
+const SelectSection = ({ titleSize, margin, title, options, values, defaultValue, onChange }: Props) => {
   return (
     <InputSectionContainer>
       <InputLabelContainer titleSize={titleSize} margin={margin}>
         {title}
       </InputLabelContainer>
-      <SelectBox options={options} defaultValue={defaultValue} onChange={onChange} />
+      <SelectBox options={options} values={values} defaultValue={defaultValue} onChange={onChange} />
     </InputSectionContainer>
   );
 };
