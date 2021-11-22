@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 
 import { incrementLikeCount } from '~/api/playlist';
+import { insertLikes } from '~/api/user';
 import Character from '~/atoms/Character';
 import Portal from '~/atoms/Portal';
 import theme from '~/styles/theme';
@@ -11,6 +12,12 @@ import { GameRoom } from '~/types/GameRoom';
 interface ModalContainerProps {
   height?: string;
   maxWidth?: string;
+}
+
+interface Props {
+  gameRoom: GameRoom | undefined;
+  playlistId: string | undefined;
+  userId: string;
 }
 
 const McCharacter = styled.div`
@@ -122,12 +129,13 @@ const Name = styled.p`
   font-size: 1.2em;
 `;
 
-const ResultModal = ({ gameRoom, playlistId }: { gameRoom: GameRoom | undefined; playlistId: string | undefined }) => {
+const ResultModal = ({ gameRoom, playlistId, userId }: Props) => {
   const [isClickedLikeBtn, setIsClickedLikeBtn] = useState<boolean>(false);
 
   const handleClickLikeBtn = () => {
     if (!playlistId) return;
     incrementLikeCount(playlistId);
+    insertLikes(playlistId, userId);
     setIsClickedLikeBtn(true);
   };
 
