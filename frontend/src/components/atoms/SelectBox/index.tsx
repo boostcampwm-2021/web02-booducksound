@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 
 interface Props {
   options: string[] | number[];
+  values: string[] | number[];
   defaultValue?: string | number;
   onChange: ChangeEventHandler;
 }
@@ -21,11 +22,13 @@ const Select = styled.select`
   width: 100%;
 `;
 
-const SelectBox = ({ options, defaultValue, onChange }: Props) => {
+const SelectBox = ({ options, values, defaultValue, onChange }: Props) => {
   return (
     <Select defaultValue={defaultValue} onChange={onChange}>
-      {options.map((e, i) => (
-        <option key={`${e}${i}`}>{e}</option>
+      {options.map((option, i) => (
+        <option key={i} value={values[i]}>
+          {option}
+        </option>
       ))}
     </Select>
   );
