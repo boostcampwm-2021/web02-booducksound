@@ -18,6 +18,7 @@ interface Props {
   name: string;
   status: 'king' | 'ready' | 'prepare';
   skip: boolean;
+  answer: boolean;
   score: number;
   type: boolean;
   roomNo: string | null;
@@ -56,7 +57,7 @@ const ProfileCircle = styled.div`
   }
 `;
 
-const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting' }>`
+const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting'; answer: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -64,6 +65,7 @@ const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting' }>`
   font-size: 16px;
   min-width: 60px;
   position: relative;
+  padding: 4px 8px;
 
   &:hover > .btn_list {
     display: block;
@@ -75,6 +77,13 @@ const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting' }>`
     align-items: center;
     font-size: 14px;
   }
+
+  ${({ answer }) =>
+    answer &&
+    css`
+      border-radius: 20px;
+      border-bottom: 3px solid ${theme.colors.ocean};
+    `}
 
   ${({ mode }) =>
     mode &&
@@ -134,12 +143,13 @@ const Name = styled.p`
   white-space: nowrap;
   overflow: hidden;
   font-size: 1.1em;
+  text-align: right;
+
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 0.8em;
     text-align: center;
     margin-top: 4px;
   }
-  text-align: right;
 `;
 
 const Point = styled(Name)`
@@ -155,9 +165,6 @@ const MidContainer = styled.div`
   display: flex;
   flex-direction: column;
   text-align: center;
-  /* @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    flex-direction: row;
-  } */
 `;
 
 const ChipContainer = styled.div`
@@ -202,7 +209,18 @@ const KingBtn = styled.button`
   }
 `;
 
-const CharacterProfile = ({ id, mode, color, name, status, skip, score, type, roomNo }: PropsWithChildren<Props>) => {
+const CharacterProfile = ({
+  id,
+  mode,
+  color,
+  name,
+  status,
+  skip,
+  answer,
+  score,
+  type,
+  roomNo,
+}: PropsWithChildren<Props>) => {
   const [delegateModalOnOff, setDelegateModalOnOff] = useState<boolean>(false);
   const [delegatedUserName, setDelegatedUserName] = useState<string>('');
   const socket = useSocket();
@@ -222,7 +240,7 @@ const CharacterProfile = ({ id, mode, color, name, status, skip, score, type, ro
   };
 
   return (
-    <Container mode={mode}>
+    <Container mode={mode} answer={answer}>
       <ProfileContainer>
         <ProfileCircle>
           <Character color={color} width={'90%'} />

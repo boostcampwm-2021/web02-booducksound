@@ -70,7 +70,11 @@ const Container = styled(GlassContainer)<Props>`
 const CharacterContainer = styled(Container)`
   display: flex;
   justify-content: flex-start;
-  padding: 12px;
+  padding: 16px 4px;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    padding: 4px;
+  }
 `;
 
 const ChatListContainer = styled(Container)`
@@ -210,8 +214,6 @@ const gameStatusSummary = (gameRoom?: GameRoom) => {
   if (!gameRoom) return;
 
   const { status, curRound, maxRound } = gameRoom;
-
-  // console.log('gameStatusSummary 실행', status);
 
   switch (status) {
     case 'playing':

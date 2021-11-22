@@ -96,12 +96,12 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
   };
 
   const checkFormChanged = (prev: Form, next: Form) => {
+    console.log(prev, next);
     return Object.keys(prev).some((key) => prev[key] !== next[key]);
   };
 
   const validateForm = (form: Form) => {
-    const condition =
-      !checkFormChanged(defaultForm, form) || !form.title || !form.playlistId || form.password !== '********';
+    const condition = !checkFormChanged(defaultForm, form) || !form.title || !form.playlistId;
 
     setLeftButtonDisabled(condition);
     return !condition;
@@ -176,9 +176,11 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             values={[0.01, 0.25, 0.5, 0.75, 1]}
             defaultValue={0.5}
             onChange={(e) => {
-              const needAnswerRatio = Number((e.target as HTMLSelectElement).value);
-              validateForm(form);
-              setForm((form) => ({ ...form, needAnswerRatio }));
+              setForm((prev) => {
+                const form = { ...prev, needAnswerRatio: Number((e.target as HTMLSelectElement).value) };
+                validateForm(form);
+                return form;
+              });
             }}
           />
           <SelectSection
@@ -189,9 +191,11 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             values={[10, 20, 30, 40, 50, 60, 70, 80, 90]}
             defaultValue={60}
             onChange={(e) => {
-              const timePerProblem = Number((e.target as HTMLSelectElement).value);
-              validateForm(form);
-              setForm((form) => ({ ...form, timePerProblem }));
+              setForm((prev) => {
+                const form = { ...prev, timePerProblem: Number((e.target as HTMLSelectElement).value) };
+                validateForm(form);
+                return form;
+              });
             }}
           />
         </HalfContainer>
