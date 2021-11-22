@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongoose';
 import short from 'short-uuid';
 import socketio from 'socket.io';
 
@@ -123,7 +122,7 @@ io.on('connection', (socket) => {
       serverRooms[uuid].players[Object.keys(serverRooms[uuid].players)[0]].status = 'king';
     }
 
-    io.emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
   };
 
