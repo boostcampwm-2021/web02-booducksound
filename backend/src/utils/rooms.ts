@@ -9,10 +9,10 @@ export const getLobbyRoom = (uuid: string) => {
   const lobbyRoom: LobbyRoom = {
     title: serverRoom.title,
     curPeople: Object.keys(serverRoom.players).length,
-    maxPeople: 8, // TODO: 방 슬롯 열고 닫는 거에 따라 maxPeople 설정
+    maxPeople: 8,
     hasPassword: !!serverRoom.password,
-    hashtags: serverRoom.hashtags, // TODO: playlistId를 통해 hashtags 가져오기
-    playlistName: serverRoom.playlistName, // TODO: playlistId를 통해 playlistName 가져오기
+    hashtags: serverRoom.hashtags,
+    playlistName: serverRoom.playlistName,
     status: serverRoom.status,
   };
 
@@ -27,9 +27,9 @@ export const getGameRoom = (uuid: string) => {
     hasPassword: !!serverRoom.password,
     playlistId: serverRoom.playlistId,
     playlistName: serverRoom.playlistName,
-    hashtags: serverRoom.hashtags, // TODO: playListID를 통해 hashtags를 기져 오기
+    hashtags: serverRoom.hashtags,
     players: serverRoom.players,
-    skip: serverRoom.skip,
+    needAnswerRatio: serverRoom.needAnswerRatio,
     status: serverRoom.status,
     curRound: serverRoom.curRound,
     maxRound: serverRoom.maxRound,

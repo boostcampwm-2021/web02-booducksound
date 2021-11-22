@@ -113,8 +113,8 @@ interface Props {
       playlistName: string;
       playlistId: string;
       password: string;
-      skip: GameRoom['skip'] | number;
-      timePerProblem: GameRoom['timePerProblem'] | number;
+      needAnswerRatio: number;
+      timePerProblem: number;
     }>
   >;
   validateForm: Function;

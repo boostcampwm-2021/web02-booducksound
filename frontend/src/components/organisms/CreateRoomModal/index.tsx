@@ -70,7 +70,7 @@ interface Form {
   playlistName: string;
   playlistId: string;
   password: string;
-  skip: number;
+  needAnswerRatio: number;
   timePerProblem: number;
 }
 
@@ -83,7 +83,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
     playlistName: '',
     playlistId: '',
     password: '',
-    skip: 5,
+    needAnswerRatio: 0.5,
     timePerProblem: 60,
   });
 
@@ -166,15 +166,15 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
         </ContentContainer>
         <HalfContainer>
           <SelectSection
-            title="스킵 인원 수"
+            title="정답 인원 수"
             margin="8px"
             titleSize="1em"
-            options={['1명', '2명', '3명', '4명', '5명', '6명', '7명', '8명']}
-            defaultValue="5명"
+            options={['1명만', '25% 이상', '50% 이상', '75% 이상', '모두']}
+            values={[0.01, 0.25, 0.5, 0.75, 1]}
+            defaultValue={0.5}
             onChange={(e) => {
-              const skipStr = (e.target as HTMLSelectElement).value;
-              const skip = Number(skipStr.replace(/[^0-9]/g, ''));
-              setForm((form) => ({ ...form, skip }));
+              const needAnswerRatio = Number((e.target as HTMLSelectElement).value);
+              setForm((form) => ({ ...form, needAnswerRatio }));
             }}
           />
           <SelectSection
@@ -182,10 +182,10 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
             margin="8px"
             titleSize="1em"
             options={['10초', '20초', '30초', '40초', '50초', '60초', '70초', '80초', '90초']}
-            defaultValue="60초"
+            values={[10, 20, 30, 40, 50, 60, 70, 80, 90]}
+            defaultValue={60}
             onChange={(e) => {
-              const timePerProblemStr = (e.target as HTMLSelectElement).value;
-              const timePerProblem = Number(timePerProblemStr.replace(/[^0-9]/g, ''));
+              const timePerProblem = Number((e.target as HTMLSelectElement).value);
               setForm((form) => ({ ...form, timePerProblem }));
             }}
           />

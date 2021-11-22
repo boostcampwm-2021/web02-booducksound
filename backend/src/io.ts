@@ -16,8 +16,11 @@ const replaceText = (str: string) => {
   return str.replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>{}[\]\\/ ]/gim, '').toLowerCase();
 };
 
-const resetSkip = (uuid: string) => {
-  Object.keys(serverRooms[uuid].players).forEach((key) => (serverRooms[uuid].players[key].skip = false));
+const resetPlayer = (uuid: string) => {
+  Object.keys(serverRooms[uuid].players).forEach((key) => {
+    serverRooms[uuid].players[key].skip = false;
+    serverRooms[uuid].players[key].answer = false;
+  });
 };
 
 const clearTimer = (timer: NodeJS.Timeout | null) => {
@@ -52,11 +55,15 @@ const setWaitTimer = (serverRoom: ServerRoom, uuid: string, isExistNext: boolean
   }, 5000);
 };
 
-const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; who?: string }) => {
+const getNextRound = (
+  uuid: string,
+  { type, answerCount }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; answerCount?: number },
+) => {
   const gameEnd = (uuid: string) => {
     serverRooms[uuid].curRound = 1;
     serverRooms[uuid].status = 'waiting';
     serverRooms[uuid].skipCount = 0;
+    serverRooms[uuid].answerCount = 0;
     serverRooms[uuid].streams.forEach((stream) => stream.destroy());
     serverRooms[uuid].streams = [];
     Object.keys(serverRooms[uuid].players).forEach((key) => {
@@ -66,7 +73,7 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
         PlaylistService.incrementPlayCount(serverRooms[uuid].playlistId);
       }
     });
-    resetSkip(uuid);
+    resetPlayer(uuid);
     clearTimer(serverRooms[uuid].timer);
 
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
@@ -78,7 +85,7 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
     const { curRound, maxRound, musics } = serverRooms[uuid];
 
     if (curRound === maxRound) {
-      io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, who });
+      io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, answerCount });
       setTimeout(() => gameEnd(uuid), 5000);
       return;
     }
@@ -92,8 +99,9 @@ const getNextRound = (uuid: string, { type, who }: { type: 'SKIP' | 'ANSWER' | '
     }
 
     serverRooms[uuid].skipCount = 0;
-    resetSkip(uuid);
-    io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, who });
+    serverRooms[uuid].answerCount = 0;
+    resetPlayer(uuid);
+    io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, answerCount });
 
     setWaitTimer(serverRooms[uuid], uuid, curRound + 1 < musics.length);
   } catch (error) {
@@ -141,7 +149,7 @@ io.on('connection', (socket) => {
 
   socket.on(SocketEvents.CREATE_ROOM, async (room, done) => {
     try {
-      const { title, playlistId, playlistName, password, skip, timePerProblem } = room;
+      const { title, playlistId, playlistName, password, needAnswerRatio, timePerProblem } = room;
       const uuid = short.generate();
 
       const setRoomInfo = async (playlistId: string) => {
@@ -153,12 +161,13 @@ io.on('connection', (socket) => {
           playlistId,
           playlistName,
           hashtags: playlist.hashtags,
-          skip,
+          needAnswerRatio,
           timePerProblem,
           status: 'waiting',
           musics: playlist.musics,
           curRound: 1,
           maxRound: playlist.musics.length,
+          answerCount: 0,
           skipCount: 0,
           streams: [],
           timer: null,
@@ -177,9 +186,9 @@ io.on('connection', (socket) => {
 
   socket.on(SocketEvents.SET_GAME_ROOM, async (uuid, password, room, done) => {
     try {
-      if (room === undefined) return;
-      const { title, playlistId, playlistName, skip, timePerProblem } = room;
-      serverRooms[uuid] = { ...serverRooms[uuid], title, playlistId, playlistName, skip, timePerProblem };
+      if (!room) return;
+      const { title, playlistId, playlistName, needAnswerRatio, timePerProblem } = room;
+      serverRooms[uuid] = { ...serverRooms[uuid], title, playlistId, playlistName, needAnswerRatio, timePerProblem };
 
       if (password !== '********') serverRooms[uuid] = { ...serverRooms[uuid], password };
       const playlist = await PlaylistService.getById(playlistId);
@@ -217,6 +226,7 @@ io.on('connection', (socket) => {
             color,
             status: Object.keys(serverRooms[uuid].players).length ? 'prepare' : 'king',
             skip: false,
+            answer: false,
             score: 0,
           },
         },
@@ -232,6 +242,7 @@ io.on('connection', (socket) => {
     } catch (error) {
       console.error(error);
     }
+
     socket.on('disconnect', () => {
       try {
         leaveRoom(uuid);
@@ -324,6 +335,7 @@ io.on('connection', (socket) => {
     if (serverRooms[uuid].password === code) done(true);
     else done(false);
   });
+
   socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string, color: string) => {
     try {
       const currentMusicInfo = serverRooms[uuid]?.musics[serverRooms[uuid].curRound - 1];
@@ -332,11 +344,17 @@ io.on('connection', (socket) => {
       if (serverRooms[uuid].status === 'waiting' || !isAnswer) {
         return io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message', color });
       }
+
+      serverRooms[uuid].players[socket.id].answer = true;
       serverRooms[uuid].players[socket.id].score += 100;
-      serverRooms[uuid].status = 'resting';
-      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+      serverRooms[uuid].answerCount += 1;
       io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
-      getNextRound(uuid, { type: 'ANSWER', who: name });
+      io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+
+      const { answerCount, players, needAnswerRatio } = serverRooms[uuid];
+      if (answerCount >= Object.keys(players).length * needAnswerRatio) {
+        getNextRound(uuid, { type: 'ANSWER', answerCount });
+      }
     } catch (error) {
       console.error(error);
     }
