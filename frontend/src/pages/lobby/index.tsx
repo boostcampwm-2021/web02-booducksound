@@ -159,18 +159,15 @@ const Lobby: NextPage = () => {
     setSearch(search);
   };
 
-  const handleRoomClick: MouseEventHandler = (e) => {
-    const roomcard = (e.target as Element).closest('.roomcard') as HTMLDivElement;
-    if (!roomcard) return;
-
-    const { uuid, lock, status } = roomcard.dataset;
+  const handleClickRoomCard = (room: LobbyRoom, uuid: string) => () => {
+    const { hasPassword, status } = room;
     if (!uuid || status !== 'waiting') return;
-    if (lock === 'false') {
-      dispatch({ type: RoomActions.SET_UUID, payload: { uuid } });
-      Router.push(`/game`);
-    } else {
+    if (hasPassword) {
       setEnterPwd(uuid);
+      return;
     }
+    dispatch({ type: RoomActions.SET_UUID, payload: { uuid } });
+    Router.push(`/game`);
   };
 
   return (
@@ -246,11 +243,13 @@ const Lobby: NextPage = () => {
           </SearchWrapper>
         </SearchContainer>
         <GridContainer>
-          <GridWrapper onClick={handleRoomClick}>
+          <GridWrapper>
             {rooms &&
               Object.entries(rooms)
                 .filter(([uuid, { title, playlistName }]) => title.includes(search) || playlistName.includes(search))
-                .map(([uuid, room]) => <RoomCard key={uuid} uuid={uuid} {...room} />)}
+                .map(([uuid, room]) => (
+                  <RoomCard key={uuid} room={room} handleClickRoomCard={handleClickRoomCard(room, uuid)} />
+                ))}
           </GridWrapper>
         </GridContainer>
       </Wrapper>

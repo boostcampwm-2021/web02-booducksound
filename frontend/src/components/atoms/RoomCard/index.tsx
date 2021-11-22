@@ -6,6 +6,11 @@ interface ContainerProps {
   status: 'playing' | 'waiting' | 'resting';
 }
 
+interface Props {
+  room: LobbyRoom;
+  handleClickRoomCard: () => void;
+}
+
 const Container = styled.div<ContainerProps>`
   display: flex;
   flex-direction: column;
@@ -104,18 +109,10 @@ const Hashtag = styled.span`
   }
 `;
 
-const RoomCard = ({
-  title,
-  playlistName,
-  hashtags,
-  curPeople,
-  maxPeople,
-  status,
-  hasPassword,
-  uuid,
-}: { uuid: string } & LobbyRoom) => {
+const RoomCard = ({ room, handleClickRoomCard }: Props) => {
+  const { status, title, hasPassword, curPeople, maxPeople, playlistName, hashtags } = room;
   return (
-    <Container className="roomcard" status={status} data-uuid={uuid} data-lock={!!hasPassword} data-status={status}>
+    <Container className="roomcard" onClick={handleClickRoomCard} status={status}>
       <FirstLineContainer>
         <Title>{title}</Title>
         <FirstLineRightContainer>
