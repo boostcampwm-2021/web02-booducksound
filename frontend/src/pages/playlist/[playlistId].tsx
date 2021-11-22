@@ -2,6 +2,7 @@ import { KeyboardEventHandler, MouseEvent, useState } from 'react';
 
 import styled from '@emotion/styled';
 import type { NextPage, NextPageContext } from 'next';
+import dynamic from 'next/dynamic';
 import Router, { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 
@@ -13,11 +14,12 @@ import { FAILED, SUCCESS } from '~/constants/index';
 import Chip from '~/molecules/Chip';
 import CreatePlaylistInputBox from '~/organisms/CreatePlaylistInputBox';
 import CreatePlaylistMusicList from '~/organisms/CreatePlaylistMusicList';
-import CreatePlaylistMusicModal from '~/organisms/CreatePlaylistMusicModal';
 import theme from '~/styles/theme';
 import { Music } from '~/types/Music';
 import { Playlist } from '~/types/Playlist';
 import { PlaylistInput } from '~/types/PlaylistInput';
+
+const CreatePlaylistMusicModal = dynamic(() => import('~/organisms/CreatePlaylistMusicModal'));
 
 const ChipContainer = styled.div`
   display: flex;

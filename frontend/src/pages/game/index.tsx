@@ -2,6 +2,7 @@ import { MutableRefObject, ReactEventHandler, useEffect, useRef, useState } from
 
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -10,15 +11,16 @@ import { useLeavePage } from '~/hooks/useLeavePage';
 import useSocket from '~/hooks/useSocket';
 import useSocketEmit from '~/hooks/useSocketEmit';
 import useSocketOn from '~/hooks/useSocketOn';
-import BlurDialog from '~/molecules/BlurDialog';
 import GameRoomContainer from '~/organisms/GameRoomContainer';
 import GameRoomNav from '~/organisms/GameRoomNav';
-import ResultModal from '~/organisms/ResultModal';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
 import { RoomActions } from '~/types/Actions';
 import { GameRoom } from '~/types/GameRoom';
 import { SocketEvents } from '~/types/SocketEvents';
+
+const BlurDialog = dynamic(() => import('~/molecules/BlurDialog'));
+const ResultModal = dynamic(() => import('~/organisms/ResultModal'));
 
 const Container = styled.div`
   overflow: hidden;

@@ -2,16 +2,18 @@ import { useEffect, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getUser } from '~/actions/user';
 import { deleteLikes } from '~/api/user';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
-import Modal from '~/molecules/Modal';
 import MyPageContainer from '~/organisms/MyPageContainer';
 import { RootState } from '~/reducers/index';
 import { UserState } from '~/reducers/user';
+
+const Modal = dynamic(() => import('~/molecules/Modal'));
 
 const AlertMsg = styled.p`
   text-align: center;

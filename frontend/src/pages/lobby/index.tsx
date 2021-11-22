@@ -1,25 +1,27 @@
-import { ChangeEventHandler, MouseEventHandler, useEffect, useState } from 'react';
+import { ChangeEventHandler, useState } from 'react';
 
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import InputText from '~/atoms/InputText';
-import RoomCard from '~/atoms/RoomCard';
 import useSocketEmit from '~/hooks/useSocketEmit';
 import useSocketOn from '~/hooks/useSocketOn';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
-import CreateRoomModal from '~/organisms/CreateRoomModal';
-import EnterPwdModal from '~/organisms/EnterPwdModal';
-import InviteCodeModal from '~/organisms/InviteCodeModal';
 import { RootState } from '~/reducers/index';
 import { UserState } from '~/reducers/user';
 import theme from '~/styles/theme';
 import { RoomActions } from '~/types/Actions';
 import { LobbyRoom } from '~/types/LobbyRoom';
 import { SocketEvents } from '~/types/SocketEvents';
+
+const RoomCard = dynamic(() => import('~/atoms/RoomCard'));
+const EnterPwdModal = dynamic(() => import('~/organisms/EnterPwdModal'));
+const CreateRoomModal = dynamic(() => import('~/organisms/CreateRoomModal'));
+const InviteCodeModal = dynamic(() => import('~/organisms/InviteCodeModal'));
 
 const Container = styled.div`
   display: flex;
