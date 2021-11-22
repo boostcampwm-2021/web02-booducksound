@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongoose';
 import short from 'short-uuid';
 import socketio from 'socket.io';
 
@@ -131,7 +130,7 @@ io.on('connection', (socket) => {
       serverRooms[uuid].players[Object.keys(serverRooms[uuid].players)[0]].status = 'king';
     }
 
-    io.emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
   };
 
@@ -329,7 +328,9 @@ io.on('connection', (socket) => {
       console.error(error);
     }
   });
-
+  socket.on(SocketEvents.GET_ROOM_PASSWORD, (uuid: string, done) => {
+    done(serverRooms[uuid].password);
+  });
   socket.on(SocketEvents.COMPARE_PWD, (uuid: string, code: string, done) => {
     if (!code) return;
     if (serverRooms[uuid].password === code) done(true);

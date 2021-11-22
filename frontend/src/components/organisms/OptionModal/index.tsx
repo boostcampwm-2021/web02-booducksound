@@ -7,6 +7,7 @@ import { Socket } from 'socket.io-client';
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
 import useSocket from '~/hooks/useSocket';
+import useSocketEmit from '~/hooks/useSocketEmit';
 import InputWithButton from '~/molecules/InputWithButton';
 import Modal from '~/molecules/Modal';
 import SelectSection from '~/molecules/SelectSection';
@@ -79,12 +80,19 @@ interface Form {
 const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
   const socket = useSocket();
   const { uuid } = useSelector((state: RootState) => state.room);
-  const [password, setPassword] = useState(gameRoom.hasPassword ? '********' : '');
+  const [password, setPassword] = useState('');
+  const [pastPassword, setPastPassword] = useState('');
+
   const { title, playlistName, playlistId, needAnswerRatio, timePerProblem } = gameRoom;
   const defaultForm = { title, playlistName, playlistId, needAnswerRatio, timePerProblem, password };
   const [form, setForm] = useState<Form>(defaultForm);
   const [leftButtonDisabled, setLeftButtonDisabled] = useState(true);
   const [playlistModalOnOff, setPlaylistModalOnOff] = useState(false);
+
+  useSocketEmit(SocketEvents.GET_ROOM_PASSWORD, uuid, (gamePassword: string) => {
+    setPassword(gamePassword);
+    setPastPassword(gamePassword);
+  });
 
   const handleUpdateRoomBtn: MouseEventHandler = () => {
     if (socket === null) return;
@@ -101,8 +109,8 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
   };
 
   const validateForm = (form: Form) => {
-    const condition = !checkFormChanged(defaultForm, form) || !form.title || !form.playlistId;
-
+    const condition =
+      !checkFormChanged(defaultForm, form) || !form.title || !form.playlistId || password !== pastPassword;
     setLeftButtonDisabled(condition);
     return !condition;
   };
