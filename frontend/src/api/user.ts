@@ -17,7 +17,10 @@ export const getMyPlaylist = async (_id: Array<string>) => {
   return res.json();
 };
 
-export const deleteLikes = async (id: string, _id: string) => {
-  await API('DELETE')(`${BACKEND_URL}/user/likes`)({ body: JSON.stringify({ id, _id }) });
-  return true;
+export const insertLikes = async (playlistId: string, _id: string) => {
+  await API('PUT')(`${BACKEND_URL}/user/likes`)({ body: JSON.stringify({ playlistId, _id }) });
+};
+
+export const deleteLikes = async (playlistId: string, _id: string) => {
+  await API('DELETE')(`${BACKEND_URL}/user/likes?playlistId=${playlistId}&_id=${_id}`)();
 };

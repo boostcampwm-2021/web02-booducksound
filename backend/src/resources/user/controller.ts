@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import mongoose from 'mongoose';
 
 import * as AccountService from '../account/service';
 
@@ -40,10 +39,21 @@ export const getMyPlaylist = async (req: Request, res: Response) => {
   }
 };
 
+export const putLikes = async (req: Request, res: Response) => {
+  try {
+    const { playlistId, _id } = req.body;
+    await UserService.insertLikes(_id, playlistId);
+    res.sendStatus(200);
+  } catch (err) {
+    res.sendStatus(400);
+  }
+};
+
 export const deleteLikes = async (req: Request, res: Response) => {
   try {
-    const { id, _id }: { id: string; _id: mongoose.Types.ObjectId } = req.body;
-    await UserService.deleteLikes(id, _id);
+    const { playlistId, _id } = req.query;
+    if (!playlistId || !_id) throw Error('Not Exist UserId or PlaylistId');
+    await UserService.deleteLikes(playlistId as string, _id as string);
     res.sendStatus(200);
   } catch (err) {
     res.sendStatus(400);

@@ -14,7 +14,7 @@ const Container = styled.div`
   text-align: center;
 `;
 
-const MyPageContainer = ({ openRemoveModal }: { openRemoveModal: ({ target }: any) => void }) => {
+const MyPageContainer = ({ openRemoveModal }: { openRemoveModal: (id: string) => () => void }) => {
   const userInfo: UserState = useSelector((state: RootState) => state.user);
   const { id, nickname, color: userColor, likes, myPlaylist } = userInfo || {};
   const handleUserMenu = (id: string, dom: JSX.ReactElement) => {

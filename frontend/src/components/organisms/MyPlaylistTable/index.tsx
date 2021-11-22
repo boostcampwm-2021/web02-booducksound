@@ -33,7 +33,7 @@ const TableBtnBox = styled.div`
 interface Props {
   myPlaylist: Playlist[] | any;
   isMine: boolean;
-  openRemoveModal: ({ target }: any) => void;
+  openRemoveModal: (id: string) => () => void;
 }
 
 const MyPlaylistTable = ({ myPlaylist, isMine, openRemoveModal }: Props) => {
@@ -61,10 +61,10 @@ const MyPlaylistTable = ({ myPlaylist, isMine, openRemoveModal }: Props) => {
           <td colSpan={2}>{PLAYLIST_EMPTY_MSG}</td>
         </EmptyPlayList>
       ) : (
-        myPlaylist.map((e: Playlist) => (
-          <tr key={e._id} data-id={e._id} data-writer={e.userId}>
+        myPlaylist.map((playlist: Playlist) => (
+          <tr key={playlist._id}>
             <td>
-              <PlayTitle>{e.playlistName}</PlayTitle>
+              <PlayTitle>{playlist.playlistName}</PlayTitle>
             </td>
             <td>
               <TableBtnBox>
@@ -74,7 +74,7 @@ const MyPlaylistTable = ({ myPlaylist, isMine, openRemoveModal }: Props) => {
                     fontSize={'14px'}
                     paddingH={'8px'}
                     width={'100px'}
-                    onClick={handleUpdatePlaylist(e._id)}
+                    onClick={handleUpdatePlaylist(playlist._id)}
                   >
                     수정
                   </Button>
@@ -84,7 +84,9 @@ const MyPlaylistTable = ({ myPlaylist, isMine, openRemoveModal }: Props) => {
                   fontSize={'14px'}
                   paddingH={'8px'}
                   width={'100px'}
-                  onClick={isMine ? handleDeletePlaylist(e._id, dispatch) : openRemoveModal}
+                  onClick={
+                    isMine ? handleDeletePlaylist(playlist._id, dispatch) : openRemoveModal(playlist._id as string)
+                  }
                 >
                   삭제
                 </Button>

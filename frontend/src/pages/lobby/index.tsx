@@ -1,25 +1,27 @@
-import { ChangeEventHandler, MouseEventHandler, useEffect, useState } from 'react';
+import { ChangeEventHandler, useState } from 'react';
 
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import InputText from '~/atoms/InputText';
-import RoomCard from '~/atoms/RoomCard';
 import useSocketEmit from '~/hooks/useSocketEmit';
 import useSocketOn from '~/hooks/useSocketOn';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
-import CreateRoomModal from '~/organisms/CreateRoomModal';
-import EnterPwdModal from '~/organisms/EnterPwdModal';
-import InviteCodeModal from '~/organisms/InviteCodeModal';
 import { RootState } from '~/reducers/index';
 import { UserState } from '~/reducers/user';
 import theme from '~/styles/theme';
 import { RoomActions } from '~/types/Actions';
 import { LobbyRoom } from '~/types/LobbyRoom';
 import { SocketEvents } from '~/types/SocketEvents';
+
+const RoomCard = dynamic(() => import('~/atoms/RoomCard'));
+const EnterPwdModal = dynamic(() => import('~/organisms/EnterPwdModal'));
+const CreateRoomModal = dynamic(() => import('~/organisms/CreateRoomModal'));
+const InviteCodeModal = dynamic(() => import('~/organisms/InviteCodeModal'));
 
 const Container = styled.div`
   display: flex;
@@ -111,10 +113,14 @@ const GridWrapper = styled.div`
 const SearchRoomInputText = styled(InputText)`
   width: 100%;
   font-size: 18px;
-  padding: 10px 20px 10px 120px;
+  padding: 10px 20px 10px 80px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
-  background-position-x: 10%;
+  background-position-x: 20px;
   background-size: 25px;
+
+  @media (max-width: ${theme.breakpoints.sm}) {
+    font-size: 12px;
+  }
 `;
 
 const Lobby: NextPage = () => {
@@ -159,18 +165,15 @@ const Lobby: NextPage = () => {
     setSearch(search);
   };
 
-  const handleRoomClick: MouseEventHandler = (e) => {
-    const roomcard = (e.target as Element).closest('.roomcard') as HTMLDivElement;
-    if (!roomcard) return;
-
-    const { uuid, lock, status } = roomcard.dataset;
+  const handleClickRoomCard = (room: LobbyRoom, uuid: string) => () => {
+    const { hasPassword, status } = room;
     if (!uuid || status !== 'waiting') return;
-    if (lock === 'false') {
-      dispatch({ type: RoomActions.SET_UUID, payload: { uuid } });
-      Router.push(`/game`);
-    } else {
+    if (hasPassword) {
       setEnterPwd(uuid);
+      return;
     }
+    dispatch({ type: RoomActions.SET_UUID, payload: { uuid } });
+    Router.push(`/game`);
   };
 
   return (
@@ -184,6 +187,8 @@ const Lobby: NextPage = () => {
                   background={theme.colors.lime}
                   width="180px"
                   fontSize="20px"
+                  mdWidth="140px"
+                  mdFontSize="16px"
                   smWidth="110px"
                   smFontSize="12px"
                 >
@@ -197,6 +202,8 @@ const Lobby: NextPage = () => {
               background={theme.colors.lightsky}
               width="180px"
               fontSize="20px"
+              mdFontSize="16px"
+              mdWidth="140px"
               smWidth="110px"
               smFontSize="12px"
               onClick={handleCodeModalBtn}
@@ -210,6 +217,8 @@ const Lobby: NextPage = () => {
                     background={theme.colors.peach}
                     width="180px"
                     fontSize="20px"
+                    mdFontSize="16px"
+                    mdWidth="140px"
                     smWidth="110px"
                     smFontSize="12px"
                   >
@@ -222,6 +231,8 @@ const Lobby: NextPage = () => {
               background={theme.colors.sand}
               width="180px"
               fontSize="20px"
+              mdFontSize="16px"
+              mdWidth="140px"
               smWidth="110px"
               smFontSize="12px"
               onClick={handleCreateRoomModalBtn}
@@ -246,11 +257,13 @@ const Lobby: NextPage = () => {
           </SearchWrapper>
         </SearchContainer>
         <GridContainer>
-          <GridWrapper onClick={handleRoomClick}>
+          <GridWrapper>
             {rooms &&
               Object.entries(rooms)
                 .filter(([uuid, { title, playlistName }]) => title.includes(search) || playlistName.includes(search))
-                .map(([uuid, room]) => <RoomCard key={uuid} uuid={uuid} {...room} />)}
+                .map(([uuid, room]) => (
+                  <RoomCard key={uuid} room={room} handleClickRoomCard={handleClickRoomCard(room, uuid)} />
+                ))}
           </GridWrapper>
         </GridContainer>
       </Wrapper>

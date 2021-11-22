@@ -168,14 +168,16 @@ body {
 
 @font-face {
   font-family: 'GmarketSansMedium';
-  src: url(../../public/fonts/GmarketSansMedium.otf) format('woff');
+  src: url(../../public/fonts/GmarketSansMedium.woff2) format('woff2'),
+    url(../../public/fonts/GmarketSansMedium.otf) format('opentype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'KoPubDotumMedium';
-  src: url(../../public/fonts/KoPubWorldDotum_ProLight.otf) format('woff');
+  src: url(../../public/fonts/KoPubWorldDotum_ProLight.woff2) format('woff2'),
+    url(../../public/fonts/KoPubWorldDotum_ProLight.otf) format('opentype');
   font-weight: normal;
   font-style: normal;
 }

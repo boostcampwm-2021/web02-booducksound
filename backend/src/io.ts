@@ -177,7 +177,7 @@ io.on('connection', (socket) => {
       };
       await setRoomInfo(playlistId);
       const lobbyRoom = getLobbyRoom(uuid);
-      io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
+      socket.broadcast.emit(SocketEvents.SET_LOBBY_ROOM, uuid, lobbyRoom);
     } catch (error) {
       console.error(error);
     }
