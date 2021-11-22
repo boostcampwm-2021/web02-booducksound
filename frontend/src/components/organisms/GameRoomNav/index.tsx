@@ -143,20 +143,22 @@ const GameRoomNav = ({
       <MuteButton type="button" volume={volume} onClick={handleMute} />
       <VolumeBar name="volume" value={volume} min="0" max="100" step="5" type="range" onChange={handleVolume} />
       <FlexItem>
-        <ResponsiveButton
-          width="160px"
-          fontSize="1em"
-          onClick={handleCopy}
-          background={theme.colors.lime}
-          mdWidth="100px"
-        >
-          초대코드 복사
-        </ResponsiveButton>
+        {status === 'waiting' && (
+          <ResponsiveButton
+            width="160px"
+            fontSize="1em"
+            onClick={handleCopy}
+            background={theme.colors.lime}
+            mdWidth="100px"
+          >
+            초대코드 복사
+          </ResponsiveButton>
+        )}
         {player && (
           <ResponsiveButton
             width="160px"
             mdWidth="84px"
-            background={theme.colors.whitesmoke}
+            background={statusEncoder[player.status] !== 'READY' ? theme.colors.sky : theme.colors.peach}
             fontSize="1em"
             onClick={handleStartBtnClick(player)}
             disabled={status === 'resting' || player.skip || (player.status === 'king' && !isAllReady)}
