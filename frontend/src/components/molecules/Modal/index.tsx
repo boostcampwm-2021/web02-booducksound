@@ -32,6 +32,14 @@ const ModalContainer = styled.div<ModalContainerProps>`
   background: #fff;
   border-radius: 32px;
   z-index: 99;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: 32px 16px;
+  }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: 32px 10px;
+  }
 `;
 
 const ModalWrapper = styled.div`
