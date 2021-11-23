@@ -1,28 +1,9 @@
-import Router from 'next/router';
-import { Cookies } from 'react-cookie';
-
 import { BACKEND_URL } from '~/constants/index';
 import API from '~/utils/API';
-
-export const cookie = new Cookies();
-
-export const getCookie = () => cookie.get('token');
-
-export const handleLoginUser = () => {
-  const token = getCookie();
-  const notLoginUrlList = ['/', '/login', '/enter', '/join'];
-  const loginUrlList = ['/mypage', '/lobby', '/playlist', '/game'];
-  if (token && notLoginUrlList.some((e) => location.pathname === e)) Router.push('/lobby');
-  if (!token && loginUrlList.some((e) => location.pathname.includes(e))) Router.push('/');
-};
 
 export const getUserInfo = async () => {
   const res = await API('GET')(`${BACKEND_URL}/check-login`)();
   return res.json();
-};
-
-export const updateStoreData = (getUser: Function) => {
-  getUser() && handleLoginUser();
 };
 
 export const requestLogin = async (id: string, password: string) => {
@@ -34,7 +15,6 @@ export const requestLogin = async (id: string, password: string) => {
 
 export const requestLogout = async () => {
   await API('GET')(`${BACKEND_URL}/log-out`)();
-  handleLoginUser();
 };
 
 export const requestChangePassword = async (id: string, nickname: string, password: string) => {
