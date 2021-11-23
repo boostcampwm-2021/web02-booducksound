@@ -1,9 +1,11 @@
 import styled from '@emotion/styled';
 import type { NextPage } from 'next';
 import Link from 'next/link';
+import { useDispatch } from 'react-redux';
 
 import Button from '~/atoms/Button';
 import theme from '~/styles/theme';
+import { UserActions } from '~/types/Actions';
 
 const MainContainer = styled.div`
   position: fixed;
@@ -76,6 +78,8 @@ const Logo = styled.div`
 `;
 
 const Home: NextPage = () => {
+  const dispatch = useDispatch();
+  dispatch({ type: UserActions.REMOVE_USER });
   return (
     <MainContainer>
       <Logo />
