@@ -1,3 +1,4 @@
+import fs, { ReadStream } from 'fs';
 import { PassThrough } from 'stream';
 
 import { path } from '@ffmpeg-installer/ffmpeg';
@@ -7,36 +8,38 @@ import ytdl from 'ytdl-core';
 FFmpeg.setFfmpegPath(path);
 
 class Youtubestream {
-  stream: PassThrough;
+  videoId: string;
+  mp3Path: string;
+  #passThrough?: PassThrough;
 
   constructor(url: string) {
     const MAX_TIME_LENGTH = 90;
-
     const regex = /(.*?)(^|\/|v=)([a-z0-9_-]{11})(.*)?/i;
-    const stream = new PassThrough();
     const videoId = (url.match(regex) as RegExpExecArray)[3];
+    const mp3Path = `musics/${videoId}.mp3`;
 
+    this.videoId = videoId;
+    this.mp3Path = mp3Path;
+
+    if (!fs.existsSync(`musics`)) fs.mkdirSync('musics');
+    if (fs.existsSync(mp3Path) && fs.statSync(mp3Path).size > 0) return;
+
+    const passThrough = new PassThrough();
+    const writeStream = fs.createWriteStream(mp3Path);
     const video = ytdl(`https://youtube.com/watch?v=${videoId}`, { quality: 'lowestaudio' });
     const ffmpeg = FFmpeg(video);
 
     process.nextTick(() => {
-      const output = ffmpeg.noVideo().inputOptions(`-t ${MAX_TIME_LENGTH}`).format('mp3').pipe(stream);
-
-      ffmpeg.once('error', (error: Error) => {
-        stream.emit('error', error);
-      });
-
-      output.once('error', (error: Error) => {
-        video.destroy();
-        stream.emit('error', error);
-      });
+      ffmpeg.noVideo().inputOptions(`-t ${MAX_TIME_LENGTH}`).format('mp3').pipe(passThrough);
+      passThrough.pipe(writeStream);
     });
 
-    this.stream = stream;
+    this.#passThrough = passThrough;
   }
 
-  destroy() {
-    this.stream.destroy();
+  get stream() {
+    if (this.#passThrough) return this.#passThrough;
+    return fs.createReadStream(this.mp3Path);
   }
 }
 
