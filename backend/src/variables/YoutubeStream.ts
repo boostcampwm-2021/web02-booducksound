@@ -1,7 +1,8 @@
-import fs, { ReadStream } from 'fs';
+import fs from 'fs';
 import { PassThrough } from 'stream';
 
 import { path } from '@ffmpeg-installer/ffmpeg';
+import cloneable from 'cloneable-readable';
 import FFmpeg from 'fluent-ffmpeg';
 import ytdl from 'ytdl-core';
 
@@ -38,7 +39,7 @@ class Youtubestream {
   }
 
   get stream() {
-    if (this.#passThrough) return this.#passThrough;
+    if (this.#passThrough) return cloneable(this.#passThrough);
     return fs.createReadStream(this.mp3Path);
   }
 }

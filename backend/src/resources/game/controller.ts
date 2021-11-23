@@ -1,4 +1,3 @@
-import cloneable from 'cloneable-readable';
 import { Request, Response } from 'express';
 
 import serverRooms from '../../variables/serverRooms';
@@ -8,7 +7,7 @@ export const getInitialMusic = async (req: Request, res: Response) => {
     const { uuid } = req.params;
 
     if (!serverRooms[uuid]?.streams?.[0]?.stream) throw Error('stream을 찾을 수 없습니다');
-    const stream = cloneable(serverRooms[uuid].streams[0].stream);
+    const stream = serverRooms[uuid].streams[0].stream;
 
     for await (const chunk of stream) {
       res.write(chunk);
@@ -26,7 +25,7 @@ export const getNextMusic = async (req: Request, res: Response) => {
     const { uuid } = req.params;
 
     if (!serverRooms[uuid]?.streams?.[1]?.stream) throw Error('stream을 찾을 수 없습니다');
-    const stream = cloneable(serverRooms[uuid].streams[1].stream);
+    const stream = serverRooms[uuid].streams[1].stream;
 
     for await (const chunk of stream) {
       res.write(chunk);
