@@ -147,12 +147,12 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             inputClassName="selectPlaylist"
             placeholder={form.playlistName}
             isSearch={false}
-            btnWidth="100px"
+            btnWidth="84px"
             btnFontSize="0.8em"
             btnContent="고르기"
             btnBackground={theme.colors.lime}
-            btnSmWidth="60px"
-            btnHeight="38px"
+            btnSmWidth="72px"
+            btnHeight="36px"
             disabled={true}
             value={form.playlistName}
             onClick={() => setPlaylistModalOnOff(true)}
