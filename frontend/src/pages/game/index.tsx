@@ -173,13 +173,13 @@ const Game: NextPage = () => {
         music2={music2.current}
         isAllReady={gameRoom?.isAllReady}
       />
-      <GameRoomContainer players={gameRoom?.players} gameRoom={gameRoom as GameRoom} endTime={timerEndTime} />
-      <audio ref={music1} onEnded={handleAudioEnded} />
-      <audio ref={music2} onEnded={handleAudioEnded} />
+      {gameRoom && <GameRoomContainer gameRoom={gameRoom} endTime={timerEndTime} />}
       {dialogMsg && <BlurDialog title={dialogMsg.title} content={dialogMsg.content} />}
       {gameResultModalOnOff && gameRoom && (
         <GameResultModal gameRoom={gameRoom} userId={userInfo.id} setModalOnOff={setGameResultModalOnOff} />
       )}
+      <audio ref={music1} onEnded={handleAudioEnded} />
+      <audio ref={music2} onEnded={handleAudioEnded} />
     </Container>
   );
 };
