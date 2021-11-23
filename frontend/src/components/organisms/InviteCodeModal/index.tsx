@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
+import { COPY_EMPTY_MSG, COPY_ERR_MSG } from '~/constants/index';
 import Modal from '~/molecules/Modal';
 import { RoomActions } from '~/types/Actions';
 
@@ -34,9 +35,9 @@ const InviteCodeModal = ({ setModalOnOff, leftButtonText, rooms }: Props) => {
   const dispatch = useDispatch();
 
   const handleEnterRoom = () => {
-    if (!code) return toast.error('초대 코드를 입력해 주세요.');
+    if (!code) return toast.error(COPY_EMPTY_MSG);
     const res = findAvailableRoom(code, rooms);
-    if (!res) return toast.error('존재하지 않는 초대 코드입니다.');
+    if (!res) return toast.error(COPY_ERR_MSG);
     dispatch({ type: RoomActions.SET_UUID, payload: { uuid: code } });
     Router.push(`/game`);
   };

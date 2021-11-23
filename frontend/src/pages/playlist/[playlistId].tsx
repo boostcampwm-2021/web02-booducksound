@@ -11,7 +11,7 @@ import { createPlaylist, selectPlaylist, updatePlaylist } from '~/api/playlist';
 import Button from '~/atoms/Button';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
-import { FAILED, SUCCESS } from '~/constants/index';
+import { FAILED, PLAYLIST_ERR_MSG, PLAYLIST_INPUT_ERR_MSG, SUCCESS } from '~/constants/index';
 import Chip from '~/molecules/Chip';
 import CreatePlaylistInputBox from '~/organisms/CreatePlaylistInputBox';
 import CreatePlaylistMusicList from '~/organisms/CreatePlaylistMusicList';
@@ -127,7 +127,7 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
   };
   const handleSubmit = async () => {
     if (!checkAllValidInput()) {
-      toast.error('입력을 확인해주세요.');
+      toast.error(PLAYLIST_INPUT_ERR_MSG);
       return;
     }
     const result = await mapSubmitFunction({
@@ -136,7 +136,7 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
       playlist: { playlistName, description, musics, hashtags, userId: userInfo.id },
     });
     const { status } = result;
-    if (status === FAILED) toast.error('플레이리스트 등록에 실패하였습니다.');
+    if (status === FAILED) toast.error(PLAYLIST_ERR_MSG);
     if (status === SUCCESS) Router.back();
   };
 
