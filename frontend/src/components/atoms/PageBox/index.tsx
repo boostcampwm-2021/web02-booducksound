@@ -16,10 +16,13 @@ const BoxWrapper = styled.div`
 `;
 
 const BoxContainer = styled.div`
+  display: flex;
+  align-items: center;
   width: 100%;
   max-width: 1200px;
-  min-height: calc(100vh - 11.2rem);
+  min-height: 80vh;
   box-shadow: 0px 4px 4px rgb(0 0 0 / 20%), 0px 4px 20px rgb(0 0 0 / 20%);
+  overflow-y: auto;
   padding: 4.8rem 4rem;
   margin: 0 auto;
   border-radius: 100px;

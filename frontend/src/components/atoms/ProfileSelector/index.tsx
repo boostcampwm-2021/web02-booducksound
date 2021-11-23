@@ -22,7 +22,6 @@ const ProfileContainer = styled.div<Props>`
   max-height: ${({ type }) => (type === 'mypage' ? '120px' : '240px')};
   width: ${({ type }) => (type === 'mypage' ? '14vw' : '24vw')};
   height: ${({ type }) => (type === 'mypage' ? '14vw' : '24vw')};
-  margin: 0 auto 2.4rem auto;
   position: relative;
 `;
 

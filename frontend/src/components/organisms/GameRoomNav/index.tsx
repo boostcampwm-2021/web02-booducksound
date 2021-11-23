@@ -152,9 +152,11 @@ const GameRoomNav = ({
         {status === 'waiting' && (
           <ResponsiveButton
             width="160px"
-            height="100%"
+            height="46px"
             mdWidth="100px"
+            mdHeight="34px"
             smWidth="82px"
+            smHeight="28px"
             background={theme.colors.lime}
             fontSize="1em"
             smFontSize="0.8em"
@@ -166,9 +168,11 @@ const GameRoomNav = ({
         {player && (
           <ResponsiveButton
             width="160px"
-            height="100%"
+            height="46px"
             mdWidth="100px"
+            mdHeight="34px"
             smWidth="82px"
+            smHeight="28px"
             background={
               status === 'waiting'
                 ? player.status !== 'ready'
@@ -188,9 +192,11 @@ const GameRoomNav = ({
           <ExitAnchor>
             <ResponsiveButton
               width="160px"
-              height="100%"
+              height="46px"
               mdWidth="100px"
+              mdHeight="34px"
               smWidth="82px"
+              smHeight="28px"
               fontSize="1em"
               smFontSize="0.8em"
               background={theme.colors.sand}

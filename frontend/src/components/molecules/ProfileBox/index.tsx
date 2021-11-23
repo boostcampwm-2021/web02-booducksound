@@ -7,25 +7,23 @@ import Button from '~/atoms/Button';
 import UserInfoBox from '~/molecules/UserInfoBox';
 import theme from '~/styles/theme';
 
-const Warper = styled.div`
+import ResponsiveButton from '../ResponsiveButton';
+
+const Wrapper = styled.div`
   display: flex;
+  width: 100%;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding-bottom: 24px;
   border-bottom: 1px solid ${theme.colors.gray};
-
-  > div:first-of-type {
-    flex-grow: 0;
-  }
-
-  > div:last-child {
-    flex-grow: 1;
-  }
 
   @media (max-width: ${theme.breakpoints.sm}) {
     display: block;
   }
 `;
 const ProfileBtnBox = styled.div`
+  display: flex;
+  column-gap: 4px;
   text-align: right;
 
   > a {
@@ -62,7 +60,7 @@ type Info = {
   userColor: string;
 };
 
-const ProfileBox = ({ info, handleUserMenu }: { info: Info; handleUserMenu: Function }) => {
+const ProfileBox = ({ info }: { info: Info }) => {
   const { id, nickname, userColor } = info;
 
   const handleLogout = async () => {
@@ -71,30 +69,46 @@ const ProfileBox = ({ info, handleUserMenu }: { info: Info; handleUserMenu: Func
   };
 
   return (
-    <Warper>
+    <Wrapper>
       <UserInfoBox info={{ id, nickname, userColor }} />
       <ProfileBtnBox>
-        {handleUserMenu(
-          id,
+        {id && (
           <Link href="/findPwd">
             <a>
-              <Button background={theme.colors.lime} fontSize={'16px'} paddingH={'16px'} width={'160px'}>
+              <ResponsiveButton
+                background={theme.colors.lime}
+                fontSize="16px"
+                width="168px"
+                height="60px"
+                mdFontSize="14px"
+                mdWidth="102px"
+                mdHeight="38px"
+                smFontSize="14px"
+                smWidth="100px"
+                smHeight="38px"
+              >
                 비밀번호 변경
-              </Button>
+              </ResponsiveButton>
             </a>
-          </Link>,
+          </Link>
         )}
-        <Button
+        <ResponsiveButton
           background={theme.colors.lightsky}
-          fontSize={'16px'}
-          paddingH={'16px'}
-          width={'160px'}
+          fontSize="16px"
+          width="168px"
+          height="60px"
+          mdFontSize="14px"
+          mdWidth="102px"
+          mdHeight="38px"
+          smFontSize="14px"
+          smWidth="100px"
+          smHeight="38px"
           onClick={handleLogout}
         >
           로그아웃
-        </Button>
+        </ResponsiveButton>
       </ProfileBtnBox>
-    </Warper>
+    </Wrapper>
   );
 };
 

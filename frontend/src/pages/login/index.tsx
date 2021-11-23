@@ -17,15 +17,13 @@ import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG } from '~/constants/index';
 import theme from '~/styles/theme';
 
 const LoginContainer = styled.div`
-  position: fixed;
-  width: calc(100vw - 8rem);
-  height: max-content;
-  margin: auto;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
   text-align: center;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
 `;
 
 const SearchPwdBtn = styled.a`

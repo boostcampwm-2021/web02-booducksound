@@ -14,7 +14,7 @@ const Container = styled.div`
 `;
 const UserInfo = styled.div`
   padding: 0 2rem;
-  margin-bottom: 2.4rem;
+  /* margin-bottom: 2.4rem; */
   text-align: left;
 
   .user-name {
