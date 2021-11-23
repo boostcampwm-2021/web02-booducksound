@@ -6,6 +6,7 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import Router from 'next/router';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { getUser } from '~/actions/user';
 import { requestLogin } from '~/api/account';
@@ -13,7 +14,7 @@ import Button from '~/atoms/Button';
 import InputText from '~/atoms/InputText';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
-import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG } from '~/constants/index';
+import { ID_EMPTY_MSG, LOGIN_SUCC_MSG, PASSWORD_EMPTY_MSG } from '~/constants/index';
 import theme from '~/styles/theme';
 
 const LoginContainer = styled.div`
@@ -79,11 +80,12 @@ const Login: NextPage = () => {
   const dispatch = useDispatch();
 
   const handleLogin = async () => {
-    if (!id) return alert(ID_EMPTY_MSG);
-    if (!password) return alert(PASSWORD_EMPTY_MSG);
+    if (!id) return toast.error(ID_EMPTY_MSG);
+    if (!password) return toast.error(PASSWORD_EMPTY_MSG);
     const res = await requestLogin(id, password);
     if (res) {
       dispatch(getUser());
+      toast.info(LOGIN_SUCC_MSG);
       Router.push('/lobby');
     }
   };

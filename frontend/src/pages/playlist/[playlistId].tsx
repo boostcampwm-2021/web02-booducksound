@@ -5,12 +5,13 @@ import type { NextPage, NextPageContext } from 'next';
 import dynamic from 'next/dynamic';
 import Router, { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { createPlaylist, selectPlaylist, updatePlaylist } from '~/api/playlist';
 import Button from '~/atoms/Button';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
-import { FAILED, SUCCESS } from '~/constants/index';
+import { FAILED, PLAYLIST_ERR_MSG, PLAYLIST_INPUT_ERR_MSG, SUCCESS } from '~/constants/index';
 import Chip from '~/molecules/Chip';
 import CreatePlaylistInputBox from '~/organisms/CreatePlaylistInputBox';
 import CreatePlaylistMusicList from '~/organisms/CreatePlaylistMusicList';
@@ -126,7 +127,7 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
   };
   const handleSubmit = async () => {
     if (!checkAllValidInput()) {
-      alert('입력을 확인해주세요.');
+      toast.error(PLAYLIST_INPUT_ERR_MSG);
       return;
     }
     const result = await mapSubmitFunction({
@@ -135,7 +136,7 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
       playlist: { playlistName, description, musics, hashtags, userId: userInfo.id },
     });
     const { status } = result;
-    if (status === FAILED) alert('플레이리스트 등록에 실패하였습니다.');
+    if (status === FAILED) toast.error(PLAYLIST_ERR_MSG);
     if (status === SUCCESS) Router.back();
   };
 
