@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import useSocket from '~/hooks/useSocket';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
@@ -129,7 +130,7 @@ const GameRoomNav = ({
     textarea.select();
     document.execCommand('copy');
     document.body.removeChild(textarea);
-    alert('초대코드가 복사되었습니다.');
+    toast.info('초대코드가 복사되었습니다.');
   };
 
   useEffect(() => {

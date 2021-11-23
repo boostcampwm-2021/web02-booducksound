@@ -3,6 +3,7 @@ import { Dispatch, MouseEventHandler } from 'react';
 import styled from '@emotion/styled';
 import router from 'next/router';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { getUser } from '~/actions/user';
 import { deletePlaylist } from '~/api/playlist';
@@ -44,7 +45,7 @@ const MyPlaylistTable = ({ myPlaylist, isMine, openRemoveModal }: Props) => {
     async (e) => {
       if (!_id) return;
       const result = await deletePlaylist(_id);
-      if (result.status === FAILED) return alert('알 수 없는 오류로 삭제되지 않았습니다.');
+      if (result.status === FAILED) return toast.error('알 수 없는 오류로 삭제되지 않았습니다.');
       dispatch(getUser());
     };
   const handleUpdatePlaylist =

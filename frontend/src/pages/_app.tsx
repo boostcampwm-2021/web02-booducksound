@@ -4,6 +4,7 @@ import { ThemeProvider } from '@emotion/react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 import { createStore, applyMiddleware, compose, Action } from 'redux';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 
@@ -14,6 +15,7 @@ import { UserState } from '~/reducers/user';
 import theme from '~/styles/theme';
 
 import '~/styles/default.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const store = createStore(rootReducer, compose(applyMiddleware(thunk)));
 const dispatch = store.dispatch as ThunkDispatch<UserState, void, Action>;
@@ -37,6 +39,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           <link rel="short icon" href="images/favicon.ico" />
         </Head>
         <Component {...pageProps} />
+        <ToastContainer />
       </Provider>
     </ThemeProvider>
   );
