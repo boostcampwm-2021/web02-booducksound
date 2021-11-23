@@ -45,8 +45,16 @@ const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
 
 const setWaitTimer = (serverRoom: ServerRoom, uuid: string, isExistNext: boolean) => {
   clearTimer(serverRoom.timer);
+
   serverRoom.timer = setTimeout(() => {
+    const { curRound, musics } = serverRoom;
+
     serverRoom.status = 'playing';
+
+    if (curRound < musics.length) {
+      serverRoom.streams.push(new Youtubestream(musics[curRound].url));
+    }
+
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     io.to(uuid).emit(SocketEvents.NEXT_ROUND, isExistNext);
     setHintTimer(serverRoom, uuid);
@@ -90,10 +98,6 @@ const getNextRound = (
 
     serverRooms[uuid].curRound += 1;
     serverRooms[uuid].streams.shift();
-
-    if (curRound + 1 < musics.length) {
-      serverRooms[uuid].streams.push(new Youtubestream(musics[curRound + 1].url));
-    }
 
     serverRooms[uuid].skipCount = 0;
     serverRooms[uuid].answerCount = 0;
