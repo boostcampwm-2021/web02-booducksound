@@ -53,7 +53,7 @@ const Nav = styled.nav`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 32px 8px;
+  padding: 24px 8px;
   column-gap: 10px;
 
   @media (max-width: ${theme.breakpoints.md}) {
