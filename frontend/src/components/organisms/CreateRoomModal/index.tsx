@@ -1,4 +1,4 @@
-import { useState, MouseEventHandler, ChangeEventHandler, SetStateAction, Dispatch } from 'react';
+import { useState, MouseEventHandler, SetStateAction, Dispatch } from 'react';
 
 import styled from '@emotion/styled';
 import Router from 'next/router';

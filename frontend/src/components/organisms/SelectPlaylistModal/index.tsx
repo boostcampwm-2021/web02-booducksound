@@ -9,7 +9,6 @@ import TextLabel from '~/atoms/TextLabel';
 import Modal from '~/molecules/Modal';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import theme from '~/styles/theme';
-import { GameRoom } from '~/types/GameRoom';
 import { Playlist } from '~/types/Playlist';
 
 const Container = styled.div`

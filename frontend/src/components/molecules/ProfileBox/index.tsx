@@ -3,7 +3,6 @@ import Link from 'next/link';
 import Router from 'next/router';
 
 import { requestLogout } from '~/api/account';
-import Button from '~/atoms/Button';
 import UserInfoBox from '~/molecules/UserInfoBox';
 import theme from '~/styles/theme';
 

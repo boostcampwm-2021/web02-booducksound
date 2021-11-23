@@ -3,20 +3,17 @@ import { KeyboardEventHandler, useState, useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 
-// import GameSummary from '~/atoms/GameSummary';
 import GlassContainer from '~/atoms/GlassContainer';
 import useSocket from '~/hooks/useSocket';
 import useSocketOn from '~/hooks/useSocketOn';
 import CharacterList from '~/molecules/CharacterList';
 import ChatList from '~/molecules/ChatList';
 import GamePlaySummary from '~/molecules/GamePlaySummary';
-// import GameWaitSummary from '~/molecules/GameWaitSummary';
 import OptionModal from '~/organisms/OptionModal';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
 import { Chat } from '~/types/Chat';
 import { GameRoom } from '~/types/GameRoom';
-import { Player } from '~/types/Player';
 import { Players } from '~/types/Players';
 import { SocketEvents } from '~/types/SocketEvents';
 
