@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 
-import GameSummary from '~/atoms/GameSummary';
 import Timer from '~/atoms/Timer';
 import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
@@ -39,10 +38,17 @@ const TimerWrapper = styled.div`
   }
 `;
 
-const Round = styled(GameSummary)`
+const Round = styled.p`
+  font-size: 18px;
+  font-family: ${theme.fonts.gmarket};
+
   &::after {
-    content: 'Round';
+    content: 'Round ';
     margin-left: 8px;
+  }
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    font-size: 16px;
   }
 `;
 
@@ -58,9 +64,6 @@ const GamePlaySummary = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime: n
       <Round>
         {curRound} / {maxRound}
       </Round>
-      <GameSummary>
-        <b>음악</b>을 듣고 <b>답</b>을 입력하세요.
-      </GameSummary>
     </>
   );
 };

@@ -17,7 +17,7 @@ const CharactersContainer = styled.div`
   overflow: auto;
   display: flex;
   flex-direction: column;
-  padding: 4px 10px;
+  padding: 8px 16px;
   row-gap: 10px;
 
   @media (max-width: ${theme.breakpoints.md}) {

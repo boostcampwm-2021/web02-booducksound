@@ -20,7 +20,7 @@ import { GameRoom } from '~/types/GameRoom';
 import { SocketEvents } from '~/types/SocketEvents';
 
 const BlurDialog = dynamic(() => import('~/molecules/BlurDialog'));
-const ResultModal = dynamic(() => import('~/organisms/ResultModal'));
+const GameResultModal = dynamic(() => import('~/organisms/GameResultModal'));
 
 const Container = styled.div`
   overflow: hidden;
@@ -147,13 +147,6 @@ const Game: NextPage = () => {
     }
   });
 
-  useEffect(() => {
-    if (!gameResultModalOnOff) return;
-    setTimeout(() => {
-      setGameResultModalOnOff(false);
-    }, 4000);
-  }, [gameResultModalOnOff]);
-
   useSocketOn(SocketEvents.SET_GAME_ROOM, (gameRoom: GameRoom) => {
     if (!gameRoom) return;
     setGameRoom(gameRoom);
@@ -180,13 +173,13 @@ const Game: NextPage = () => {
         music2={music2.current}
         isAllReady={gameRoom?.isAllReady}
       />
-      <GameRoomContainer players={gameRoom?.players} gameRoom={gameRoom as GameRoom} endTime={timerEndTime} />
+      {gameRoom && <GameRoomContainer gameRoom={gameRoom} endTime={timerEndTime} />}
+      {dialogMsg && <BlurDialog title={dialogMsg.title} content={dialogMsg.content} />}
+      {gameResultModalOnOff && gameRoom && (
+        <GameResultModal gameRoom={gameRoom} userId={userInfo.id} setModalOnOff={setGameResultModalOnOff} />
+      )}
       <audio ref={music1} onEnded={handleAudioEnded} />
       <audio ref={music2} onEnded={handleAudioEnded} />
-      {dialogMsg && <BlurDialog title={dialogMsg.title} content={dialogMsg.content} />}
-      {gameResultModalOnOff && (
-        <ResultModal gameRoom={gameRoom} playlistId={gameRoom?.playlistId} userId={userInfo.id} />
-      )}
     </Container>
   );
 };

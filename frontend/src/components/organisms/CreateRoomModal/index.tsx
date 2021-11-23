@@ -138,12 +138,12 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
             inputClassName="selectPlaylist"
             placeholder="플레이리스트를 선택해주세요"
             isSearch={false}
-            btnWidth="100px"
+            btnWidth="84px"
             btnFontSize="0.8em"
             btnContent="고르기"
             btnBackground={theme.colors.lime}
-            btnSmWidth="60px"
-            btnHeight="38px"
+            btnSmWidth="72px"
+            btnHeight="36px"
             disabled={true}
             value={form.playlistName}
             onClick={() => setPlaylistModalOnOff(true)}

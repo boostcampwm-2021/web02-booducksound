@@ -3,15 +3,14 @@ import { KeyboardEventHandler, useState, useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 
-import GameSummary from '~/atoms/GameSummary';
+// import GameSummary from '~/atoms/GameSummary';
 import GlassContainer from '~/atoms/GlassContainer';
-import Timer from '~/atoms/Timer';
 import useSocket from '~/hooks/useSocket';
 import useSocketOn from '~/hooks/useSocketOn';
 import CharacterList from '~/molecules/CharacterList';
 import ChatList from '~/molecules/ChatList';
 import GamePlaySummary from '~/molecules/GamePlaySummary';
-import GameWaitSummary from '~/molecules/GameWaitSummary';
+// import GameWaitSummary from '~/molecules/GameWaitSummary';
 import OptionModal from '~/organisms/OptionModal';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
@@ -29,7 +28,7 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   display: grid;
-  row-gap: 12px;
+  row-gap: 8px;
   column-gap: 64px;
   font-size: 16px;
   padding-bottom: 128px;
@@ -91,6 +90,8 @@ const ChatListContainer = styled(Container)`
 
 const RightTitle = styled.div`
   position: relative;
+  display: flex;
+  row-gap: 16px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -99,10 +100,32 @@ const RightTitle = styled.div`
   align-items: center;
 `;
 
-const Hint = styled(GameSummary)`
+const GameSummary = styled.p`
+  font-size: 20px;
+  color: ${theme.colors.black};
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    font-size: 16px;
+  }
+`;
+
+const Bold = styled.b`
+  color: ${theme.colors.ocean};
+`;
+
+const Hint = styled.p`
+  font-weight: 700;
+  font-size: 20px;
+  color: ${theme.colors.black};
+
   &::before {
     content: '힌트 : ';
+    color: ${theme.colors.ocean};
     margin-right: 8px;
+  }
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    font-size: 16px;
   }
 `;
 
@@ -112,6 +135,11 @@ const LeftTitleContainer = styled(Container)`
   flex-direction: column;
   row-gap: 8px;
   padding: 16px;
+  font-size: 18px;
+
+  @media (max-width: ${theme.breakpoints.md}) {
+    font-size: 16px;
+  }
 `;
 
 const RoomTitle = styled.h3`
@@ -164,15 +192,7 @@ const Input = styled.input`
   outline: none;
 `;
 
-const GameRoomContainer = ({
-  players,
-  gameRoom,
-  endTime,
-}: {
-  players?: { [socketId: string]: Player };
-  gameRoom: GameRoom;
-  endTime: number;
-}) => {
+const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime: number }) => {
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
   const [modalOnOff, setModalOnOff] = useState<boolean>(false);
@@ -181,6 +201,8 @@ const GameRoomContainer = ({
   const chatListContainer = useRef<HTMLDivElement>(null);
   const [chatList, setChatList] = useState<Chat[]>([]);
   const socket = useSocket();
+
+  const { players } = gameRoom;
 
   const handlePressEnter: KeyboardEventHandler = (e) => {
     if (e.key !== 'Enter') return;
@@ -232,11 +254,18 @@ const GameRoomContainer = ({
         </CharacterContainer>
         <Container type={'rightTitle'}>
           <RightTitle>
-            {gameRoom?.status === 'waiting' && <GameWaitSummary></GameWaitSummary>}
-            {(gameRoom?.status === 'playing' || gameRoom?.status === 'resting') && (
-              <GamePlaySummary gameRoom={gameRoom} endTime={endTime}></GamePlaySummary>
+            {gameRoom.status === 'waiting' && (
+              <GameSummary>
+                <Bold>대기중</Bold>입니다.
+              </GameSummary>
             )}
-            {gameRoom?.status === 'playing' && hint && <Hint>{hint}</Hint>}
+            {gameRoom.status !== 'waiting' && <GamePlaySummary gameRoom={gameRoom} endTime={endTime} />}
+            {gameRoom.status !== 'waiting' && hint && <Hint>{hint}</Hint>}
+            {gameRoom.status !== 'waiting' && !hint && (
+              <GameSummary>
+                <Bold>음악</Bold>을 듣고 <Bold>답</Bold>을 입력하세요.
+              </GameSummary>
+            )}
           </RightTitle>
         </Container>
         <ChatListContainer type={'rightChat'} ref={chatListContainer}>
