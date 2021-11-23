@@ -30,6 +30,10 @@ class Youtubestream {
     const video = ytdl(`https://youtube.com/watch?v=${videoId}`, { quality: 'lowestaudio' });
     const ffmpeg = FFmpeg(video);
 
+    ffmpeg.once('error', (error: Error) => {
+      passThrough.emit('error', error);
+    });
+
     process.nextTick(() => {
       ffmpeg.noVideo().inputOptions(`-t ${MAX_TIME_LENGTH}`).format('mp3').pipe(passThrough);
       passThrough.pipe(writeStream);
