@@ -13,9 +13,11 @@ import userRouter from './resources/user/router';
 
 const app = express();
 
-app.use(
-  cors({ credentials: true, origin: ['http://localhost:7000', 'http://27.96.131.89', 'http://booducksound.kro.kr'] }),
-);
+const LOCALHOST = process.env.LOCALHOST as string;
+const PRODUCTION = process.env.PRODUCTION as string;
+const DOMAIN_NAME = process.env.DOMAIN_NAME as string;
+
+app.use(cors({ credentials: true, origin: [LOCALHOST, PRODUCTION, DOMAIN_NAME] }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
@@ -36,7 +38,7 @@ const server = http.createServer(app);
 io.attach(server, {
   cors: {
     credentials: true,
-    origin: ['http://localhost:7000', 'http://27.96.131.89', 'http://booducksound.kro.kr'],
+    origin: [LOCALHOST, PRODUCTION, DOMAIN_NAME],
   },
 });
 
