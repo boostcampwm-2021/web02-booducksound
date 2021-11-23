@@ -38,11 +38,8 @@ const UserInfoBox = ({ info }: { info: Info }) => {
   const dispatch = useDispatch();
 
   const changeBooduckColor = (newColor: string) => {
-    setColor(() => {
-      changeColor(id, newColor);
-      dispatch(getUser());
-      return newColor;
-    });
+    changeColor(id, newColor);
+    dispatch(getUser());
   };
   useEffect(() => {
     setColor(userColor);
