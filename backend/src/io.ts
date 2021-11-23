@@ -63,7 +63,6 @@ const getNextRound = (
     serverRooms[uuid].status = 'waiting';
     serverRooms[uuid].skipCount = 0;
     serverRooms[uuid].answerCount = 0;
-    serverRooms[uuid].streams.forEach((stream) => stream.destroy());
     serverRooms[uuid].streams = [];
     Object.keys(serverRooms[uuid].players).forEach((key) => {
       if (serverRooms[uuid].players[key].status !== 'king') {
@@ -90,7 +89,6 @@ const getNextRound = (
     }
 
     serverRooms[uuid].curRound += 1;
-    serverRooms[uuid].streams[0].destroy();
     serverRooms[uuid].streams.shift();
 
     if (curRound + 1 < musics.length) {
@@ -120,7 +118,6 @@ io.on('connection', (socket) => {
 
     if (!Object.keys(serverRooms[uuid].players).length) {
       if (serverRooms[uuid].timer) clearTimer(serverRooms[uuid].timer);
-      serverRooms[uuid].streams.forEach((stream) => stream.destroy());
       delete serverRooms[uuid];
       io.emit(SocketEvents.DELETE_LOBBY_ROOM, uuid);
       return;
