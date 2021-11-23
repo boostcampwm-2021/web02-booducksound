@@ -26,7 +26,6 @@ const Timer = ({ initSec, resetTrigger }: { initSec: number; resetTrigger: any }
         clearTimeout(timer.current);
         return;
       }
-
       setSeconds(seconds - 1);
     }, 1000);
 

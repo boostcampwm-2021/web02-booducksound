@@ -3,12 +3,15 @@ import { KeyboardEventHandler, useState, useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 
+import GameSummary from '~/atoms/GameSummary';
 import GlassContainer from '~/atoms/GlassContainer';
 import Timer from '~/atoms/Timer';
 import useSocket from '~/hooks/useSocket';
 import useSocketOn from '~/hooks/useSocketOn';
 import CharacterList from '~/molecules/CharacterList';
 import ChatList from '~/molecules/ChatList';
+import GamePlaySummary from '~/molecules/GamePlaySummary';
+import GameWaitSummary from '~/molecules/GameWaitSummary';
 import OptionModal from '~/organisms/OptionModal';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
@@ -96,21 +99,6 @@ const RightTitle = styled.div`
   align-items: center;
 `;
 
-const GameSummary = styled.p`
-  line-height: 2.4rem;
-
-  > b {
-    color: ${theme.colors.ocean};
-  }
-`;
-
-const Round = styled(GameSummary)`
-  &::after {
-    content: 'Round';
-    margin-left: 8px;
-  }
-`;
-
 const Hint = styled(GameSummary)`
   &::before {
     content: '힌트 : ';
@@ -176,78 +164,14 @@ const Input = styled.input`
   outline: none;
 `;
 
-const TimerWrapper = styled.div`
-  position: absolute;
-  top: -24px;
-  left: -28px;
-  width: 100px;
-  height: 100px;
-  font-size: 28px;
-  font-weight: 700;
-
-  @media (max-width: ${theme.breakpoints.lg}) {
-    font-size: 24px;
-    top: -20px;
-    left: -20px;
-    width: 84px;
-    height: 84px;
-  }
-
-  @media (max-width: ${theme.breakpoints.md}) {
-    position: fixed;
-    font-size: 24px;
-    width: 64px;
-    height: 64px;
-    top: 52px;
-    left: 12px;
-    transform: translate(0, 0);
-  }
-
-  @media (max-width: ${theme.breakpoints.sm}) {
-    font-size: 18px;
-    width: 58px;
-    height: 58px;
-  }
-`;
-
-const gameStatusSummary = (gameRoom?: GameRoom) => {
-  if (!gameRoom) return;
-
-  const { status, curRound, maxRound } = gameRoom;
-
-  switch (status) {
-    case 'playing':
-    case 'resting': {
-      return (
-        <>
-          <TimerWrapper>
-            <Timer initSec={gameRoom.timePerProblem} resetTrigger={gameRoom.curRound} />
-          </TimerWrapper>
-          <Round>
-            {curRound} / {maxRound}
-          </Round>
-          <GameSummary>
-            <b>음악</b>을 듣고 <b>답</b>을 입력하세요.
-          </GameSummary>
-        </>
-      );
-    }
-    default: {
-      return (
-        <GameSummary>
-          <b>대기중</b>입니다.
-        </GameSummary>
-      );
-    }
-  }
-};
-
 const GameRoomContainer = ({
   players,
   gameRoom,
+  endTime,
 }: {
   players?: { [socketId: string]: Player };
-  gameRoom: GameRoom | undefined;
+  gameRoom: GameRoom;
+  endTime: number;
 }) => {
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
@@ -308,7 +232,10 @@ const GameRoomContainer = ({
         </CharacterContainer>
         <Container type={'rightTitle'}>
           <RightTitle>
-            {gameStatusSummary(gameRoom)}
+            {gameRoom?.status === 'waiting' && <GameWaitSummary></GameWaitSummary>}
+            {(gameRoom?.status === 'playing' || gameRoom?.status === 'resting') && (
+              <GamePlaySummary gameRoom={gameRoom} endTime={endTime}></GamePlaySummary>
+            )}
             {gameRoom?.status === 'playing' && hint && <Hint>{hint}</Hint>}
           </RightTitle>
         </Container>
