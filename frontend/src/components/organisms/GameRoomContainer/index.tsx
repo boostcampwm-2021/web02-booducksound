@@ -105,6 +105,8 @@ const GameSummary = styled.p`
 `;
 
 const Round = styled(GameSummary)`
+  font-size: 18px;
+
   &::after {
     content: 'Round';
     margin-left: 8px;

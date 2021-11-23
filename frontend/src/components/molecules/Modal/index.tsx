@@ -28,6 +28,7 @@ const ModalContainer = styled.div<ModalContainerProps>`
   width: 90vw;
   max-width: ${({ maxWidth }) => maxWidth || '640px'};
   height: ${({ height }) => height || '72vh'};
+  max-height: 90vh;
   padding: 32px;
   background: #fff;
   border-radius: 32px;
