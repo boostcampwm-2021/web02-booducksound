@@ -4,6 +4,15 @@ import theme from '~/styles/theme';
 
 const BoxWrapper = styled.div`
   padding: 5.6rem 2rem;
+  animation: Tower 0.6s forwards;
+  @keyframes Tower {
+    from {
+      margin-top: 999px;
+    }
+    to {
+      margin-top: 0;
+    }
+  }
 `;
 
 const BoxContainer = styled.div`

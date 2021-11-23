@@ -29,8 +29,13 @@ const Container = styled.nav`
 
 const FlexItem = styled.div`
   display: flex;
-  align-items: center;
+  align-items: stretch;
   column-gap: 8px;
+`;
+
+const ExitAnchor = styled.a`
+  display: flex;
+  align-items: stretch;
 `;
 
 const MuteButton = styled.button`
@@ -74,7 +79,7 @@ const VolumeBar = styled.input`
 `;
 
 const converter: { [status: string]: 'ready' | 'prepare' } = { prepare: 'ready', ready: 'prepare' };
-const statusEncoder = { king: 'START', prepare: 'PREPARE', ready: 'READY' };
+const statusEncoder = { king: '시작하기', prepare: '준비하기', ready: '준비완료' };
 
 const GameRoomNav = ({
   players,
@@ -93,6 +98,7 @@ const GameRoomNav = ({
   const socket = useSocket();
   const player = socket && players?.[socket.id];
   const [preventMulti, setPreventMulti] = useState(false);
+
   const changeStatus = (player: Player) => () => {
     if (player.status !== 'king') player = { ...player, status: converter[player.status] };
     socket?.emit(SocketEvents.SET_PLAYER, uuid, player);
@@ -148,10 +154,13 @@ const GameRoomNav = ({
         {status === 'waiting' && (
           <ResponsiveButton
             width="160px"
-            fontSize="1em"
-            onClick={handleCopy}
-            background={theme.colors.lime}
+            height="100%"
             mdWidth="100px"
+            smWidth="82px"
+            background={theme.colors.lime}
+            fontSize="1em"
+            smFontSize="0.8em"
+            onClick={handleCopy}
           >
             초대코드 복사
           </ResponsiveButton>
@@ -159,15 +168,18 @@ const GameRoomNav = ({
         {player && (
           <ResponsiveButton
             width="160px"
-            mdWidth="84px"
+            height="100%"
+            mdWidth="100px"
+            smWidth="82px"
             background={
               status === 'waiting'
-                ? statusEncoder[player.status] !== 'READY'
-                  ? theme.colors.lilac
-                  : theme.colors.peach
-                : theme.colors.yellow
+                ? player.status !== 'ready'
+                  ? theme.colors.lightsky
+                  : theme.colors.lilac
+                : theme.colors.peach
             }
             fontSize="1em"
+            smFontSize="0.8em"
             onClick={handleStartBtnClick(player)}
             disabled={status === 'resting' || player.skip || (player.status === 'king' && !isAllReady)}
           >
@@ -175,11 +187,19 @@ const GameRoomNav = ({
           </ResponsiveButton>
         )}
         <Link href="/lobby">
-          <a>
-            <ResponsiveButton width="160px" fontSize="1em" background={theme.colors.sand} mdWidth="84px">
+          <ExitAnchor>
+            <ResponsiveButton
+              width="160px"
+              height="100%"
+              mdWidth="100px"
+              smWidth="82px"
+              fontSize="1em"
+              smFontSize="0.8em"
+              background={theme.colors.sand}
+            >
               나가기
             </ResponsiveButton>
-          </a>
+          </ExitAnchor>
         </Link>
       </FlexItem>
     </Container>

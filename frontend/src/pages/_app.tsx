@@ -9,7 +9,6 @@ import { createStore, applyMiddleware, compose, Action } from 'redux';
 import thunk, { ThunkDispatch } from 'redux-thunk';
 
 import { getUser } from '~/actions/user';
-import { updateStoreData } from '~/api/account';
 import rootReducer from '~/reducers/index';
 import { UserState } from '~/reducers/user';
 import theme from '~/styles/theme';
@@ -22,7 +21,7 @@ const dispatch = store.dispatch as ThunkDispatch<UserState, void, Action>;
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
-    updateStoreData(() => dispatch(getUser()));
+    dispatch(getUser());
   }, []);
   return (
     <ThemeProvider theme={theme}>

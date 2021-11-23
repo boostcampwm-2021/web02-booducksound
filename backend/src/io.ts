@@ -45,10 +45,18 @@ const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
 
 const setWaitTimer = (serverRoom: ServerRoom, uuid: string, isExistNext: boolean) => {
   clearTimer(serverRoom.timer);
+
   serverRoom.timer = setTimeout(() => {
+    const { curRound, musics } = serverRoom;
     serverRoom.status = 'playing';
+
+    if (curRound < musics.length) {
+      serverRoom.streams.push(new Youtubestream(musics[curRound].url));
+    }
+
+    const endTime = Date.now() + serverRoom.timePerProblem * 1000;
+    io.to(uuid).emit(SocketEvents.NEXT_ROUND, isExistNext, endTime);
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
-    io.to(uuid).emit(SocketEvents.NEXT_ROUND, isExistNext);
     setHintTimer(serverRoom, uuid);
     setRoundTimer(serverRoom, uuid);
   }, 5000);
@@ -90,10 +98,6 @@ const getNextRound = (
 
     serverRooms[uuid].curRound += 1;
     serverRooms[uuid].streams.shift();
-
-    if (curRound + 1 < musics.length) {
-      serverRooms[uuid].streams.push(new Youtubestream(musics[curRound + 1].url));
-    }
 
     serverRooms[uuid].skipCount = 0;
     serverRooms[uuid].answerCount = 0;
@@ -259,7 +263,10 @@ io.on('connection', (socket) => {
       Object.keys(serverRooms[uuid].players).forEach((e) => {
         serverRooms[uuid].players[e].score = 0;
       });
-      io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid));
+
+      const endTime = Date.now() + serverRooms[uuid].timePerProblem * 1000;
+
+      io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid), endTime);
       io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
       setRoundTimer(serverRooms[uuid], uuid);
     } catch (error) {

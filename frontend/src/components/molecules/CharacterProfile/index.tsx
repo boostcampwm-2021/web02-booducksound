@@ -81,8 +81,18 @@ const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting'; answer:
   ${({ answer }) =>
     answer &&
     css`
-      border-radius: 20px;
-      border-bottom: 3px solid ${theme.colors.ocean};
+      & ${ProfileCircle}::before {
+        content: '';
+        position: absolute;
+        bottom: -6px;
+        right: -6px;
+        width: 24px;
+        height: 24px;
+        background-repeat: no-repeat;
+        background-size: cover;
+        z-index: 99;
+        background-image: url('/images/check.svg');
+      }
     `}
 
   ${({ mode }) =>

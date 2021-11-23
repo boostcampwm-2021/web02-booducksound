@@ -16,7 +16,7 @@ const ButtonContainer = styled.button<ButtonContainerProps>`
   background: ${({ background }) => background || 'inherit'};
 
   font-size: ${({ fontSize }) => fontSize || 'inherit'};
-  padding: ${({ paddingH }) => paddingH || '6%'} 0;
+  padding: ${({ paddingH }) => paddingH || '5%'} 0;
 
   font-family: ${({ theme }) => theme.fonts.gmarket};
   border-radius: 60px;

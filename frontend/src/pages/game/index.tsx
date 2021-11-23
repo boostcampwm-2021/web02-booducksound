@@ -20,7 +20,7 @@ import { GameRoom } from '~/types/GameRoom';
 import { SocketEvents } from '~/types/SocketEvents';
 
 const BlurDialog = dynamic(() => import('~/molecules/BlurDialog'));
-const ResultModal = dynamic(() => import('~/organisms/ResultModal'));
+const GameResultModal = dynamic(() => import('~/organisms/GameResultModal'));
 
 const Container = styled.div`
   overflow: hidden;
@@ -39,6 +39,7 @@ const Game: NextPage = () => {
   const [gameRoom, setGameRoom] = useState<GameRoom>();
   const [dialogMsg, setDialogMsg] = useState<{ title: string; content: string } | null>(null);
   const [gameResultModalOnOff, setGameResultModalOnOff] = useState(false);
+  const [timerEndTime, setTimerEndTime] = useState(0);
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
   const socket = useSocket();
@@ -73,7 +74,7 @@ const Game: NextPage = () => {
     },
   );
 
-  useSocketOn(SocketEvents.START_GAME, (gameRoom: GameRoom) => {
+  useSocketOn(SocketEvents.START_GAME, (gameRoom: GameRoom, endTime: number) => {
     if (!music1.current || !music2.current) throw Error('START_GAME에서 audio Element를 찾을 수 없습니다');
 
     curMusic.current = music1.current;
@@ -82,6 +83,7 @@ const Game: NextPage = () => {
     curMusic.current.src = `${BACKEND_URL}/game/${uuid}/init`;
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
 
+    setTimerEndTime(endTime);
     setGameRoom(gameRoom);
 
     const playPromise = curMusic.current.play();
@@ -110,7 +112,7 @@ const Game: NextPage = () => {
     },
   );
 
-  useSocketOn(SocketEvents.NEXT_ROUND, (isExistNext: boolean) => {
+  useSocketOn(SocketEvents.NEXT_ROUND, (isExistNext: boolean, endTime: number) => {
     if (!curMusic.current || !nextMusic.current) throw Error('NEXT_ROUND에서 curMusic, nextMusic을 찾을 수 없습니다');
     setDialogMsg(null);
 
@@ -119,6 +121,8 @@ const Game: NextPage = () => {
     curMusic.current.pause();
     curMusic.current = nextMusic.current;
     nextMusic.current = temp;
+
+    setTimerEndTime(endTime);
 
     const playPromise = curMusic.current.play();
 
@@ -130,7 +134,7 @@ const Game: NextPage = () => {
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
   });
 
-  useSocketOn(SocketEvents.GAME_END, (gameRoom: GameRoom) => {
+  useSocketOn(SocketEvents.GAME_END, () => {
     music1.current?.pause();
     music2.current?.pause();
     setDialogMsg(null);
@@ -142,13 +146,6 @@ const Game: NextPage = () => {
       router.push('/lobby');
     }
   });
-
-  useEffect(() => {
-    if (!gameResultModalOnOff) return;
-    setTimeout(() => {
-      setGameResultModalOnOff(false);
-    }, 4000);
-  }, [gameResultModalOnOff]);
 
   useSocketOn(SocketEvents.SET_GAME_ROOM, (gameRoom: GameRoom) => {
     if (!gameRoom) return;
@@ -176,13 +173,13 @@ const Game: NextPage = () => {
         music2={music2.current}
         isAllReady={gameRoom?.isAllReady}
       />
-      <GameRoomContainer players={gameRoom?.players} gameRoom={gameRoom} />
+      {gameRoom && <GameRoomContainer gameRoom={gameRoom} endTime={timerEndTime} />}
+      {dialogMsg && <BlurDialog title={dialogMsg.title} content={dialogMsg.content} />}
+      {gameResultModalOnOff && gameRoom && (
+        <GameResultModal gameRoom={gameRoom} userId={userInfo.id} setModalOnOff={setGameResultModalOnOff} />
+      )}
       <audio ref={music1} onEnded={handleAudioEnded} />
       <audio ref={music2} onEnded={handleAudioEnded} />
-      {dialogMsg && <BlurDialog title={dialogMsg.title} content={dialogMsg.content} />}
-      {gameResultModalOnOff && (
-        <ResultModal gameRoom={gameRoom} playlistId={gameRoom?.playlistId} userId={userInfo.id} />
-      )}
     </Container>
   );
 };
