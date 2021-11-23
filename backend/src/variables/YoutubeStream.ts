@@ -1,7 +1,8 @@
-import fs, { ReadStream } from 'fs';
+import fs from 'fs';
 import { PassThrough } from 'stream';
 
 import { path } from '@ffmpeg-installer/ffmpeg';
+import cloneable from 'cloneable-readable';
 import FFmpeg from 'fluent-ffmpeg';
 import ytdl from 'ytdl-core';
 
@@ -29,6 +30,10 @@ class Youtubestream {
     const video = ytdl(`https://youtube.com/watch?v=${videoId}`, { quality: 'lowestaudio' });
     const ffmpeg = FFmpeg(video);
 
+    ffmpeg.once('error', (error: Error) => {
+      passThrough.emit('error', error);
+    });
+
     process.nextTick(() => {
       ffmpeg.noVideo().inputOptions(`-t ${MAX_TIME_LENGTH}`).format('mp3').pipe(passThrough);
       passThrough.pipe(writeStream);
@@ -38,7 +43,7 @@ class Youtubestream {
   }
 
   get stream() {
-    if (this.#passThrough) return this.#passThrough;
+    if (this.#passThrough) return cloneable(this.#passThrough);
     return fs.createReadStream(this.mp3Path);
   }
 }
