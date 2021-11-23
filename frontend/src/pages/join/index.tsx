@@ -5,6 +5,7 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import Router from 'next/router';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { getUser } from '~/actions/user';
 import { requestJoin } from '~/api/account';
@@ -94,23 +95,23 @@ const Join: NextPage = () => {
   const signUp = async () => {
     const { result, message } = await idCheck();
 
-    if (result) return alert(message);
+    if (result) return toast.error(message);
     await requestJoin(id, password, nickname, color);
     dispatch(getUser());
     Router.push('/lobby');
   };
 
   const handleIdCheck = async () => {
-    if (!id) return alert(ID_EMPTY_MSG);
+    if (!id) return toast.error(ID_EMPTY_MSG);
 
     const { message } = await idCheck();
-    alert(message);
+    toast.info(message);
   };
 
   const handleJoin = async () => {
-    if (!id) return alert(ID_EMPTY_MSG);
-    if (!password) return alert(PASSWORD_EMPTY_MSG);
-    if (!nickname) return alert(NICKNAME_EMPTY_MSG);
+    if (!id) return toast.error(ID_EMPTY_MSG);
+    if (!password) return toast.error(PASSWORD_EMPTY_MSG);
+    if (!nickname) return toast.error(NICKNAME_EMPTY_MSG);
     signUp();
   };
 

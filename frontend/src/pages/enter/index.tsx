@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import Router from 'next/router';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { getUser } from '~/actions/user';
 import { requestEnter } from '~/api/account';
@@ -74,7 +75,7 @@ const Enter: NextPage = () => {
   const dispatch = useDispatch();
 
   const handleEnter = async () => {
-    if (!nickname) return alert(NICKNAME_EMPTY_MSG);
+    if (!nickname) return toast.error(NICKNAME_EMPTY_MSG);
     await requestEnter(nickname, color);
     dispatch(getUser());
     Router.push('/lobby');

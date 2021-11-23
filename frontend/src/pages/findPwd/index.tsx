@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import { requestChangePassword } from '~/api/account';
 import InputText from '~/atoms/InputText';
@@ -76,9 +77,9 @@ const FindPwd: NextPage = () => {
   }, [userInfo]);
 
   const handleFindPwd = () => {
-    if (!id) return alert(ID_EMPTY_MSG);
-    if (!nickname) return alert(NICKNAME_EMPTY_MSG);
-    if (!password) return alert(PASSWORD_EMPTY_MSG);
+    if (!id) return toast.error(ID_EMPTY_MSG);
+    if (!nickname) return toast.error(NICKNAME_EMPTY_MSG);
+    if (!password) return toast.error(PASSWORD_EMPTY_MSG);
     requestChangePassword(id, nickname, password);
   };
 

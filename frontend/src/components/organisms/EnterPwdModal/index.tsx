@@ -3,9 +3,11 @@ import { useState, ChangeEventHandler, SetStateAction, Dispatch } from 'react';
 import styled from '@emotion/styled';
 import Router from 'next/router';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
+import { PASSWORD_ERR_MSG, PASSWORD_EMPTY_MSG } from '~/constants/index';
 import useSocket from '~/hooks/useSocket';
 import Modal from '~/molecules/Modal';
 import { RoomActions } from '~/types/Actions';
@@ -30,9 +32,9 @@ const EnterPwdModal = ({ uuid, setModalOnOff, leftButtonText }: Props) => {
   const dispatch = useDispatch();
   const socket = useSocket();
   const handleEnterRoom = () => {
-    if (!code) return alert('비밀번호를 입력해 주세요.');
+    if (!code) return toast.error(PASSWORD_EMPTY_MSG);
     socket?.emit(SocketEvents.COMPARE_PWD, uuid, code, (res: boolean) => {
-      if (!res) return alert('비밀번호가 다릅니다.');
+      if (!res) return toast.error(PASSWORD_ERR_MSG);
       dispatch({ type: RoomActions.SET_UUID, payload: { uuid: uuid } });
       Router.push(`/game`);
     });
