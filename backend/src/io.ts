@@ -67,6 +67,8 @@ const getNextRound = (
   { type, answerCount }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; answerCount?: number },
 ) => {
   const gameEnd = (uuid: string) => {
+    if (!serverRooms[uuid]) return;
+
     serverRooms[uuid].curRound = 1;
     serverRooms[uuid].status = 'waiting';
     serverRooms[uuid].skipCount = 0;
@@ -97,8 +99,6 @@ const getNextRound = (
     }
 
     serverRooms[uuid].curRound += 1;
-    serverRooms[uuid].streams.shift();
-
     serverRooms[uuid].skipCount = 0;
     serverRooms[uuid].answerCount = 0;
     resetPlayer(uuid);
@@ -276,7 +276,6 @@ io.on('connection', (socket) => {
 
   socket.on(SocketEvents.SKIP, (uuid: string, id: string) => {
     try {
-      if (!serverRooms[uuid]) return;
       if (serverRooms[uuid].status !== 'playing') return;
       if (serverRooms[uuid].players[id].skip) return;
 

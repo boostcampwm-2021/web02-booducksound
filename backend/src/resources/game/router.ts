@@ -1,10 +1,9 @@
 import express from 'express';
 
-import { getInitialMusic, getNextMusic } from './controller';
+import { getMusic } from './controller';
 
 const router = express.Router();
 
-router.get('/:uuid/init', getInitialMusic);
-router.get('/:uuid/next', getNextMusic);
+router.get('/:uuid/:round', getMusic);
 
 export default router;

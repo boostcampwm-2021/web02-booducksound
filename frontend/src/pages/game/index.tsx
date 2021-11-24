@@ -52,8 +52,6 @@ const Game: NextPage = () => {
   const nextMusic: MutableRefObject<HTMLAudioElement | null> = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // TODO : 닉네임, 부덕이 색깔 등이 설정되어 있지 않으면(로그인 하지 않았다면) 설정 페이지로 보낼 것
-
     if (!uuid) {
       router.push('/lobby');
     }
@@ -64,12 +62,8 @@ const Game: NextPage = () => {
     uuid,
     userInfo,
     ({ type, message, gameRoom }: { type: string; message: string; gameRoom: GameRoom }) => {
-      if (type === 'fail') {
-        // TODO : window.alert이 아니라 모달으로 에러 message를 띄우도록 할 것
-        router.push('/lobby');
-      }
+      if (type === 'fail') return router.push('/lobby');
 
-      // TODO : 받아온 gameRoom 데이터에 따라 화면을 렌더링할 것
       setGameRoom(gameRoom);
     },
   );
@@ -80,8 +74,8 @@ const Game: NextPage = () => {
     curMusic.current = music1.current;
     nextMusic.current = music2.current;
 
-    curMusic.current.src = `${BACKEND_URL}/game/${uuid}/init`;
-    nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
+    curMusic.current.src = `${BACKEND_URL}/game/${uuid}/${1}`;
+    nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/${2}`;
 
     setTimerEndTime(endTime);
     setGameRoom(gameRoom);
@@ -112,27 +106,33 @@ const Game: NextPage = () => {
     },
   );
 
-  useSocketOn(SocketEvents.NEXT_ROUND, (isExistNext: boolean, endTime: number) => {
-    if (!curMusic.current || !nextMusic.current) throw Error('NEXT_ROUND에서 curMusic, nextMusic을 찾을 수 없습니다');
-    setDialogMsg(null);
+  useSocketOn(
+    SocketEvents.NEXT_ROUND,
+    (isExistNext: boolean, endTime: number) => {
+      if (!curMusic.current || !nextMusic.current) return;
+      if (!gameRoom) return;
 
-    const temp = curMusic.current;
+      setDialogMsg(null);
 
-    curMusic.current.pause();
-    curMusic.current = nextMusic.current;
-    nextMusic.current = temp;
+      const temp = curMusic.current;
 
-    setTimerEndTime(endTime);
+      curMusic.current.pause();
+      curMusic.current = nextMusic.current;
+      nextMusic.current = temp;
 
-    const playPromise = curMusic.current.play();
+      setTimerEndTime(endTime);
 
-    playPromise.then(() => {
-      curMusic.current?.play();
-    });
+      const playPromise = curMusic.current.play();
 
-    if (!isExistNext) return;
-    nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/next`;
-  });
+      playPromise.then(() => {
+        curMusic.current?.play();
+      });
+
+      if (!isExistNext) return;
+      nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/${gameRoom.curRound + 2}`;
+    },
+    gameRoom?.curRound,
+  );
 
   useSocketOn(SocketEvents.GAME_END, () => {
     music1.current?.pause();
@@ -178,8 +178,8 @@ const Game: NextPage = () => {
       {gameResultModalOnOff && gameRoom && (
         <GameResultModal gameRoom={gameRoom} userId={userInfo.id} setModalOnOff={setGameResultModalOnOff} />
       )}
-      <audio ref={music1} onEnded={handleAudioEnded} />
-      <audio ref={music2} onEnded={handleAudioEnded} />
+      <audio ref={music1} onEnded={handleAudioEnded} controls />
+      <audio ref={music2} onEnded={handleAudioEnded} controls />
     </Container>
   );
 };

@@ -104,7 +104,6 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
   };
 
   const checkFormChanged = (prev: Form, next: Form) => {
-    console.log(prev, next);
     return Object.keys(prev).some((key) => prev[key] !== next[key]);
   };
 
