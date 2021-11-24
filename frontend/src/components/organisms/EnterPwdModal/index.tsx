@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
-import { PASSWORD_ERR_MSG, PASSWORD_EMPTY_MSG } from '~/constants/index';
+import { PASSWORD_ERR_MSG, PASSWORD_EMPTY_MSG, TOAST_OPTION } from '~/constants/index';
 import useSocket from '~/hooks/useSocket';
 import Modal from '~/molecules/Modal';
 import { RoomActions } from '~/types/Actions';
@@ -32,9 +32,9 @@ const EnterPwdModal = ({ uuid, setModalOnOff, leftButtonText }: Props) => {
   const dispatch = useDispatch();
   const socket = useSocket();
   const handleEnterRoom = () => {
-    if (!code) return toast.error(PASSWORD_EMPTY_MSG);
+    if (!code) return toast.error(PASSWORD_EMPTY_MSG, TOAST_OPTION);
     socket?.emit(SocketEvents.COMPARE_PWD, uuid, code, (res: boolean) => {
-      if (!res) return toast.error(PASSWORD_ERR_MSG);
+      if (!res) return toast.error(PASSWORD_ERR_MSG, TOAST_OPTION);
       dispatch({ type: RoomActions.SET_UUID, payload: { uuid: uuid } });
       Router.push(`/game`);
     });

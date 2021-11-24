@@ -1,6 +1,9 @@
+import { toast } from 'react-toastify';
+
 export const SOCKET_URI = process.env.NEXT_PUBLIC_SOCKET_URI;
 export const BACKEND_URL = process.env.NEXT_PUBLIC_SOCKET_URI;
 export const HEADERS = { 'Content-Type': 'application/json' };
+export const TOAST_OPTION = { autoClose: 3000, position: toast.POSITION.BOTTOM_RIGHT };
 export const SUCCESS = 'SUCCESS';
 export const FAILED = 'FAILED';
 export const LOGIN_SUCC_MSG = '로그인에 성공했습니다.';

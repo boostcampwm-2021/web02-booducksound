@@ -1,4 +1,4 @@
-import { HEADERS as headers } from '../constants';
+import { HEADERS as headers } from '~/constants/index';
 
 type FetchOption = {
   body?: ReadableStream | Blob | FormData | URLSearchParams | string;

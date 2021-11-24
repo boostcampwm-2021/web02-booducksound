@@ -75,7 +75,7 @@ const Enter: NextPage = () => {
   const dispatch = useDispatch();
 
   const handleEnter = async () => {
-    if (!nickname) return toast.error(NICKNAME_EMPTY_MSG);
+    if (!nickname) return toast.error(NICKNAME_EMPTY_MSG, TOAST_OPTION);
     await requestEnter(nickname, color);
     dispatch(getUser());
     Router.push('/lobby');

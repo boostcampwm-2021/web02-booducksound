@@ -9,7 +9,7 @@ import { requestChangePassword } from '~/api/account';
 import InputText from '~/atoms/InputText';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
-import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG } from '~/constants/index';
+import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG, TOAST_OPTION } from '~/constants/index';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
@@ -77,9 +77,9 @@ const FindPwd: NextPage = () => {
   }, [userInfo]);
 
   const handleFindPwd = () => {
-    if (!id) return toast.error(ID_EMPTY_MSG);
-    if (!nickname) return toast.error(NICKNAME_EMPTY_MSG);
-    if (!password) return toast.error(PASSWORD_EMPTY_MSG);
+    if (!id) return toast.error(ID_EMPTY_MSG, TOAST_OPTION);
+    if (!nickname) return toast.error(NICKNAME_EMPTY_MSG, TOAST_OPTION);
+    if (!password) return toast.error(PASSWORD_EMPTY_MSG, TOAST_OPTION);
     requestChangePassword(id, nickname, password);
   };
 

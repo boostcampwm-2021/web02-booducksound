@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { getUser } from '~/actions/user';
 import { deletePlaylist } from '~/api/playlist';
 import Button from '~/atoms/Button';
-import { FAILED, PLAYLIST_DELETE_ERR_MSG, PLAYLIST_EMPTY_MSG } from '~/constants/index';
+import { FAILED, PLAYLIST_DELETE_ERR_MSG, PLAYLIST_EMPTY_MSG, TOAST_OPTION } from '~/constants/index';
 import theme from '~/styles/theme';
 import { Playlist } from '~/types/Playlist';
 
@@ -45,7 +45,7 @@ const MyPlaylistTable = ({ myPlaylist, isMine, openRemoveModal }: Props) => {
     async (e) => {
       if (!_id) return;
       const result = await deletePlaylist(_id);
-      if (result.status === FAILED) return toast.error(PLAYLIST_DELETE_ERR_MSG);
+      if (result.status === FAILED) return toast.error(PLAYLIST_DELETE_ERR_MSG, TOAST_OPTION);
       dispatch(getUser());
     };
   const handleUpdatePlaylist =

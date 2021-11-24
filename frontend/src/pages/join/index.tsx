@@ -14,7 +14,7 @@ import InputText from '~/atoms/InputText';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import ProfileSelector from '~/atoms/ProfileSelector';
-import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG, BACKEND_URL } from '~/constants/index';
+import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG, BACKEND_URL, TOAST_OPTION } from '~/constants/index';
 import theme from '~/styles/theme';
 import API from '~/utils/API';
 
@@ -95,23 +95,23 @@ const Join: NextPage = () => {
   const signUp = async () => {
     const { result, message } = await idCheck();
 
-    if (result) return toast.error(message);
+    if (result) return toast.error(message, TOAST_OPTION);
     await requestJoin(id, password, nickname, color);
     dispatch(getUser());
     Router.push('/lobby');
   };
 
   const handleIdCheck = async () => {
-    if (!id) return toast.error(ID_EMPTY_MSG);
+    if (!id) return toast.error(ID_EMPTY_MSG, TOAST_OPTION);
 
     const { message } = await idCheck();
-    toast.info(message);
+    toast.info(message, TOAST_OPTION);
   };
 
   const handleJoin = async () => {
-    if (!id) return toast.error(ID_EMPTY_MSG);
-    if (!password) return toast.error(PASSWORD_EMPTY_MSG);
-    if (!nickname) return toast.error(NICKNAME_EMPTY_MSG);
+    if (!id) return toast.error(ID_EMPTY_MSG, TOAST_OPTION);
+    if (!password) return toast.error(PASSWORD_EMPTY_MSG, TOAST_OPTION);
+    if (!nickname) return toast.error(NICKNAME_EMPTY_MSG, TOAST_OPTION);
     signUp();
   };
 
