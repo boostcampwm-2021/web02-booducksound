@@ -106,7 +106,10 @@ const GameResultModal = ({ gameRoom, userId, setModalOnOff }: Props) => {
           <Title>결과</Title>
         </FirstLine>
         <ResultCharacterWrapper>
-          {gameRoom && Object.values(gameRoom.players).map((player, i) => <ResultCharacter key={i} player={player} />)}
+          {gameRoom &&
+            Object.values(gameRoom.players)
+              .sort((a, b) => b.score - a.score)
+              .map((player, i) => <ResultCharacter key={i} player={player} />)}
         </ResultCharacterWrapper>
         <RecommendWrapper>
           <RecommendContent>

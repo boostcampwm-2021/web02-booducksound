@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
-import { COPY_EMPTY_MSG, COPY_ERR_MSG } from '~/constants/index';
+import { COPY_EMPTY_MSG, COPY_ERR_MSG, TOAST_OPTION } from '~/constants/index';
 import Modal from '~/molecules/Modal';
 import { RoomActions } from '~/types/Actions';
 
@@ -35,9 +35,9 @@ const InviteCodeModal = ({ setModalOnOff, leftButtonText, rooms }: Props) => {
   const dispatch = useDispatch();
 
   const handleEnterRoom = () => {
-    if (!code) return toast.error(COPY_EMPTY_MSG);
+    if (!code) return toast.error(COPY_EMPTY_MSG, TOAST_OPTION);
     const res = findAvailableRoom(code, rooms);
-    if (!res) return toast.error(COPY_ERR_MSG);
+    if (!res) return toast.error(COPY_ERR_MSG, TOAST_OPTION);
     dispatch({ type: RoomActions.SET_UUID, payload: { uuid: code } });
     Router.push(`/game`);
   };

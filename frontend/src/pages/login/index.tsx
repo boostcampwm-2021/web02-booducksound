@@ -14,7 +14,7 @@ import Button from '~/atoms/Button';
 import InputText from '~/atoms/InputText';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
-import { ID_EMPTY_MSG, LOGIN_SUCC_MSG, PASSWORD_EMPTY_MSG } from '~/constants/index';
+import { ID_EMPTY_MSG, LOGIN_SUCC_MSG, PASSWORD_EMPTY_MSG, TOAST_OPTION } from '~/constants/index';
 import theme from '~/styles/theme';
 
 const LoginContainer = styled.div`
@@ -78,12 +78,12 @@ const Login: NextPage = () => {
   const dispatch = useDispatch();
 
   const handleLogin = async () => {
-    if (!id) return toast.error(ID_EMPTY_MSG);
-    if (!password) return toast.error(PASSWORD_EMPTY_MSG);
+    if (!id) return toast.error(ID_EMPTY_MSG, TOAST_OPTION);
+    if (!password) return toast.error(PASSWORD_EMPTY_MSG, TOAST_OPTION);
     const res = await requestLogin(id, password);
     if (res) {
       dispatch(getUser());
-      toast.info(LOGIN_SUCC_MSG);
+      toast.info(LOGIN_SUCC_MSG, TOAST_OPTION);
       Router.push('/lobby');
     }
   };

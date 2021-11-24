@@ -1,8 +1,6 @@
-import Router from 'next/router';
-import { Cookies } from 'react-cookie';
 import { toast } from 'react-toastify';
 
-import { BACKEND_URL } from '~/constants/index';
+import { BACKEND_URL, TOAST_OPTION } from '~/constants/index';
 import API from '~/utils/API';
 
 export const getUserInfo = async () => {
@@ -13,7 +11,7 @@ export const getUserInfo = async () => {
 export const requestLogin = async (id: string, password: string) => {
   const res = await API('POST')(`${BACKEND_URL}/sign-in`)({ body: JSON.stringify({ id, password }) });
   const { isLogin, message } = await res.json();
-  if (!isLogin) toast.error(message);
+  if (!isLogin) toast.error(message, TOAST_OPTION);
   return isLogin;
 };
 
@@ -24,7 +22,7 @@ export const requestLogout = async () => {
 export const requestChangePassword = async (id: string, nickname: string, password: string) => {
   const res = await API('POST')(`${BACKEND_URL}/reset-pwd`)({ body: JSON.stringify({ id, nickname, password }) });
   const { isChange, message } = await res.json();
-  isChange ? toast.success(message) : toast.error(message);
+  isChange ? toast.success(message, TOAST_OPTION) : toast.error(message, TOAST_OPTION);
   if (isChange) history.back();
 };
 
@@ -32,14 +30,14 @@ export const requestEnter = async (nickname: string, color: string) => {
   const res = await API('POST')(`${BACKEND_URL}/guest-sign-in`)({ body: JSON.stringify({ nickname, color }) });
   const { isLogin, message } = await res.json();
 
-  if (!isLogin) return toast.error(message);
-  toast.info(message);
+  if (!isLogin) return toast.error(message, TOAST_OPTION);
+  toast.info(message, TOAST_OPTION);
 };
 
 export const requestJoin = async (id: string, password: string, nickname: string, color: string) => {
   const res = await API('POST')(`${BACKEND_URL}/sign-up`)({ body: JSON.stringify({ id, password, nickname, color }) });
   const { isLogin, message } = await res.json();
 
-  if (!isLogin) return toast.error(message);
-  toast.info(message);
+  if (!isLogin) return toast.error(message, TOAST_OPTION);
+  toast.info(message, TOAST_OPTION);
 };

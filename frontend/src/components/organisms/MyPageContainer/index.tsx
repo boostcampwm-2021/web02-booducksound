@@ -37,7 +37,7 @@ const MyPageContainer = ({ openRemoveModal }: { openRemoveModal: (id: string) =>
       {id ? (
         <MyPlayListBox info={{ id, likes, myPlaylist }} openRemoveModal={openRemoveModal} />
       ) : (
-        <Information>회원으로 로그인 하면 자신의 플레이리스트를 확인할 수 있습니다.</Information>
+        <Information>회원으로 로그인하시면 자신의 플레이리스트를 확인할 수 있습니다.</Information>
       )}
     </Container>
   );

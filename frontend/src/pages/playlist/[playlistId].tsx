@@ -11,7 +11,7 @@ import { createPlaylist, selectPlaylist, updatePlaylist } from '~/api/playlist';
 import Button from '~/atoms/Button';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
-import { FAILED, PLAYLIST_ERR_MSG, PLAYLIST_INPUT_ERR_MSG, SUCCESS } from '~/constants/index';
+import { FAILED, PLAYLIST_ERR_MSG, PLAYLIST_INPUT_ERR_MSG, SUCCESS, TOAST_OPTION } from '~/constants/index';
 import Chip from '~/molecules/Chip';
 import CreatePlaylistInputBox from '~/organisms/CreatePlaylistInputBox';
 import CreatePlaylistMusicList from '~/organisms/CreatePlaylistMusicList';
@@ -128,7 +128,7 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
   };
   const handleSubmit = async () => {
     if (!checkAllValidInput()) {
-      toast.error(PLAYLIST_INPUT_ERR_MSG);
+      toast.error(PLAYLIST_INPUT_ERR_MSG, TOAST_OPTION);
       return;
     }
     const result = await mapSubmitFunction({
@@ -137,7 +137,7 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
       playlist: { playlistName, description, musics, hashtags, userId: userInfo.id },
     });
     const { status } = result;
-    if (status === FAILED) toast.error(PLAYLIST_ERR_MSG);
+    if (status === FAILED) toast.error(PLAYLIST_ERR_MSG, TOAST_OPTION);
     if (status === SUCCESS) Router.back();
   };
 
