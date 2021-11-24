@@ -23,6 +23,7 @@ const ProfileContainer = styled.div<Props>`
   width: ${({ type }) => (type === 'mypage' ? '14vw' : '24vw')};
   height: ${({ type }) => (type === 'mypage' ? '14vw' : '24vw')};
   position: relative;
+  margin-bottom: 1rem;
 `;
 
 const ChangeBtn = styled.span<Props>`
