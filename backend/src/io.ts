@@ -293,6 +293,7 @@ io.on('connection', (socket) => {
 
   socket.on(SocketEvents.SET_PLAYER, (uuid: string, player: Player) => {
     try {
+      if (!serverRooms[uuid]) return;
       serverRooms[uuid].players[socket.id] = player;
       io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     } catch (error) {
@@ -302,6 +303,7 @@ io.on('connection', (socket) => {
 
   socket.on(SocketEvents.SET_DELEGATE, (uuid: string, delegatedId: string) => {
     try {
+      if (!serverRooms[uuid]) return;
       serverRooms[uuid].players[socket.id].status = 'prepare';
       serverRooms[uuid].players[delegatedId].status = 'king';
       io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
