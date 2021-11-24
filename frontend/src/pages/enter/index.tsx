@@ -13,7 +13,7 @@ import InputText from '~/atoms/InputText';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import ProfileSelector from '~/atoms/ProfileSelector';
-import { NICKNAME_EMPTY_MSG } from '~/constants/index';
+import { NICKNAME_EMPTY_MSG, TOAST_OPTION } from '~/constants/index';
 import theme from '~/styles/theme';
 
 const EnterContainer = styled.div`

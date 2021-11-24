@@ -32,6 +32,7 @@ const ChipContainer = styled.div`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  width: 100%;
   row-gap: 20px;
 `;
 const SubmitButtonWrapper = styled.div`
