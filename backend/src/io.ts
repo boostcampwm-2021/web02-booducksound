@@ -343,7 +343,9 @@ io.on('connection', (socket) => {
 
   socket.on(SocketEvents.SEND_CHAT, (uuid: string, name: string, text: string, color: string) => {
     try {
-      const currentMusicInfo = serverRooms[uuid]?.musics[serverRooms[uuid].curRound - 1];
+      if (!serverRooms[uuid]) return;
+
+      const currentMusicInfo = serverRooms[uuid].musics[serverRooms[uuid].curRound - 1];
       const isAnswer = currentMusicInfo.answers.some((answer) => replaceText(answer) === replaceText(text));
 
       if (serverRooms[uuid].status === 'waiting' || !isAnswer) {
