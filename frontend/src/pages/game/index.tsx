@@ -76,6 +76,8 @@ const Game: NextPage = () => {
 
     curMusic.current.src = `${BACKEND_URL}/game/${uuid}/${1}`;
     nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/${2}`;
+    curMusic.current.load();
+    nextMusic.current.load();
 
     setTimerEndTime(endTime);
     setGameRoom(gameRoom);
@@ -130,6 +132,7 @@ const Game: NextPage = () => {
 
       if (!isExistNext) return;
       nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/${gameRoom.curRound + 2}`;
+      nextMusic.current.load();
     },
     gameRoom?.curRound,
   );
@@ -178,8 +181,8 @@ const Game: NextPage = () => {
       {gameResultModalOnOff && gameRoom && (
         <GameResultModal gameRoom={gameRoom} userId={userInfo.id} setModalOnOff={setGameResultModalOnOff} />
       )}
-      <audio ref={music1} onEnded={handleAudioEnded} controls />
-      <audio ref={music2} onEnded={handleAudioEnded} controls />
+      <audio ref={music1} onEnded={handleAudioEnded} preload="none" />
+      <audio ref={music2} onEnded={handleAudioEnded} preload="none" />
     </Container>
   );
 };
