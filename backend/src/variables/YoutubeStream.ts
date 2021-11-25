@@ -21,11 +21,10 @@ class Youtubestream {
   }
 
   #getPassThrough(videoId: string, mp3Path: string) {
-    const MAX_FILE_BYTE = 2 ** 20;
-    const NEED_FILE_BYTE = 2 ** 10;
+    const NEED_FILE_BYTE = 2 ** 20;
 
     if (!fs.existsSync(`musics`)) fs.mkdirSync('musics');
-    if (fs.existsSync(mp3Path) && fs.statSync(mp3Path).size > NEED_FILE_BYTE) return;
+    if (fs.existsSync(mp3Path) && fs.statSync(mp3Path).size >= NEED_FILE_BYTE) return;
 
     const passThrough = new PassThrough();
     const writeStream = fs.createWriteStream(mp3Path);
@@ -35,8 +34,9 @@ class Youtubestream {
     passThrough.pipe(writeStream);
 
     writeStream.on('drain', () => {
-      if (fs.statSync(mp3Path).size < MAX_FILE_BYTE) return;
-      video.pause();
+      if (fs.statSync(mp3Path).size < NEED_FILE_BYTE) return;
+      video.unpipe();
+      passThrough.unpipe();
       writeStream.close();
     });
 
