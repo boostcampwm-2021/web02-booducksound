@@ -1,6 +1,21 @@
 {
   "presets": ["@babel/preset-typescript", "@babel/preset-env"],
   "plugins": [
+    [
+      "module-resolver",
+      {
+        "extensions": [".ts"],
+        "root": ["."],
+        "alias": {
+          "~/models": "./src/models",
+          "~/resources": "./src/resources",
+          "~/sockets": "./src/sockets",
+          "~/types": "./src/types",
+          "~/utils": "./src/utils",
+          "~/variables": "./src/variables"
+        }
+      }
+    ],
     "@babel/proposal-class-properties",
     "@babel/proposal-object-rest-spread",
     "@babel/plugin-transform-runtime"

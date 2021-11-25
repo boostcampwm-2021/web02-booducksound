@@ -1,4 +1,4 @@
-import { ServerRoom } from '../types/ServerRoom';
+import { ServerRoom } from '~/types/ServerRoom';
 
 const serverRooms: { [uuid: string]: ServerRoom } = {};
 

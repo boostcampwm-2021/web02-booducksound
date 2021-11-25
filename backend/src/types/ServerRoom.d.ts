@@ -1,6 +1,5 @@
-import Youtubestream from '../variables/YoutubeStream';
-
-import { Player } from './Player';
+import { Player } from '~/types/Player';
+import Youtubestream from '~/variables/YoutubeStream';
 
 export type ServerRoom = {
   status: 'playing' | 'waiting' | 'resting';

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import User from '../../models/User';
+import User from '~/models/User';
 const SECRET_KEY: string = process.env.JWT_SECRET || '';
 
 export interface LoginInfo {

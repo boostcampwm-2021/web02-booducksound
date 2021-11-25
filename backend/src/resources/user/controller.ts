@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 
-import * as AccountService from '../account/service';
-
-import * as UserService from './service';
+import * as AccountService from '~/resources/account/service';
+import * as UserService from '~/resources/user/service';
 
 export const changeColor = async (req: Request, res: Response) => {
   try {

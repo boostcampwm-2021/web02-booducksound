@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 
-import * as UserService from '../user/service';
-
-import * as PlaylistService from './service';
+import * as PlaylistService from '~/resources/playList/service';
+import * as UserService from '~/resources/user/service';
 
 export const get = async (req: Request, res: Response) => {
   const LIMIT = 10;

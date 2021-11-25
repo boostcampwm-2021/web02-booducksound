@@ -5,11 +5,12 @@ import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
 
-import io from './io';
-import accRouter from './resources/account/router';
-import gameRouter from './resources/game/router';
-import playListRouter from './resources/playList/router';
-import userRouter from './resources/user/router';
+import sockets from './sockets';
+
+import accRouter from '~/resources/account/router';
+import gameRouter from '~/resources/game/router';
+import playListRouter from '~/resources/playList/router';
+import userRouter from '~/resources/user/router';
 
 const app = express();
 
@@ -35,7 +36,7 @@ app.get('/', (req, res) => {
 
 const server = http.createServer(app);
 
-io.attach(server, {
+sockets.attach(server, {
   cors: {
     credentials: true,
     origin: [LOCALHOST, PRODUCTION, DOMAIN_NAME],

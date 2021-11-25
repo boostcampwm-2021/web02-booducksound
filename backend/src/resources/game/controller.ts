@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import serverRooms from '../../variables/serverRooms';
+import serverRooms from '~/variables/serverRooms';
 
 export const getMusic = async (req: Request, res: Response) => {
   try {

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
-import Playlist from '../../models/Playlist';
-import User from '../../models/User';
+import Playlist from '~/models/Playlist';
+import User from '~/models/User';
 
 export const changeColor = async (id: string, color: string) => {
   await User.updateOne({ id }, { color });

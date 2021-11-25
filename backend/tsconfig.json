@@ -7,7 +7,16 @@
     "noEmit": true,
     "strict": true,
     "isolatedModules": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/models/*": ["src/models/*"],
+      "~/resources/*": ["src/resources/*"],
+      "~/sockets/*": ["src/sockets/*"],
+      "~/types/*": ["src/types/*"],
+      "~/utils/*": ["src/utils/*"],
+      "~/variables/*": ["src/variables/*"]
+    }
   },
   "include": ["src"],
   "exclude": ["./node_modules/**", "./build/**"]
