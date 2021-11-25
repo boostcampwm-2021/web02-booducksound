@@ -36,7 +36,10 @@ const setHintTimer = (serverRoom: ServerRoom, uuid: string) => {
 
 const setRoundTimer = (serverRoom: ServerRoom, uuid: string) => {
   clearTimer(serverRoom.timer);
+
   serverRoom.timer = setTimeout(() => {
+    if (!serverRoom) return;
+
     serverRoom.status = 'resting';
     io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
     getNextRound(uuid, { type: 'TIMEOUT' });
@@ -47,6 +50,8 @@ const setWaitTimer = (serverRoom: ServerRoom, uuid: string, isExistNext: boolean
   clearTimer(serverRoom.timer);
 
   serverRoom.timer = setTimeout(() => {
+    if (!serverRoom) return;
+
     const { curRound, musics } = serverRoom;
     serverRoom.status = 'playing';
 
