@@ -3,10 +3,9 @@ import Link from 'next/link';
 import Router from 'next/router';
 
 import { requestLogout } from '~/api/account';
+import ResponsiveButton from '~/molecules/ResponsiveButton';
 import UserInfoBox from '~/molecules/UserInfoBox';
 import theme from '~/styles/theme';
-
-import ResponsiveButton from '../ResponsiveButton';
 
 const Wrapper = styled.div`
   display: flex;

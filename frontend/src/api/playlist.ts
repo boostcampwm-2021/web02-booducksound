@@ -1,7 +1,6 @@
+import { BACKEND_URL } from '~/constants/index';
 import { Playlist } from '~/types/Playlist';
 import API from '~/utils/API';
-
-import { BACKEND_URL } from '../constants';
 
 export const selectPlaylist = async (_id: string) => {
   const res = await API('GET')(`${BACKEND_URL}/playlist/${_id}`)();

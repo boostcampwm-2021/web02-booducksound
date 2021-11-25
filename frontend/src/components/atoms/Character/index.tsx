@@ -1,4 +1,4 @@
-import { character } from '../../../types/character';
+import { character } from '~/types/character';
 
 const Character = (props: character) => {
   const { color, width } = props;
