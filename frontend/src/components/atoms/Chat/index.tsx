@@ -16,7 +16,7 @@ const Message = styled.p`
 
 const Name = styled.span`
   color: ${({ color }) => `#${color}` || '#000'};
-  text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+  text-shadow: 0 1px #000, 1px 0 #000;
 `;
 
 const Content = styled.span`
