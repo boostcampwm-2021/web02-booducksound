@@ -3,6 +3,7 @@ import { Socket } from 'socket.io';
 import io from '~/sockets/io';
 import getGameRoom from '~/sockets/utils/getGameRoom';
 import getLobbyRoom from '~/sockets/utils/getLobbyRoom';
+import setHintTimer from '~/sockets/utils/setHintTimer';
 import setRoundTimer from '~/sockets/utils/setRoundTimer';
 import { SocketEvents } from '~/types/SocketEvents';
 import serverRooms from '~/variables/serverRooms';
@@ -24,6 +25,7 @@ function handleStartGame(this: Socket, uuid: string) {
     io.to(uuid).emit(SocketEvents.START_GAME, getGameRoom(uuid), endTime);
     io.emit(SocketEvents.SET_LOBBY_ROOM, uuid, getLobbyRoom(uuid));
     setRoundTimer(serverRooms[uuid], uuid);
+    setHintTimer(serverRooms[uuid], uuid);
   } catch (error) {
     console.error(error);
   }
