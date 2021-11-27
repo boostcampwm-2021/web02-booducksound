@@ -1,4 +1,4 @@
-import { KeyboardEventHandler, useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
@@ -16,6 +16,8 @@ import { Chat } from '~/types/Chat';
 import { GameRoom } from '~/types/GameRoom';
 import { Players } from '~/types/Players';
 import { SocketEvents } from '~/types/SocketEvents';
+
+import GameRoomInputContainer from '../GameRoomInputContainer';
 
 interface Props {
   type: 'leftTitle' | 'rightTitle' | 'leftCharacter' | 'rightChat';
@@ -172,42 +174,16 @@ const SettingButton = styled.button`
   cursor: pointer;
 `;
 
-const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  grid-area: rightSearch;
-`;
-
-const Input = styled.input`
-  border: 2px solid black;
-  font-size: 1em;
-  padding: 10px 24px;
-  border-radius: 100px;
-  box-shadow: 2px 2px 10px gray;
-  width: 100%;
-  outline: none;
-`;
-
 const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime: number }) => {
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
   const [modalOnOff, setModalOnOff] = useState<boolean>(false);
-  const [text, setText] = useState<string>('');
   const [hint, setHint] = useState('');
   const chatListContainer = useRef<HTMLDivElement>(null);
   const [chatList, setChatList] = useState<Chat[]>([]);
   const socket = useSocket();
 
   const { players } = gameRoom;
-
-  const handlePressEnter: KeyboardEventHandler = (e) => {
-    if (e.key !== 'Enter') return;
-    if (!text.trim()) return;
-
-    socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text, userInfo.color);
-    setText('');
-  };
 
   const scorllToBottom = () => {
     if (!chatListContainer.current) return;
@@ -268,14 +244,7 @@ const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime:
         <ChatListContainer type={'rightChat'} ref={chatListContainer}>
           <ChatList chatList={chatList} />
         </ChatListContainer>
-        <InputContainer>
-          <Input
-            value={text}
-            placeholder="메시지를 입력하세요"
-            onChange={(e) => setText(e.target.value)}
-            onKeyUp={handlePressEnter}
-          />
-        </InputContainer>
+        <GameRoomInputContainer color={userInfo.color} name={userInfo.nickname} uuid={uuid}></GameRoomInputContainer>
       </Wrapper>
       {modalOnOff && gameRoom && (
         <OptionModal setModalOnOff={setModalOnOff} leftButtonText={'수정하기'} gameRoom={gameRoom} />
