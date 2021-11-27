@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
@@ -7,16 +7,15 @@ import GlassContainer from '~/atoms/GlassContainer';
 import useSocket from '~/hooks/useSocket';
 import useSocketOn from '~/hooks/useSocketOn';
 import CharacterList from '~/molecules/CharacterList';
-import ChatList from '~/molecules/ChatList';
 import GamePlaySummary from '~/molecules/GamePlaySummary';
 import OptionModal from '~/organisms/OptionModal';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
-import { Chat } from '~/types/Chat';
 import { GameRoom } from '~/types/GameRoom';
 import { Players } from '~/types/Players';
 import { SocketEvents } from '~/types/SocketEvents';
 
+import GameRoomChatContainer from '../GameRoomChatContainer';
 import GameRoomInputContainer from '../GameRoomInputContainer';
 
 interface Props {
@@ -76,15 +75,6 @@ const CharacterContainer = styled(Container)`
   @media (max-width: ${theme.breakpoints.md}) {
     padding: 4px;
   }
-`;
-
-const ChatListContainer = styled(Container)`
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  row-gap: 2px;
-  padding: 20px 20px 10px 20px;
-  overflow-y: scroll;
 `;
 
 const RightTitle = styled.div`
@@ -179,32 +169,15 @@ const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime:
   const userInfo = useSelector((state: RootState) => state.user);
   const [modalOnOff, setModalOnOff] = useState<boolean>(false);
   const [hint, setHint] = useState('');
-  const chatListContainer = useRef<HTMLDivElement>(null);
-  const [chatList, setChatList] = useState<Chat[]>([]);
   const socket = useSocket();
 
   const { players } = gameRoom;
-
-  const scorllToBottom = () => {
-    if (!chatListContainer.current) return;
-    chatListContainer.current.scrollTo({ top: chatListContainer.current.scrollHeight, behavior: 'smooth' });
-  };
 
   const confirmKing = () => {
     if (!socket || !players?.[socket.id]) return false;
     if (players[socket.id].status !== 'king') return false;
     return true;
   };
-
-  useSocketOn(SocketEvents.RECEIVE_CHAT, ({ name, text, status, color }: Chat) => {
-    setChatList((v) => [...v, { name, text, status, color }]);
-    scorllToBottom();
-  });
-
-  useSocketOn(SocketEvents.RECEIVE_ANSWER, ({ name, text, status }: Chat) => {
-    setChatList((v) => [...v, { name, text, status }]);
-    scorllToBottom();
-  });
 
   useSocketOn(SocketEvents.SHOW_HINT, (hint: string) => {
     setHint(hint);
@@ -241,9 +214,7 @@ const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime:
             )}
           </RightTitle>
         </Container>
-        <ChatListContainer type={'rightChat'} ref={chatListContainer}>
-          <ChatList chatList={chatList} />
-        </ChatListContainer>
+        <GameRoomChatContainer></GameRoomChatContainer>
         <GameRoomInputContainer color={userInfo.color} name={userInfo.nickname} uuid={uuid}></GameRoomInputContainer>
       </Wrapper>
       {modalOnOff && gameRoom && (
