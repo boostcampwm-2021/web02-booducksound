@@ -45,10 +45,6 @@ const MyPage: NextPage = () => {
     setRemoveModalOnOff(false);
   };
 
-  useEffect(() => {
-    dispatch(getUser());
-  }, []);
-
   return (
     <>
       <MenuInfoBox name="마이페이지" />

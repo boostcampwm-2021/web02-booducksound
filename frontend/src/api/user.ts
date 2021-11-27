@@ -8,11 +8,11 @@ const handleColor = (id: string, color: string) =>
   API('POST')(`${BACKEND_URL}/user/color`)({ body: JSON.stringify({ id, color }) });
 
 export const changeColor = async (id: string, color: string) => {
-  id ? handleColor(id, color) : handleNonUserColor(color);
+  id ? await handleColor(id, color) : await handleNonUserColor(color);
 };
 
 export const getMyPlaylist = async (_id: Array<string>) => {
-  if (!_id) return;
+  if (_id.length === 0) return [];
   const res = await API('GET')(`${BACKEND_URL}/user/playlist?_id=${JSON.stringify(_id)}`)();
   return res.json();
 };

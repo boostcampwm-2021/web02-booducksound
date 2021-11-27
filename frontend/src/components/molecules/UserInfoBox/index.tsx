@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { getUser } from '~/actions/user';
 import { changeColor } from '~/api/user';
 import ProfileSelector from '~/atoms/ProfileSelector';
+import useDebounce from '~/hooks/useDebounce';
 import theme from '~/styles/theme';
 
 const Container = styled.div`
@@ -34,19 +35,26 @@ type Info = {
 
 const UserInfoBox = ({ info }: { info: Info }) => {
   const { id, nickname, userColor } = info;
-  const [color, setColor] = useState('fff');
+  const [color, setColor] = useState(userColor);
+  const debouncedColor = useDebounce(color, 700);
   const dispatch = useDispatch();
 
-  const changeBooduckColor = (newColor: string) => {
-    changeColor(id, newColor);
-    dispatch(getUser());
-  };
+  const handleClickChangeBtn = (value: string) => setColor(value);
+
   useEffect(() => {
+    if (!debouncedColor) return;
+    changeColor(id, debouncedColor);
+    dispatch(getUser());
+  }, [debouncedColor]);
+
+  useEffect(() => {
+    if (!userColor) return;
     setColor(userColor);
   }, [userColor]);
+
   return (
     <Container>
-      <ProfileSelector type="mypage" color={color} setColor={changeBooduckColor}></ProfileSelector>
+      <ProfileSelector type="mypage" color={color} setColor={handleClickChangeBtn}></ProfileSelector>
       <UserInfo>
         <p className="user-name">{nickname}</p>
         <p className="user-id">{id || '비회원'}</p>
