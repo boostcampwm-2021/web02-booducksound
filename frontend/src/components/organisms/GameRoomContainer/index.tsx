@@ -236,7 +236,7 @@ const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime:
 
   useEffect(() => {
     setHint('');
-  }, [gameRoom?.curRound]);
+  }, [gameRoom?.status]);
 
   return (
     <>
