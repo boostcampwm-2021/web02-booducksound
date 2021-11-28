@@ -22,11 +22,19 @@ function handleSendChat(this: Socket, uuid: string, name: string, text: string, 
     serverRooms[uuid].players[socket.id].answer = true;
     serverRooms[uuid].players[socket.id].score += Math.max(100 - serverRooms[uuid].answerCount * 20, 10);
     serverRooms[uuid].answerCount += 1;
-    io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, { uuid, name, text: '', status: 'answer' });
-    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
 
     const { answerCount, players, needAnswerRatio } = serverRooms[uuid];
-    if (answerCount >= Object.keys(players).length * needAnswerRatio) {
+    const needAnswerCount = Math.ceil(Object.keys(players).length * needAnswerRatio);
+
+    io.to(uuid).emit(SocketEvents.RECEIVE_ANSWER, {
+      uuid,
+      name,
+      text: `(정답 인원: ${answerCount}/${needAnswerCount} 명)`,
+      status: 'answer',
+    });
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
+
+    if (answerCount >= needAnswerCount) {
       getNextRound(uuid, { type: 'ANSWER', answerCount });
     }
   } catch (error) {
