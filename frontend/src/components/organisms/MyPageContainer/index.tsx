@@ -12,6 +12,7 @@ const Container = styled.div`
   height: 100%;
   text-align: center;
   align-self: flex-start;
+  margin-bottom: auto;
 `;
 
 const Information = styled.p`
