@@ -26,7 +26,7 @@ const Container = styled.div`
   row-gap: 4px;
 `;
 
-const FirstLine = styled.p`
+const FirstLine = styled.div`
   position: relative;
   display: flex;
   justify-content: center;
