@@ -17,8 +17,8 @@ export const postMyPlaylist = async (userId: string, playlistId: mongoose.Types.
   await User.findOneAndUpdate({ id: userId }, { $push: { myPlaylist: playlistId } });
 };
 
-export const insertLikes = async (_id: string, playlistId: string) => {
-  await User.updateOne({ _id }, { $addToSet: { likes: playlistId } });
+export const insertLikes = async (id: string, playlistId: string) => {
+  await User.updateOne({ id }, { $addToSet: { likes: playlistId } });
 };
 
 export const deleteLikes = async (id: string, _id: string) => {
