@@ -18,3 +18,4 @@ export const PLAYLIST_EMPTY_MSG = '플레이리스트가 존재하지 않습니�
 export const PLAYLIST_ERR_MSG = '플레이리스트 등록에 실패하였습니다.';
 export const PLAYLIST_INPUT_ERR_MSG = '플레이리스트 입력을 확인해 주세요..';
 export const PLAYLIST_DELETE_ERR_MSG = '플레이리스트 삭제에 실패하였습니다.';
+export const GAME_ENTER_ERR_MSG = '이미 해당 방에 참여중입니다.';

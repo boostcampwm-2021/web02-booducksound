@@ -67,7 +67,7 @@ const PlaylistInfo = styled.div`
   display: flex;
   justify-content: left;
   margin-right: 10px;
-  overflow: hidden;
+  /* overflow: hidden; */
   white-space: nowrap;
   /* position: relative; */
 

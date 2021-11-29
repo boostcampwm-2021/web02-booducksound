@@ -6,8 +6,11 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Router from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 import InputText from '~/atoms/InputText';
+import { GAME_ENTER_ERR_MSG, TOAST_OPTION } from '~/constants/index';
+import useSocket from '~/hooks/useSocket';
 import useSocketEmit from '~/hooks/useSocketEmit';
 import useSocketOn from '~/hooks/useSocketOn';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
@@ -125,13 +128,14 @@ const SearchRoomInputText = styled(InputText)`
 
 const Lobby: NextPage = () => {
   const dispatch = useDispatch();
+  const socket = useSocket();
   const userInfo: UserState = useSelector((state: RootState) => state.user);
   const [enterPwd, setEnterPwd] = useState('');
   const [search, setSearch] = useState('');
   const [codeModalOnOff, setCodeModalOnOff] = useState(false);
   const [createRoomModalOnOff, setCreateRoomModalOnOff] = useState(false);
   const [rooms, setRooms] = useState<{ [uuid: string]: LobbyRoom }>({});
-  const { id } = userInfo || {};
+  const { id, nickname, color } = userInfo || {};
 
   useSocketEmit(SocketEvents.SET_LOBBY_ROOMS, (lobbyRooms: { [uuid: string]: LobbyRoom }) => {
     setRooms(lobbyRooms);
@@ -172,8 +176,13 @@ const Lobby: NextPage = () => {
       setEnterPwd(uuid);
       return;
     }
-    dispatch({ type: RoomActions.SET_UUID, payload: { uuid } });
-    Router.push(`/game`);
+    socket?.emit(SocketEvents.CHECK_ENTER, { uuid, nickname, color });
+    socket?.on(SocketEvents.CHECK_ENTER, (res: boolean) => {
+      if (res) {
+        dispatch({ type: RoomActions.SET_UUID, payload: { uuid } });
+        Router.push(`/game`);
+      } else toast.error(GAME_ENTER_ERR_MSG, TOAST_OPTION);
+    });
   };
 
   return (

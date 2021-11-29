@@ -1,3 +1,4 @@
+import onCheckEnter from './events/game/checkEnter';
 import onGetRoomPassword from './events/game/getRoomPassword';
 import onLeaveRoom from './events/game/leaveRoom';
 import onSendChat from './events/game/sendChat';
@@ -29,6 +30,7 @@ sockets.on('connection', (socket) => {
   onSetPlayer(socket);
   onSkip(socket);
   onStartGame(socket);
+  onCheckEnter(socket);
 });
 
 export default sockets;
