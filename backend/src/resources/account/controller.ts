@@ -46,7 +46,7 @@ export const signIn = async (req: Request, res: Response) => {
   try {
     const { id, password }: UserService.LoginInfo = req.body;
     const result = await UserService.login({ id, password });
-    res.cookie('token', UserService.createUserToken(id), { maxAge: 24 * 60 * 60 * 1000 });
+    res.cookie('token', UserService.createUserToken(id), { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
     res.json(result);
   } catch (err: any) {
     res.json({ isLogin: false, message: err.message });
@@ -57,7 +57,7 @@ export const signUp = async (req: Request, res: Response) => {
   try {
     const { id, password, nickname, color }: UserService.UserType = req.body;
     const result = await UserService.join({ id, password, nickname, color });
-    res.cookie('token', UserService.createUserToken(id), { maxAge: 24 * 60 * 60 * 1000 });
+    res.cookie('token', UserService.createUserToken(id), { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
     res.json(result);
   } catch (err: any) {
     res.json({ isLogin: false, message: err.message });
@@ -68,7 +68,10 @@ export const guestSignIn = (req: Request, res: Response) => {
   try {
     const { nickname, color }: UserService.GuestLoginInfo = req.body;
     const result = UserService.enter();
-    res.cookie('token', UserService.createNonUserToken(nickname, color), { maxAge: 24 * 60 * 60 * 1000 });
+    res.cookie('token', UserService.createNonUserToken(nickname, color), {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
     res.json(result);
   } catch (err: any) {
     res.json({ isLogin: false, message: err.message });

@@ -21,7 +21,10 @@ export const changeNonUserColor = (req: Request, res: Response) => {
     if (!token) throw Error('유효하지 않은 Token입니다.');
 
     const { nickname } = AccountService.verifyToken(token) as AccountService.GuestLoginInfo;
-    res.cookie('token', AccountService.createNonUserToken(nickname, color), { maxAge: 24 * 60 * 60 * 1000 });
+    res.cookie('token', AccountService.createNonUserToken(nickname, color), {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+    });
     res.sendStatus(200);
   } catch (err) {
     res.sendStatus(401);
