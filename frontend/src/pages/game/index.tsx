@@ -46,6 +46,7 @@ const Game: NextPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
+  const gameEndRoom = useRef(gameRoom);
   const music1 = useRef<HTMLAudioElement>(null);
   const music2 = useRef<HTMLAudioElement>(null);
   const curMusic: MutableRefObject<HTMLAudioElement | null> = useRef<HTMLAudioElement | null>(null);
@@ -137,12 +138,17 @@ const Game: NextPage = () => {
     gameRoom?.curRound,
   );
 
-  useSocketOn(SocketEvents.GAME_END, () => {
-    music1.current?.pause();
-    music2.current?.pause();
-    setDialogMsg(null);
-    setGameResultModalOnOff(true);
-  });
+  useSocketOn(
+    SocketEvents.GAME_END,
+    () => {
+      gameEndRoom.current = gameRoom;
+      music1.current?.pause();
+      music2.current?.pause();
+      setDialogMsg(null);
+      setGameResultModalOnOff(true);
+    },
+    gameRoom,
+  );
 
   useSocketOn(SocketEvents.SET_EXPULSION, (id: string) => {
     if (socket && id === socket.id) {
@@ -178,8 +184,8 @@ const Game: NextPage = () => {
       />
       {gameRoom && <GameRoomContainer gameRoom={gameRoom} endTime={timerEndTime} />}
       {dialogMsg && <BlurDialog title={dialogMsg.title} content={dialogMsg.content} />}
-      {gameResultModalOnOff && gameRoom && (
-        <GameResultModal gameRoom={gameRoom} userId={userInfo.id} setModalOnOff={setGameResultModalOnOff} />
+      {gameResultModalOnOff && gameEndRoom.current && (
+        <GameResultModal gameRoom={gameEndRoom.current} userId={userInfo.id} setModalOnOff={setGameResultModalOnOff} />
       )}
       <audio ref={music1} onEnded={handleAudioEnded} preload="none" />
       <audio ref={music2} onEnded={handleAudioEnded} preload="none" />

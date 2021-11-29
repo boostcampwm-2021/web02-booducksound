@@ -39,7 +39,11 @@ const Chat = ({ name, text, status, color }: Props) => {
 
   if (status === 'alert') return <AlertMessage>{name + text}</AlertMessage>;
 
-  return <AlertMessage>{name}님께서 정답을 맞추셨습니다.</AlertMessage>;
+  return (
+    <AlertMessage>
+      {name}님께서 정답을 맞추셨습니다. {text}
+    </AlertMessage>
+  );
 };
 
 export default Chat;
