@@ -76,7 +76,6 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
   const handleCancelButton = () => setModalOption({ type: 'close', target: null });
 
   const pressEnterHandler: KeyboardEventHandler = (e) => {
-    if (e.key !== 'Enter') return;
     if (!answer.trim()) return;
     setAnswer('');
     setMusic((preState) => {

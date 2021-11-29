@@ -119,7 +119,7 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
     e.preventDefault();
   };
   const handleAddChipKeyUp: KeyboardEventHandler = (e) => {
-    if (e.key !== 'Enter' && e.key !== ' ') return;
+    if (e.key !== ' ') return;
     if (!hashtag.trim()) return;
     setPlaylist({ hashtag: '' });
     setPlaylistAll((preState: PlaylistInput) => {

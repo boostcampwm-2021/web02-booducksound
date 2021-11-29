@@ -1,4 +1,4 @@
-import { KeyboardEventHandler, useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
@@ -7,15 +7,16 @@ import GlassContainer from '~/atoms/GlassContainer';
 import useSocket from '~/hooks/useSocket';
 import useSocketOn from '~/hooks/useSocketOn';
 import CharacterList from '~/molecules/CharacterList';
-import ChatList from '~/molecules/ChatList';
 import GamePlaySummary from '~/molecules/GamePlaySummary';
 import OptionModal from '~/organisms/OptionModal';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
-import { Chat } from '~/types/Chat';
 import { GameRoom } from '~/types/GameRoom';
 import { Players } from '~/types/Players';
 import { SocketEvents } from '~/types/SocketEvents';
+
+import GameRoomChatContainer from '../GameRoomChatContainer';
+import GameRoomInputContainer from '../GameRoomInputContainer';
 
 interface Props {
   type: 'leftTitle' | 'rightTitle' | 'leftCharacter' | 'rightChat';
@@ -74,15 +75,6 @@ const CharacterContainer = styled(Container)`
   @media (max-width: ${theme.breakpoints.md}) {
     padding: 4px;
   }
-`;
-
-const ChatListContainer = styled(Container)`
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  row-gap: 2px;
-  padding: 20px 20px 10px 20px;
-  overflow-y: scroll;
 `;
 
 const RightTitle = styled.div`
@@ -172,63 +164,20 @@ const SettingButton = styled.button`
   cursor: pointer;
 `;
 
-const InputContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  grid-area: rightSearch;
-`;
-
-const Input = styled.input`
-  border: 2px solid black;
-  font-size: 1em;
-  padding: 10px 24px;
-  border-radius: 100px;
-  box-shadow: 2px 2px 10px gray;
-  width: 100%;
-  outline: none;
-`;
-
 const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime: number }) => {
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
   const [modalOnOff, setModalOnOff] = useState<boolean>(false);
-  const [text, setText] = useState<string>('');
   const [hint, setHint] = useState('');
-  const chatListContainer = useRef<HTMLDivElement>(null);
-  const [chatList, setChatList] = useState<Chat[]>([]);
   const socket = useSocket();
 
   const { players } = gameRoom;
-
-  const handlePressEnter: KeyboardEventHandler = (e) => {
-    if (e.key !== 'Enter') return;
-    if (!text.trim()) return;
-
-    socket?.emit(SocketEvents.SEND_CHAT, uuid, userInfo.nickname, text, userInfo.color);
-    setText('');
-  };
-
-  const scorllToBottom = () => {
-    if (!chatListContainer.current) return;
-    chatListContainer.current.scrollTo({ top: chatListContainer.current.scrollHeight, behavior: 'smooth' });
-  };
 
   const confirmKing = () => {
     if (!socket || !players?.[socket.id]) return false;
     if (players[socket.id].status !== 'king') return false;
     return true;
   };
-
-  useSocketOn(SocketEvents.RECEIVE_CHAT, ({ name, text, status, color }: Chat) => {
-    setChatList((v) => [...v, { name, text, status, color }]);
-    scorllToBottom();
-  });
-
-  useSocketOn(SocketEvents.RECEIVE_ANSWER, ({ name, text, status }: Chat) => {
-    setChatList((v) => [...v, { name, text, status }]);
-    scorllToBottom();
-  });
 
   useSocketOn(SocketEvents.SHOW_HINT, (hint: string) => {
     setHint(hint);
@@ -265,17 +214,8 @@ const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime:
             )}
           </RightTitle>
         </Container>
-        <ChatListContainer type={'rightChat'} ref={chatListContainer}>
-          <ChatList chatList={chatList} />
-        </ChatListContainer>
-        <InputContainer>
-          <Input
-            value={text}
-            placeholder="메시지를 입력하세요"
-            onChange={(e) => setText(e.target.value)}
-            onKeyUp={handlePressEnter}
-          />
-        </InputContainer>
+        <GameRoomChatContainer></GameRoomChatContainer>
+        <GameRoomInputContainer color={userInfo.color} name={userInfo.nickname} uuid={uuid}></GameRoomInputContainer>
       </Wrapper>
       {modalOnOff && gameRoom && (
         <OptionModal setModalOnOff={setModalOnOff} leftButtonText={'수정하기'} gameRoom={gameRoom} />

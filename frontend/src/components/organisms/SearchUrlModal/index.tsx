@@ -95,7 +95,6 @@ const SelectPlaylistModal = ({ setModalOnOff, setMusic }: Props) => {
   };
 
   const handleEnter: KeyboardEventHandler = (e) => {
-    if (e.key !== 'Enter') return;
     socket?.emit(SocketEvents.SEARCH_URL, search, (res: SearchedListProps[]) => {
       setMusicList(res);
     });

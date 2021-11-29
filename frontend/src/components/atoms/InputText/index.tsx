@@ -1,3 +1,5 @@
+import { KeyboardEventHandler } from 'react';
+
 import styled from '@emotion/styled';
 
 import InputTextProps from '~/types/InputTextProps';
@@ -15,8 +17,22 @@ const Container = styled.input<ContainerProps>`
   background-position: left;
 `;
 
-const InputText = ({ type = 'text', handleKeyDown, handleChange, handleEnter, ...props }: InputTextProps) => (
-  <Container type={type} onKeyDown={handleKeyDown} onKeyUp={handleEnter} onChange={handleChange} {...props}></Container>
-);
+const InputText = ({ type = 'text', handleKeyDown, handleChange, handleEnter, ...props }: InputTextProps) => {
+  const handlePressEnter: KeyboardEventHandler = (e) => {
+    if (!handleEnter) return;
+    if (e.key !== 'Enter') return;
+    handleEnter();
+  };
+
+  return (
+    <Container
+      type={type}
+      onKeyDown={handleKeyDown}
+      onKeyUp={handlePressEnter}
+      onChange={handleChange}
+      {...props}
+    ></Container>
+  );
+};
 
 export default InputText;
