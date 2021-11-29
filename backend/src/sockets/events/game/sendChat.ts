@@ -15,7 +15,7 @@ function handleSendChat(this: Socket, uuid: string, name: string, text: string, 
     const currentMusicInfo = serverRooms[uuid].musics[serverRooms[uuid].curRound - 1];
     const isAnswer = currentMusicInfo.answers.some((answer: string) => replaceText(answer) === replaceText(text));
 
-    if (serverRooms[uuid].status === 'waiting' || !isAnswer || serverRooms[uuid].players[socket.id].answer) {
+    if (serverRooms[uuid].status !== 'playing' || !isAnswer || serverRooms[uuid].players[socket.id].answer) {
       return io.to(uuid).emit(SocketEvents.RECEIVE_CHAT, { name, text, status: 'message', color });
     }
 

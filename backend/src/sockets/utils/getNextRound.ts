@@ -40,6 +40,7 @@ const getNextRound = (
     const { curRound, maxRound, musics } = serverRooms[uuid];
 
     if (curRound === maxRound) {
+      serverRooms[uuid].status = 'waiting';
       io.to(uuid).emit(SocketEvents.ROUND_END, { type, info: musics[curRound - 1].info, answerCount });
       setTimeout(() => gameEnd(uuid), 5000);
       return;
