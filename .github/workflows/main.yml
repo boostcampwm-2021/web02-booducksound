@@ -30,4 +30,3 @@ jobs:
             yarn install
             yarn run build
             yarn run deploy
-            sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 7000
