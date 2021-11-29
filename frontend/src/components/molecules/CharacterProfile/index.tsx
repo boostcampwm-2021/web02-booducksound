@@ -7,7 +7,6 @@ import Character from '~/atoms/Character';
 import StatusChip from '~/atoms/StatusChip';
 import useSocket from '~/hooks/useSocket';
 import DelegateModal from '~/organisms/DelegateModal';
-import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
 import { SocketEvents } from '~/types/SocketEvents';
 
@@ -36,9 +35,9 @@ const ProfileContainer = styled.div`
 
 const ProfileCircle = styled.div`
   position: relative;
-  background: ${theme.colors.white};
+  background: ${({ theme }) => theme.colors.white};
   border-radius: 50%;
-  border: 2px solid ${theme.colors.mint};
+  border: 2px solid ${({ theme }) => theme.colors.mint};
   width: 50px;
   height: 50px;
   flex-shrink: 0;
@@ -46,12 +45,12 @@ const ProfileCircle = styled.div`
   justify-content: center;
   align-items: flex-end;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     width: 40px;
     height: 40px;
   }
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     width: 34px;
     height: 34px;
   }
@@ -71,7 +70,7 @@ const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting'; answer:
     display: block;
   }
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -95,7 +94,7 @@ const Container = styled.div<{ mode?: 'waiting' | 'playing' | 'resting'; answer:
       }
     `}
 
-  ${({ mode }) =>
+  ${({ mode, theme }) =>
     mode &&
     mode !== 'waiting' &&
     css`
@@ -163,7 +162,7 @@ const Name = styled.p`
 `;
 
 const Point = styled(Name)`
-  color: ${theme.colors.deepgray};
+  color: ${({ theme }) => theme.colors.deepgray};
   line-height: 1.8;
 
   &::before {
@@ -195,7 +194,7 @@ const BtnList = styled.div`
   right: 0;
   text-align: center;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     right: auto;
     bottom: 0;
   }
@@ -204,15 +203,15 @@ const BtnList = styled.div`
 const KingBtn = styled.button`
   font-size: 0.64rem;
   cursor: pointer;
-  background: ${theme.colors.white};
-  border: 1px solid ${theme.colors.deepgray};
+  background: ${({ theme }) => theme.colors.white};
+  border: 1px solid ${({ theme }) => theme.colors.deepgray};
   border-radius: 4px;
 
   &:first-of-type {
     margin: 0 0.2rem 0 0;
   }
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     &:first-of-type {
       margin: 0 0 0.1rem 0;
     }
@@ -253,7 +252,7 @@ const CharacterProfile = ({
     <Container mode={mode} answer={answer}>
       <ProfileContainer>
         <ProfileCircle>
-          <Character color={color} width={'90%'} />
+          <Character color={color} width="90%" />
         </ProfileCircle>
       </ProfileContainer>
       <MidContainer>

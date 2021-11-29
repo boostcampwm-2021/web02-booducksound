@@ -1,7 +1,5 @@
 import styled from '@emotion/styled';
 
-import theme from '~/styles/theme';
-
 const BoxWrapper = styled.div`
   padding: 5.6rem 2rem;
   animation: Tower 0.6s forwards;
@@ -31,7 +29,7 @@ const BoxContainer = styled.div`
   border-bottom: 15px solid #111;
   background-color: #fff;
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding: 3.6rem 3rem;
   }
 `;

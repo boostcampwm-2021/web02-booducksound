@@ -1,7 +1,5 @@
 import styled from '@emotion/styled';
 
-import theme from '~/styles/theme';
-
 const PlayListTable = styled.table`
   margin: 0;
   width: 100%;
@@ -15,11 +13,11 @@ const PlayListTable = styled.table`
 
   tr:not(.no-result) {
     &:not(:last-child) {
-      border-bottom: 1px solid ${theme.colors.gray};
+      border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
     }
 
     &:hover {
-      background-color: ${theme.colors.lightsky};
+      background-color: ${({ theme }) => theme.colors.lightsky};
     }
 
     > td {

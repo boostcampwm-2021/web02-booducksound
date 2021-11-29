@@ -93,12 +93,12 @@ const Modal = ({
           <ButtonContainer hasOnlyCancleBtn={hasOnlyCancleBtn}>
             {!hasOnlyCancleBtn && (
               <ResponsiveButton
-                width={'180px'}
-                fontSize={'22px'}
-                mdWidth={'160px'}
-                mdFontSize={'20px'}
-                smWidth={'120px'}
-                smFontSize={'16px'}
+                width="180px"
+                fontSize="22px"
+                mdWidth="160px"
+                mdFontSize="20px"
+                smWidth="120px"
+                smFontSize="16px"
                 background={theme.colors.sky}
                 onClick={leftButtonHandler}
                 disabled={leftButtonDisabled}
@@ -107,12 +107,12 @@ const Modal = ({
               </ResponsiveButton>
             )}
             <ResponsiveButton
-              width={'180px'}
-              fontSize={'22px'}
-              mdWidth={'160px'}
-              mdFontSize={'20px'}
-              smWidth={'120px'}
-              smFontSize={'16px'}
+              width="180px"
+              fontSize="22px"
+              mdWidth="160px"
+              mdFontSize="20px"
+              smWidth="120px"
+              smFontSize="16px"
               background={theme.colors.alert}
               onClick={rightButtonHandler}
             >

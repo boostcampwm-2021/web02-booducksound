@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 
+import { NON_USER_MYPAGE_MSG } from '~/constants/index';
 import MyPlayListBox from '~/molecules/MyPlayListBox';
 import ProfileBox from '~/molecules/ProfileBox';
 import { RootState } from '~/reducers/index';
 import { UserState } from '~/reducers/user';
-import theme from '~/styles/theme';
 
 const Container = styled.div`
   width: 100%;
@@ -19,11 +19,11 @@ const Information = styled.p`
   font-size: 20px;
   padding-top: 64px;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 16px;
   }
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 14px;
   }
 `;
@@ -38,7 +38,7 @@ const MyPageContainer = ({ openRemoveModal }: { openRemoveModal: (id: string) =>
       {id ? (
         <MyPlayListBox info={{ id, likes, myPlaylist }} openRemoveModal={openRemoveModal} />
       ) : (
-        <Information>회원으로 로그인하시면 자신의 플레이리스트를 확인할 수 있습니다.</Information>
+        <Information>{NON_USER_MYPAGE_MSG}</Information>
       )}
     </Container>
   );

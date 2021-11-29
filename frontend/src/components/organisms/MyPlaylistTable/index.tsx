@@ -13,18 +13,20 @@ import theme from '~/styles/theme';
 import { Playlist } from '~/types/Playlist';
 
 const EmptyPlayList = styled.tr`
-  border: 1px solid ${theme.colors.gray};
+  border: 1px solid ${({ theme }) => theme.colors.gray};
   border-width: 1px 0 1px 0;
-  color: ${theme.colors.gray};
+  color: ${({ theme }) => theme.colors.gray};
 
   > td {
     padding: 8rem 0 !important;
   }
 `;
+
 const PlayTitle = styled.h4`
   text-align: left;
   font-size: 1.2rem;
 `;
+
 const TableBtnBox = styled.div`
   > button {
     margin-bottom: 0.4rem;
@@ -48,6 +50,7 @@ const MyPlaylistTable = ({ myPlaylist, isMine, openRemoveModal }: Props) => {
       if (result.status === FAILED) return toast.error(PLAYLIST_DELETE_ERR_MSG, TOAST_OPTION);
       dispatch(getUser());
     };
+
   const handleUpdatePlaylist =
     (_id: string | undefined): MouseEventHandler =>
     (e) => {
@@ -72,9 +75,9 @@ const MyPlaylistTable = ({ myPlaylist, isMine, openRemoveModal }: Props) => {
                 {isMine && (
                   <Button
                     background={theme.colors.sky}
-                    fontSize={'14px'}
-                    paddingH={'8px'}
-                    width={'100px'}
+                    fontSize="14px"
+                    paddingH="8px"
+                    width="100px"
                     onClick={handleUpdatePlaylist(playlist._id)}
                   >
                     수정
@@ -82,9 +85,9 @@ const MyPlaylistTable = ({ myPlaylist, isMine, openRemoveModal }: Props) => {
                 )}
                 <Button
                   background={theme.colors.peach}
-                  fontSize={'14px'}
-                  paddingH={'8px'}
-                  width={'100px'}
+                  fontSize="14px"
+                  paddingH="8px"
+                  width="100px"
                   onClick={
                     isMine ? handleDeletePlaylist(playlist._id, dispatch) : openRemoveModal(playlist._id as string)
                   }

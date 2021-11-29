@@ -7,7 +7,6 @@ import { getUser } from '~/actions/user';
 import { changeColor } from '~/api/user';
 import ProfileSelector from '~/atoms/ProfileSelector';
 import useDebounce from '~/hooks/useDebounce';
-import theme from '~/styles/theme';
 
 const Container = styled.div`
   display: flex;
@@ -24,7 +23,7 @@ const UserInfo = styled.div`
   }
 
   .user-id {
-    color: ${theme.colors.gray};
+    color: ${({ theme }) => theme.colors.gray};
   }
 `;
 type Info = {

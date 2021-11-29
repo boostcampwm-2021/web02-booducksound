@@ -1,7 +1,5 @@
 import styled from '@emotion/styled';
 
-import theme from '~/styles/theme';
-
 interface radio {
   name: string;
   value?: string;
@@ -34,10 +32,10 @@ const RadioBtnGroup = styled.label`
     position: relative;
     margin: 0;
     border-radius: 50%;
-    border: 1px solid ${theme.colors.gray};
+    border: 1px solid ${({ theme }) => theme.colors.gray};
 
     &:hover {
-      border-color: ${theme.colors.deepgray};
+      border-color: ${({ theme }) => theme.colors.deepgray};
     }
 
     &::after {

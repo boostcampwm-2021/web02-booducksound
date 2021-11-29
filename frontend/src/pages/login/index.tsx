@@ -28,7 +28,7 @@ const LoginContainer = styled.div`
 `;
 
 const SearchPwdBtn = styled.a`
-  color: ${theme.colors.deepgray};
+  color: ${({ theme }) => theme.colors.deepgray};
   text-align: center;
   margin-top: 1.5rem;
 `;
@@ -48,10 +48,11 @@ const InputContainer = styled.div`
     display: block;
   }
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     > * {
       width: 100%;
     }
+
     button {
       width: 90%;
       font-size: 20px;
@@ -66,7 +67,7 @@ const LoginInputText = styled(InputText)`
   padding: 24px 20px 24px 80px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 18px;
     padding: 24px 40px 24px 40px;
   }
@@ -90,7 +91,7 @@ const Login: NextPage = () => {
 
   return (
     <>
-      <MenuInfoBox name="로그인" />
+      <MenuInfoBox content="로그인" />
       <PageBox>
         <LoginContainer>
           <InputContainer>
@@ -109,13 +110,7 @@ const Login: NextPage = () => {
               value={password}
               handleChange={({ target }) => setPassword((target as HTMLInputElement).value.trim())}
             ></LoginInputText>
-            <Button
-              width={'560px'}
-              background={theme.colors.sky}
-              fontSize={'30px'}
-              paddingH={'24px'}
-              onClick={handleLogin}
-            >
+            <Button width="560px" background={theme.colors.sky} fontSize="30px" paddingH="24px" onClick={handleLogin}>
               로그인
             </Button>
             <Link href="/findPwd">

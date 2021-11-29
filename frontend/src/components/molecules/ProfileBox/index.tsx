@@ -13,9 +13,9 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding-bottom: 24px;
-  border-bottom: 1px solid ${theme.colors.gray};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     display: block;
   }
 `;
@@ -29,7 +29,7 @@ const ProfileBtnBox = styled.div`
     margin-right: 0.6rem;
   }
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 16px;
     padding: 12px 0;
 
@@ -43,7 +43,7 @@ const ProfileBtnBox = styled.div`
       margin: 0 0 0.4rem 0;
     }
   }
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     button {
       padding: 8px 0;
       width: 100%;

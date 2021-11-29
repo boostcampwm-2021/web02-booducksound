@@ -1,7 +1,5 @@
 import styled from '@emotion/styled';
 
-import theme from '~/styles/theme';
-
 interface Props {
   name: string;
   text: string;
@@ -21,11 +19,11 @@ const Name = styled.span`
 
 const Content = styled.span`
   font-weight: 400;
-  color: ${theme.colors.night};
+  color: ${({ theme }) => theme.colors.night};
 `;
 
 const AlertMessage = styled.p`
-  color: ${theme.colors.ocean};
+  color: ${({ theme }) => theme.colors.ocean};
 `;
 
 const Chat = ({ name, text, status, color }: Props) => {

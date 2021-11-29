@@ -16,52 +16,65 @@ interface Props {
 }
 
 const MusicListContainer = styled.div``;
+
 const MusicListTitleBox = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 15px;
   border-bottom: 2px solid #eee;
 `;
+
 const MusicListContentBox = styled.div`
   height: 350px;
   border-bottom: 2px solid #eee;
   overflow-y: auto;
+
   :not(:hover) {
     ::-webkit-scrollbar {
       display: none;
     }
   }
 `;
+
 const MusicListTitleTop = styled.div`
   display: flex;
   align-items: center;
   column-gap: 30px;
-  @media (max-width: 1200px) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     column-gap: 30px;
   }
-  @media (max-width: 768px) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     column-gap: 20px;
   }
-  @media (max-width: 480px) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     column-gap: 10px;
   }
 `;
+
 const MusicListTitleBottom = styled.div`
-  color: ${theme.colors.gray};
+  color: ${({ theme }) => theme.colors.gray};
   margin-bottom: 30px;
 `;
+
 const MusicListTitle = styled.h1`
   font-weight: bold;
-  @media (min-width: 480px) {
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 15px;
   }
-  @media (min-width: 768px) {
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 20px;
   }
-  @media (min-width: 1200px) {
+
+  @media (min-width: ${({ theme }) => theme.breakpoints.lg}) {
     font-size: 25px;
   }
 `;
+
 const EmptyBox = styled.div`
   display: flex;
   justify-content: center;
@@ -70,17 +83,20 @@ const EmptyBox = styled.div`
   height: 100%;
   color: #ddd;
 `;
+
 const CreatePlaylistMusicList = ({ musics, setModalOption, setPlaylist }: PropsWithChildren<Props>) => {
   const [grab, setGrab] = useState<EventTarget>();
 
   const handleDragOver: DragEventHandler = (e) => {
     e.preventDefault();
   };
+
   const handleDragStart: DragEventHandler = (e) => {
     setGrab(e.target);
     (e.target as HTMLElement).classList.add('grabbing');
     e.dataTransfer.effectAllowed = 'move';
   };
+
   const handleDrop: DragEventHandler = (e) => {
     const grabPosition = Number((grab as HTMLElement).dataset.position);
     const targetPosition = Number((e.target as HTMLElement).dataset.position);
@@ -89,10 +105,12 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setPlaylist }: PropsW
       return { ...prevState, musics: nextMusics };
     });
   };
+
   const handleDragEnd: DragEventHandler = (e) => {
     (e.target as HTMLElement).classList.remove('grabbing');
     e.dataTransfer.dropEffect = 'move';
   };
+
   const deleteMusic = (target: number) =>
     setPlaylist((prevState: PlaylistInput) => {
       return {

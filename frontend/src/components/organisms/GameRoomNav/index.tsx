@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import { COPY_SUCC_MSG, TOAST_OPTION } from '~/constants/index';
+import { COPY_SUCC_MSG, TOAST_OPTION, INIT_VOLUME, MAX_VOLUME } from '~/constants/index';
 import useSocket from '~/hooks/useSocket';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import { RootState } from '~/reducers/index';
@@ -21,7 +21,7 @@ const Container = styled.nav`
   padding: 4px 8px 12px 8px;
   font-size: 16px;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 14px;
     padding: 4px 4px 8px 4px;
   }
@@ -47,7 +47,7 @@ const MuteButton = styled.button`
   background: url('images/ic_speaker${({ volume }: { volume: number }) => !volume && '_off'}.png') no-repeat center/24px;
   cursor: pointer;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     width: 32px;
     height: 32px;
   }
@@ -65,15 +65,15 @@ const VolumeBar = styled.input`
   height: 5px;
   align-self: center;
   cursor: pointer;
-  background: ${theme.colors.whitesmoke};
+  background: ${({ theme }) => theme.colors.whitesmoke};
   border-radius: 10px;
 
   &::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 0;
     height: 5px;
-    background-color: ${theme.colors.deepgray};
-    box-shadow: -100vw 0 0 100vw ${theme.colors.deepgray};
+    background-color: ${({ theme }) => theme.colors.deepgray};
+    box-shadow: -100vw 0 0 100vw ${({ theme }) => theme.colors.deepgray};
     cursor: pointer;
   }
 `;
@@ -97,7 +97,8 @@ const GameRoomNav = ({
   const { uuid } = useSelector((state: RootState) => state.room);
   const socket = useSocket();
   const player = socket && players?.[socket.id];
-  const [preventMulti, setPreventMulti] = useState(false);
+  // const [preventMulti, setPreventMulti] = useState(false);
+  const [volume, setVolume] = useState(INIT_VOLUME);
 
   const changeStatus = (player: Player) => () => {
     if (player.status !== 'king') player = { ...player, status: converter[player.status] };
@@ -107,17 +108,10 @@ const GameRoomNav = ({
   const startGame = () => socket?.emit(SocketEvents.START_GAME, uuid);
 
   const makeSkip = () => {
-    if (preventMulti) return;
-    setPreventMulti(true);
+    // if (preventMulti) return;
+    // setPreventMulti(true);
     socket?.emit(SocketEvents.SKIP, uuid, socket.id);
   };
-
-  useEffect(() => {
-    if (!preventMulti) return;
-    setTimeout(() => {
-      setPreventMulti(false);
-    }, 1000);
-  }, [preventMulti]);
 
   const handleStartBtnClick = (player: Player) => {
     if (status === 'playing') return makeSkip;
@@ -125,9 +119,8 @@ const GameRoomNav = ({
     return changeStatus(player);
   };
 
-  const [volume, setVolume] = useState(70);
-
   const handleMute = () => (volume === 0 ? setVolume(100) : setVolume(0));
+
   const handleVolume = ({ target }: any) => setVolume(target.value);
 
   const handleCopy = () => {
@@ -140,10 +133,17 @@ const GameRoomNav = ({
     toast.info(COPY_SUCC_MSG, TOAST_OPTION);
   };
 
+  // useEffect(() => {
+  //   if (!preventMulti) return;
+  //   setTimeout(() => {
+  //     setPreventMulti(false);
+  //   }, 1000);
+  // }, [preventMulti]);
+
   useEffect(() => {
     if (!music1 || !music2) return;
-    music1.volume = volume / 100;
-    music2.volume = volume / 100;
+    music1.volume = volume / MAX_VOLUME;
+    music2.volume = volume / MAX_VOLUME;
   }, [volume, music1, music2]);
 
   return (
@@ -190,7 +190,7 @@ const GameRoomNav = ({
             {status === 'waiting' ? statusEncoder[player.status] : 'SKIP'}
           </ResponsiveButton>
         )}
-        <Link href="/lobby">
+        <Link href="/lobby" passHref>
           <ExitAnchor>
             <ResponsiveButton
               width="160px"

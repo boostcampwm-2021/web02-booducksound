@@ -1,8 +1,7 @@
-import { PropsWithChildren } from 'react';
-
 import styled from '@emotion/styled';
+
 interface Props {
-  name: string;
+  content: string;
 }
 
 const MenuInfo = styled.h4`
@@ -30,11 +29,11 @@ const handleBack = () => {
   history.back();
 };
 
-const MenuInfoBox = ({ name }: PropsWithChildren<Props>) => {
+const MenuInfoBox = ({ content }: Props) => {
   return (
     <MenuInfo>
       <BackBtn onClick={handleBack} />
-      {name}
+      {content}
     </MenuInfo>
   );
 };

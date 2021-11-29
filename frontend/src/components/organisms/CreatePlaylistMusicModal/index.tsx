@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 
 import Button from '~/atoms/Button';
 import InputText from '~/atoms/InputText';
+import { YOUTUBE_REG_EXP } from '~/constants/index';
 import Chip from '~/molecules/Chip';
 import Modal from '~/molecules/Modal';
 import SearchUrlModal from '~/organisms/SearchUrlModal';
@@ -16,6 +17,7 @@ interface Props {
   setModalOption: Function;
   musicInfo?: Music | null;
 }
+
 interface InputType {
   inputType: 'info' | 'hint' | 'url' | 'answers';
 }
@@ -26,14 +28,17 @@ const MusicModalTop = styled.div`
   align-items: center;
   margin-bottom: 20px;
 `;
+
 const MusicModalTitle = styled.h1`
   font-size: 25px;
   font-weight: bold;
 `;
+
 const MusicModalDescription = styled.div`
   color: #999999;
   font-size: 15px;
 `;
+
 const MusicModalInputBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -41,6 +46,7 @@ const MusicModalInputBox = styled.div`
   row-gap: 10px;
   margin-bottom: 20px;
 `;
+
 const MusicModalChipContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -48,6 +54,7 @@ const MusicModalChipContainer = styled.div`
   row-gap: 10px;
   margin-bottom: 40px;
 `;
+
 const MusicModalInputText = styled(InputText)`
   width: 98%;
   padding: 12px 10px 12px 45px;
@@ -84,8 +91,7 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
   };
 
   const checkValidUrl = (url: string) => {
-    const youtubeRegExp = /(https:\/\/)?(www\.)?youtube\.com\/watch\?v=[a-zA-Z0-9_]*/g;
-    return RegExp(youtubeRegExp).test(url);
+    return RegExp(YOUTUBE_REG_EXP).test(url);
   };
 
   const handleChange =

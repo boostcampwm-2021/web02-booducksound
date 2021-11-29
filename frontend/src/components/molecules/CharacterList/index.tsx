@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 
 import useSocket from '~/hooks/useSocket';
 import CharacterProfile from '~/molecules/CharacterProfile';
-import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
 import { Players } from '~/types/Players';
 
@@ -20,7 +19,7 @@ const CharactersContainer = styled.div`
   padding: 8px 16px;
   row-gap: 10px;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     flex-direction: row;
     height: 100%;
     align-items: center;

@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { BACKEND_URL } from '~/constants/index';
+import { BACKEND_URL, TIME_EXCESS_MSG, GAME_SKIP_MSG } from '~/constants/index';
 import { useLeavePage } from '~/hooks/useLeavePage';
 import useSocket from '~/hooks/useSocket';
 import useSocketEmit from '~/hooks/useSocketEmit';
@@ -14,7 +14,6 @@ import useSocketOn from '~/hooks/useSocketOn';
 import GameRoomContainer from '~/organisms/GameRoomContainer';
 import GameRoomNav from '~/organisms/GameRoomNav';
 import { RootState } from '~/reducers/index';
-import theme from '~/styles/theme';
 import { RoomActions } from '~/types/Actions';
 import { GameRoom } from '~/types/GameRoom';
 import { SocketEvents } from '~/types/SocketEvents';
@@ -30,7 +29,7 @@ const Container = styled.div`
   margin: 0 auto;
   padding: 4px 32px;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     padding: 4px 8px;
   }
 `;
@@ -94,7 +93,7 @@ const Game: NextPage = () => {
     SocketEvents.ROUND_END,
     ({ type, info, answerCount }: { type: 'SKIP' | 'ANSWER' | 'TIMEOUT'; info: string; answerCount?: number }) => {
       if (type === 'SKIP') {
-        setDialogMsg({ title: `${info}`, content: `모두가 SKIP 하였습니다.` });
+        setDialogMsg({ title: `${info}`, content: GAME_SKIP_MSG });
         return;
       }
 
@@ -104,7 +103,7 @@ const Game: NextPage = () => {
       }
 
       if (type === 'TIMEOUT') {
-        setDialogMsg({ title: `${info}`, content: `시간이 초과했습니다.` });
+        setDialogMsg({ title: `${info}`, content: TIME_EXCESS_MSG });
       }
     },
   );

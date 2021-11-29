@@ -1,7 +1,5 @@
 import styled from '@emotion/styled';
 
-import theme from '~/styles/theme';
-
 interface Props {
   num: number;
 }
@@ -17,7 +15,7 @@ const BoxTitle = styled.h2<Props>`
     font-size: 0.95rem;
     display: inline-block;
     margin-left: 1rem;
-    color: ${theme.colors.ocean};
+    color: ${({ theme }) => theme.colors.ocean};
   }
 `;
 

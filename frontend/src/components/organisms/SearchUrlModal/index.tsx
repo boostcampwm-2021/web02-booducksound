@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
+import { SEARCH_EMPTY_MSG } from '~/constants/index';
 import useSocket from '~/hooks/useSocket';
 import Modal from '~/molecules/Modal';
 import { Music } from '~/types/Music';
@@ -62,6 +63,7 @@ const Title = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+
 const SearchList = styled.ul`
   width: 100%;
   align-self: center;
@@ -113,7 +115,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setMusic }: Props) => {
         <SearchInputText
           className="SearchListearch"
           isSearch={true}
-          placeholder="검색어를 입력해주세요"
+          placeholder={SEARCH_EMPTY_MSG}
           value={search}
           handleChange={handleSearchChange}
           handleEnter={handleEnter}
@@ -123,9 +125,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setMusic }: Props) => {
             <MusicBox
               key={index}
               onClick={() => {
-                setMusic((preState) => {
-                  return { ...preState, url: element.url };
-                });
+                setMusic((preState) => ({ ...preState, url: element.url }));
                 setModalOnOff(false);
               }}
             >

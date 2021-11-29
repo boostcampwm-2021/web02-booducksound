@@ -39,11 +39,12 @@ const InputContainer = styled.div`
     display: block;
   }
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     width: 100%;
     > * {
       width: 100%;
     }
+
     button {
       width: 100%;
       padding: 20px 0;
@@ -58,7 +59,7 @@ const FindPwdInputText = styled(InputText)`
   padding: 24px 20px 24px 80px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 18px;
     padding: 24px 40px 24px 40px;
   }
@@ -85,7 +86,7 @@ const FindPwd: NextPage = () => {
 
   return (
     <>
-      <MenuInfoBox name="비밀번호 재설정" />
+      <MenuInfoBox content="비밀번호 재설정" />
       <PageBox>
         <LoginContainer>
           <InputContainer>
@@ -112,10 +113,10 @@ const FindPwd: NextPage = () => {
               handleChange={({ target }) => setPassword((target as HTMLInputElement).value)}
             ></FindPwdInputText>
             <ResponsiveButton
-              width={'560px'}
+              width="560px"
               background={theme.colors.sky}
-              fontSize={'28px'}
-              smFontSize={'20px'}
+              fontSize="28px"
+              smFontSize="20px"
               onClick={handleFindPwd}
             >
               비밀번호 재설정

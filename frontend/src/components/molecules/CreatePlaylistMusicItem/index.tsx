@@ -11,6 +11,7 @@ interface DragHandlers {
   handleDrop: DragEventHandler;
   handleDragEnd: DragEventHandler;
 }
+
 interface Props {
   idx: number;
   title: string;
@@ -31,10 +32,12 @@ const ItemContainer = styled.div`
     background-color: #eee;
   }
 `;
+
 const MusicTitle = styled.p`
   font-size: 20px;
   font-weight: bold;
 `;
+
 const ButtonBox = styled.div`
   display: flex;
   flex-direction: column;

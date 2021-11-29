@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 
 import Character from '~/atoms/Character';
-import theme from '~/styles/theme';
 import { Player } from '~/types/Player';
 
 const ProfileContainer = styled.div`
@@ -15,9 +14,9 @@ const ProfileCircle = styled.div`
   flex-shrink: 0;
   justify-content: center;
   align-items: flex-end;
-  background: ${theme.colors.white};
+  background: ${({ theme }) => theme.colors.white};
   border-radius: 50%;
-  border: 2px solid ${theme.colors.mint};
+  border: 2px solid ${({ theme }) => theme.colors.mint};
   width: 50px;
   height: 50px;
 `;
@@ -46,7 +45,7 @@ const Container = styled.div`
 
   &:nth-of-type(1) ${ProfileCircle} {
     & {
-      border-color: ${theme.colors.yellow};
+      border-color: ${({ theme }) => theme.colors.yellow};
     }
 
     &::after {
@@ -56,7 +55,7 @@ const Container = styled.div`
 
   &:nth-of-type(2) ${ProfileCircle} {
     & {
-      border-color: ${theme.colors.gray};
+      border-color: ${({ theme }) => theme.colors.gray};
     }
 
     &::after {
@@ -66,7 +65,7 @@ const Container = styled.div`
 
   &:nth-of-type(3) ${ProfileCircle} {
     & {
-      border-color: ${theme.colors.peach};
+      border-color: ${({ theme }) => theme.colors.peach};
     }
 
     &::after {
@@ -82,7 +81,7 @@ const Name = styled.p`
   font-size: 18px;
   text-align: right;
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 14px;
   }
 `;
@@ -90,14 +89,14 @@ const Name = styled.p`
 const Point = styled(Name)`
   flex: 0 0 100px;
   width: 0;
-  color: ${theme.colors.deepgray};
+  color: ${({ theme }) => theme.colors.deepgray};
   font-size: 16px;
 
   &::before {
     content: '포인트 : ';
   }
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 14px;
   }
 `;
@@ -107,7 +106,7 @@ const ResultCharacter = ({ player }: { player: Player }) => {
     <Container>
       <ProfileContainer>
         <ProfileCircle>
-          <Character color={player.color} width={'90%'} />
+          <Character color={player.color} width="90%" />
         </ProfileCircle>
       </ProfileContainer>
       <Name>{player.nickname}</Name>

@@ -7,6 +7,7 @@ import { Socket } from 'socket.io-client';
 
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
+import { INIT_NEED_ANSWER_RATIO, INIT_TIME_PER_PROBLEM } from '~/constants/index';
 import useSocket from '~/hooks/useSocket';
 import InputWithButton from '~/molecules/InputWithButton';
 import Modal from '~/molecules/Modal';
@@ -83,8 +84,8 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
     playlistName: '',
     playlistId: '',
     password: '',
-    needAnswerRatio: 0.5,
-    timePerProblem: 60,
+    needAnswerRatio: INIT_NEED_ANSWER_RATIO,
+    timePerProblem: INIT_TIME_PER_PROBLEM,
   });
 
   const [leftButtonDisabled, setLeftButtonDisabled] = useState(true);

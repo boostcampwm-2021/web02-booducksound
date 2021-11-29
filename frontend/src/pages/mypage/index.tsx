@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
@@ -47,7 +47,7 @@ const MyPage: NextPage = () => {
 
   return (
     <>
-      <MenuInfoBox name="마이페이지" />
+      <MenuInfoBox content="마이페이지" />
       <PageBox>
         <MyPageContainer openRemoveModal={openRemoveModal} />
       </PageBox>

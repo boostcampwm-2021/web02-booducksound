@@ -5,6 +5,7 @@ import { useInView } from 'react-intersection-observer';
 
 import ChatComponent from '~/atoms/Chat';
 import GlassContainer from '~/atoms/GlassContainer';
+import { CHAT_BLOCK_SIZE } from '~/constants/index';
 import useSocketOn from '~/hooks/useSocketOn';
 import { Chat } from '~/types/Chat';
 import { SocketEvents } from '~/types/SocketEvents';
@@ -12,6 +13,7 @@ import { SocketEvents } from '~/types/SocketEvents';
 interface Props {
   type: 'leftTitle' | 'rightTitle' | 'leftCharacter' | 'rightChat';
 }
+
 interface OptimizeChat {
   allChat: Chat[];
   subChat: Chat[];
@@ -20,6 +22,7 @@ interface OptimizeChat {
 const Container = styled(GlassContainer)<Props>`
   grid-area: ${({ type }) => type};
 `;
+
 const ChatListContainer = styled(Container)`
   display: flex;
   justify-content: flex-start;
@@ -28,8 +31,6 @@ const ChatListContainer = styled(Container)`
   padding: 20px 20px 10px 20px;
   overflow-y: scroll;
 `;
-
-const CHAT_BLOCK_SIZE = 50;
 
 const GameRoomChatContainer = () => {
   const [chatList, setChatList] = useState<OptimizeChat>({ allChat: [], subChat: [] });
@@ -40,6 +41,7 @@ const GameRoomChatContainer = () => {
     if (!chatListContainer.current) return;
     chatListContainer.current.scrollTo({ top: chatListContainer.current.scrollHeight, behavior: 'smooth' });
   };
+
   const updateChat =
     ({ name, text, status, color }: Chat) =>
     (prevState: OptimizeChat) => {
@@ -52,6 +54,7 @@ const GameRoomChatContainer = () => {
       newState.allChat.push(newChat);
       return newState;
     };
+
   const addSubChat = (prevState: OptimizeChat) => {
     const newState = { ...prevState };
     const start = newState.allChat.length - newState.subChat.length - CHAT_BLOCK_SIZE;
@@ -66,7 +69,7 @@ const GameRoomChatContainer = () => {
     setChatList(addSubChat);
     if (!chatListContainer.current || chatList.allChat.length === chatList.subChat.length) return;
     const chatGap = chatList.allChat.length - chatList.subChat.length;
-    const numOfAddedChat = chatGap >= 50 ? 50 : chatGap;
+    const numOfAddedChat = chatGap >= CHAT_BLOCK_SIZE ? CHAT_BLOCK_SIZE : chatGap;
     const CHAT_LINE_HEIGHT = 16;
     chatListContainer.current.scrollTo(0, numOfAddedChat * CHAT_LINE_HEIGHT);
   }, [isTopInView]);
@@ -82,7 +85,7 @@ const GameRoomChatContainer = () => {
   });
 
   return (
-    <ChatListContainer type={'rightChat'} ref={chatListContainer}>
+    <ChatListContainer type="rightChat" ref={chatListContainer}>
       <ul>
         {chatList.subChat.map((element: Chat, i: number) => (
           <li ref={!i ? topRef : null} key={i}>

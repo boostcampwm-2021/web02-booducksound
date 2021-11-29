@@ -16,6 +16,7 @@ type Props = {
 
 const MyPlayListBox = ({ info, openRemoveModal }: Props) => {
   const { likes, myPlaylist } = info;
+
   return (
     <>
       <BoxTitle num={myPlaylist?.length}>내가 작성한 플레이리스트</BoxTitle>

@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 
 import Character from '~/atoms/Character';
-import theme from '~/styles/theme';
 
 interface Props {
   type?: string;
@@ -17,7 +16,7 @@ const getRandomHex = () => {
 
 const ProfileContainer = styled.div<Props>`
   border-radius: 50%;
-  border: 1px solid ${theme.colors.gray};
+  border: 1px solid ${({ theme }) => theme.colors.gray};
   max-width: ${({ type }) => (type === 'mypage' ? '120px' : '240px')};
   max-height: ${({ type }) => (type === 'mypage' ? '120px' : '240px')};
   width: ${({ type }) => (type === 'mypage' ? '14vw' : '24vw')};
@@ -36,7 +35,7 @@ const ChangeBtn = styled.span<Props>`
   position: absolute;
   right: 0;
   bottom: 0;
-  border: 1px solid ${theme.colors.deepgray};
+  border: 1px solid ${({ theme }) => theme.colors.deepgray};
   background: #fff url('images/ic_shuffle.png') no-repeat center/45%;
 `;
 
@@ -47,7 +46,7 @@ const ProfileSelector = ({ type, color, setColor }: Props) => {
 
   return (
     <ProfileContainer type={type} color={color} setColor={setColor}>
-      <Character width={'100%'} color={color}></Character>
+      <Character width="100%" color={color}></Character>
       <ChangeBtn type={type} onClick={getRandomColor} color={color} setColor={setColor} />
     </ProfileContainer>
   );

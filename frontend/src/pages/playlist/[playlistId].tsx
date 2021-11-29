@@ -11,7 +11,15 @@ import { createPlaylist, selectPlaylist, updatePlaylist } from '~/api/playlist';
 import Button from '~/atoms/Button';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
-import { FAILED, PLAYLIST_ERR_MSG, PLAYLIST_INPUT_ERR_MSG, SUCCESS, TOAST_OPTION } from '~/constants/index';
+import {
+  FAILED,
+  PLAYLIST_ERR_MSG,
+  PLAYLIST_INPUT_ERR_MSG,
+  SUCCESS,
+  TOAST_OPTION,
+  MIN_MUSIC_LENGTH,
+  MAX_MUSIC_LENGTH,
+} from '~/constants/index';
 import Chip from '~/molecules/Chip';
 import CreatePlaylistInputBox from '~/organisms/CreatePlaylistInputBox';
 import CreatePlaylistMusicList from '~/organisms/CreatePlaylistMusicList';
@@ -29,30 +37,35 @@ const ChipContainer = styled.div`
   row-gap: 10px;
   margin-bottom: 40px;
 `;
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   row-gap: 20px;
 `;
+
 const SubmitButtonWrapper = styled.div`
   display: inline;
   text-align: center;
 `;
+
 const Container = styled.div`
-  @media (max-width: 1200px) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     & > div > :last-child {
       padding: 70px;
       border-radius: 100px;
     }
   }
-  @media (max-width: 768px) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     & > div > :last-child {
       padding: 50px;
       border-radius: 80px;
     }
   }
-  @media (max-width: 480px) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     & > div > :last-child {
       padding: 40px;
       border-radius: 60px;
@@ -109,33 +122,39 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
     setPlaylistAll((preState) => {
       return { ...preState, ...newState };
     });
+
   const checkAllValidInput = () => {
     if (!playlistName || !description || !hashtags.length) return false;
-    if (musics.length < 3 || musics.length > 50) return false;
+    if (musics.length < MIN_MUSIC_LENGTH || musics.length > MAX_MUSIC_LENGTH) return false;
     return true;
   };
+
   const handleAddChipKeyDown: KeyboardEventHandler = (e) => {
     if (e.key !== ' ') return;
     e.preventDefault();
   };
+
   const handleAddChipKeyUp: KeyboardEventHandler = (e) => {
-    if (e.key !== ' ') return;
     if (!hashtag.trim()) return;
+
     setPlaylist({ hashtag: '' });
     setPlaylistAll((preState: PlaylistInput) => {
       return { ...preState, hashtags: [...preState.hashtags, hashtag.replace(/\s/g, '')] };
     });
   };
+
   const handleSubmit = async () => {
     if (!checkAllValidInput()) {
       toast.error(PLAYLIST_INPUT_ERR_MSG, TOAST_OPTION);
       return;
     }
+
     const result = await mapSubmitFunction({
       type,
       playlistId,
       playlist: { playlistName, description, musics, hashtags, userId: userInfo.id },
     });
+
     const { status } = result;
     if (status === FAILED) toast.error(PLAYLIST_ERR_MSG, TOAST_OPTION);
     if (status === SUCCESS) Router.back();
@@ -157,11 +176,13 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
       return await updatePlaylist(playlistId, playlist);
     }
   };
+
   const addMusics = (newMusic: Music) => {
     setPlaylistAll((preState: PlaylistInput) => {
       return { ...preState, musics: [...preState.musics, newMusic] };
     });
   };
+
   const updateMusics = (newMusic: Music) => {
     setPlaylistAll((preState: PlaylistInput) => {
       const nextMusics = [...preState.musics];
@@ -169,6 +190,7 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
       return { ...preState, musics: nextMusics };
     });
   };
+
   const deleteMusics = (idx: number) => (e: MouseEvent) => {
     setPlaylistAll((preState: PlaylistInput) => {
       const nextMusics = preState.hashtags.filter((hashtag, i) => i !== idx);
@@ -178,7 +200,7 @@ const PlaylistCreate: NextPage<Props> = ({ type, content }) => {
 
   return (
     <Container>
-      <MenuInfoBox name="플레이리스트 추가"></MenuInfoBox>
+      <MenuInfoBox content="플레이리스트 추가"></MenuInfoBox>
       <PageBox>
         <Wrapper>
           <CreatePlaylistInputBox

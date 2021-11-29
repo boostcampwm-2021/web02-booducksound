@@ -6,6 +6,7 @@ import { useInView } from 'react-intersection-observer';
 import { getPlaylists as fetchPlaylists } from '~/api/playlist';
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
+import { LIMIT_SEARCH_TIME, SEARCH_EMPTY_MSG } from '~/constants/index';
 import Modal from '~/molecules/Modal';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import theme from '~/styles/theme';
@@ -41,7 +42,7 @@ const PlayList = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid ${theme.colors.gray};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.gray};
   padding: 20px 8px;
   background: ${({ theme }) => theme.colors.white};
   cursor: pointer;
@@ -67,14 +68,12 @@ const PlaylistInfo = styled.div`
   display: flex;
   justify-content: left;
   margin-right: 10px;
-  /* overflow: hidden; */
   white-space: nowrap;
-  /* position: relative; */
-
   animation-name: slideFont;
   animation-duration: 7s;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
+
   @keyframes slideFont {
     from {
       transform: translateX(-100%);
@@ -104,7 +103,7 @@ const SearchInputText = styled(InputText)`
 `;
 
 const Hashtags = styled.span`
-  color: ${theme.colors.ocean};
+  color: ${({ theme }) => theme.colors.ocean};
 `;
 
 const Contents = styled.div`
@@ -204,7 +203,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
     if (timer.current) clearTimeout(timer.current);
     timer.current = setTimeout(() => {
       getPlaylists(1, search, { init: true });
-    }, 200);
+    }, LIMIT_SEARCH_TIME);
   };
 
   const handleSelectPlaylistBtnClick = (e: MouseEvent, playlistId: string, playlistName: string) => {
@@ -229,7 +228,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
         <SearchInputText
           className="playlistSearch"
           isSearch={true}
-          placeholder="검색어를 입력해주세요"
+          placeholder={SEARCH_EMPTY_MSG}
           value={search}
           handleChange={handleSearchChange}
         />

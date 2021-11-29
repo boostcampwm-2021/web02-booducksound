@@ -11,6 +11,7 @@ const Container = styled.button`
   border: none;
   cursor: pointer;
 `;
+
 interface Props {
   clickHandler: MouseEventHandler;
 }

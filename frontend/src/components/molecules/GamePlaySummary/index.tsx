@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 
 import Timer from '~/atoms/Timer';
-import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
 
 const TimerWrapper = styled.div`
@@ -13,7 +12,7 @@ const TimerWrapper = styled.div`
   font-size: 28px;
   font-weight: 700;
 
-  @media (max-width: ${theme.breakpoints.lg}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     font-size: 24px;
     top: -20px;
     left: -20px;
@@ -21,7 +20,7 @@ const TimerWrapper = styled.div`
     height: 84px;
   }
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     position: fixed;
     font-size: 24px;
     width: 64px;
@@ -31,7 +30,7 @@ const TimerWrapper = styled.div`
     transform: translate(0, 0);
   }
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 18px;
     width: 58px;
     height: 58px;
@@ -40,14 +39,14 @@ const TimerWrapper = styled.div`
 
 const Round = styled.p`
   font-size: 18px;
-  font-family: ${theme.fonts.gmarket};
+  font-family: ${({ theme }) => theme.fonts.gmarket};
 
   &::after {
     content: 'Round ';
     margin-left: 8px;
   }
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 16px;
   }
 `;

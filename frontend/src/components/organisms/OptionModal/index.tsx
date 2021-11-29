@@ -6,6 +6,7 @@ import { Socket } from 'socket.io-client';
 
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
+import { ROOM_TITLE_EMPTY_MSG } from '~/constants/index';
 import useSocket from '~/hooks/useSocket';
 import useSocketEmit from '~/hooks/useSocketEmit';
 import InputWithButton from '~/molecules/InputWithButton';
@@ -77,25 +78,30 @@ interface Form {
   timePerProblem: number;
 }
 
+interface SelectOption {
+  needAnswerRatio?: number;
+  timePerProblem?: number;
+}
+
 const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
   const socket = useSocket();
   const { uuid } = useSelector((state: RootState) => state.room);
-  const [password, setPassword] = useState('');
-  const [pastPassword, setPastPassword] = useState('');
-
+  const [password, setPassword] = useState({ inputPassword: '', prevPassword: '' });
   const { title, playlistName, playlistId, needAnswerRatio, timePerProblem } = gameRoom;
-  const defaultForm = { title, playlistName, playlistId, needAnswerRatio, timePerProblem, password };
-  const [form, setForm] = useState<Form>(defaultForm);
+  const defaultForm = {
+    title,
+    playlistName,
+    playlistId,
+    needAnswerRatio,
+    timePerProblem,
+    password: password.inputPassword,
+  };
   const [leftButtonDisabled, setLeftButtonDisabled] = useState(true);
   const [playlistModalOnOff, setPlaylistModalOnOff] = useState(false);
-
-  useSocketEmit(SocketEvents.GET_ROOM_PASSWORD, uuid, (gamePassword: string) => {
-    setPassword(gamePassword);
-    setPastPassword(gamePassword);
-  });
+  const [form, setForm] = useState<Form>(defaultForm);
 
   const handleUpdateRoomBtn: MouseEventHandler = () => {
-    if (socket === null) return;
+    if (!socket) return;
     if (!validateForm) return;
 
     (socket as Socket).emit(SocketEvents.SET_GAME_ROOM, uuid, password, form, () => {
@@ -109,10 +115,24 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
 
   const validateForm = (form: Form) => {
     const condition =
-      !checkFormChanged(defaultForm, form) || !form.title || !form.playlistId || password !== pastPassword;
+      !checkFormChanged(defaultForm, form) ||
+      !form.title ||
+      !form.playlistId ||
+      password.inputPassword !== password.prevPassword;
     setLeftButtonDisabled(condition);
     return !condition;
   };
+
+  const handleSelect = (option: SelectOption) =>
+    setForm((prev: Form) => {
+      const form = { ...prev, ...option };
+      validateForm(form);
+      return form;
+    });
+
+  useSocketEmit(SocketEvents.GET_ROOM_PASSWORD, uuid, (gamePassword: string) => {
+    setPassword({ inputPassword: gamePassword, prevPassword: gamePassword });
+  });
 
   return (
     <Modal
@@ -128,7 +148,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
           <TextLabel>방 제목</TextLabel>
           <ModalInputText
             className="roomTitle"
-            placeholder="방 제목을 입력하세요"
+            placeholder={ROOM_TITLE_EMPTY_MSG}
             isSearch={false}
             value={form.title}
             handleChange={(e) => {
@@ -166,10 +186,10 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             className="roomPassword"
             placeholder={gameRoom.hasPassword ? '********' : ''}
             isSearch={false}
-            value={password}
+            value={password.inputPassword}
             handleChange={(e) => {
               const password = (e.target as HTMLInputElement).value;
-              setPassword(password);
+              setPassword((prev) => ({ ...prev, inputPassword: password }));
               validateForm(form);
             }}
           />
@@ -182,13 +202,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             options={['1명만', '25% 이상', '50% 이상', '75% 이상', '모두']}
             values={[0.01, 0.25, 0.5, 0.75, 1]}
             defaultValue={0.5}
-            onChange={(e) => {
-              setForm((prev) => {
-                const form = { ...prev, needAnswerRatio: Number((e.target as HTMLSelectElement).value) };
-                validateForm(form);
-                return form;
-              });
-            }}
+            onChange={(e) => handleSelect({ needAnswerRatio: Number((e.target as HTMLSelectElement).value) })}
           />
           <SelectSection
             title="문항 당 시간"
@@ -197,13 +211,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             options={['10초', '20초', '30초', '40초', '50초', '60초', '70초', '80초', '90초']}
             values={[10, 20, 30, 40, 50, 60, 70, 80, 90]}
             defaultValue={60}
-            onChange={(e) => {
-              setForm((prev) => {
-                const form = { ...prev, timePerProblem: Number((e.target as HTMLSelectElement).value) };
-                validateForm(form);
-                return form;
-              });
-            }}
+            onChange={(e) => handleSelect({ timePerProblem: Number((e.target as HTMLSelectElement).value) })}
           />
         </HalfContainer>
       </Container>

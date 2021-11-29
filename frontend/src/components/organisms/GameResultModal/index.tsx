@@ -6,7 +6,6 @@ import { incrementLikeCount } from '~/api/playlist';
 import { insertLikes } from '~/api/user';
 import Modal from '~/molecules/Modal';
 import ResultCharacter from '~/molecules/ResultCharacter';
-import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
 
 interface Props {
@@ -55,21 +54,21 @@ const RecommendWrapper = styled.div`
   text-align: center;
   font-weight: 700;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 16px;
   }
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 14px;
   }
 `;
 
 const RecommendContent = styled.p`
-  colors: ${theme.colors.night};
+  color: ${({ theme }) => theme.colors.night};
 `;
 
 const RecommendAdditionalInfo = styled.p`
-  color: ${theme.colors.deepgray};
+  color: ${({ theme }) => theme.colors.deepgray};
 `;
 
 const Like = styled.button`

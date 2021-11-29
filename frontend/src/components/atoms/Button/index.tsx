@@ -14,16 +14,13 @@ const ButtonContainer = styled.button<ButtonContainerProps>`
   width: ${({ width }) => width || '100%'};
   height: ${({ height }) => height || 'auto'};
   background: ${({ background }) => background || 'inherit'};
-
   font-size: ${({ fontSize }) => fontSize || 'inherit'};
   padding: ${({ paddingH }) => paddingH || '5%'} 0;
-
   font-family: ${({ theme }) => theme.fonts.gmarket};
   border-radius: 60px;
   border: 2px solid ${({ theme }) => theme.colors.black};
   box-shadow: 4px 1px 0 ${({ theme }) => theme.colors.black};
   cursor: pointer;
-
   white-space: nowrap;
 
   &:hover {

@@ -13,7 +13,7 @@ import InputText from '~/atoms/InputText';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
 import ProfileSelector from '~/atoms/ProfileSelector';
-import { NICKNAME_EMPTY_MSG, TOAST_OPTION } from '~/constants/index';
+import { INIT_USER_COLOR_HEX, NICKNAME_EMPTY_MSG, TOAST_OPTION } from '~/constants/index';
 import theme from '~/styles/theme';
 
 const EnterContainer = styled.div`
@@ -25,12 +25,13 @@ const EnterContainer = styled.div`
   width: 100%;
   text-align: center;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     button {
       width: calc(100% - 2rem);
     }
   }
-  @media (max-width: ${theme.breakpoints.sm}) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     button {
       width: 90%;
     }
@@ -46,10 +47,11 @@ const InputContainer = styled.div`
     display: block;
   }
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     > * {
       width: 100%;
     }
+
     button {
       width: 90%;
       font-size: 18px;
@@ -63,7 +65,7 @@ const EnterInputText = styled(InputText)`
   padding: 20px 20px 20px 80px;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 18px;
     padding: 24px 40px 24px 40px;
   }
@@ -71,7 +73,7 @@ const EnterInputText = styled(InputText)`
 
 const Enter: NextPage = () => {
   const [nickname, setNickname] = useState('');
-  const [color, setColor] = useState('fff');
+  const [color, setColor] = useState(INIT_USER_COLOR_HEX);
   const dispatch = useDispatch();
 
   const handleEnter = async () => {
@@ -83,7 +85,7 @@ const Enter: NextPage = () => {
 
   return (
     <>
-      <MenuInfoBox name="비회원 로그인" />
+      <MenuInfoBox content="비회원 로그인" />
       <PageBox>
         <EnterContainer>
           <ProfileSelector color={color} setColor={setColor}></ProfileSelector>
@@ -96,13 +98,7 @@ const Enter: NextPage = () => {
               handleChange={({ target }) => setNickname((target as HTMLInputElement).value.trim())}
             ></EnterInputText>
             <a>
-              <Button
-                width={'480px'}
-                background={theme.colors.sky}
-                fontSize={'30px'}
-                paddingH={'24px'}
-                onClick={handleEnter}
-              >
+              <Button width="480px" background={theme.colors.sky} fontSize="30px" paddingH="24px" onClick={handleEnter}>
                 참여하기
               </Button>
             </a>

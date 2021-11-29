@@ -1,9 +1,7 @@
 import styled from '@emotion/styled';
 
-import theme from '~/styles/theme';
-
 const GlassContainer = styled.div`
-  background-color: ${theme.colors.lightsky};
+  background-color: ${({ theme }) => theme.colors.lightsky};
   display: flex;
   width: 100%;
   height: 100%;

@@ -18,39 +18,47 @@ const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 25px;
-  @media (max-width: 1200px) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     & > div > :last-child {
       height: 40px;
       padding-left: 30px;
     }
   }
-  @media (max-width: 768px) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     & > div > :last-child {
       height: 40px;
       padding-left: 20px;
     }
   }
-  @media (max-width: 480px) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     & > div > :last-child {
       height: 35px;
       padding-left: 10px;
     }
   }
 `;
+
 const PlaylistInputText = styled(InputText)`
   width: 98%;
   height: 3em;
   padding: 25px 10px 25px 45px;
-  @media (max-width: 1200px) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     padding: 25px 10px 25px 45px;
   }
-  @media (max-width: 768px) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     padding: 20px 10px 20px 35px;
   }
-  @media (max-width: 480px) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding: 15px 10px 15px 20px;
   }
 `;
+
 const SectionBox = styled.div`
   display: flex;
   flex-direction: column;

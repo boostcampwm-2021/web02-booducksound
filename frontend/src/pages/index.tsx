@@ -37,13 +37,15 @@ const MainContainer = styled.div`
     right: 0;
     z-index: -1;
   }
-  @media (max-width: 768px) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     button {
       width: calc(100% - 2rem);
       margin-bottom: 1rem;
     }
   }
-  @media (max-width: 480px) {
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     button {
       width: 90%;
     }
@@ -51,7 +53,7 @@ const MainContainer = styled.div`
 `;
 
 const BtnBox = styled.div`
-  @media (min-width: 768px) {
+  @media (min-width: ${({ theme }) => theme.breakpoints.md}) {
     margin-bottom: 1rem;
 
     > *:first-of-type {
@@ -86,14 +88,14 @@ const Home: NextPage = () => {
       <BtnBox>
         <Link href="/login">
           <a>
-            <Button width={'320px'} background={theme.colors.sand} paddingH={'24px'} fontSize={'28px'}>
+            <Button width="320px" background={theme.colors.sand} paddingH="24px" fontSize="28px">
               로그인
             </Button>
           </a>
         </Link>
         <Link href="/join">
           <a>
-            <Button width={'320px'} background={theme.colors.sand} paddingH={'24px'} fontSize={'28px'}>
+            <Button width="320px" background={theme.colors.sand} paddingH="24px" fontSize="28px">
               회원가입
             </Button>
           </a>
@@ -101,7 +103,7 @@ const Home: NextPage = () => {
       </BtnBox>
       <Link href="/enter">
         <a>
-          <Button width={'656px'} background={theme.colors.mint} fontSize={'28px'} paddingH={'24px'}>
+          <Button width="656px" background={theme.colors.mint} fontSize="28px" paddingH="24px">
             비회원 로그인
           </Button>
         </a>

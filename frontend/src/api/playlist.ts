@@ -1,4 +1,4 @@
-import { BACKEND_URL } from '~/constants/index';
+import { BACKEND_URL, INCREMENT, DECREMENT } from '~/constants/index';
 import { Playlist } from '~/types/Playlist';
 import API from '~/utils/API';
 
@@ -34,5 +34,6 @@ export const getPlaylists = async (option?: { q?: string; page?: number }) => {
 export const updateLikeCount = (option: string) => async (_id: string) =>
   await API('PUT')(`${BACKEND_URL}/playlist/like`)({ body: JSON.stringify({ _id, mode: option }) });
 
-export const incrementLikeCount = updateLikeCount('INCREMENT');
-export const decrementLikeCount = updateLikeCount('DECREMENT');
+export const incrementLikeCount = updateLikeCount(INCREMENT);
+
+export const decrementLikeCount = updateLikeCount(DECREMENT);

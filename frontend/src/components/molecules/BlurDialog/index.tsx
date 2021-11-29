@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 
 import Portal from '~/atoms/Portal';
-import theme from '~/styles/theme';
 
 const Container = styled.div`
   position: fixed;
@@ -10,7 +9,7 @@ const Container = styled.div`
   transform: translate(-50%, -50%);
   background: rgba(0, 0, 0, 0.68);
   padding: 24px;
-  color: ${theme.colors.white};
+  color: ${({ theme }) => theme.colors.white};
   font-size: 28px;
   animation: drop 4s;
 
@@ -29,11 +28,11 @@ const Container = styled.div`
     }
   }
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 20px;
   }
 
-  @media (max-width: ${theme.breakpoints.sm}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: 16px;
   }
 `;

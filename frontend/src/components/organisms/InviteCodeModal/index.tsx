@@ -26,8 +26,7 @@ const ModalInputText = styled(InputText)`
 `;
 
 const findAvailableRoom = (roomID: string, rooms: Array<String>) => {
-  const room = rooms.filter((e: String) => e === roomID);
-  return room.length > 0;
+  return rooms.some((e: String) => e === roomID);
 };
 
 const InviteCodeModal = ({ setModalOnOff, leftButtonText, rooms }: Props) => {

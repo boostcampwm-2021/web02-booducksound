@@ -10,7 +10,6 @@ import CharacterList from '~/molecules/CharacterList';
 import GamePlaySummary from '~/molecules/GamePlaySummary';
 import OptionModal from '~/organisms/OptionModal';
 import { RootState } from '~/reducers/index';
-import theme from '~/styles/theme';
 import { GameRoom } from '~/types/GameRoom';
 import { Players } from '~/types/Players';
 import { SocketEvents } from '~/types/SocketEvents';
@@ -38,7 +37,7 @@ const Wrapper = styled.div`
     'leftCharacter rightSearch' 1fr
     / 348px 1fr;
 
-  @media (max-width: ${theme.breakpoints.lg}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.lg}) {
     column-gap: 28px;
 
     grid-template:
@@ -49,7 +48,7 @@ const Wrapper = styled.div`
       / 300px 1fr;
   }
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     grid-template:
       'leftTitle leftTitle leftTitle' 1fr
       'leftCharacter leftCharacter leftCharacter' 1fr
@@ -72,7 +71,7 @@ const CharacterContainer = styled(Container)`
   justify-content: flex-start;
   padding: 16px 4px;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     padding: 4px;
   }
 `;
@@ -91,29 +90,29 @@ const RightTitle = styled.div`
 
 const GameSummary = styled.p`
   font-size: 20px;
-  color: ${theme.colors.black};
+  color: ${({ theme }) => theme.colors.black};
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 16px;
   }
 `;
 
 const Bold = styled.b`
-  color: ${theme.colors.ocean};
+  color: ${({ theme }) => theme.colors.ocean};
 `;
 
 const Hint = styled.p`
   font-weight: 700;
   font-size: 20px;
-  color: ${theme.colors.black};
+  color: ${({ theme }) => theme.colors.black};
 
   &::before {
     content: '힌트 : ';
-    color: ${theme.colors.ocean};
+    color: ${({ theme }) => theme.colors.ocean};
     margin-right: 8px;
   }
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 16px;
   }
 `;
@@ -126,7 +125,7 @@ const LeftTitleContainer = styled(Container)`
   padding: 16px;
   font-size: 18px;
 
-  @media (max-width: ${theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     font-size: 16px;
   }
 `;
@@ -190,15 +189,15 @@ const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime:
   return (
     <>
       <Wrapper>
-        <LeftTitleContainer type={'leftTitle'}>
+        <LeftTitleContainer type="leftTitle">
           <RoomTitle>{gameRoom?.title}</RoomTitle>
           <PlaylistName>{gameRoom?.playlistName}</PlaylistName>
           {gameRoom?.status === 'waiting' && confirmKing() && <SettingButton onClick={() => setModalOnOff(true)} />}
         </LeftTitleContainer>
-        <CharacterContainer type={'leftCharacter'}>
+        <CharacterContainer type="leftCharacter">
           <CharacterList players={players as Players} status={gameRoom?.status} roomNo={uuid} />
         </CharacterContainer>
-        <Container type={'rightTitle'}>
+        <Container type="rightTitle">
           <RightTitle>
             {gameRoom.status === 'waiting' && (
               <GameSummary>
@@ -218,7 +217,7 @@ const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime:
         <GameRoomInputContainer color={userInfo.color} name={userInfo.nickname} uuid={uuid}></GameRoomInputContainer>
       </Wrapper>
       {modalOnOff && gameRoom && (
-        <OptionModal setModalOnOff={setModalOnOff} leftButtonText={'수정하기'} gameRoom={gameRoom} />
+        <OptionModal setModalOnOff={setModalOnOff} leftButtonText="수정하기" gameRoom={gameRoom} />
       )}
     </>
   );

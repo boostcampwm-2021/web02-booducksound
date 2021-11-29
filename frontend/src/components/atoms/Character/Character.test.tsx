@@ -4,7 +4,7 @@ import Character from '~/atoms/Character';
 
 describe('케릭터', () => {
   it('캐릭터 렌더링', () => {
-    const result = render(<Character color="ffff" width={'200'} />);
+    const result = render(<Character color="ffff" width="200" />);
     expect(result).toMatchInlineSnapshot(`
       Object {
         "asFragment": [Function],
