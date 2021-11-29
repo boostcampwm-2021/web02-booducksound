@@ -7,16 +7,16 @@ import ytdl from 'ytdl-core';
 class Youtubestream {
   videoId: string;
   mp3Path: string;
-  #passThrough?: PassThrough;
+  passThrough?: PassThrough;
 
   constructor(url: string) {
     this.videoId = this.#parseUrl(url);
     this.mp3Path = this.#getMp3Path(this.videoId);
-    this.#passThrough = this.#getPassThrough(this.videoId, this.mp3Path);
+    this.passThrough = this.#getPassThrough(this.videoId, this.mp3Path);
   }
 
   get stream() {
-    if (this.#passThrough) return cloneable(this.#passThrough);
+    if (this.passThrough) return cloneable(this.passThrough);
     return fs.createReadStream(this.mp3Path);
   }
 
@@ -37,6 +37,8 @@ class Youtubestream {
       if (fs.statSync(mp3Path).size < NEED_FILE_BYTE) return;
       video.unpipe();
       passThrough.unpipe();
+      passThrough.destroy();
+      delete this.passThrough;
       writeStream.close();
     });
 
