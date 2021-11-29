@@ -12,7 +12,7 @@ export const changeColor = async (id: string, color: string) => {
 };
 
 export const getMyPlaylist = async (_id: Array<string>) => {
-  if (_id.length === 0) return [];
+  if (!_id) return [];
   const res = await API('GET')(`${BACKEND_URL}/user/playlist?_id=${JSON.stringify(_id)}`)();
   return res.json();
 };
