@@ -1,3 +1,9 @@
+<style>
+td, th {
+   border: none!important;
+}
+</style>
+
 <h1 align="center"> 🐥BooduckSound🐥 </h1>
 <div align="center"><img src="https://user-images.githubusercontent.com/49841765/139250079-ebf5d063-5fac-40d9-8c7a-b59989baa1e0.png" alt="booducksound"/></div>
 <div align="center">
@@ -51,12 +57,13 @@
 > 스타크래프트 노래 맞추기 유즈맵에서 영감을 얻어 제작된 부덕사운드는 유튜브 링크를 통하여 문제를 만들고, 친구들과 함께 노래를 들으며 채팅으로 문제를 맞출 수 있는 온라인 노래 맞추기 배틀 게임입니다.
 
 
-![image](https://user-images.githubusercontent.com/49841765/143986906-2c3680a6-5edc-40dc-8ce6-16d9982447d0.png)
 
 <br>
 
-### 플레이 방법 ⚾
 
+### 플레이 방법 ⚾
+<img align='left' src='https://media2.giphy.com/media/4oMoIbIQrvCjm/giphy.gif?cid=ecf05e47esel7g35iuq4diuyz01iw911vkecytet7dkfn18b&rid=giphy.gif&ct=g' width=350 />
+      
 🏠 방을 만들고 싶으시다면, 방 생성을 눌러주시고, 원하는 플레이 리스트를 골라주세요!
 
 🎉 같이 플레이 하고 싶은 친구들에게 초대코드를 보내주세요!
@@ -70,8 +77,6 @@
 ✅ 정답은 채팅창에 적어주세요 🧡
 
 ⛷ 스킵은 모두 눌러야 넘어갑니다!
-
-<img src='https://media2.giphy.com/media/4oMoIbIQrvCjm/giphy.gif?cid=ecf05e47esel7g35iuq4diuyz01iw911vkecytet7dkfn18b&rid=giphy.gif&ct=g' width=300 />
 
 <br>
 
