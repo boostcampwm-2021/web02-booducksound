@@ -18,7 +18,7 @@ import {
   ID_EMPTY_MSG,
   PASSWORD_EMPTY_MSG,
   NICKNAME_EMPTY_MSG,
-  BACKEND_URL,
+  BACKEND_URI,
   TOAST_OPTION,
   INIT_USER_COLOR_HEX,
 } from '~/constants/index';
@@ -96,7 +96,7 @@ const Join: NextPage = () => {
   const dispatch = useDispatch();
 
   const idCheck = async () => {
-    const res = await API('GET')(`${BACKEND_URL}/check-id?id=${id}`)();
+    const res = await API('GET')(`${BACKEND_URI}/check-id?id=${id}`)();
     return res.json();
   };
 
