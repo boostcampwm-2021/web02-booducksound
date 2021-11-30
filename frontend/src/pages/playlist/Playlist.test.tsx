@@ -1,6 +1,8 @@
+import { ThemeProvider } from '@emotion/react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 
 import { UserState } from '~/reducers/user';
+import theme from '~/styles/theme';
 import { PlaylistInput } from '~/types/PlaylistInput';
 
 import PlaylistCreate from './[playlistId]';
@@ -35,7 +37,11 @@ jest.mock('next/router', () => ({
 describe('플레이리스트 생성/수정 페이지', () => {
   it('제목/설명/해시태그 입력 시 InputText에 그대로 나타나야 한다.', () => {
     const content: PlaylistInput = { playlistName: '', description: '', hashtag: '', hashtags: [], musics: [] };
-    const { getByPlaceholderText } = render(<PlaylistCreate content={content} type="create"></PlaylistCreate>);
+    const { getByPlaceholderText } = render(
+      <ThemeProvider theme={theme}>
+        <PlaylistCreate content={content} type="create"></PlaylistCreate>
+      </ThemeProvider>,
+    );
     const title = getByPlaceholderText('플레이리스트 제목을 입력해주세요.');
     const description = getByPlaceholderText('플레이리스트 설명을 입력해주세요.');
     const hashtag = getByPlaceholderText('추가할 해시태그를 입력 후 Enter를 클릭하세요.');
@@ -52,7 +58,9 @@ describe('플레이리스트 생성/수정 페이지', () => {
   it('해시태그 입력 후 Enter키 입력 시 칩이 쌓여야 한다.', () => {
     const content: PlaylistInput = { playlistName: '', description: '', hashtag: '', hashtags: [], musics: [] };
     const { getByPlaceholderText, getByText } = render(
-      <PlaylistCreate content={content} type="create"></PlaylistCreate>,
+      <ThemeProvider theme={theme}>
+        <PlaylistCreate content={content} type="create"></PlaylistCreate>
+      </ThemeProvider>,
     );
     const hashtag = getByPlaceholderText('추가할 해시태그를 입력 후 Enter를 클릭하세요.');
     fireEvent.change(hashtag, { target: { value: 'test' } });

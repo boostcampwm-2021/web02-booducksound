@@ -12,7 +12,9 @@ describe('버튼 렌더링 테스트', () => {
 
   render(
     <ThemeProvider theme={theme}>
-      <Button background={background} fontSize={fontSize} content={content} />
+      <Button background={background} fontSize={fontSize}>
+        {content}
+      </Button>
     </ThemeProvider>,
   );
 
@@ -27,6 +29,6 @@ describe('버튼 렌더링 테스트', () => {
   });
 
   it('폰트 사이즈', () => {
-    expect(button).toHaveStyle(`font-size: ${fontSize}px`);
+    expect(button).toHaveStyle(`font-size: ${fontSize}`);
   });
 });
