@@ -1,4 +1,3 @@
-
 <h1 align="center"> 🐥BooduckSound🐥 </h1>
 <div align="center"><img src="https://user-images.githubusercontent.com/49841765/139250079-ebf5d063-5fac-40d9-8c7a-b59989baa1e0.png" alt="booducksound"/></div>
 <div align="center">
@@ -27,6 +26,8 @@
   </p>
 </div>
 
+<br>
+
 ## Member 👨‍👨‍👦‍👦
 
 <div align="center">
@@ -37,12 +38,9 @@
 
 </div>
 
-
+<br>
 
 ## 부덕사운드란? 🎞
-
-
-
 
 <div class="callout">
   <div>
@@ -54,6 +52,8 @@
 
 
 ![image](https://user-images.githubusercontent.com/49841765/143986906-2c3680a6-5edc-40dc-8ce6-16d9982447d0.png)
+
+<br>
 
 ### 플레이 방법 ⚾
 
@@ -73,12 +73,16 @@
 
 <img src='https://media2.giphy.com/media/4oMoIbIQrvCjm/giphy.gif?cid=ecf05e47esel7g35iuq4diuyz01iw911vkecytet7dkfn18b&rid=giphy.gif&ct=g' width=300 />
 
+<br>
+
 ### 플레이리스트 생성 🎧
 
 - 유저 모두 자신만의 노래 문제를 만들 수 있습니다 !
 - 유튜브 링크를 조합하여 나만의 플레이리스트를 만들어 보세요.
 - 평소에 즐겨 듣던 노래나 장르 별로 노래를 모아 문제를 내보는 건 어떨까요 ?
 - 취향저격 플레이리스트를 만들어 유저들의 좋아요를 모아보세요 😍
+
+<br>
 
 ### 게임 플레이 🔊
 
@@ -87,6 +91,8 @@
 - 친구들과 함께 접속하여 플레이리스트를 골라 노래를 맞추며 즐길 수 있습니다 😆
 - 오늘 밤엔 친구들과 부덕사운드에 모여 2010 노래 모음 플레이리스트를 들으며 노래 맞추기 🍗 내기 어떤가요 ?!
 
+<br>
+
 ### 오디오 스트림 중개 🎵
 
 ![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/49841765/143987304-3500bcac-561c-4bed-92b1-5fc306e8dd99.gif)
@@ -94,6 +100,8 @@
 - 유저가 원하는 노래의 유튜브 URL을 입력하면, 서버는 해당 URL을 저장합니다.
 - 해당 플레이리스트가 플레이 될 때, 저장되어 있던 URL을 ytdl 라이브러리가 파싱하여 googleVideo의 실제 weba 파일이 저장되어 있는 저장소의 URL을 만듭니다.
 - 서버는 googleVideo에 저장되어 있는 weba 파일을 오디오 스트림을 통해 전달 받고, 클라이언트에게 중개해줍니다.
+
+<br>
 
 ## Link 🎈
 
