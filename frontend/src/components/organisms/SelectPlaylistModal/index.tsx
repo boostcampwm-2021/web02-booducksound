@@ -7,6 +7,7 @@ import { getPlaylists as fetchPlaylists } from '~/api/playlist';
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
 import { LIMIT_SEARCH_TIME, SEARCH_EMPTY_MSG } from '~/constants/index';
+import useDebounce from '~/hooks/useDebounce';
 import Modal from '~/molecules/Modal';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import theme from '~/styles/theme';
@@ -140,7 +141,7 @@ const PlayCount = styled.span`
   }
 `;
 
-interface Props {
+type Props = {
   setModalOnOff: Dispatch<SetStateAction<boolean>>;
   setForm: Dispatch<
     SetStateAction<{
@@ -153,7 +154,7 @@ interface Props {
     }>
   >;
   validateForm: Function;
-}
+};
 
 const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) => {
   const [search, setSearch] = useState('');
@@ -163,6 +164,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
   const [lastRef, isLastInView] = useInView();
   const maxPage = useRef(Infinity);
   const timer = useRef<ReturnType<typeof setTimeout>>();
+  const debouncedSearch = useDebounce(search, LIMIT_SEARCH_TIME);
 
   const getPlaylists = async (page: number, search: string, option?: { init?: boolean }) => {
     setIsLoading(true);
@@ -177,6 +179,19 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
     } else setPlaylists((prevState) => [...prevState, ...playlists]);
 
     setIsLoading(false);
+  };
+
+  const handleSearchChange: ChangeEventHandler = (e) => {
+    setSearch((e.target as HTMLInputElement).value);
+  };
+
+  const handleSelectPlaylistBtnClick = (e: MouseEvent, playlistId: string, playlistName: string) => {
+    setForm((prev) => {
+      const form = { ...prev, playlistId, playlistName };
+      validateForm(form);
+      return form;
+    });
+    setModalOnOff(false);
   };
 
   useEffect(() => {
@@ -196,24 +211,9 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
     getPlaylists(page + 1, search);
   }, [isLastInView, isLoading]);
 
-  const handleSearchChange: ChangeEventHandler = (e) => {
-    const search = (e.target as HTMLInputElement).value;
-    setSearch(search);
-
-    if (timer.current) clearTimeout(timer.current);
-    timer.current = setTimeout(() => {
-      getPlaylists(1, search, { init: true });
-    }, LIMIT_SEARCH_TIME);
-  };
-
-  const handleSelectPlaylistBtnClick = (e: MouseEvent, playlistId: string, playlistName: string) => {
-    setForm((prev) => {
-      const form = { ...prev, playlistId, playlistName };
-      validateForm(form);
-      return form;
-    });
-    setModalOnOff(false);
-  };
+  useEffect(() => {
+    getPlaylists(1, debouncedSearch, { init: true });
+  }, [debouncedSearch]);
 
   return (
     <Modal
@@ -250,7 +250,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setForm, validateForm }: Props) =>
                     background={theme.colors.lilac}
                     fontSize="16px"
                     width="80px"
-                    onClick={(e) => handleSelectPlaylistBtnClick(e, _id as string, playlistName)}
+                    onClick={(e: MouseEvent) => handleSelectPlaylistBtnClick(e, _id as string, playlistName)}
                   >
                     선택
                   </SelectButton>
