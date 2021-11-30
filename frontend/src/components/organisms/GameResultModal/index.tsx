@@ -85,6 +85,7 @@ const Like = styled.button`
 
 const GameResultModal = ({ gameRoom, userId, setModalOnOff }: Props) => {
   const [isClickedLikeBtn, setIsClickedLikeBtn] = useState<boolean>(false);
+  const newPlayers = Object.values(gameRoom.players).sort((a, b) => b.score - a.score);
 
   const handleClickLikeBtn = () => {
     incrementLikeCount(gameRoom.playlistId);
@@ -105,10 +106,7 @@ const GameResultModal = ({ gameRoom, userId, setModalOnOff }: Props) => {
           <Title>결과</Title>
         </FirstLine>
         <ResultCharacterWrapper>
-          {gameRoom &&
-            Object.values(gameRoom.players)
-              .sort((a, b) => b.score - a.score)
-              .map((player, i) => <ResultCharacter key={i} player={player} />)}
+          {gameRoom && newPlayers.map((player, i) => <ResultCharacter key={i} player={player} />)}
         </ResultCharacterWrapper>
         <RecommendWrapper>
           <RecommendContent>

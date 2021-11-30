@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import InputText from '~/atoms/InputText';
-import { GAME_ENTER_ERR_MSG, TOAST_OPTION } from '~/constants/index';
+import { GAME_ENTER_ERR_MSG, TOAST_OPTION, SEARCH_EMPTY_MSG } from '~/constants/index';
 import useSocket from '~/hooks/useSocket';
 import useSocketEmit from '~/hooks/useSocketEmit';
 import useSocketOn from '~/hooks/useSocketOn';
@@ -21,7 +21,7 @@ import { RoomActions } from '~/types/Actions';
 import { LobbyRoom } from '~/types/LobbyRoom';
 import { SocketEvents } from '~/types/SocketEvents';
 
-const RoomCard = dynamic(() => import('~/atoms/RoomCard'));
+const RoomCard = dynamic(() => import('~/molecules/RoomCard'));
 const EnterPwdModal = dynamic(() => import('~/organisms/EnterPwdModal'));
 const CreateRoomModal = dynamic(() => import('~/organisms/CreateRoomModal'));
 const InviteCodeModal = dynamic(() => import('~/organisms/InviteCodeModal'));
@@ -259,7 +259,7 @@ const Lobby: NextPage = () => {
             <SearchRoomInputText
               className="searchRoom"
               isSearch={true}
-              placeholder="검색어를 입력하세요"
+              placeholder={SEARCH_EMPTY_MSG}
               value={search}
               handleChange={handleSearchChange}
             ></SearchRoomInputText>

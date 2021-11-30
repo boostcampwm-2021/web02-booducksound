@@ -113,7 +113,7 @@ const SelectPlaylistModal = ({ setModalOnOff, setMusic }: Props) => {
       <Container>
         <TextLabel>노래 검색</TextLabel>
         <SearchInputText
-          className="SearchListearch"
+          className="SearchListSearch"
           isSearch={true}
           placeholder={SEARCH_EMPTY_MSG}
           value={search}

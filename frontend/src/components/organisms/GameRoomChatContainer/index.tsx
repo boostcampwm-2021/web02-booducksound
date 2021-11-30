@@ -37,7 +37,7 @@ const GameRoomChatContainer = () => {
   const chatListContainer = useRef<HTMLDivElement>(null);
   const [topRef, isTopInView] = useInView();
 
-  const scorllToBottom = () => {
+  const scrollToBottom = () => {
     if (!chatListContainer.current) return;
     chatListContainer.current.scrollTo({ top: chatListContainer.current.scrollHeight, behavior: 'smooth' });
   };
@@ -76,12 +76,12 @@ const GameRoomChatContainer = () => {
 
   useSocketOn(SocketEvents.RECEIVE_CHAT, ({ name, text, status, color }: Chat) => {
     setChatList(updateChat({ name, text, status, color }));
-    scorllToBottom();
+    scrollToBottom();
   });
 
   useSocketOn(SocketEvents.RECEIVE_ANSWER, ({ name, text, status }: Chat) => {
     setChatList(updateChat({ name, text, status }));
-    scorllToBottom();
+    scrollToBottom();
   });
 
   return (

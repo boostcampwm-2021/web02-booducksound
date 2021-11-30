@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
+import { PLAYLIST_TITLE_MSG, PLAYLIST_DESCRIPTION_MSG, PLAYLIST_HASH_TAG_MSG } from '~/constants/index';
 
 interface Props {
   setPlaylist: Function;
@@ -82,7 +83,7 @@ const CreatePlaylistInputBox = ({
           value={playlistName}
           className="title"
           isSearch={false}
-          placeholder="플레이리스트 제목을 입력해주세요."
+          placeholder={PLAYLIST_TITLE_MSG}
         ></PlaylistInputText>
       </SectionBox>
       <SectionBox>
@@ -92,7 +93,7 @@ const CreatePlaylistInputBox = ({
           value={description}
           className="description"
           isSearch={false}
-          placeholder="플레이리스트 설명을 입력해주세요."
+          placeholder={PLAYLIST_DESCRIPTION_MSG}
         ></PlaylistInputText>
       </SectionBox>
       <SectionBox>
@@ -104,7 +105,7 @@ const CreatePlaylistInputBox = ({
           value={hashtag}
           className="hashag"
           isSearch={false}
-          placeholder="추가할 해시태그를 입력 후 Enter를 클릭하세요."
+          placeholder={PLAYLIST_HASH_TAG_MSG}
         ></PlaylistInputText>
       </SectionBox>
     </InputContainer>

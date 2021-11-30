@@ -55,7 +55,7 @@ const EnterPwdModal = ({ uuid, setModalOnOff, leftButtonText }: Props) => {
       <TextLabel>비밀번호</TextLabel>
       <ModalInputText
         className="roomTitle"
-        placeholder="비밀번호를 입력하세요."
+        placeholder={PASSWORD_EMPTY_MSG}
         isSearch={false}
         handleChange={handleSetCode as ChangeEventHandler}
         value={code}

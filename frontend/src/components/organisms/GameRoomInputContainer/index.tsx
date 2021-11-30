@@ -3,6 +3,7 @@ import { ChangeEventHandler, KeyboardEventHandler, useState } from 'react';
 import styled from '@emotion/styled';
 
 import InputText from '~/atoms/InputText';
+import { CHAT_EMPTY_MSG } from '~/constants/index';
 import useSocket from '~/hooks/useSocket';
 import { SocketEvents } from '~/types/SocketEvents';
 
@@ -48,7 +49,7 @@ const GameRoomInputContainer = ({ uuid, name, color }: Props) => {
         value={chat}
         className="chatText"
         isSearch={false}
-        placeholder="메시지를 입력하세요."
+        placeholder={CHAT_EMPTY_MSG}
         handleChange={handleChangeInputText}
         handleEnter={handlePressEnter}
       ></ChatInputText>

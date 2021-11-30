@@ -38,14 +38,14 @@ const CharacterList = ({
   roomNo: string | null;
 }) => {
   const socket = useSocket();
+  const newPlayers =
+    status !== 'waiting' ? Object.entries(players).sort((a, b) => b[1].score - a[1].score) : Object.entries(players);
+
   return (
     <Container>
       <CharactersContainer>
         {players &&
-          (status !== 'waiting'
-            ? Object.entries(players).sort((a, b) => b[1].score - a[1].score)
-            : Object.entries(players)
-          ).map((player, index) => (
+          newPlayers.map((player, index) => (
             <CharacterProfile
               id={player[0]}
               type={!!(socket && players[socket.id]?.status === 'king' && status === 'waiting')}

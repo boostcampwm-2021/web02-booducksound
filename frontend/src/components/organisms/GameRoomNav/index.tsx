@@ -97,7 +97,6 @@ const GameRoomNav = ({
   const { uuid } = useSelector((state: RootState) => state.room);
   const socket = useSocket();
   const player = socket && players?.[socket.id];
-  // const [preventMulti, setPreventMulti] = useState(false);
   const [volume, setVolume] = useState(INIT_VOLUME);
 
   const changeStatus = (player: Player) => () => {
@@ -108,8 +107,6 @@ const GameRoomNav = ({
   const startGame = () => socket?.emit(SocketEvents.START_GAME, uuid);
 
   const makeSkip = () => {
-    // if (preventMulti) return;
-    // setPreventMulti(true);
     socket?.emit(SocketEvents.SKIP, uuid, socket.id);
   };
 
@@ -132,13 +129,6 @@ const GameRoomNav = ({
     document.body.removeChild(textarea);
     toast.info(COPY_SUCC_MSG, TOAST_OPTION);
   };
-
-  // useEffect(() => {
-  //   if (!preventMulti) return;
-  //   setTimeout(() => {
-  //     setPreventMulti(false);
-  //   }, 1000);
-  // }, [preventMulti]);
 
   useEffect(() => {
     if (!music1 || !music2) return;

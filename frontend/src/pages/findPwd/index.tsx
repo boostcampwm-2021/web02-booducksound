@@ -9,7 +9,13 @@ import { requestChangePassword } from '~/api/account';
 import InputText from '~/atoms/InputText';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
-import { ID_EMPTY_MSG, PASSWORD_EMPTY_MSG, NICKNAME_EMPTY_MSG, TOAST_OPTION } from '~/constants/index';
+import {
+  ID_EMPTY_MSG,
+  PASSWORD_EMPTY_MSG,
+  NICKNAME_EMPTY_MSG,
+  TOAST_OPTION,
+  PASSWORD_RENEW_MSG,
+} from '~/constants/index';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import { RootState } from '~/reducers/index';
 import theme from '~/styles/theme';
@@ -93,14 +99,14 @@ const FindPwd: NextPage = () => {
             <FindPwdInputText
               className="id"
               isSearch={false}
-              placeholder="아이디를 입력하세요."
+              placeholder={ID_EMPTY_MSG}
               value={id}
               handleChange={({ target }) => setID((target as HTMLInputElement).value)}
             ></FindPwdInputText>
             <FindPwdInputText
               className="nick"
               isSearch={false}
-              placeholder="닉네임을 입력하세요."
+              placeholder={NICKNAME_EMPTY_MSG}
               value={nickname}
               handleChange={({ target }) => setNickname((target as HTMLInputElement).value)}
             ></FindPwdInputText>
@@ -108,7 +114,7 @@ const FindPwd: NextPage = () => {
               className="password"
               type="password"
               isSearch={false}
-              placeholder="새로운 비밀번호를 입력하세요."
+              placeholder={PASSWORD_RENEW_MSG}
               value={password}
               handleChange={({ target }) => setPassword((target as HTMLInputElement).value)}
             ></FindPwdInputText>

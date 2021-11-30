@@ -46,7 +46,7 @@ const ProfileSelector = ({ type, color, setColor }: Props) => {
 
   return (
     <ProfileContainer type={type} color={color} setColor={setColor}>
-      <Character width="100%" color={color}></Character>
+      <Character width="100%" color={color} />
       <ChangeBtn type={type} onClick={getRandomColor} color={color} setColor={setColor} />
     </ProfileContainer>
   );

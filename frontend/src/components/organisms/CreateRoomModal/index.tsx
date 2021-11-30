@@ -7,7 +7,12 @@ import { Socket } from 'socket.io-client';
 
 import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
-import { INIT_NEED_ANSWER_RATIO, INIT_TIME_PER_PROBLEM } from '~/constants/index';
+import {
+  INIT_NEED_ANSWER_RATIO,
+  INIT_TIME_PER_PROBLEM,
+  ROOM_TITLE_EMPTY_MSG,
+  PLAYLIST_SELECT_EMPTY_MSG,
+} from '~/constants/index';
 import useSocket from '~/hooks/useSocket';
 import InputWithButton from '~/molecules/InputWithButton';
 import Modal from '~/molecules/Modal';
@@ -121,7 +126,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
           <TextLabel>방 제목</TextLabel>
           <ModalInputText
             className="roomTitle"
-            placeholder="방 제목을 입력하세요"
+            placeholder={ROOM_TITLE_EMPTY_MSG}
             isSearch={false}
             value={form.title}
             handleChange={(e) => {
@@ -137,7 +142,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
           <SelectPlaylistLabel>플레이리스트</SelectPlaylistLabel>
           <InputWithButton
             inputClassName="selectPlaylist"
-            placeholder="플레이리스트를 선택해주세요"
+            placeholder={PLAYLIST_SELECT_EMPTY_MSG}
             isSearch={false}
             btnWidth="84px"
             btnFontSize="0.8em"

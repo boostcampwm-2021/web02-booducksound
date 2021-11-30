@@ -13,7 +13,6 @@ import Button from '~/atoms/Button';
 import InputText from '~/atoms/InputText';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
-import ProfileSelector from '~/atoms/ProfileSelector';
 import {
   ID_EMPTY_MSG,
   PASSWORD_EMPTY_MSG,
@@ -22,6 +21,7 @@ import {
   TOAST_OPTION,
   INIT_USER_COLOR_HEX,
 } from '~/constants/index';
+import ProfileSelector from '~/molecules/ProfileSelector';
 import theme from '~/styles/theme';
 import API from '~/utils/API';
 
@@ -133,7 +133,7 @@ const Join: NextPage = () => {
             <JoinInputText
               className="newId"
               isSearch={false}
-              placeholder="아이디를 입력하세요."
+              placeholder={ID_EMPTY_MSG}
               value={id}
               handleChange={({ target }) => setID((target as HTMLInputElement).value.trim())}
             ></JoinInputText>
@@ -150,14 +150,14 @@ const Join: NextPage = () => {
               className="newPassword"
               type="password"
               isSearch={false}
-              placeholder="비밀번호를 입력해 주세요."
+              placeholder={PASSWORD_EMPTY_MSG}
               value={password}
               handleChange={({ target }) => setPassword((target as HTMLInputElement).value.trim())}
             ></JoinInputText>
             <JoinInputText
               className="newNickname"
               isSearch={false}
-              placeholder="닉네임을 입력하세요."
+              placeholder={NICKNAME_EMPTY_MSG}
               value={nickname}
               handleChange={({ target }) => setNickname((target as HTMLInputElement).value.trim())}
             ></JoinInputText>

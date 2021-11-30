@@ -5,8 +5,9 @@ import { useDispatch } from 'react-redux';
 
 import { getUser } from '~/actions/user';
 import { changeColor } from '~/api/user';
-import ProfileSelector from '~/atoms/ProfileSelector';
+import { COLOR_CHANGE_TIME } from '~/constants/index';
 import useDebounce from '~/hooks/useDebounce';
+import ProfileSelector from '~/molecules/ProfileSelector';
 
 const Container = styled.div`
   display: flex;
@@ -14,7 +15,6 @@ const Container = styled.div`
 `;
 const UserInfo = styled.div`
   padding: 0 2rem;
-  /* margin-bottom: 2.4rem; */
   text-align: left;
 
   .user-name {
@@ -35,7 +35,7 @@ type Info = {
 const UserInfoBox = ({ info }: { info: Info }) => {
   const { id, nickname, userColor } = info;
   const [color, setColor] = useState(userColor);
-  const debouncedColor = useDebounce(color, 700);
+  const debouncedColor = useDebounce(color, COLOR_CHANGE_TIME);
   const dispatch = useDispatch();
 
   const handleClickChangeBtn = (value: string) => setColor(value);

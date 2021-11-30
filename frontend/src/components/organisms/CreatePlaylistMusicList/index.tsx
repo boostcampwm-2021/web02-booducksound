@@ -3,6 +3,7 @@ import { DragEventHandler, PropsWithChildren, useState } from 'react';
 import styled from '@emotion/styled';
 
 import Button from '~/atoms/Button';
+import { MUSIC_LIST_INSERT_MSG } from '~/constants/index';
 import CreatePlaylistMusicItem from '~/molecules/CreatePlaylistMusicItem';
 import theme from '~/styles/theme';
 import { Music } from '~/types/Music';
@@ -134,7 +135,7 @@ const CreatePlaylistMusicList = ({ musics, setModalOption, setPlaylist }: PropsW
             추가
           </Button>
         </MusicListTitleTop>
-        <MusicListTitleBottom>최소 3개, 최대 50개까지 추가가 가능합니다.</MusicListTitleBottom>
+        <MusicListTitleBottom>{MUSIC_LIST_INSERT_MSG}</MusicListTitleBottom>
       </MusicListTitleBox>
       <MusicListContentBox>
         {!musics.length ? (

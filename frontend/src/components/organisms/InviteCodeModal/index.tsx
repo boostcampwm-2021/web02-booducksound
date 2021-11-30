@@ -56,7 +56,7 @@ const InviteCodeModal = ({ setModalOnOff, leftButtonText, rooms }: Props) => {
       <TextLabel>초대코드</TextLabel>
       <ModalInputText
         className="roomTitle"
-        placeholder="초대 코드를 입력하세요."
+        placeholder={COPY_EMPTY_MSG}
         isSearch={false}
         handleChange={handleSetCode as ChangeEventHandler}
         value={code}

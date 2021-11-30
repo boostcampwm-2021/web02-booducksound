@@ -26,6 +26,7 @@
     "react-redux": "^7.2.6",
     "react-toastify": "^8.1.0",
     "redux": "^4.1.2",
+    "redux-mock-store": "^1.5.4",
     "redux-thunk": "^2.4.0",
     "socket.io-client": "^4.3.2"
   },
@@ -33,6 +34,7 @@
     "@emotion/babel-plugin": "^11.3.0",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
     "@types/react": "17.0.33",
     "@types/react-dom": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.2.0",

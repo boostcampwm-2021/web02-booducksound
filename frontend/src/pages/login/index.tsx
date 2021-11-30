@@ -98,7 +98,7 @@ const Login: NextPage = () => {
             <LoginInputText
               className="loginId"
               isSearch={false}
-              placeholder="아이디를 입력하세요."
+              placeholder={ID_EMPTY_MSG}
               value={id}
               handleChange={({ target }) => setID((target as HTMLInputElement).value.trim())}
             ></LoginInputText>
@@ -106,7 +106,7 @@ const Login: NextPage = () => {
               className="loginPassword"
               type="password"
               isSearch={false}
-              placeholder="비밀번호를 입력하세요."
+              placeholder={PASSWORD_EMPTY_MSG}
               value={password}
               handleChange={({ target }) => setPassword((target as HTMLInputElement).value.trim())}
             ></LoginInputText>

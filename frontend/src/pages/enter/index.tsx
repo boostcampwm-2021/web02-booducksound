@@ -12,8 +12,8 @@ import Button from '~/atoms/Button';
 import InputText from '~/atoms/InputText';
 import MenuInfoBox from '~/atoms/MenuInfoBox';
 import PageBox from '~/atoms/PageBox';
-import ProfileSelector from '~/atoms/ProfileSelector';
 import { INIT_USER_COLOR_HEX, NICKNAME_EMPTY_MSG, TOAST_OPTION } from '~/constants/index';
+import ProfileSelector from '~/molecules/ProfileSelector';
 import theme from '~/styles/theme';
 
 const EnterContainer = styled.div`
@@ -93,7 +93,7 @@ const Enter: NextPage = () => {
             <EnterInputText
               className="nickname"
               isSearch={false}
-              placeholder="닉네임을 입력하세요."
+              placeholder={NICKNAME_EMPTY_MSG}
               value={nickname}
               handleChange={({ target }) => setNickname((target as HTMLInputElement).value.trim())}
             ></EnterInputText>
