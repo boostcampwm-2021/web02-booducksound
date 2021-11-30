@@ -6,7 +6,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { BACKEND_URL, TIME_EXCESS_MSG, GAME_SKIP_MSG } from '~/constants/index';
+import { BACKEND_URI, TIME_EXCESS_MSG, GAME_SKIP_MSG } from '~/constants/index';
 import { useLeavePage } from '~/hooks/useLeavePage';
 import useSocket from '~/hooks/useSocket';
 import useSocketEmit from '~/hooks/useSocketEmit';
@@ -74,8 +74,8 @@ const Game: NextPage = () => {
     curMusic.current = music1.current;
     nextMusic.current = music2.current;
 
-    curMusic.current.src = `${BACKEND_URL}/game/${uuid}/${1}`;
-    nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/${2}`;
+    curMusic.current.src = `${BACKEND_URI}/game/${uuid}/${1}`;
+    nextMusic.current.src = `${BACKEND_URI}/game/${uuid}/${2}`;
     curMusic.current.load();
     nextMusic.current.load();
 
@@ -131,7 +131,7 @@ const Game: NextPage = () => {
       });
 
       if (!isExistNext) return;
-      nextMusic.current.src = `${BACKEND_URL}/game/${uuid}/${gameRoom.curRound + 2}`;
+      nextMusic.current.src = `${BACKEND_URI}/game/${uuid}/${gameRoom.curRound + 2}`;
       nextMusic.current.load();
     },
     gameRoom?.curRound,

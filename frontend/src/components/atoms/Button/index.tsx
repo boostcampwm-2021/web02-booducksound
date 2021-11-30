@@ -2,13 +2,13 @@ import { MouseEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
-interface ButtonContainerProps {
+type ButtonContainerProps = {
   width?: string;
   height?: string;
   background?: string;
   fontSize?: string;
   paddingH?: string;
-}
+};
 
 const ButtonContainer = styled.button<ButtonContainerProps>`
   width: ${({ width }) => width || '100%'};
@@ -38,7 +38,7 @@ const ButtonContainer = styled.button<ButtonContainerProps>`
   }
 `;
 
-interface Props {
+type Props = {
   width?: string;
   height?: string;
   background?: string;
@@ -46,7 +46,7 @@ interface Props {
   paddingH?: string;
   onClick?: MouseEventHandler;
   disabled?: boolean;
-}
+};
 
 const Button = ({
   width,

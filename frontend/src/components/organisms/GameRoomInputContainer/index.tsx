@@ -7,11 +7,11 @@ import { CHAT_EMPTY_MSG } from '~/constants/index';
 import useSocket from '~/hooks/useSocket';
 import { SocketEvents } from '~/types/SocketEvents';
 
-interface Props {
+type Props = {
   uuid: string | null;
   name: string;
   color: string;
-}
+};
 
 const InputContainer = styled.div`
   display: flex;

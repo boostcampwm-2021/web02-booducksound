@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
@@ -17,7 +17,7 @@ import {
   ID_EMPTY_MSG,
   PASSWORD_EMPTY_MSG,
   NICKNAME_EMPTY_MSG,
-  BACKEND_URL,
+  BACKEND_URI,
   TOAST_OPTION,
   INIT_USER_COLOR_HEX,
 } from '~/constants/index';
@@ -96,7 +96,7 @@ const Join: NextPage = () => {
   const dispatch = useDispatch();
 
   const idCheck = async () => {
-    const res = await API('GET')(`${BACKEND_URL}/check-id?id=${id}`)();
+    const res = await API('GET')(`${BACKEND_URI}/check-id?id=${id}`)();
     return res.json();
   };
 
@@ -135,7 +135,7 @@ const Join: NextPage = () => {
               isSearch={false}
               placeholder={ID_EMPTY_MSG}
               value={id}
-              handleChange={({ target }) => setID((target as HTMLInputElement).value.trim())}
+              handleChange={({ target }: ChangeEvent) => setID((target as HTMLInputElement).value.trim())}
             ></JoinInputText>
             <Button
               background={theme.colors.peach}
@@ -152,14 +152,14 @@ const Join: NextPage = () => {
               isSearch={false}
               placeholder={PASSWORD_EMPTY_MSG}
               value={password}
-              handleChange={({ target }) => setPassword((target as HTMLInputElement).value.trim())}
+              handleChange={({ target }: ChangeEvent) => setPassword((target as HTMLInputElement).value.trim())}
             ></JoinInputText>
             <JoinInputText
               className="newNickname"
               isSearch={false}
               placeholder={NICKNAME_EMPTY_MSG}
               value={nickname}
-              handleChange={({ target }) => setNickname((target as HTMLInputElement).value.trim())}
+              handleChange={({ target }: ChangeEvent) => setNickname((target as HTMLInputElement).value.trim())}
             ></JoinInputText>
             <Link href="/join">
               <a>

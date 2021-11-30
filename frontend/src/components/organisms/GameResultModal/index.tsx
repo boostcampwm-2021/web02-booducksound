@@ -8,11 +8,11 @@ import Modal from '~/molecules/Modal';
 import ResultCharacter from '~/molecules/ResultCharacter';
 import { GameRoom } from '~/types/GameRoom';
 
-interface Props {
+type Props = {
   gameRoom: GameRoom;
   userId: string;
   setModalOnOff: Dispatch<SetStateAction<boolean>>;
-}
+};
 
 const Container = styled.div`
   position: relative;

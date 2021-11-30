@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 
 import theme from '~/styles/theme';
 
-interface Props {
+type Props = {
   status: 'king' | 'ready' | 'prepare' | 'skip';
-}
+};
 
 const chipColor = {
   king: theme.colors.orange,

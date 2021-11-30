@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
@@ -95,7 +95,7 @@ const Enter: NextPage = () => {
               isSearch={false}
               placeholder={NICKNAME_EMPTY_MSG}
               value={nickname}
-              handleChange={({ target }) => setNickname((target as HTMLInputElement).value.trim())}
+              handleChange={({ target }: ChangeEvent) => setNickname((target as HTMLInputElement).value.trim())}
             ></EnterInputText>
             <a>
               <Button width="480px" background={theme.colors.sky} fontSize="30px" paddingH="24px" onClick={handleEnter}>

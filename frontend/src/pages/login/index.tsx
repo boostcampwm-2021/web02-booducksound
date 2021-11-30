@@ -1,5 +1,4 @@
-/* eslint-disable @next/next/link-passhref */
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
@@ -100,7 +99,7 @@ const Login: NextPage = () => {
               isSearch={false}
               placeholder={ID_EMPTY_MSG}
               value={id}
-              handleChange={({ target }) => setID((target as HTMLInputElement).value.trim())}
+              handleChange={({ target }: ChangeEvent) => setID((target as HTMLInputElement).value.trim())}
             ></LoginInputText>
             <LoginInputText
               className="loginPassword"
@@ -108,7 +107,7 @@ const Login: NextPage = () => {
               isSearch={false}
               placeholder={PASSWORD_EMPTY_MSG}
               value={password}
-              handleChange={({ target }) => setPassword((target as HTMLInputElement).value.trim())}
+              handleChange={({ target }: ChangeEvent) => setPassword((target as HTMLInputElement).value.trim())}
             ></LoginInputText>
             <Button width="560px" background={theme.colors.sky} fontSize="30px" paddingH="24px" onClick={handleLogin}>
               로그인

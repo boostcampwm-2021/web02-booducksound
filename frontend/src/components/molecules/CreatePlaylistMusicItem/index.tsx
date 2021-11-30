@@ -5,20 +5,20 @@ import styled from '@emotion/styled';
 import Button from '~/atoms/Button';
 import theme from '~/styles/theme';
 
-interface DragHandlers {
+type DragHandlers = {
   handleDragOver: DragEventHandler;
   handleDragStart: DragEventHandler;
   handleDrop: DragEventHandler;
   handleDragEnd: DragEventHandler;
-}
+};
 
-interface Props {
+type Props = {
   idx: number;
   title: string;
   deleteItem: Function;
   modifyItem: Function;
   dragHandlers: DragHandlers;
-}
+};
 
 const ItemContainer = styled.div`
   display: flex;

@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 
-interface Props {
+type Props = {
   num: number;
-}
+};
 
 const BoxTitle = styled.h2<Props>`
   text-align: left;

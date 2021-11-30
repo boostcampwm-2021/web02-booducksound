@@ -2,12 +2,12 @@ import { ChangeEventHandler } from 'react';
 
 import styled from '@emotion/styled';
 
-interface Props {
+type Props = {
   options: string[] | number[];
   values: string[] | number[];
   defaultValue?: string | number;
   onChange: ChangeEventHandler;
-}
+};
 
 const Select = styled.select`
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);

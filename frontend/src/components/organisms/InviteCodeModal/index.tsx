@@ -11,11 +11,11 @@ import { COPY_EMPTY_MSG, COPY_ERR_MSG, TOAST_OPTION } from '~/constants/index';
 import Modal from '~/molecules/Modal';
 import { RoomActions } from '~/types/Actions';
 
-interface Props {
+type Props = {
   setModalOnOff: Dispatch<SetStateAction<boolean>>;
   leftButtonText?: string;
   rooms: Array<String>;
-}
+};
 
 const ModalInputText = styled(InputText)`
   font-size: 1rem;

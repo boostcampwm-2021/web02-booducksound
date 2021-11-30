@@ -13,11 +13,11 @@ import Modal from '~/molecules/Modal';
 import { RoomActions } from '~/types/Actions';
 import { SocketEvents } from '~/types/SocketEvents';
 
-interface Props {
+type Props = {
   setModalOnOff: Dispatch<SetStateAction<string>>;
   leftButtonText?: string;
   uuid: string;
-}
+};
 
 const ModalInputText = styled(InputText)`
   font-size: 1rem;

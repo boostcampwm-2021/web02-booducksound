@@ -75,16 +75,16 @@ const SearchList = styled.ul`
   height: 100%;
 `;
 
-interface SearchedListProps {
+type SearchedListProps = {
   title: string;
   url: string;
   thumbnails: string;
-}
+};
 
-interface Props {
+type Props = {
   setModalOnOff: Dispatch<SetStateAction<boolean>>;
   setMusic: Dispatch<SetStateAction<Music>>;
-}
+};
 
 const SelectPlaylistModal = ({ setModalOnOff, setMusic }: Props) => {
   const [musicList, setMusicList] = useState<SearchedListProps[]>();

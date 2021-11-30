@@ -2,11 +2,11 @@ import styled from '@emotion/styled';
 
 import Character from '~/atoms/Character';
 
-interface Props {
+type Props = {
   type?: string;
   color: string;
   setColor: any;
-}
+};
 
 const getRandomHex = () => {
   return Math.floor(Math.random() * 255)

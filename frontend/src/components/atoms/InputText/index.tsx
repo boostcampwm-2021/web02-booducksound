@@ -2,11 +2,11 @@ import { KeyboardEventHandler } from 'react';
 
 import styled from '@emotion/styled';
 
-import InputTextProps from '~/types/InputTextProps';
+import { InputTextProps } from '~/types/InputTextProps';
 
-interface ContainerProps {
+type ContainerProps = {
   isSearch: boolean;
-}
+};
 
 const Container = styled.input<ContainerProps>`
   border: 2px solid black;

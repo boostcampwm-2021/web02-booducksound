@@ -1,4 +1,4 @@
-import { KeyboardEventHandler, PropsWithChildren } from 'react';
+import { ChangeEvent, KeyboardEventHandler, PropsWithChildren } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -6,14 +6,14 @@ import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
 import { PLAYLIST_TITLE_MSG, PLAYLIST_DESCRIPTION_MSG, PLAYLIST_HASH_TAG_MSG } from '~/constants/index';
 
-interface Props {
+type Props = {
   setPlaylist: Function;
   playlistName: string;
   description: string;
   hashtag: string;
   handleAddChipKeyUp: KeyboardEventHandler;
   handleAddChipKeyDown: KeyboardEventHandler;
-}
+};
 
 const InputContainer = styled.div`
   display: flex;
@@ -79,7 +79,9 @@ const CreatePlaylistInputBox = ({
       <SectionBox>
         <TextLabel>플레이리스트 제목</TextLabel>
         <PlaylistInputText
-          handleChange={(e) => setPlaylist({ playlistName: (e.currentTarget as HTMLTextAreaElement).value })}
+          handleChange={(e: ChangeEvent) =>
+            setPlaylist({ playlistName: (e.currentTarget as HTMLTextAreaElement).value })
+          }
           value={playlistName}
           className="title"
           isSearch={false}
@@ -89,7 +91,9 @@ const CreatePlaylistInputBox = ({
       <SectionBox>
         <TextLabel>플레이리스트 설명</TextLabel>
         <PlaylistInputText
-          handleChange={(e) => setPlaylist({ description: (e.currentTarget as HTMLTextAreaElement).value })}
+          handleChange={(e: ChangeEvent) =>
+            setPlaylist({ description: (e.currentTarget as HTMLTextAreaElement).value })
+          }
           value={description}
           className="description"
           isSearch={false}
@@ -101,7 +105,7 @@ const CreatePlaylistInputBox = ({
         <PlaylistInputText
           handleEnter={handleAddChipKeyUp}
           handleKeyDown={handleAddChipKeyDown}
-          handleChange={(e) => setPlaylist({ hashtag: (e.currentTarget as HTMLTextAreaElement).value })}
+          handleChange={(e: ChangeEvent) => setPlaylist({ hashtag: (e.currentTarget as HTMLTextAreaElement).value })}
           value={hashtag}
           className="hashag"
           isSearch={false}

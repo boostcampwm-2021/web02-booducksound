@@ -20,15 +20,15 @@ import theme from '~/styles/theme';
 import { Music } from '~/types/Music';
 import { showAlert } from '~/utils/showAlert';
 
-interface Props {
+type Props = {
   setMusics: Function;
   setModalOption: Function;
   musicInfo?: Music | null;
-}
+};
 
-interface InputType {
+type InputType = {
   inputType: 'info' | 'hint' | 'url' | 'answers';
-}
+};
 
 const MusicModalTop = styled.div`
   display: flex;
@@ -82,10 +82,10 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
   const handleRegistButton = () => {
     const { info, hint, url, answers } = music;
 
-    if (!showAlert(!(info && hint && url && answers.length !== 0), MUSIC_CONFIRM_MSG)) return;
+    const checkInfo = (info && hint && url && answers.length !== 0) as boolean;
+    if (!showAlert(!checkInfo, MUSIC_CONFIRM_MSG)) return;
     if (!showAlert(!checkValidUrl(url), URL_CONFIRM_MSG)) return;
-
-    setMusics({ info, hint, url, answers });
+    setMusics(music);
     setModalOption({ type: 'close', target: null });
   };
 
@@ -100,7 +100,7 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
   };
 
   const checkValidUrl = (url: string) => {
-    return RegExp(YOUTUBE_REG_EXP).test(url);
+    return new RegExp(YOUTUBE_REG_EXP).test(url);
   };
 
   const handleChange =
@@ -150,28 +150,28 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
       </MusicModalTop>
       <MusicModalInputBox>
         <MusicModalInputText
-          handleChange={(e) => handleChange({ inputType: 'info' })(e)}
+          handleChange={(e: ChangeEvent) => handleChange({ inputType: 'info' })(e)}
           className="info"
           isSearch={false}
           placeholder={MUSIC_INSERT_EXAMPLE_MSG}
           value={music.info}
         ></MusicModalInputText>
         <MusicModalInputText
-          handleChange={(e) => handleChange({ inputType: 'hint' })(e)}
+          handleChange={(e: ChangeEvent) => handleChange({ inputType: 'hint' })(e)}
           className="hint"
           isSearch={false}
           placeholder={SHOW_HINT_MSG}
           value={music.hint}
         ></MusicModalInputText>
         <MusicModalInputText
-          handleChange={(e) => handleChange({ inputType: 'url' })(e)}
+          handleChange={(e: ChangeEvent) => handleChange({ inputType: 'url' })(e)}
           className="url"
           isSearch={false}
           placeholder={URL_EMPTY_MSG}
           value={music.url}
         ></MusicModalInputText>
         <MusicModalInputText
-          handleChange={(e) => setAnswer((e.currentTarget as HTMLTextAreaElement).value)}
+          handleChange={(e: ChangeEvent) => setAnswer((e.currentTarget as HTMLTextAreaElement).value)}
           handleEnter={pressEnterHandler}
           className="answer"
           isSearch={false}

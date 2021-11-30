@@ -6,10 +6,10 @@ import Portal from '~/atoms/Portal';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 import theme from '~/styles/theme';
 
-interface ModalContainerProps {
+type ModalContainerProps = {
   height?: string;
   maxWidth?: string;
-}
+};
 
 const ModalBackground = styled.div`
   position: fixed;

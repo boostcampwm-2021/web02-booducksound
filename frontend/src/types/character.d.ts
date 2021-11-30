@@ -1,4 +1,4 @@
-export interface character {
+export type character = {
   color: string;
   width: string;
-}
+};

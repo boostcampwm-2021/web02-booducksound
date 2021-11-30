@@ -74,14 +74,14 @@ const Container = styled.div`
 `;
 const TARGET_INIT = 0;
 
-interface ModalOption {
+type ModalOption = {
   type: 'close' | 'create' | 'modify';
   target: number;
-}
-interface Props {
+};
+type Props = {
   type: 'create' | 'update';
   content: PlaylistInput;
-}
+};
 
 export const getServerSideProps = async ({ query }: NextPageContext) => {
   const { playlistId } = query;

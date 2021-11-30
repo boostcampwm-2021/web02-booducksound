@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
@@ -101,14 +101,14 @@ const FindPwd: NextPage = () => {
               isSearch={false}
               placeholder={ID_EMPTY_MSG}
               value={id}
-              handleChange={({ target }) => setID((target as HTMLInputElement).value)}
+              handleChange={({ target }: ChangeEvent) => setID((target as HTMLInputElement).value)}
             ></FindPwdInputText>
             <FindPwdInputText
               className="nick"
               isSearch={false}
               placeholder={NICKNAME_EMPTY_MSG}
               value={nickname}
-              handleChange={({ target }) => setNickname((target as HTMLInputElement).value)}
+              handleChange={({ target }: ChangeEvent) => setNickname((target as HTMLInputElement).value)}
             ></FindPwdInputText>
             <FindPwdInputText
               className="password"
@@ -116,7 +116,7 @@ const FindPwd: NextPage = () => {
               isSearch={false}
               placeholder={PASSWORD_RENEW_MSG}
               value={password}
-              handleChange={({ target }) => setPassword((target as HTMLInputElement).value)}
+              handleChange={({ target }: ChangeEvent) => setPassword((target as HTMLInputElement).value)}
             ></FindPwdInputText>
             <ResponsiveButton
               width="560px"

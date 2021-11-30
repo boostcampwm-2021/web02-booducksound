@@ -4,10 +4,10 @@ import styled from '@emotion/styled';
 
 import SelectBox from '~/atoms/SelectBox';
 
-interface InputLabelContainerProps {
+type InputLabelContainerProps = {
   titleSize: string;
   margin: string;
-}
+};
 
 interface Props extends InputLabelContainerProps {
   title: string;

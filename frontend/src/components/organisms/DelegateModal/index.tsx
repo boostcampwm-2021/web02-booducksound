@@ -10,11 +10,11 @@ const AlertMsg = styled.p`
   margin: 1.5rem 0;
 `;
 
-interface Props {
+type Props = {
   nickname: string;
   leftButtonHandler: MouseEventHandler;
   rightButtonHandler: MouseEventHandler;
-}
+};
 
 const DelegateModal = ({ nickname, leftButtonHandler, rightButtonHandler }: Props) => {
   return (
