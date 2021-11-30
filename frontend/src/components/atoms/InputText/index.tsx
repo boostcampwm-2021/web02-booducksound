@@ -26,6 +26,7 @@ const InputText = ({ type = 'text', handleKeyDown, handleChange, handleEnter, ..
 
   return (
     <Container
+      maxLength={100}
       type={type}
       onKeyDown={handleKeyDown}
       onKeyUp={handlePressEnter}
