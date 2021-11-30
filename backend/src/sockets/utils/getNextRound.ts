@@ -1,4 +1,5 @@
 import gameEnd from './gameEnd';
+import getGameRoom from './getGameRoom';
 import resetPlayer from './resetPlayer';
 
 import io from '~/sockets/io';
@@ -13,6 +14,7 @@ const getNextRound = (
   try {
     const { curRound, maxRound, musics } = serverRooms[uuid];
     serverRooms[uuid].status = 'resting';
+    io.to(uuid).emit(SocketEvents.SET_GAME_ROOM, getGameRoom(uuid));
 
     if (curRound === maxRound) {
       serverRooms[uuid].status = 'waiting';

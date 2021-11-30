@@ -205,7 +205,7 @@ const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime:
               </GameSummary>
             )}
             {gameRoom.status !== 'waiting' && <GamePlaySummary gameRoom={gameRoom} endTime={endTime} />}
-            {gameRoom.status !== 'waiting' && hint && <Hint>{hint}</Hint>}
+            {gameRoom.status === 'playing' && hint && <Hint>{hint}</Hint>}
             {gameRoom.status !== 'waiting' && !hint && (
               <GameSummary>
                 <Bold>음악</Bold>을 듣고 <Bold>답</Bold>을 입력하세요.
