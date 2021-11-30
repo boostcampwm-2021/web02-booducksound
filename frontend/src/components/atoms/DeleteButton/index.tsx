@@ -12,9 +12,9 @@ const Container = styled.button`
   cursor: pointer;
 `;
 
-interface Props {
+type Props = {
   clickHandler: MouseEventHandler;
-}
+};
 
 const DeleteButton = ({ clickHandler }: Props) => {
   return <Container onClick={clickHandler}></Container>;

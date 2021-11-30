@@ -17,9 +17,9 @@ import { SocketEvents } from '~/types/SocketEvents';
 import GameRoomChatContainer from '../GameRoomChatContainer';
 import GameRoomInputContainer from '../GameRoomInputContainer';
 
-interface Props {
+type Props = {
   type: 'leftTitle' | 'rightTitle' | 'leftCharacter' | 'rightChat';
-}
+};
 
 const Wrapper = styled.div`
   width: 100%;

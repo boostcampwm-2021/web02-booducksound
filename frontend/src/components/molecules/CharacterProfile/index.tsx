@@ -10,7 +10,7 @@ import DelegateModal from '~/organisms/DelegateModal';
 import { GameRoom } from '~/types/GameRoom';
 import { SocketEvents } from '~/types/SocketEvents';
 
-interface Props {
+type Props = {
   id: string;
   mode: GameRoom['status'] | undefined;
   color: string;
@@ -21,7 +21,7 @@ interface Props {
   score: number;
   type: boolean;
   roomNo: string | null;
-}
+};
 
 const ProfileContainer = styled.div`
   flex: 0 0 60px;

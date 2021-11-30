@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 
 import styled from '@emotion/styled';
 import { NextPage } from 'next';
@@ -95,14 +95,14 @@ const FindPwd: NextPage = () => {
               isSearch={false}
               placeholder="아이디를 입력하세요."
               value={id}
-              handleChange={({ target }) => setID((target as HTMLInputElement).value)}
+              handleChange={({ target }: ChangeEvent) => setID((target as HTMLInputElement).value)}
             ></FindPwdInputText>
             <FindPwdInputText
               className="nick"
               isSearch={false}
               placeholder="닉네임을 입력하세요."
               value={nickname}
-              handleChange={({ target }) => setNickname((target as HTMLInputElement).value)}
+              handleChange={({ target }: ChangeEvent) => setNickname((target as HTMLInputElement).value)}
             ></FindPwdInputText>
             <FindPwdInputText
               className="password"
@@ -110,7 +110,7 @@ const FindPwd: NextPage = () => {
               isSearch={false}
               placeholder="새로운 비밀번호를 입력하세요."
               value={password}
-              handleChange={({ target }) => setPassword((target as HTMLInputElement).value)}
+              handleChange={({ target }: ChangeEvent) => setPassword((target as HTMLInputElement).value)}
             ></FindPwdInputText>
             <ResponsiveButton
               width="560px"

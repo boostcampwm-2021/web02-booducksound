@@ -9,11 +9,11 @@ import { Music } from '~/types/Music';
 import { PlaylistInput } from '~/types/PlaylistInput';
 import { swap } from '~/utils/swap';
 
-interface Props {
+type Props = {
   musics: Music[];
   setModalOption: Function;
   setPlaylist: Function;
-}
+};
 
 const MusicListContainer = styled.div``;
 

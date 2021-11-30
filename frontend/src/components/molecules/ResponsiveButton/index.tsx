@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 
 import Button from '~/atoms/Button';
 
-interface ButtonWrapperProps {
+type ButtonWrapperProps = {
   width: string;
   fontSize: string;
   height?: string;
@@ -18,7 +18,7 @@ interface ButtonWrapperProps {
   lgHeight?: string;
   lgFontSize?: string;
   onClick?: MouseEventHandler;
-}
+};
 
 interface Props extends ButtonWrapperProps {
   background: string;

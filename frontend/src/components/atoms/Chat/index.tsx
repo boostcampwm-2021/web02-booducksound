@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 
-interface Props {
+type Props = {
   name: string;
   text: string;
   status: 'alert' | 'message' | 'answer';
   color?: string;
-}
+};
 
 const Message = styled.p`
   width: 100%;

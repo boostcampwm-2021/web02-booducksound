@@ -1,4 +1,4 @@
-import { useState, MouseEventHandler, SetStateAction, Dispatch } from 'react';
+import { useState, MouseEventHandler, SetStateAction, Dispatch, ChangeEvent } from 'react';
 
 import styled from '@emotion/styled';
 import Router from 'next/router';
@@ -61,19 +61,19 @@ const ModalInputText = styled(InputText)`
   padding: 10px 10px 10px 30px;
 `;
 
-interface Props {
+type Props = {
   setModalOnOff: Dispatch<SetStateAction<boolean>>;
   leftButtonText: string;
-}
+};
 
-interface Form {
+type Form = {
   title: string;
   playlistName: string;
   playlistId: string;
   password: string;
   needAnswerRatio: number;
   timePerProblem: number;
-}
+};
 
 const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
   const socket = useSocket();
@@ -124,7 +124,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
             placeholder="방 제목을 입력하세요"
             isSearch={false}
             value={form.title}
-            handleChange={(e) => {
+            handleChange={(e: ChangeEvent) => {
               setForm((prev) => {
                 const form = { ...prev, title: (e.target as HTMLInputElement).value };
                 validateForm(form);
@@ -160,7 +160,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
             placeholder=""
             isSearch={false}
             value={form.password}
-            handleChange={(e) => {
+            handleChange={(e: ChangeEvent) => {
               setForm((form) => ({ ...form, password: (e.target as HTMLInputElement).value }));
             }}
           />
@@ -173,7 +173,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
             options={['1명만', '25% 이상', '50% 이상', '75% 이상', '모두']}
             values={[0.01, 0.25, 0.5, 0.75, 1]}
             defaultValue={0.5}
-            onChange={(e) => {
+            onChange={(e: ChangeEvent) => {
               const needAnswerRatio = Number((e.target as HTMLSelectElement).value);
               setForm((form) => ({ ...form, needAnswerRatio }));
             }}
@@ -185,7 +185,7 @@ const CreateRoomModal = ({ setModalOnOff, leftButtonText }: Props) => {
             options={['10초', '20초', '30초', '40초', '50초', '60초', '70초', '80초', '90초']}
             values={[10, 20, 30, 40, 50, 60, 70, 80, 90]}
             defaultValue={60}
-            onChange={(e) => {
+            onChange={(e: ChangeEvent) => {
               const timePerProblem = Number((e.target as HTMLSelectElement).value);
               setForm((form) => ({ ...form, timePerProblem }));
             }}

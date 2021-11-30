@@ -1,15 +1,15 @@
 import Playlist from '~/models/Playlist';
 
-interface MusicProps {
+type MusicProps = {
   order: Number;
   startPoint: Number;
   destPoint: Number;
   musicURL: String;
   hint: String;
   answers: [];
-}
+};
 
-interface PlaylistProps {
+type PlaylistProps = {
   playlistName: String;
   likeCount: Number;
   playCount: Number;
@@ -17,7 +17,7 @@ interface PlaylistProps {
   hashtags: [];
   userId: String;
   createdAt: Date;
-}
+};
 
 export const getById = async (_id: string) => {
   return Playlist.findById(_id);

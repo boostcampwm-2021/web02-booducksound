@@ -3,34 +3,34 @@ import jwt from 'jsonwebtoken';
 import User from '~/models/User';
 const SECRET_KEY: string = process.env.JWT_SECRET || '';
 
-export interface LoginInfo {
+export type LoginInfo = {
   id: string;
   password: string;
-}
+};
 
 export interface UserType extends LoginInfo {
   nickname: string;
   color?: string;
 }
 
-export interface LoginResponse {
+export type LoginResponse = {
   isLogin: boolean;
   message: string;
   token: string | undefined;
-}
+};
 
-export interface GuestLoginInfo {
+export type GuestLoginInfo = {
   nickname: string;
   color: string;
-}
+};
 
-export interface UserToken {
+export type UserToken = {
   id?: string;
   nickname?: string;
   color?: string;
   iat?: number;
   exp?: number;
-}
+};
 
 export const idCheck = async (id: string) => {
   const result = await User.find({ id });

@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 
-interface Props {
+type Props = {
   content: string;
-}
+};
 
 const MenuInfo = styled.h4`
   font-weight: 600;

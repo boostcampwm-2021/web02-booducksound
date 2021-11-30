@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import InputText from '~/atoms/InputText';
 import ResponsiveButton from '~/molecules/ResponsiveButton';
 
-interface Props {
+type Props = {
   inputClassName: string;
   disabled: boolean;
   isSearch: boolean;
@@ -23,7 +23,7 @@ interface Props {
   btnMdWidth?: string;
   btnSmWidth?: string;
   onClick?: MouseEventHandler;
-}
+};
 
 const Container = styled.div`
   position: relative;

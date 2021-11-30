@@ -4,9 +4,9 @@ import styled from '@emotion/styled';
 
 import DeleteButton from '~/atoms/DeleteButton';
 
-interface Props {
+type Props = {
   deleteHandler: MouseEventHandler;
-}
+};
 
 const ChipContainer = styled.div`
   display: flex;

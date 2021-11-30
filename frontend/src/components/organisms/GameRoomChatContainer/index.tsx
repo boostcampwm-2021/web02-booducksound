@@ -10,14 +10,14 @@ import useSocketOn from '~/hooks/useSocketOn';
 import { Chat } from '~/types/Chat';
 import { SocketEvents } from '~/types/SocketEvents';
 
-interface Props {
+type Props = {
   type: 'leftTitle' | 'rightTitle' | 'leftCharacter' | 'rightChat';
-}
+};
 
-interface OptimizeChat {
+type OptimizeChat = {
   allChat: Chat[];
   subChat: Chat[];
-}
+};
 
 const Container = styled(GlassContainer)<Props>`
   grid-area: ${({ type }) => type};

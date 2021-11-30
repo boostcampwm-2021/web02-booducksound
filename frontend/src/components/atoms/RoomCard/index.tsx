@@ -1,14 +1,15 @@
 import styled from '@emotion/styled';
 
 import { LobbyRoom } from '~/types/LobbyRoom';
-interface ContainerProps {
-  status: 'playing' | 'waiting' | 'resting';
-}
 
-interface Props {
+type ContainerProps = {
+  status: 'playing' | 'waiting' | 'resting';
+};
+
+type Props = {
   room: LobbyRoom;
   handleClickRoomCard: () => void;
-}
+};
 
 const Container = styled.div<ContainerProps>`
   display: flex;

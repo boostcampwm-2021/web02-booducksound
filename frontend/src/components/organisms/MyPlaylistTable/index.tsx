@@ -33,11 +33,11 @@ const TableBtnBox = styled.div`
   }
 `;
 
-interface Props {
+type Props = {
   myPlaylist: Playlist[] | any;
   isMine: boolean;
   openRemoveModal: (id: string) => () => void;
-}
+};
 
 const MyPlaylistTable = ({ myPlaylist, isMine, openRemoveModal }: Props) => {
   const dispatch = useDispatch();

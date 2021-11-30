@@ -12,15 +12,15 @@ import theme from '~/styles/theme';
 import { Music } from '~/types/Music';
 import { showAlert } from '~/utils/showAlert';
 
-interface Props {
+type Props = {
   setMusics: Function;
   setModalOption: Function;
   musicInfo?: Music | null;
-}
+};
 
-interface InputType {
+type InputType = {
   inputType: 'info' | 'hint' | 'url' | 'answers';
-}
+};
 
 const MusicModalTop = styled.div`
   display: flex;
@@ -141,28 +141,28 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
       </MusicModalTop>
       <MusicModalInputBox>
         <MusicModalInputText
-          handleChange={(e) => handleChange({ inputType: 'info' })(e)}
+          handleChange={(e: ChangeEvent) => handleChange({ inputType: 'info' })(e)}
           className="info"
           isSearch={false}
           placeholder="노래 정보를 입력해 주세요. ex) 아이유 - 팔레트"
           value={music.info}
         ></MusicModalInputText>
         <MusicModalInputText
-          handleChange={(e) => handleChange({ inputType: 'hint' })(e)}
+          handleChange={(e: ChangeEvent) => handleChange({ inputType: 'hint' })(e)}
           className="hint"
           isSearch={false}
           placeholder="힌트를 입력해 주세요."
           value={music.hint}
         ></MusicModalInputText>
         <MusicModalInputText
-          handleChange={(e) => handleChange({ inputType: 'url' })(e)}
+          handleChange={(e: ChangeEvent) => handleChange({ inputType: 'url' })(e)}
           className="url"
           isSearch={false}
           placeholder="유튜브 URL을 입력해 주세요."
           value={music.url}
         ></MusicModalInputText>
         <MusicModalInputText
-          handleChange={(e) => setAnswer((e.currentTarget as HTMLTextAreaElement).value)}
+          handleChange={(e: ChangeEvent) => setAnswer((e.currentTarget as HTMLTextAreaElement).value)}
           handleEnter={pressEnterHandler}
           className="answer"
           isSearch={false}

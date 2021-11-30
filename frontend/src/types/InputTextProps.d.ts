@@ -1,6 +1,6 @@
 import { ChangeEventHandler, KeyboardEventHandler } from 'react';
 
-export default interface InputTextProps {
+export type InputTextProps = {
   type?: 'text' | 'password';
   name?: string;
   disabled?: boolean;
@@ -11,4 +11,4 @@ export default interface InputTextProps {
   handleEnter?: Function;
   handleKeyDown?: KeyboardEventHandler;
   handleChange?: ChangeEventHandler;
-}
+};

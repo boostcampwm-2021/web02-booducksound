@@ -1,4 +1,4 @@
-import { useState, MouseEventHandler, SetStateAction, Dispatch } from 'react';
+import { useState, MouseEventHandler, SetStateAction, Dispatch, ChangeEvent } from 'react';
 
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
@@ -62,13 +62,13 @@ const HalfContainer = styled.div`
   column-gap: 12px;
 `;
 
-interface Props {
+type Props = {
   setModalOnOff: Dispatch<SetStateAction<boolean>>;
   leftButtonText: string;
   gameRoom: GameRoom;
-}
+};
 
-interface Form {
+type Form = {
   [key: string]: string | number;
   title: string;
   playlistName: string;
@@ -76,12 +76,12 @@ interface Form {
   password: string;
   needAnswerRatio: number;
   timePerProblem: number;
-}
+};
 
-interface SelectOption {
+type SelectOption = {
   needAnswerRatio?: number;
   timePerProblem?: number;
-}
+};
 
 const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
   const socket = useSocket();
@@ -151,7 +151,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             placeholder={ROOM_TITLE_EMPTY_MSG}
             isSearch={false}
             value={form.title}
-            handleChange={(e) => {
+            handleChange={(e: ChangeEvent) => {
               setForm((prev) => {
                 const form = { ...prev, title: (e.target as HTMLInputElement).value };
                 validateForm(form);
@@ -187,7 +187,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             placeholder={gameRoom.hasPassword ? '********' : ''}
             isSearch={false}
             value={password.inputPassword}
-            handleChange={(e) => {
+            handleChange={(e: ChangeEvent) => {
               const password = (e.target as HTMLInputElement).value;
               setPassword((prev) => ({ ...prev, inputPassword: password }));
               validateForm(form);
@@ -202,7 +202,9 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             options={['1명만', '25% 이상', '50% 이상', '75% 이상', '모두']}
             values={[0.01, 0.25, 0.5, 0.75, 1]}
             defaultValue={0.5}
-            onChange={(e) => handleSelect({ needAnswerRatio: Number((e.target as HTMLSelectElement).value) })}
+            onChange={(e: ChangeEvent) =>
+              handleSelect({ needAnswerRatio: Number((e.target as HTMLSelectElement).value) })
+            }
           />
           <SelectSection
             title="문항 당 시간"
@@ -211,7 +213,9 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             options={['10초', '20초', '30초', '40초', '50초', '60초', '70초', '80초', '90초']}
             values={[10, 20, 30, 40, 50, 60, 70, 80, 90]}
             defaultValue={60}
-            onChange={(e) => handleSelect({ timePerProblem: Number((e.target as HTMLSelectElement).value) })}
+            onChange={(e: ChangeEvent) =>
+              handleSelect({ timePerProblem: Number((e.target as HTMLSelectElement).value) })
+            }
           />
         </HalfContainer>
       </Container>
