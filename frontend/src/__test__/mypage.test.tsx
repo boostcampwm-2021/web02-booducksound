@@ -1,12 +1,11 @@
 import { ThemeProvider } from '@emotion/react';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useRouter } from 'next/router';
 
 import { UserState } from '~/reducers/user';
 import theme from '~/styles/theme';
 
-import MyPage from './index';
+import MyPage from '../pages/mypage/index';
 
 export const useSelector = jest.fn();
 export const useDispatch = jest.fn();

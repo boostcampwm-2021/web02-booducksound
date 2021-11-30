@@ -5,7 +5,7 @@ import { UserState } from '~/reducers/user';
 import theme from '~/styles/theme';
 import { PlaylistInput } from '~/types/PlaylistInput';
 
-import PlaylistCreate from './[playlistId]';
+import PlaylistCreate from '../pages/playlist/[playlistId]';
 
 export const useSelector = jest.fn();
 export const useDispatch = jest.fn();
