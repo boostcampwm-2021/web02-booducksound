@@ -72,11 +72,10 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
   const [answer, setAnswer] = useState<string>('');
   const handleRegistButton = () => {
     const { info, hint, url, answers } = music;
-
-    if (!showAlert(!(info && hint && url && answers.length !== 0), '노래 정보를 모두 입력해야합니다.')) return;
+    const checkInfo = (info && hint && url && answers.length !== 0) as boolean;
+    if (!showAlert(!checkInfo, '노래 정보를 모두 입력해야합니다.')) return;
     if (!showAlert(!checkValidUrl(url), '유튜브 URL을 확인해주세요.')) return;
-    const newState = { info, hint, url, answers };
-    setMusics(newState);
+    setMusics(music);
     setModalOption({ type: 'close', target: null });
   };
 
@@ -91,7 +90,7 @@ const CreatePlaylistMusicModal = ({ setMusics, setModalOption, musicInfo }: Prop
   };
 
   const checkValidUrl = (url: string) => {
-    return RegExp(YOUTUBE_REG_EXP).test(url);
+    return new RegExp(YOUTUBE_REG_EXP).test(url);
   };
 
   const handleChange =
