@@ -104,7 +104,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
     if (!socket) return;
     if (!validateForm) return;
 
-    (socket as Socket).emit(SocketEvents.SET_GAME_ROOM, uuid, password, form, () => {
+    (socket as Socket).emit(SocketEvents.SET_GAME_ROOM, uuid, password.inputPassword, form, () => {
       setModalOnOff(false);
     });
   };
@@ -201,7 +201,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             titleSize="1em"
             options={['1명만', '25% 이상', '50% 이상', '75% 이상', '모두']}
             values={[0.01, 0.25, 0.5, 0.75, 1]}
-            defaultValue={0.5}
+            defaultValue={form.needAnswerRatio}
             onChange={(e: ChangeEvent) =>
               handleSelect({ needAnswerRatio: Number((e.target as HTMLSelectElement).value) })
             }
@@ -212,7 +212,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             titleSize="1em"
             options={['10초', '20초', '30초', '40초', '50초', '60초', '70초', '80초', '90초']}
             values={[10, 20, 30, 40, 50, 60, 70, 80, 90]}
-            defaultValue={60}
+            defaultValue={form.timePerProblem}
             onChange={(e: ChangeEvent) =>
               handleSelect({ timePerProblem: Number((e.target as HTMLSelectElement).value) })
             }
