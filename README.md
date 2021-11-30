@@ -1,9 +1,3 @@
-<style>
-td, th {
-   border: none!important;
-}
-</style>
-
 <h1 align="center"> 🐥BooduckSound🐥 </h1>
 <div align="center"><img src="https://user-images.githubusercontent.com/49841765/139250079-ebf5d063-5fac-40d9-8c7a-b59989baa1e0.png" alt="booducksound"/></div>
 <div align="center">
@@ -50,7 +44,7 @@ td, th {
 
 <div class="callout">
   <div>
-    <p><code><a href='https://booducksound.com'>booducksound</a></code> : 친구들과 다함께 온라인으로 즐길 수 있는 <b>웹 기반 노래 맞추기 게임</b></p>
+    <p><code><a href='https://booducksound.com' target='_blank'>booducksound</a></code> : 친구들과 다함께 온라인으로 즐길 수 있는 <b>웹 기반 노래 맞추기 게임</b></p>
   </div>
 </div>
 
