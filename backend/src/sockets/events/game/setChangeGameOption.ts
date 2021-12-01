@@ -8,17 +8,11 @@ import InitRoomInfo from '~/types/InitRoomInfo';
 import { SocketEvents } from '~/types/SocketEvents';
 import serverRooms from '~/variables/serverRooms';
 
-async function handleSetGameRoom(
-  this: Socket,
-  uuid: string,
-  password: string,
-  room: InitRoomInfo,
-  done: (...argv: any) => void,
-) {
+async function handleChangeGameOption(this: Socket, uuid: string, room: InitRoomInfo, done: (...argv: any) => void) {
   try {
     if (!room) return;
 
-    const { title, playlistId, playlistName, needAnswerRatio, timePerProblem } = room;
+    const { title, playlistId, playlistName, needAnswerRatio, timePerProblem, password } = room;
     const playlist = await PlaylistService.getById(playlistId);
 
     serverRooms[uuid] = {
@@ -43,8 +37,8 @@ async function handleSetGameRoom(
   }
 }
 
-const onSetGameRoom = (socket: Socket) => {
-  socket.on(SocketEvents.SET_GAME_ROOM, handleSetGameRoom);
+const onChangeGameOption = (socket: Socket) => {
+  socket.on(SocketEvents.CHNAGE_GAME_OPTION, handleChangeGameOption);
 };
 
-export default onSetGameRoom;
+export default onChangeGameOption;

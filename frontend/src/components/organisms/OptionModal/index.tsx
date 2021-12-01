@@ -8,7 +8,6 @@ import InputText from '~/atoms/InputText';
 import TextLabel from '~/atoms/TextLabel';
 import { ROOM_TITLE_EMPTY_MSG } from '~/constants/index';
 import useSocket from '~/hooks/useSocket';
-import useSocketEmit from '~/hooks/useSocketEmit';
 import InputWithButton from '~/molecules/InputWithButton';
 import Modal from '~/molecules/Modal';
 import SelectSection from '~/molecules/SelectSection';
@@ -66,6 +65,7 @@ type Props = {
   setModalOnOff: Dispatch<SetStateAction<boolean>>;
   leftButtonText: string;
   gameRoom: GameRoom;
+  initPassword: string;
 };
 
 type Form = {
@@ -83,10 +83,9 @@ type SelectOption = {
   timePerProblem?: number;
 };
 
-const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
+const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom, initPassword }: Props) => {
   const socket = useSocket();
   const { uuid } = useSelector((state: RootState) => state.room);
-  const [password, setPassword] = useState({ inputPassword: '', prevPassword: '' });
   const { title, playlistName, playlistId, needAnswerRatio, timePerProblem } = gameRoom;
   const defaultForm = {
     title,
@@ -94,7 +93,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
     playlistId,
     needAnswerRatio,
     timePerProblem,
-    password: password.inputPassword,
+    password: initPassword,
   };
   const [leftButtonDisabled, setLeftButtonDisabled] = useState(true);
   const [playlistModalOnOff, setPlaylistModalOnOff] = useState(false);
@@ -104,7 +103,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
     if (!socket) return;
     if (!validateForm) return;
 
-    (socket as Socket).emit(SocketEvents.SET_GAME_ROOM, uuid, password.inputPassword, form, () => {
+    (socket as Socket).emit(SocketEvents.CHNAGE_GAME_OPTION, uuid, form, () => {
       setModalOnOff(false);
     });
   };
@@ -114,11 +113,7 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
   };
 
   const validateForm = (form: Form) => {
-    const condition =
-      !checkFormChanged(defaultForm, form) ||
-      !form.title ||
-      !form.playlistId ||
-      password.inputPassword !== password.prevPassword;
+    const condition = !checkFormChanged(defaultForm, form) || !form.title || !form.playlistId;
     setLeftButtonDisabled(condition);
     return !condition;
   };
@@ -129,10 +124,6 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
       validateForm(form);
       return form;
     });
-
-  useSocketEmit(SocketEvents.GET_ROOM_PASSWORD, uuid, (gamePassword: string) => {
-    setPassword({ inputPassword: gamePassword, prevPassword: gamePassword });
-  });
 
   return (
     <Modal
@@ -186,11 +177,13 @@ const OptionModal = ({ setModalOnOff, leftButtonText, gameRoom }: Props) => {
             className="roomPassword"
             placeholder={gameRoom.hasPassword ? '********' : ''}
             isSearch={false}
-            value={password.inputPassword}
+            value={form.password}
             handleChange={(e: ChangeEvent) => {
-              const password = (e.target as HTMLInputElement).value;
-              setPassword((prev) => ({ ...prev, inputPassword: password }));
-              validateForm(form);
+              setForm((prev) => {
+                const form = { ...prev, password: (e.target as HTMLInputElement).value };
+                validateForm(form);
+                return form;
+              });
             }}
           />
         </InputContainer>

@@ -166,7 +166,8 @@ const SettingButton = styled.button`
 const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime: number }) => {
   const { uuid } = useSelector((state: RootState) => state.room);
   const userInfo = useSelector((state: RootState) => state.user);
-  const [modalOnOff, setModalOnOff] = useState<boolean>(false);
+  const [initPassword, setInitPassword] = useState('');
+  const [optionModalOnOff, setOptionModalOnOff] = useState<boolean>(false);
   const [hint, setHint] = useState('');
   const socket = useSocket();
 
@@ -176,6 +177,14 @@ const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime:
     if (!socket || !players?.[socket.id]) return false;
     if (players[socket.id].status !== 'king') return false;
     return true;
+  };
+
+  const handleSettingButtonClick = () => {
+    if (!socket) return;
+    socket.emit(SocketEvents.GET_ROOM_PASSWORD, uuid, (password: string) => {
+      setInitPassword(password);
+      setOptionModalOnOff(true);
+    });
   };
 
   useSocketOn(SocketEvents.SHOW_HINT, (hint: string) => {
@@ -192,7 +201,7 @@ const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime:
         <LeftTitleContainer type="leftTitle">
           <RoomTitle>{gameRoom?.title}</RoomTitle>
           <PlaylistName>{gameRoom?.playlistName}</PlaylistName>
-          {gameRoom?.status === 'waiting' && confirmKing() && <SettingButton onClick={() => setModalOnOff(true)} />}
+          {gameRoom?.status === 'waiting' && confirmKing() && <SettingButton onClick={handleSettingButtonClick} />}
         </LeftTitleContainer>
         <CharacterContainer type="leftCharacter">
           <CharacterList players={players as Players} status={gameRoom?.status} roomNo={uuid} />
@@ -216,8 +225,13 @@ const GameRoomContainer = ({ gameRoom, endTime }: { gameRoom: GameRoom; endTime:
         <GameRoomChatContainer></GameRoomChatContainer>
         <GameRoomInputContainer color={userInfo.color} name={userInfo.nickname} uuid={uuid}></GameRoomInputContainer>
       </Wrapper>
-      {modalOnOff && gameRoom && (
-        <OptionModal setModalOnOff={setModalOnOff} leftButtonText="수정하기" gameRoom={gameRoom} />
+      {optionModalOnOff && gameRoom && (
+        <OptionModal
+          setModalOnOff={setOptionModalOnOff}
+          leftButtonText="수정하기"
+          gameRoom={gameRoom}
+          initPassword={initPassword}
+        />
       )}
     </>
   );
