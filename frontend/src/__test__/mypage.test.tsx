@@ -31,7 +31,6 @@ function renderMypage() {
 
   const myPlayListTitle = () => result.getByText('내가 작성한 플레이리스트');
   const myLikePlayListTitle = () => result.getByText('내가 좋아요한 플레이리스트');
-  //   const changePasswordButton = () => result.getByText('비밀번호 변경');
   const logOutButton = () => result.getByText('로그아웃');
 
   function clickLogOut() {
@@ -53,8 +52,4 @@ describe('<MyPage />', () => {
 
     expect(clickLogOut()).toBeInTheDocument();
   });
-  //   it('비회원일때 마이페이지', async () => {
-  //     const { logOutButton, clickLogOut } = renderMypage();
-  //     expect(clickLogOut()).toBeInTheDocument();
-  //   });
 });
